@@ -856,6 +856,49 @@ button.thead:hover h3{color:var(--mblue)}
 :root[data-theme="light"]{color-scheme:light}
 .btn.tema{display:inline-flex;align-items:center;gap:5px}
 .btn.tema svg{flex:none;display:block}
+.statusline{flex-wrap:wrap;row-gap:6px}
+@media (max-width:560px){ .btn.tema span{display:none} .btn.tema{padding-inline:7px} }
+/* documentação das pessoas */
+.dwrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.dtab{border-collapse:separate;border-spacing:0;width:100%;min-width:720px;font:600 12.5px/1.2 var(--cond);letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+.dtab th,.dtab td{padding:5px 7px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.dtab thead th{background:var(--surface-2);color:var(--muted);font-size:11.5px;letter-spacing:.07em;font-weight:700}
+.dtab tr.dg th{background:var(--bg);color:var(--mblue);font-size:11.5px;letter-spacing:.08em;padding-top:9px;font-weight:700}
+.dtab tbody th{font-weight:700}
+.dn{border:0;background:none;padding:2px 0;font:700 13px/1.2 var(--cond);color:var(--ink);text-align:left;cursor:pointer;letter-spacing:.02em;text-transform:uppercase}
+.dn:hover{color:var(--mblue);text-decoration:underline}
+.dtab .dc{text-align:center;font-variant-numeric:tabular-nums}
+.dc a,.dc span{display:inline-block;min-width:60px;padding:3px 6px;border-radius:3px;text-decoration:none;color:inherit}
+.dc a:hover{text-decoration:underline}
+.dc.ok a,.dc.ok span{background:var(--ok-soft);color:var(--ok)}
+.dc.warn a,.dc.warn span{background:var(--warn-soft);color:var(--warn)}
+.dc.bad a,.dc.bad span{background:var(--danger-soft);color:var(--danger)}
+.dc.none span{color:var(--faint);min-width:0}
+.dtab td.more{color:var(--muted)}
+.dtab tr.dpend th .dn{color:var(--danger)}
+.dleg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:8px 0 0;font:600 11.5px/1.3 var(--cond);letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.dleg i{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.dleg i.ok{background:var(--ok-soft);box-shadow:inset 0 0 0 1px var(--ok)} .dleg i.warn{background:var(--warn-soft);box-shadow:inset 0 0 0 1px var(--warn)} .dleg i.bad{background:var(--danger-soft);box-shadow:inset 0 0 0 1px var(--danger)}
+.dleg-n{flex-basis:100%;text-transform:none;letter-spacing:0;font:400 12.5px/1.4 var(--body)}
+.docsev .toolbar.sub{margin:4px 0 10px}
+.docsev .dwrap{margin-bottom:8px}
+.drow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;padding:10px;border:1px solid var(--line);border-left:4px solid var(--line-strong);border-radius:6px;background:var(--surface);margin-bottom:8px}
+.drow.st-ok{border-left-color:var(--ok)} .drow.st-vence,.drow.st-semdata{border-left-color:var(--warn)} .drow.st-vencido{border-left-color:var(--danger)}
+.drow .dr-top{flex-basis:100%;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.drow .dr-top .spacer{flex:1}
+.drow select,.drow input{border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 13px/1.2 var(--cond);padding:6px 8px;text-transform:uppercase;letter-spacing:.02em}
+.drow label{display:flex;flex-direction:column;gap:4px;font:700 10.5px/1 var(--cond);letter-spacing:.08em;color:var(--muted)}
+.drow label small{font:500 11.5px/1.2 var(--body);letter-spacing:0;text-transform:none;color:var(--muted)}
+.drow .dr-f{flex-basis:100%;font:500 12px/1.35 var(--body);color:var(--muted);overflow-wrap:anywhere}
+.drow .dst{font:700 11px/1 var(--cond);letter-spacing:.06em;padding:4px 7px;border-radius:3px;background:var(--surface-2);color:var(--muted)}
+.drow.st-ok .dst{background:var(--ok-soft);color:var(--ok)} .drow.st-vence .dst,.drow.st-semdata .dst{background:var(--warn-soft);color:var(--warn)} .drow.st-vencido .dst{background:var(--danger-soft);color:var(--danger)}
+.pp-addrow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.pp-addrow .hint{font-size:12.5px}
+.pp-d{grid-column:2;font:600 11.5px/1.3 var(--cond);letter-spacing:.02em;color:var(--danger);text-transform:uppercase;overflow-wrap:anywhere}
+.dprog{height:7px;background:var(--surface-2);border-radius:4px;overflow:hidden;margin:4px 0}
+.dprog i{display:block;height:100%;background:var(--blue);transition:width .2s}
+.imp-c{font:700 11.5px/1.2 var(--cond);letter-spacing:.05em;color:var(--muted);text-transform:uppercase;text-align:right}
+
 /* importação do quadro */
 .imp-list{display:flex;flex-direction:column;gap:6px}
 .imp-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,14.5rem);gap:5px 12px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
@@ -900,7 +943,7 @@ button.thead:hover h3{color:var(--mblue)}
     </div>
   </header>
   <div class="banner" id="banner" hidden></div>
-  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm tema" id="btnTema" type="button"></button><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div>
+  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm tema" id="btnTema" type="button"></button><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json,.zip,application/zip" hidden><input id="docsFile" type="file" accept=".zip,.json,application/zip,application/x-zip-compressed,application/json" multiple hidden></div>
   <div class="restorebar" id="restoreBar" hidden></div>
 
   <main>
@@ -963,6 +1006,11 @@ button.thead:hover h3{color:var(--mblue)}
         <div class="evmapa" id="evMapa"></div>
         <div id="escTeams"></div>
         <div class="addline" id="escAdd"></div>
+      </div>
+
+      <div class="prods docsev" id="docsEv">
+        <div class="ptitle" data-act="fold" data-key="docs" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Documentação da equipe</span><span class="pc" id="docsCnt"></span><small>ASO, NRs, ficha EPI, RG… de quem está na escala, conferidos até o último dia do evento</small></div>
+        <div id="docsBody"></div>
       </div>
 
       <div class="prods fretes" id="fretes">
@@ -1138,7 +1186,8 @@ function normalizeAmb(a){
 /* cadastro: EQUIPE (nossa ou terceirizada, com integrantes, responsável, motorista e carro), PRODUTOR, EQUIPAMENTO (uma unidade por placa) e VEICULO (carro das equipes) */
 function normalizeRec(r){
   const o=Object.assign({tipo:'EQUIPE',nome:'',sigla:'',pessoas:'',funcao:'',qtd:1,contato:'',obs:'',ordem:0,lider:'',integrantes:'',motorista:'',veiculoId:'',placa:''},r);
-  o.tipo=['EQUIPAMENTO','PRODUTOR','VEICULO'].indexOf(o.tipo)>=0?o.tipo:'EQUIPE';
+  o.tipo=['EQUIPAMENTO','PRODUTOR','VEICULO','PESSOA'].indexOf(o.tipo)>=0?o.tipo:'EQUIPE';
+  if(o.tipo==='PESSOA'){ o.docs=Array.isArray(o.docs)?o.docs.filter(d=>d&&typeof d==='object'):[]; o.empresa=o.empresa||''; }
   if(typeof o.propria!=='boolean') o.propria=true; /* o cadastro antigo era só do que é nosso */
   o.qtd=Math.max(1,Math.round(num(o.qtd))||1);
   return o;
@@ -1374,10 +1423,19 @@ function sbSet(col,arr){ if(col==='eventos') eventos=arr; else if(col==='ambient
 /* alguém (ou outra aba) mudou: recarrega a coleção, sem atropelar o que ainda está gravando aqui */
 const sbTimers=new Map();
 function sbReload(col){ clearTimeout(sbTimers.get(col)); sbTimers.set(col,setTimeout(async()=>{ try{ const arr=await sbFetch(col); sbSet(col,mergeIncoming(col,arr)); onData(col); }catch(e){} },300)); }
+/* documentos das pessoas: bucket "documentos" do Storage (arquivo SQL supabase-documentos.sql) */
+function sbFiles(){ const B='documentos'; return {
+  nome:'supabase', podeEnviar:()=>true,
+  async put(blob,type,pasta){ const ext=type==='image/png'?'.png':type==='image/jpeg'?'.jpg':type==='image/webp'?'.webp':'.pdf'; const path=(String(pasta||'doc').replace(/[^a-z0-9-]/g,'')||'doc')+'/'+newId()+ext;
+    const r=await sb.storage.from(B).upload(path,blob,{contentType:type||'application/pdf',upsert:false}); if(r.error) throw r.error; return 's:'+path; },
+  href(ref){ if(!ref||ref.slice(0,2)!=='s:') return ''; const r=sb.storage.from(B).getPublicUrl(ref.slice(2)); return (r&&r.data&&r.data.publicUrl)||''; },
+  async bytes(ref){ const r=await sb.storage.from(B).download(ref.slice(2)); if(r.error) throw r.error; return await r.data.arrayBuffer(); },
+  async del(ref){ const r=await sb.storage.from(B).remove([ref.slice(2)]); if(r.error) throw r.error; } }; }
 async function connect(){
   if(sbCfgOk()){
     try{
       sb=window.supabase.createClient(window.__SB_URL,window.__SB_KEY,{auth:{persistSession:false}});
+      FILES=sbFiles();
       const got=await Promise.all([sbFetch('eventos'),sbFetch('ambientes'),sbFetch('recursos')]);
       storage='db'; eventos=got[0]; ambientes=got[1]; recursos=got[2];
       loaded={eventos:true,ambientes:true,recursos:true};
@@ -1560,7 +1618,7 @@ function quemCurto(ev,k,t){ const mem=membersOf(t),g=going(ev,k,t); if(!g) retur
 let IX=null;
 function buildIndex(){
   IX={ps:new Map(),alloc:new Map(),memc:new Map(),pday:new Map(),vday:new Map(),radar:null};
-  IX.sig=buildSiglas(); const pp=buildPeople(); IX.psh=pp.sh; IX.phome=pp.home;
+  IX.sig=buildSiglas(); const pp=buildPeople(); IX.psh=pp.sh; IX.phome=pp.home; IX.pes=pessoasIndex();
   const push=(m,key,id)=>{ let a=m.get(key); if(!a){ a=[]; m.set(key,a); } if(a.indexOf(id)<0) a.push(id); };
   eventos.forEach(ev=>{
     const al=allocsOf(ev); IX.alloc.set(ev.id,al);
@@ -1715,6 +1773,98 @@ function removeRecFromEvent(evId,rid,keepEntry){
 }
 /* excluiu do cadastro: sai de todos os eventos */
 function removeRecEverywhere(rid){ evUsesRec(rid).forEach(ev=>removeRecFromEvent(ev.id,rid,false)); recursos.filter(r=>r.tipo==='EQUIPE'&&r.veiculoId===rid).forEach(r=>patchRec(r.id,o=>{ o.veiculoId=''; })); }
+/* ===================================================================
+   DOCUMENTAÇÃO DAS PESSOAS (ASO, NRs, ficha EPI, RG, CNH, eSocial)
+   cadastro: recursos tipo PESSOA { nome, empresa, docs:[ {id, tipo, titulo, data, validade, est, nota, arq, tam, ct, criadoEm} ] }
+     est = validade calculada pelo prazo do tipo (o documento não diz)
+   arquivo (arq): 'a:<id>' guardado no artifact · 's:<caminho>' no Storage do Supabase · 'm:<chave>' só nesta aba
+   =================================================================== */
+const DOC_TIPOS=['ASO','NR10','NR11','NR12','NR35','NR06','EPI','RG','CPF','CNH','ESOCIAL','OUTRO'];
+const DOC_NOME={ASO:'ASO',NR10:'NR 10',NR11:'NR 11',NR12:'NR 12',NR35:'NR 35',NR06:'NR 06',EPI:'FICHA EPI',RG:'RG',CPF:'CPF',CNH:'CNH',ESOCIAL:'eSOCIAL',OUTRO:'OUTRO'};
+/* prazo em meses quando o documento não traz a validade (o ASO e a CNH trazem) */
+const DOC_PRAZO={ASO:12,NR06:12,NR10:24,NR11:12,NR12:24,NR35:24};
+const DOC_COLS=['ASO','NR10','NR11','NR12','NR35','EPI','RG','CNH','ESOCIAL'];
+const DOC_EXIGE_PADRAO=['ASO','NR35','EPI','RG','ESOCIAL'];
+const DOC_AVISO_DIAS=30;
+const docTemValidade=t=>t==='CNH'||!!DOC_PRAZO[t];
+
+function addMeses(s,n){ const d=PD(s); if(!d) return ''; const x=new Date(d.getFullYear(),d.getMonth()+n,1); const last=new Date(x.getFullYear(),x.getMonth()+1,0).getDate(); x.setDate(Math.min(d.getDate(),last)); return iso(x); }
+function docValidade(d){ if(!d) return ''; if(d.validade&&!d.est) return d.validade; if(d.data&&DOC_PRAZO[d.tipo]) return addMeses(d.data,DOC_PRAZO[d.tipo]); return d.validade||''; }
+/* ok · vence (dentro do aviso) · vencido · semdata (tem arquivo, falta a data) · falta */
+function docStatus(d,ref,aviso){
+  if(!d) return 'falta';
+  if(!docTemValidade(d.tipo)) return 'ok';
+  const v=PD(docValidade(d)); if(!v) return 'semdata';
+  const r=sod(ref||today0()), a=aviso==null?DOC_AVISO_DIAS:aviso;
+  if(v<r) return 'vencido';
+  if(a>0&&(v-r)/864e5<=a) return 'vence';
+  return 'ok';
+}
+const DOC_ST_TXT={ok:'EM DIA',vence:'VENCE LOGO',vencido:'VENCIDO',semdata:'SEM DATA',falta:'FALTA'};
+
+/* ---------- pessoas ---------- */
+function pessoasIndex(){ const m=new Map(); recursos.forEach(r=>{ if(r.tipo==='PESSOA'&&tr(r.nome)) m.set(fold(r.nome),r); }); return m; }
+function pessoaRec(nome){ const k=fold(nome); if(IX&&IX.pes) return IX.pes.get(k)||null; return recursos.find(r=>r.tipo==='PESSOA'&&fold(r.nome)===k)||null; }
+function docsDe(nome){ const p=pessoaRec(nome); return p&&Array.isArray(p.docs)?p.docs:[]; }
+/* o documento que vale pra aquele tipo: o de validade mais longa (ou o mais novo) */
+function docAtual(nome,tipo){ let best=null; docsDe(nome).forEach(d=>{ if(d.tipo!==tipo) return; const k=docValidade(d)||d.data||d.criadoEm||''; if(!best||k>(docValidade(best)||best.data||best.criadoEm||'')) best=d; }); return best; }
+/* o que serve pra um documento exigido: RG pode ser a CNH; CPF pode vir no RG ou na CNH */
+const DOC_ALT={RG:['RG','CNH'],CPF:['CPF','RG','CNH']};
+function docAtualReq(nome,t){ const alts=DOC_ALT[t]; if(!alts) return docAtual(nome,t); for(const a of alts){ const d=docAtual(nome,a); if(d&&docStatus(d,null,0)!=='vencido') return d; } return docAtual(nome,t); }
+const docsEmUso=()=>!!(IX&&IX.pes&&IX.pes.size);
+/* equipe da pessoa (pelo cadastro das equipes) */
+function equipeDe(nome){ const n=normName(nome); if(IX&&IX.phome&&IX.phome.has(n)) return IX.phome.get(n); const t=teamsOrdered().find(r=>membersOf(r.id).some(x=>fold(x)===fold(n))); return t?t.id:''; }
+/* o que está errado pra uma lista de tipos, olhando até a data ref (aviso 0 = só vencido conta) */
+function pendencias(nome,tipos,ref,aviso){ return tipos.map(t=>({t:t,d:docAtualReq(nome,t)})).map(x=>({t:x.t,d:x.d,s:docStatus(x.d,ref,aviso)})).filter(x=>x.s!=='ok'); }
+function pendTxt(p){ return p.map(x=>DOC_NOME[x.t]+(x.s==='falta'?' FALTA':x.s==='vencido'?' VENCIDO':x.s==='vence'?' VENCE '+fmtDM(docValidade(x.d)):' SEM DATA')).join(' · '); }
+
+/* ---------- documentos exigidos no evento e quem vai ---------- */
+function docsExigidos(ev){ return Array.isArray(ev.docsExigidos)&&ev.docsExigidos.length?ev.docsExigidos.filter(t=>DOC_TIPOS.indexOf(t)>=0):DOC_EXIGE_PADRAO.slice(); }
+function evFimDate(ev){ const ps=evPS(ev); let b=null; ['mont','ev','desm'].forEach(k=>ps[k].forEach(sp=>{ if(!b||sp.b>b) b=sp.b; })); Object.keys(alOf(ev)).forEach(k=>{ const d=PD(k); if(d&&(!b||d>b)) b=d; }); return b||today0(); }
+/* pessoas na escala do evento: nome, equipe, dias; terceirizadas sem lista de nomes vão à parte */
+function pessoasDoEvento(ev){
+  const al=alOf(ev), m=new Map(), semLista=new Map();
+  Object.keys(al).sort().forEach(k=>al[k].forEach(t=>{ if(isProdId(t)) return; const g=going(ev,k,t);
+    if(!g){ semLista.set(t,(semLista.get(t)||0)+1); return; }
+    g.forEach(n=>{ const x=m.get(n)||{nome:n,t:t,dias:0}; x.dias++; m.set(n,x); }); }));
+  const ord=new Map(); teamsOrdered().forEach((r,i)=>ord.set(r.id,i));
+  const list=Array.from(m.values()).sort((a,b)=>(ord.get(a.t)||0)-(ord.get(b.t)||0)||a.nome.localeCompare(b.nome));
+  return {list:list,semLista:Array.from(semLista.entries()).map(([t,n])=>({t:t,dias:n}))};
+}
+
+/* ---------- tipo pelo nome do arquivo ---------- */
+function tipoDoArquivo(nome){
+  const n=' '+fold(nome).replace(/[_.\-()]+/g,' ')+' ';
+  if(/ ASO /.test(n)) return 'ASO';
+  const m=n.match(/ NR ?0?(\d{1,2}) /); if(m){ const t='NR'+String(m[1]).padStart(2,'0'); return DOC_TIPOS.indexOf(t)>=0?t:'OUTRO'; }
+  if(/ EPI /.test(n)) return 'EPI';
+  if(/ CNH /.test(n)) return 'CNH';
+  if(/ E ?SOCIAL /.test(n)) return 'ESOCIAL';
+  if(/ RG /.test(n)) return 'RG';
+  if(/ CPF /.test(n)) return 'CPF';
+  return 'OUTRO';
+}
+function tipoMime(nome,fallback){ const e=String(nome).toLowerCase().split('.').pop(); return e==='pdf'?'application/pdf':e==='jpg'||e==='jpeg'?'image/jpeg':e==='png'?'image/png':e==='webp'?'image/webp':(fallback||''); }
+const arqAceito=nome=>!!tipoMime(nome);
+
+/* ---------- onde ficam os arquivos ---------- */
+/* a conexão troca FILES (artifact: assets do artifact · Vercel: Storage do Supabase); sem isso, só nesta aba */
+let FILES=null;
+const memFiles=(()=>{ const m=new Map(); let n=0; return {
+  nome:'local', podeEnviar:()=>true,
+  async put(blob){ const k='m:'+(++n)+'-'+Date.now().toString(36); m.set(k,{blob:blob,url:URL.createObjectURL(blob)}); return k; },
+  href(ref){ const x=m.get(ref); return x?x.url:''; },
+  async bytes(ref){ const x=m.get(ref); if(!x) throw new Error('arquivo não está nesta aba'); return await x.blob.arrayBuffer(); },
+  async del(ref){ const x=m.get(ref); if(x){ URL.revokeObjectURL(x.url); m.delete(ref); } } }; })();
+const files=()=>FILES||memFiles;
+function arqHref(ref){ try{ return ref?files().href(ref)||'':''; }catch(e){ return ''; } }
+/* o artifact guarda os arquivos no próprio artifact (só quem pode editar envia) */
+function assetsFiles(assets){ return {
+  nome:'artifact', podeEnviar:()=>!!assets,
+  async put(blob,type){ if(!assets) throw {code:'not_granted',message:'só quem pode editar envia arquivo'}; const opt={type:type||blob.type||'application/pdf'}; let r; try{ r=await assets.upload(blob,opt); }catch(e){ if(e&&e.code==='store_unavailable'){ await sleep(900); r=await assets.upload(blob,opt); } else throw e; } return 'a:'+r.id; },
+  href(ref){ return ref&&ref.slice(0,2)==='a:'?'/_blob/'+ref.slice(2):''; },
+  async bytes(ref){ const res=await fetch(this.href(ref)); if(!res.ok) throw new Error('não achei o arquivo ('+res.status+')'); return await res.arrayBuffer(); },
+  async del(ref){ if(assets&&ref&&ref.slice(0,2)==='a:') await assets.delete(ref.slice(2)); } }; }
 /* ===== arrastar pra reordenar (mouse + toque) ===== */
 function makeDraggable(container,itemSel,handleSel,onReorder){
   if(!container||container._dragWired) return; container._dragWired=true;
@@ -2141,7 +2291,7 @@ function revOf(a,ev){ return JSON.stringify([a.nome,a.produtorId,a.itens,a.fab,a
 function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; } });
-  renderProds(ev); renderEscala(ev); renderFretes(ev);
+  renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderFretes(ev);
   $('#evSum').innerHTML=summaryHTML(ev);
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
@@ -2498,6 +2648,8 @@ function buildPanel(){
   if(p.kind==='mapprint') return buildMapPrintPanel(pn,p);
   if(typeof buildRecPanel==='function'&&(p.kind==='team'||p.kind==='newrec'||p.kind==='veic')) return buildRecPanel(pn,p);
   if(typeof buildImportPanel==='function'&&p.kind==='import') return buildImportPanel(pn,p);
+  if(p.kind==='pessoa') return buildPessoaPanel(pn,p);
+  if(p.kind==='docimport') return buildDocsImportPanel(pn,p);
 }
 function syncPanel(){
   const p=M.panel; if(!p||$('#panel').hidden) return;
@@ -2505,6 +2657,8 @@ function syncPanel(){
   else if(p.kind==='mapprint') mapPrintParts();
   else if((p.kind==='team'||p.kind==='veic')&&typeof recPanelParts==='function') recPanelParts();
   else if(p.kind==='import'&&typeof importParts==='function') importParts();
+  else if(p.kind==='pessoa') pessoaParts();
+  else if(p.kind==='docimport') docsImportParts();
 }
 
 /* ---------- painel do dia ---------- */
@@ -2560,7 +2714,7 @@ function presHTML(ev,t,m,days,ro){
       const on=here.filter(k=>going(ev,k,t).indexOf(nm)>=0),st=on.length===here.length?'on':(on.length?'mix':'');
       const cf=busyMap(nm,on,ev.id),fr=busyMap(nm,days.filter(k=>on.indexOf(k)<0),ev.id);
       const note=cf.size?'<span class="pp-w">TAMBÉM EM '+esc(busyTxt(cf))+'</span>':(fr.size?'<span class="pp-i">ESTÁ EM '+esc(busyTxt(fr))+'</span>':(st==='mix'?'<span class="pp-i">EM '+on.length+' DE '+here.length+' DIAS</span>':''));
-      return '<button type="button" class="pp'+(st?' '+st:'')+(cf.size?' ch':'')+'" data-pp="'+esc(t)+'" data-pn="'+esc(nm)+'" aria-pressed="'+(st==='on'?'true':(st==='mix'?'mixed':'false'))+'"'+(ro?' disabled':'')+'><span class="pp-box" aria-hidden="true"></span><span class="pp-n">'+esc(nm)+(nm===mot?' <small>MOTORISTA</small>':'')+(r&&normName(r.lider)===nm?' <small>RESPONSÁVEL</small>':'')+'</span>'+note+'</button>';
+      return '<button type="button" class="pp'+(st?' '+st:'')+(cf.size?' ch':'')+'" data-pp="'+esc(t)+'" data-pn="'+esc(nm)+'" aria-pressed="'+(st==='on'?'true':(st==='mix'?'mixed':'false'))+'"'+(ro?' disabled':'')+'><span class="pp-box" aria-hidden="true"></span><span class="pp-n">'+esc(nm)+(nm===mot?' <small>MOTORISTA</small>':'')+(r&&normName(r.lider)===nm?' <small>RESPONSÁVEL</small>':'')+'</span>'+note+docAvisoPessoa(ev,nm,t)+'</button>';
     }).join('')+'</div>'+(!ro&&part?'<button type="button" class="btn-sm" data-pfull="'+esc(t)+'">VAI A EQUIPE TODA</button>':'');
   }
   const carDays=here.filter(k=>carWith(ev,k,t)).length, vinfo=r&&r.veiculoId&&carDays?'<span class="pvei">CARRO: '+esc(vehName(r.veiculoId))+(carDays<here.length?' (EM '+carDays+' DE '+here.length+' DIAS)':'')+'</span>':'';
@@ -2904,6 +3058,7 @@ function renderRecursos(){
   const grid=list=>list.length?'<div class="tgrid">'+list.map(r=>teamBoxHTML(r,w)).join('')+'</div>':'';
   const fams=new Map(); eqps.forEach(r=>{ const f=eqParse(r.nome).fam||'—'; if(!fams.has(f)) fams.set(f,[]); fams.get(f).push(r); });
   let h='<div class="tgrid one">'+semBox+'</div>';
+  h+=docsSecHTML();
   h+=recSec('own','Nossas equipes',own.length?plural(own.length,'equipe','equipes'):'nenhuma',ro?'':'<button type="button" class="chip eqp" data-new-rec="EQUIPE" data-propria="1">+ Equipe nossa</button>',grid(own)||'<p class="pempty">Nenhuma equipe nossa cadastrada. Cadastre com o responsável e as pessoas — no mapa dá pra escolher quem vai em cada dia.</p>');
   h+=recSec('ter','Terceirizadas',ter.length?plural(ter.length,'equipe','equipes'):'nenhuma',ro?'':'<button type="button" class="chip eqp" data-new-rec="EQUIPE" data-propria="0">+ Terceirizada</button>',grid(ter)||'<p class="pempty">Nenhuma terceirizada ainda. Também dá pra cadastrar direto no mapa, digitando o nome num dia.</p>');
   h+=recSec('prod','Produtores',prods.length?plural(prods.length,'produtor','produtores'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="PRODUTOR">+ Produtor</button>',grid(prods)||'<p class="pempty">Nenhum produtor cadastrado.</p>');
@@ -3026,10 +3181,12 @@ function wireRecursos(){
     const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
     const oe=t.closest('[data-open-ev]'); if(oe){ openEvent(oe.dataset.openEv); return; }
     const oc=t.closest('[data-open-cell]'); if(oc){ openCell(oc.dataset.openCell,oc.dataset.days.split(',').filter(Boolean)); return; }
+    const dp=t.closest('[data-pessoa]'); if(dp){ openPessoa(dp.dataset.pessoa); return; }
     const b=t.closest('[data-act]');
     if(b){ const act=b.dataset.act;
       if(act==='rfold'){ const sec=b.closest('.rsec'); const f=!sec.classList.contains('folded'); setFold('rec:'+sec.dataset.rkey,f); sec.classList.toggle('folded',f); b.setAttribute('aria-expanded',f?'false':'true'); }
       else if(act==='add-rec-eqp') addRec('EQUIPAMENTO',b.dataset.nome||'');
+      else if(act==='docs-import') openDocsPicker();
       else if(act==='del-rec'){ const row=b.closest('.ritem'); if(row) delRec(row.dataset.rid); }
       return; }
     if(t.closest('input,select,button')) return;
@@ -3217,6 +3374,7 @@ function wireTema(){
 }
 function wire(){
   wireTema();
+  wireDocs();
   document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
   $('#radarEv').addEventListener('change',ev=>{ radarEv=ev.target.value; render(); });
@@ -3229,6 +3387,7 @@ function wire(){
   $('#btnRestore').addEventListener('click',()=>$('#restoreFile').click());
   $('#restoreFile').addEventListener('change',ev=>{
     const f=ev.target.files&&ev.target.files[0]; ev.target.value=''; if(!f) return;
+    if(/\.zip$/i.test(f.name)){ openDocsImport([f]); return; }
     const r=new FileReader();
     r.onload=()=>{ let obj=null; try{ obj=JSON.parse(r.result); }catch(e){ toast('Não consegui ler o arquivo (JSON inválido).',true); return; } openRestoreFile(obj); };
     r.onerror=()=>toast('Falha ao abrir o arquivo.',true);
@@ -3254,7 +3413,7 @@ function wire(){
   const det=$('#viewDetalhe');
   det.addEventListener('click',ev=>{
     const b=ev.target.closest('[data-act]'); if(!b||!det.contains(b)) return; const act=b.dataset.act; const e=cur(); if(!e) return;
-    if(act==='fold'){ const box=b.closest('[data-fkey],#prods,#escala,#fretes'); if(!box) return; const key=box.dataset.fkey||foldKey(e,b.dataset.key); toggleFold(box,key); }
+    if(act==='fold'){ const box=b.closest('[data-fkey],#prods,#escala,#docsEv,#fretes'); if(!box) return; const key=box.dataset.fkey||foldKey(e,b.dataset.key); toggleFold(box,key); }
     else if(act==='fold-amb'){ const card=b.closest('.mat'); if(!card) return; const f=!card.classList.contains('folded'); setFold('a:'+card.dataset.mid,f); card.classList.toggle('folded',f); b.setAttribute('aria-expanded',f?'false':'true'); }
     else if(act==='add-frete'){ toggleFold($('#fretes'),foldKey(e,'fretes'),false); addFrete(); }
     else if(act==='rm-prod'){ M.confirm='rmp:'+b.dataset.pid; renderDetail(); }
@@ -3337,6 +3496,222 @@ function applyPick(sel,inputCls,fill){
   if(cellEl) cellEl.classList.toggle('outro',sel.value==='__outro');
   if(inp){ if(reg) inp.value=reg.nome; else if(sel.value==='__outro'){ inp.value=''; setTimeout(()=>inp.focus(),30); } else inp.value=''; }
   if(reg&&fill) fill(reg);
+}
+/* ===================================================================
+   DOCUMENTAÇÃO — tabela no cadastro, painel da pessoa, seção no evento,
+   importação da pasta do Drive (zip) e aviso no painel do dia
+   =================================================================== */
+const DOC_CLS={ok:'ok',vence:'warn',vencido:'bad',semdata:'warn',falta:'none'};
+const fmtDMY=s=>{ const d=PD(s); return d?pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2):''; };
+function loadScriptOnce(src,test){ return new Promise((res,rej)=>{ if(test()) return res(test()); const s=document.createElement('script'); s.src=src; s.onload=()=>test()?res(test()):rej(new Error(src)); s.onerror=()=>rej(new Error(src)); document.head.appendChild(s); }); }
+const loadJSZip=()=>loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',()=>window.JSZip);
+const loadPdfLib=()=>loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',()=>window.PDFLib);
+const docOrd=t=>{ const i=DOC_TIPOS.indexOf(t); return i<0?99:i; };
+
+/* ---------- tabela do cadastro: pessoa x documento ---------- */
+function docsRows(){
+  const rows=[], seen=new Set();
+  teamsOrdered().filter(r=>r.tipo==='EQUIPE').forEach(t=>membersOf(t.id).forEach(n=>{ const k=fold(n); if(seen.has(k)) return; seen.add(k); rows.push({nome:n,t:t.id,g:tr(t.nome)}); }));
+  recursos.filter(r=>r.tipo==='PESSOA'&&tr(r.nome)).sort((a,b)=>String(a.empresa||'').localeCompare(String(b.empresa||''))||String(a.nome).localeCompare(String(b.nome))).forEach(p=>{ const k=fold(p.nome); if(seen.has(k)) return; seen.add(k); rows.push({nome:normName(p.nome),t:'',g:(normName(p.empresa)||'SEM EMPRESA')+' · SEM EQUIPE'}); });
+  return rows;
+}
+function docCellHTML(nome,t,ref,aviso,req){
+  const d=req?docAtualReq(nome,t):docAtual(nome,t), s=docStatus(d,ref,aviso);
+  if(!d) return req?'<td class="dc bad"><span title="'+esc(DOC_NOME[t]+': falta')+'">FALTA</span></td>':'<td class="dc none"><span title="'+esc(DOC_NOME[t]+': falta')+'">—</span></td>';
+  const v=docValidade(d), alt=d.tipo!==t?DOC_NOME[d.tipo]+' ':'', lbl=alt+(docTemValidade(d.tipo)?(v?fmtDMY(v):'SEM DATA'):(alt?'':'OK')), href=arqHref(d.arq);
+  const tip=DOC_NOME[t]+(alt?' (vale a '+DOC_NOME[d.tipo]+')':'')+(v?' · válido até '+fmtLong(v)+(d.est?' (calculado: '+DOC_PRAZO[d.tipo]+' meses depois do certificado)':''):'')+(d.titulo?' · '+d.titulo:'');
+  const inner=href?'<a href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(tip+' — abrir')+'">'+lbl+'</a>':'<span title="'+esc(tip)+'">'+lbl+'</span>';
+  return '<td class="dc '+DOC_CLS[s]+'">'+inner+'</td>';
+}
+function docsSecHTML(){
+  const rows=docsRows(), ro=readOnly, pode=!ro&&files().podeEnviar();
+  let venc=0,vence=0,nd=0; rows.forEach(r=>{ nd+=docsDe(r.nome).length; DOC_COLS.forEach(t=>{ const s=docStatus(docAtual(r.nome,t)); if(s==='vencido') venc++; else if(s==='vence') vence++; }); });
+  const count=rows.length?plural(rows.length,'pessoa','pessoas')+' · '+plural(nd,'documento','documentos')+(venc?' · '+venc+(venc>1?' vencidos':' vencido'):'')+(vence?' · '+vence+(vence>1?' vencem':' vence')+' em 30 dias':''):'nenhuma pessoa';
+  const add=pode?'<button type="button" class="chip eqp" data-act="docs-import">↑ Importar pasta do Drive (zip)</button>':'';
+  let inner;
+  if(!rows.length) inner='<p class="pempty">Coloque as pessoas nas equipes (integrantes) ou importe a pasta de documentos do Drive.</p>';
+  else{
+    let body='', g=null;
+    rows.forEach(r=>{
+      if(r.g!==g){ g=r.g; body+='<tr class="dg"><th colspan="'+(DOC_COLS.length+2)+'" scope="rowgroup">'+esc(g)+'</th></tr>'; }
+      const extra=docsDe(r.nome).filter(d=>DOC_COLS.indexOf(d.tipo)<0).length;
+      body+='<tr><th scope="row"><button type="button" class="dn" data-pessoa="'+esc(r.nome)+'">'+esc(r.nome)+'</button></th>'+DOC_COLS.map(t=>docCellHTML(r.nome,t)).join('')+'<td class="dc more">'+(extra?'+'+extra:'')+'</td></tr>';
+    });
+    inner='<div class="dwrap"><table class="dtab"><thead><tr><th scope="col">PESSOA</th>'+DOC_COLS.map(t=>'<th scope="col" class="dc">'+DOC_NOME[t]+'</th>').join('')+'<th scope="col" class="dc" title="Outros documentos">+</th></tr></thead><tbody>'+body+'</tbody></table></div>'
+      +'<div class="dleg"><span><i class="ok"></i>EM DIA (VÁLIDO ATÉ)</span><span><i class="warn"></i>VENCE EM 30 DIAS</span><span><i class="bad"></i>VENCIDO</span><span>— FALTA</span><span class="dleg-n">Clique no nome pra ver, trocar ou mandar documento; na data, abre o arquivo. Quando o certificado não diz a validade: NR 10, NR 12 e NR 35 valem 2 anos, NR 11 e NR 06 1 ano.</span></div>';
+  }
+  return recSec('docs','Documentação das pessoas',count,add,inner,false);
+}
+
+/* ---------- painel da pessoa ---------- */
+function openPessoa(nome){ leavePanel(); M.panel={kind:'pessoa',nome:normName(nome)}; M.confirm=null; buildPanel(); showPanel(); }
+function ensurePessoa(nome,extra){
+  let r=pessoaRec(nome); if(r) return r;
+  r=normalizeRec(Object.assign({id:'p-'+slugId(nome),tipo:'PESSOA',nome:normName(nome),empresa:'',docs:[],criadoEm:nowIso(),atualizadoEm:nowIso()},extra||{}));
+  if(regOf(r.id)) r.id=newId();
+  upsertLocal('recursos',r); if(IX&&IX.pes) IX.pes.set(fold(r.nome),r); saveDocNow('recursos',r.id); return r;
+}
+function patchPessoa(nome,fn){ const r=ensurePessoa(nome); patchRec(r.id,o=>{ o.docs=Array.isArray(o.docs)?o.docs.slice():[]; fn(o); }); }
+function buildPessoaPanel(pn,p){
+  const ro=readOnly;
+  pn.innerHTML=headHTML('<span class="pchip blue">PESSOA</span><span class="pchip" id="pp-eq"></span>','<h2>'+esc(p.nome)+'</h2>')
+    +'<div class="p-body"><div class="fld"><label for="pp-emp">EMPRESA</label><input id="pp-emp" autocomplete="off" placeholder="Ex.: SILOÉ, BETEL, L FREITAS"'+(ro?' disabled':'')+'></div>'
+    +'<section><div class="sec-h"><h3>DOCUMENTOS</h3><span class="per" id="pp-sum"></span></div><div id="pp-docs"></div></section>'
+    +(ro?'':'<div class="pp-addrow" id="pp-add"></div>')
+    +'<input type="file" id="pp-file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple hidden></div>';
+  pessoaParts();
+}
+function pessoaParts(force){
+  const p=M.panel; if(!p||p.kind!=='pessoa') return; const ro=readOnly, rec=pessoaRec(p.nome), t=equipeDe(p.nome);
+  const eq=$('#pp-eq'); if(eq) eq.textContent=t?'EQUIPE '+recNome(t):'SEM EQUIPE';
+  const emp=$('#pp-emp'); if(emp&&document.activeElement!==emp) emp.value=rec?(rec.empresa||''):'';
+  const docs=(rec&&Array.isArray(rec.docs)?rec.docs:[]).slice().sort((a,b)=>docOrd(a.tipo)-docOrd(b.tipo)||String(docValidade(b)||b.data||'').localeCompare(String(docValidade(a)||a.data||'')));
+  const venc=docs.filter(d=>docStatus(d)==='vencido').length;
+  $('#pp-sum').textContent=docs.length?plural(docs.length,'documento','documentos')+(venc?' · '+venc+(venc>1?' vencidos':' vencido'):''):'';
+  const box=$('#pp-docs'), fa=document.activeElement, keep=fa&&box&&box.contains(fa)&&fa.matches('input,select')?{did:(fa.closest('[data-did]')||{}).dataset,dk:fa.dataset.dk}:null;
+  if(box&&(force||!keep)){
+    box.innerHTML=docs.length?docs.map(d=>{
+      const s=docStatus(d), v=docValidade(d), href=arqHref(d.arq), comVal=docTemValidade(d.tipo), dis=ro?' disabled':'';
+      const conf=M.confirm==='ddel:'+d.id;
+      return '<div class="drow st-'+s+'" data-did="'+esc(d.id)+'"><div class="dr-top"><select data-dk="tipo" aria-label="Tipo do documento"'+dis+'>'+DOC_TIPOS.map(x=>'<option value="'+x+'"'+(x===d.tipo?' selected':'')+'>'+DOC_NOME[x]+'</option>').join('')+'</select>'
+        +'<span class="dst">'+(comVal?DOC_ST_TXT[s]:'GUARDADO')+'</span><span class="spacer"></span>'
+        +(href?'<a class="btn sm" href="'+esc(href)+'" target="_blank" rel="noopener">Abrir</a>':'<span class="hint">sem arquivo nesta tela</span>')
+        +(ro?'':(conf?'<span class="confirm2"><span>Apagar o documento e o arquivo?</span><button type="button" class="btn danger solid sm" data-ddel-yes="'+esc(d.id)+'">Apagar</button><button type="button" class="btn sm" data-ddel-no>Não</button></span>':'<button type="button" class="btn sm danger" data-ddel="'+esc(d.id)+'">Excluir</button>'))+'</div>'
+        +'<label>'+(d.tipo==='ASO'?'DATA DO EXAME':d.tipo==='CNH'?'EMISSÃO':'DATA DO CERTIFICADO')+'<input type="date" data-dk="data" value="'+esc(d.data||'')+'"'+dis+'></label>'
+        +(comVal?'<label>VÁLIDO ATÉ<input type="date" data-dk="validade" value="'+esc(d.est?'':(d.validade||''))+'"'+dis+'>'+(d.est&&v?'<small>calculado: '+fmtLong(v)+'</small>':(!v?'<small>coloque a data</small>':''))+'</label>':'')
+        +'<div class="dr-f">'+esc(d.titulo||'')+(d.nota?' · '+esc(d.nota):'')+'</div></div>';
+    }).join(''):'<p class="hint">Nenhum documento ainda.</p>';
+    if(keep&&keep.did&&keep.dk){ const el=box.querySelector('[data-did="'+css(keep.did.did)+'"] [data-dk="'+css(keep.dk)+'"]'); if(el) el.focus({preventScroll:true}); }
+  }
+  const add=$('#pp-add'); if(add) add.innerHTML=files().podeEnviar()?'<button type="button" class="btn-primary" data-act="pp-add">+ DOCUMENTO</button><span class="hint">PDF ou foto. O tipo vem do nome do arquivo (ASO, NR 35, FICHA EPI…) e dá pra trocar aqui.</span>':'<span class="hint">Só quem pode editar manda arquivo.</span>';
+}
+async function pessoaUpload(fileList){
+  const p=M.panel; if(!p||p.kind!=='pessoa') return; const nome=p.nome, fl=Array.from(fileList||[]).filter(f=>arqAceito(f.name)||/^image\/|pdf$/.test(f.type||''));
+  if(!fl.length){ toast('Mande PDF ou foto (JPG, PNG).',true); return; }
+  toast('Enviando '+plural(fl.length,'arquivo','arquivos')+'…');
+  const novos=[]; let erro=null;
+  for(const f of fl){ try{ const ct=tipoMime(f.name,f.type)||'application/pdf'; const ref=await files().put(f,ct,slugId(nome)); novos.push({id:newId(),tipo:tipoDoArquivo(f.name),titulo:f.name,data:'',validade:'',est:false,nota:'',arq:ref,tam:f.size,ct:ct,criadoEm:nowIso()}); }catch(e){ erro=e; } }
+  if(novos.length) patchPessoa(nome,o=>{ o.docs=o.docs.concat(novos); });
+  if(erro) toast(arqErroTxt(erro),true); else toast(plural(novos.length,'documento enviado','documentos enviados')+'. Confira o tipo e coloque a data.');
+}
+function arqErroTxt(e){ const m=String(e&&(e.message||e.code)||e||''); if(/bucket/i.test(m)&&/not.?found/i.test(m)) return 'Falta criar o espaço dos documentos no Supabase (rode o SQL de documentos).'; if(e&&e.code==='not_granted') return 'Só quem pode editar manda arquivo.'; if(e&&e.code==='too_large') return 'Arquivo grande demais (máximo 20 MB).'; if(e&&e.code==='quota_or_state') return 'Acabou o espaço de arquivos deste artifact.'; return 'Não consegui guardar o arquivo ('+m.slice(0,80)+').'; }
+
+/* ---------- seção no evento ---------- */
+function renderDocsEv(ev){
+  const box=$('#docsEv'); if(!box||editingIn(box)) return;
+  const tipos=docsExigidos(ev), fim=evFimDate(ev), pe=pessoasDoEvento(ev), ro=readOnly;
+  const linhas=pe.list.map(x=>({x:x,p:pendencias(x.nome,tipos,fim,0)})), com=linhas.filter(l=>l.p.length).length;
+  $('#docsCnt').textContent=pe.list.length?plural(pe.list.length,'pessoa','pessoas')+(com?' · '+com+' com pendência':' · tudo em dia'):'ninguém na escala';
+  applyFold(box,foldKey(ev,'docs'),!pe.list.length);
+  const chips='<div class="toolbar sub"><span class="lbl">EXIGIDOS</span><div class="chips">'+DOC_TIPOS.filter(t=>t!=='OUTRO').map(t=>'<button type="button" class="chip'+(tipos.indexOf(t)>=0?' on':'')+'" data-dexige="'+t+'" aria-pressed="'+(tipos.indexOf(t)>=0)+'"'+(ro?' disabled':'')+'>'+DOC_NOME[t]+'</button>').join('')+'</div></div>';
+  let table='';
+  if(pe.list.length){
+    let g=null, body='';
+    linhas.forEach(l=>{ const tn=recNome(l.x.t); if(tn!==g){ g=tn; body+='<tr class="dg"><th colspan="'+(tipos.length+2)+'" scope="rowgroup">'+esc(g)+'</th></tr>'; }
+      body+='<tr'+(l.p.length?' class="dpend"':'')+'><th scope="row"><button type="button" class="dn" data-pessoa="'+esc(l.x.nome)+'">'+esc(l.x.nome)+'</button></th><td class="dc more">'+l.x.dias+'</td>'+tipos.map(t=>docCellHTML(l.x.nome,t,fim,0,true)).join('')+'</tr>'; });
+    table='<div class="dwrap"><table class="dtab"><thead><tr><th scope="col">PESSOA</th><th scope="col" class="dc" title="Dias na escala">DIAS</th>'+tipos.map(t=>'<th scope="col" class="dc">'+DOC_NOME[t]+'</th>').join('')+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+  }
+  const sem=pe.semLista.length?'<p class="hint">'+esc(pe.semLista.map(x=>recNome(x.t)).join(', '))+': sem a lista de pessoas no cadastro, a documentação vem da empresa.</p>':'';
+  const pac=pe.list.length?'<div class="toolbar sub"><button type="button" class="btn navy" data-act="docs-pacote">Baixar pacote de documentos (PDF)</button><span class="hint2">Junta num PDF só os documentos marcados de quem está na escala, com uma folha de índice na frente. Conferido até '+fmtLong(iso(fim))+', o último dia do evento.</span></div>':'';
+  $('#docsBody').innerHTML=chips+(pe.list.length?table:'<p class="hint">Coloque as equipes na escala pra ver a documentação de quem vai.</p>')+sem+pac;
+}
+
+/* ---------- importação da pasta do Drive ---------- */
+let DIMP=null;
+function openDocsPicker(){ const i=$('#docsFile'); if(i) i.click(); }
+async function openDocsImport(fileList){
+  const fl=Array.from(fileList||[]); const zips=fl.filter(f=>/\.zip$/i.test(f.name)), jsons=fl.filter(f=>/\.json$/i.test(f.name));
+  if(!zips.length){ toast('Escolha o .zip da pasta do Drive (o arquivo de validades .json pode ir junto).',true); return; }
+  if(!files().podeEnviar()){ toast('Só quem pode editar importa documentos.',true); return; }
+  let JSZip; try{ JSZip=await loadJSZip(); }catch(e){ toast('Não consegui carregar o leitor de zip.',true); return; }
+  toast('Lendo o zip…');
+  const man=new Map(); const addMan=o=>{ const a=o&&(o.arquivos||o); if(isObj(a)) Object.keys(a).forEach(k=>{ if(isObj(a[k])) man.set(fold(k.normalize('NFC')),a[k]); }); };
+  for(const j of jsons){ try{ addMan(JSON.parse(await j.text())); }catch(e){} }
+  const entries=[];
+  for(const z of zips){
+    let zip; try{ zip=await JSZip.loadAsync(z); }catch(e){ toast('Não consegui abrir '+z.name+'.',true); return; }
+    const inner=[]; zip.forEach((path,e)=>{ if(!e.dir) inner.push([path,e]); });
+    for(const [path,e] of inner){ const name=path.split('/').pop();
+      if(/\.json$/i.test(name)){ try{ addMan(JSON.parse(await e.async('string'))); }catch(x){} continue; }
+      if(!arqAceito(name)) continue; const parts=path.split('/'); if(parts.length<2) continue;
+      entries.push({path:path,name:name,empresa:normName(parts[0]),pessoa:normName(parts[parts.length-2]),tipo:tipoDoArquivo(name),size:(e._data&&e._data.uncompressedSize)||0,entry:e}); }
+  }
+  if(!entries.length){ toast('Não achei PDF nem foto dentro do zip.',true); return; }
+  const people=new Map();
+  entries.forEach(f=>{ f.meta=man.get(fold(f.path.normalize('NFC')))||null; const k=fold(f.pessoa); if(!people.has(k)) people.set(k,{nome:f.pessoa,empresa:f.empresa,files:[]}); people.get(k).files.push(f); });
+  const list=Array.from(people.values()).map(p=>{ const nome=equipeNome(p.nome)||p.nome; const have=docsDe(nome); p.nome=nome; p.files.forEach(f=>{ f.dup=have.some(d=>d.titulo===f.name&&(!f.size||!d.tam||d.tam===f.size)); }); return p; });
+  list.sort((a,b)=>a.empresa.localeCompare(b.empresa)||a.nome.localeCompare(b.nome));
+  DIMP={people:list,total:entries.length,todo:entries.filter(f=>!f.dup).length,comData:entries.filter(f=>f.meta).length,busy:false,done:0,fail:0};
+  leavePanel(); M.panel={kind:'docimport'}; buildPanel(); showPanel();
+}
+/* nome da pasta igual ao de alguém das equipes (sem acento, espaço duplo) */
+function equipeNome(n){ const k=fold(n); let hit=''; teamsOrdered().forEach(t=>membersOf(t.id).forEach(x=>{ if(!hit&&fold(x)===k) hit=x; })); if(hit) return hit; const p=pessoaRec(n); return p?normName(p.nome):''; }
+function buildDocsImportPanel(pn){ pn.innerHTML=headHTML('<span class="pchip o">DOCUMENTOS</span>','<h2>Importar a pasta de documentos</h2>')+'<div class="p-body" id="dimpBody"></div>'; docsImportParts(); }
+function docsImportParts(){
+  const b=$('#dimpBody'); if(!b||!DIMP) return; const P=DIMP;
+  const onde=files().nome==='artifact'?'Os arquivos ficam guardados neste artifact: quem consegue abrir o artifact consegue abrir os documentos. No menu Compartilhar dá pra deixar só pra sua organização.':files().nome==='supabase'?'Os arquivos ficam guardados no Supabase. Enquanto o site não tiver login, quem tiver o link do site consegue abrir.':'Neste modo os arquivos ficam só nesta aba (não vão pro banco).';
+  const rows=P.people.map(p=>{ const t=equipeDe(p.nome), novos=p.files.filter(f=>!f.dup).length;
+    return '<div class="imp-r"><div class="imp-n"><b>'+esc(p.nome)+'</b><small>'+esc(p.empresa)+' · '+(t?'EQUIPE '+esc(recNome(t)):'SEM EQUIPE')+' · '+plural(p.files.length,'arquivo','arquivos')+'</small></div><span class="imp-c">'+(novos?(novos===p.files.length?'':novos+' novos'):'já importado')+'</span></div>'; }).join('');
+  const busy=P.busy, pct=P.todo?Math.round(P.done/P.todo*100):100;
+  b.innerHTML='<p class="hint">'+esc(onde)+'</p>'
+    +'<div class="mp-sum"><dl><div><dt>PESSOAS</dt><dd>'+P.people.length+'</dd></div><div><dt>ARQUIVOS</dt><dd>'+P.total+(P.total-P.todo?' · '+(P.total-P.todo)+' já estavam aqui':'')+'</dd></div><div><dt>DATAS</dt><dd>'+(P.comData?P.comData+' com data lida do documento (ASO, NRs, CNH)':'sem o arquivo de validades — dá pra colocar as datas depois em cada pessoa')+'</dd></div></dl></div>'
+    +(busy||P.done?'<div class="dprog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></div><p class="hint">'+(busy?'Enviando '+P.done+' de '+P.todo+'…':'Pronto: '+plural(P.done-P.fail,'arquivo guardado','arquivos guardados')+(P.fail?' · '+P.fail+' com erro ('+esc(P.err||'')+')':''))+'</p>':'')
+    +'<section><div class="sec-h"><h3>QUEM ESTÁ NA PASTA</h3></div><div class="imp-list">'+rows+'</div></section>'
+    +'<div class="actions">'+(P.done&&!busy?'<button type="button" class="btn-primary" data-cancel>FECHAR</button>':'<button type="button" class="btn-primary" id="dimpGo"'+(busy||!P.todo?' disabled':'')+'>'+(P.todo?'IMPORTAR '+plural(P.todo,'ARQUIVO','ARQUIVOS'):'NADA NOVO PRA IMPORTAR')+'</button><button type="button" class="btn-ghost" data-cancel'+(busy?' disabled':'')+'>CANCELAR</button>')+'</div>';
+}
+async function runDocsImport(){
+  const P=DIMP; if(!P||P.busy||!P.todo) return; P.busy=true; P.done=0; P.fail=0; docsImportParts();
+  const pool=async(items,n,fn)=>{ let i=0; await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{ while(i<items.length){ const it=items[i++]; await fn(it); } })); };
+  for(const p of P.people){
+    const todo=p.files.filter(f=>!f.dup), novos=[];
+    await pool(todo,3,async f=>{
+      try{ const ct=tipoMime(f.name)||'application/pdf'; const raw=await f.entry.async('blob'); const blob=new Blob([raw],{type:ct}); const ref=await files().put(blob,ct,slugId(p.nome)); const m=f.meta||{};
+        novos.push({id:newId(),tipo:DOC_TIPOS.indexOf(m.tipo)>=0?m.tipo:f.tipo,titulo:f.name,data:m.data||'',validade:m.validade||'',est:!!m.est,nota:m.nota||'',arq:ref,tam:blob.size,ct:ct,criadoEm:nowIso()}); }
+      catch(e){ P.fail++; P.err=arqErroTxt(e); }
+      P.done++; const pr=$('#dimpBody .dprog i'); if(pr) pr.style.width=Math.round(P.done/P.todo*100)+'%'; const ht=$('#dimpBody .dprog+.hint'); if(ht) ht.textContent='Enviando '+P.done+' de '+P.todo+'…';
+    });
+    if(novos.length) patchPessoa(p.nome,o=>{ if(!tr(o.empresa)&&p.empresa) o.empresa=p.empresa; o.docs=o.docs.concat(novos); });
+    else if(!pessoaRec(p.nome)) ensurePessoa(p.nome,{empresa:p.empresa});
+  }
+  P.busy=false; docsImportParts(); refresh();
+  toast(P.fail?(P.done-P.fail)+' guardados, '+P.fail+' com erro.':'Documentos importados.',!!P.fail);
+}
+
+/* ---------- aviso no painel do dia (só equipes nossas, quando a documentação já está no sistema) ---------- */
+function docAvisoPessoa(ev,nome,t){ if(!docsEmUso()||!isPropria(t)) return ''; const p=pendencias(nome,docsExigidos(ev),evFimDate(ev),0); return p.length?'<span class="pp-d">DOC: '+esc(pendTxt(p))+'</span>':''; }
+
+/* ---------- eventos ---------- */
+function wireDocs(){
+  /* o campo de arquivo fica fora da tela que redesenha (senão a escolha se perde se alguém mudar algo enquanto a janela está aberta) */
+  const inp=$('#docsFile'); if(inp) inp.addEventListener('change',()=>{ const fl=Array.from(inp.files||[]); try{ inp.value=''; }catch(e){} openDocsImport(fl); });
+  const det=$('#viewDetalhe');
+  det.addEventListener('click',ev=>{
+    const e=cur(); if(!e) return; const t=ev.target;
+    const dx=t.closest('[data-dexige]'); if(dx){ if(dx.disabled) return; const k=dx.dataset.dexige; patchEv(e.id,o=>{ const cur0=docsExigidos(o); const i=cur0.indexOf(k); if(i>=0) cur0.splice(i,1); else cur0.push(k); o.docsExigidos=DOC_TIPOS.filter(x=>cur0.indexOf(x)>=0); }); return; }
+    if(t.closest('[data-act="docs-pacote"]')){ gerarPacoteDocs(e); return; }
+    const dp=t.closest('#docsEv [data-pessoa]'); if(dp){ openPessoa(dp.dataset.pessoa); return; }
+  });
+  const pn=$('#panel');
+  pn.addEventListener('click',ev=>{
+    const p=M.panel; if(!p) return; const t=ev.target;
+    if(p.kind==='docimport'){ if(t.closest('#dimpGo')) runDocsImport(); return; }
+    if(p.kind!=='pessoa') return;
+    if(t.closest('[data-act="pp-add"]')){ const i=$('#pp-file'); if(i) i.click(); return; }
+    const dd=t.closest('[data-ddel]'); if(dd){ M.confirm='ddel:'+dd.dataset.ddel; pessoaParts(); return; }
+    if(t.closest('[data-ddel-no]')){ M.confirm=null; pessoaParts(); return; }
+    const dy=t.closest('[data-ddel-yes]'); if(dy){ const id=dy.dataset.ddelYes, nome=p.nome, d=docsDe(nome).find(x=>x.id===id); M.confirm=null; if(!d) return;
+      patchPessoa(nome,o=>{ o.docs=o.docs.filter(x=>x.id!==id); });
+      if(d.arq&&!docsDe(nome).some(x=>x.arq===d.arq)) files().del(d.arq).catch(()=>{});
+      toast('Documento apagado.'); return; }
+  });
+  pn.addEventListener('change',ev=>{
+    const p=M.panel; if(!p||p.kind!=='pessoa') return; const el=ev.target;
+    if(el.id==='pp-file'){ const fl=el.files; pessoaUpload(fl).finally(()=>{ try{ el.value=''; }catch(e){} }); return; }
+    const row=el.closest('[data-did]'); if(row&&el.dataset.dk){ const id=row.dataset.did, k=el.dataset.dk, v=el.value;
+      patchPessoa(p.nome,o=>{ o.docs=o.docs.map(d=>{ if(d.id!==id) return d; const x=Object.assign({},d); if(k==='tipo') x.tipo=v; else if(k==='data'){ x.data=v; } else if(k==='validade'){ x.validade=v; x.est=false; } if(k==='validade'&&!v) x.est=!!DOC_PRAZO[x.tipo]; return x; }); }); pessoaParts(true); return; }
+    if(el.id==='pp-emp'){ flush('pemp:'+p.nome); }
+  });
+  pn.addEventListener('input',ev=>{ const p=M.panel; if(!p||p.kind!=='pessoa'||ev.target.id!=='pp-emp') return; const v=ev.target.value, nome=p.nome; schedule('pemp:'+nome,()=>patchPessoa(nome,o=>{ o.empresa=normName(v); }),700); });
 }
 /* ===== utilidades de PDF ===== */
 function loadJsPDF(){
@@ -3988,6 +4363,95 @@ async function gerarPDFEscala(w){
     const ok=await saveFile('escala-equipes-'+slugTxt(w.nome)+'.pdf',doc.output('arraybuffer'),'application/pdf');
     toast(ok?'PDF da escala pronto.':'Download não concluído.',!ok);
   }finally{ const b=$('#btnEscalaPDF'); if(b){ b.disabled=false; b.textContent=old||'PDF da escala (por equipe)'; } }
+}
+/* ===================================================================
+   PACOTE DE DOCUMENTOS DO EVENTO (PDF)
+   folha de índice (quem vai, cada documento e a página onde começa) + os documentos, na ordem da equipe
+   =================================================================== */
+async function gerarPacoteDocs(ev){
+  const tipos=docsExigidos(ev), fim=evFimDate(ev), pe=pessoasDoEvento(ev);
+  if(!pe.list.length){ toast('Ninguém na escala desse evento ainda.',true); return; }
+  let PL,JsPDF; try{ PL=await loadPdfLib(); JsPDF=await loadJsPDF(); }catch(e){ toast('Não consegui carregar o gerador de PDF.',true); return; }
+  toast('Montando o pacote de documentos…');
+  const body=await PL.PDFDocument.create();
+  const linhas=pe.list.map(x=>({x:x,itens:tipos.map(t=>{ const d=docAtualReq(x.nome,t); return {t:t,d:d,s:docStatus(d,fim,0),pag:0,erro:''}; })}));
+  /* vencido não entra no pacote (só aparece no índice) */
+  for(const l of linhas) for(const it of l.itens){
+    if(!it.d||!it.d.arq||it.s==='vencido') continue;
+    try{
+      const bytes=await files().bytes(it.d.arq), start=body.getPageCount();
+      const ct=it.d.ct||tipoMime(it.d.titulo||'')||'application/pdf';
+      if(ct==='application/pdf'){ const src=await PL.PDFDocument.load(bytes,{ignoreEncryption:true}); (await body.copyPages(src,src.getPageIndices())).forEach(p=>body.addPage(p)); }
+      else if(ct==='image/png'||ct==='image/jpeg'){ const img=ct==='image/png'?await body.embedPng(bytes):await body.embedJpg(bytes); const W=595.28,H=841.89,m=28,s=Math.min((W-2*m)/img.width,(H-2*m)/img.height,1); body.addPage([W,H]).drawImage(img,{x:(W-img.width*s)/2,y:(H-img.height*s)/2,width:img.width*s,height:img.height*s}); }
+      else throw new Error('formato');
+      it.pag=start+1;
+    }catch(e){ it.erro=String(e&&e.message)==='formato'?'FORMATO':'NÃO ABRIU'; }
+  }
+  /* a capa sai duas vezes: a primeira só pra saber quantas folhas ela ocupa (as páginas do índice contam a partir dela) */
+  let capa=capaPacote(JsPDF,ev,tipos,fim,pe,linhas,0); const nCapa=capa.getNumberOfPages(); capa=capaPacote(JsPDF,ev,tipos,fim,pe,linhas,nCapa);
+  const out=await PL.PDFDocument.create(), cdoc=await PL.PDFDocument.load(capa.output('arraybuffer'));
+  (await out.copyPages(cdoc,cdoc.getPageIndices())).forEach(p=>out.addPage(p));
+  if(body.getPageCount()) (await out.copyPages(body,body.getPageIndices())).forEach(p=>out.addPage(p));
+  out.setTitle('Documentação da equipe — '+(ev.nome||'evento')); out.setProducer('Demandas Plenart');
+  const u8=await out.save(), buf=u8.buffer.slice(u8.byteOffset,u8.byteOffset+u8.byteLength);
+  const pend=linhas.reduce((n,l)=>n+l.itens.filter(i=>i.s!=='ok'||i.erro).length,0);
+  const ok=await saveFile('DOCUMENTACAO_'+slug(ev.nome)+'_'+stampNow()+'.pdf',buf,'application/pdf');
+  toast(ok?'Pacote gerado'+(pend?' · '+pend+(pend>1?' pendências listadas na capa':' pendência listada na capa'):''):'Download não concluído.',!ok);
+}
+
+function capaPacote(JsPDF,ev,tipos,fim,pe,linhas,offset){
+  const doc=new JsPDF({unit:'mm',format:'a4',compress:true});
+  const PW=210,PH=297,ML=14,CW=PW-2*ML,TOP=20,BOT=PH-16;
+  const C={navy:[31,59,99],blue:[46,117,182],orange:[232,116,26],ink:[27,36,48],muted:[96,108,124],faint:[150,160,174],line:[214,221,230],soft:[243,246,250],white:[255,255,255],ok:[34,128,86],okS:[222,242,231],bad:[178,56,38],badS:[248,220,214],warnS:[253,236,214],warn:[176,98,20]};
+  const fnt=(st,sz)=>{ doc.setFont('helvetica',st); doc.setFontSize(sz); }, tc=c=>doc.setTextColor(c[0],c[1],c[2]), fc=c=>doc.setFillColor(c[0],c[1],c[2]), dc=c=>doc.setDrawColor(c[0],c[1],c[2]);
+  const T=(s,x,y,o)=>doc.text(pdfSafe(s),x,y,o||{});
+  const fit=(s,w,st,sz)=>{ fnt(st,sz); s=pdfSafe(s); if(doc.getTextWidth(s)<=w) return s; while(s.length>1&&doc.getTextWidth(s+'...')>w) s=s.slice(0,-1); return s.trim()+'...'; };
+  const evNome=(tr(ev.nome)||'EVENTO').toUpperCase();
+  const ps=evPS(ev); let a=null; ['mont','ev','desm'].forEach(k=>ps[k].forEach(sp=>{ if(!a||sp.a<a) a=sp.a; })); Object.keys(alOf(ev)).forEach(k=>{ const d=PD(k); if(d&&(!a||d<a)) a=d; });
+  /* cabeçalho */
+  fc(C.navy); doc.rect(0,0,PW,34,'F'); fc(C.orange); doc.rect(0,34,PW,1.2,'F');
+  [[0,0,C.white],[1,0,C.orange],[0,1,C.orange],[1,1,C.blue]].forEach(([i,j,c])=>{ fc(c); doc.rect(ML+i*3.6,8.6+j*3.6,3,3,'F'); });
+  fnt('bold',8.5); tc([200,214,235]); T('DOCUMENTAÇÃO DA EQUIPE',ML+10,12.2,{charSpace:0.6});
+  fnt('normal',7.2); tc([170,190,222]); T('GERADO EM '+fdt(new Date()),PW-ML,12.2,{align:'right'});
+  tc(C.white); T(fit(evNome,CW,'bold',17),ML,23);
+  if(tr(ev.local)){ tc([214,226,242]); T(fit(ev.local,CW,'normal',8.6),ML,29.5); }
+  let y=43;
+  fnt('bold',8); tc(C.navy); T('PERÍODO',ML,y); fnt('normal',8.6); tc(C.ink); T((a?fmtLong(iso(a))+' A ':'')+fmtLong(iso(fim)),ML+22,y);
+  y+=5.2; fnt('bold',8); tc(C.navy); T('DOCUMENTOS',ML,y); fnt('normal',8.6); tc(C.ink); T(tipos.map(t=>DOC_NOME[t]).join('  ·  '),ML+22,y);
+  y+=5.2; fnt('bold',8); tc(C.navy); T('VALIDADE',ML,y); fnt('normal',8.6); tc(C.ink); T('CONFERIDA ATÉ '+fmtLong(iso(fim))+' (ÚLTIMO DIA DO EVENTO)',ML+22,y);
+  y+=6;
+  /* tabela */
+  const n=tipos.length, tw=Math.max(14,Math.min(21,(CW-62)/n)), nw=CW-n*tw, rowH=7.4;
+  const head=()=>{ fc(C.navy); doc.rect(ML,y,CW,7,'F'); fnt('bold',7); tc(C.white); T('PESSOA',ML+2,y+4.7); tipos.forEach((t,i)=>T(fit(DOC_NOME[t],tw-1.5,'bold',7),ML+nw+i*tw+tw/2,y+4.7,{align:'center'})); y+=7; };
+  const pageBreak=()=>{ doc.addPage(); y=TOP; fnt('bold',8.5); tc(C.navy); T(fit(evNome,CW-40,'bold',8.5),ML,13); fnt('normal',7.5); tc(C.muted); T('DOCUMENTAÇÃO DA EQUIPE (CONTINUAÇÃO)',PW-ML,13,{align:'right'}); dc(C.orange); doc.setLineWidth(0.6); doc.line(ML,15.5,PW-ML,15.5); head(); };
+  head();
+  let g=null, zebra=0;
+  linhas.forEach(l=>{
+    const tn=recNome(l.x.t);
+    if(tn!==g){ if(y+rowH*2>BOT) pageBreak(); g=tn; fnt('bold',7.6); tc(C.blue); T('EQUIPE '+tn,ML+2,y+4.8,{charSpace:0.3}); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,y+rowH,PW-ML,y+rowH); y+=rowH; zebra=0; }
+    if(y+rowH>BOT) pageBreak();
+    if(zebra++%2){ fc(C.soft); doc.rect(ML,y,CW,rowH,'F'); }
+    tc(C.ink); T(fit(l.x.nome,nw-4,'bold',8.4),ML+2,y+4.9);
+    l.itens.forEach((it,i)=>{ const x=ML+nw+i*tw, cx=x+tw/2;
+      let txt,bg,fg;
+      if(it.erro){ txt=it.erro; bg=C.badS; fg=C.bad; }
+      else if(it.s==='falta'){ txt='FALTA'; bg=C.badS; fg=C.bad; }
+      else if(it.s==='vencido'){ txt='VENC. '+fmtDMY(docValidade(it.d)); bg=C.badS; fg=C.bad; }
+      else if(it.s==='semdata'){ txt=it.pag?'PÁG. '+(it.pag+offset):'SEM DATA'; bg=C.warnS; fg=C.warn; }
+      else { txt=it.pag?'PÁG. '+(it.pag+offset):'OK'; bg=C.okS; fg=C.ok; }
+      fc(bg); doc.roundedRect(x+0.8,y+1.1,tw-1.6,rowH-2.2,0.8,0.8,'F'); tc(fg); T(fit(txt,tw-2.4,'bold',6.6),cx,y+4.7,{align:'center'});
+    });
+    dc(C.line); doc.setLineWidth(0.15); doc.line(ML,y+rowH,PW-ML,y+rowH); y+=rowH;
+  });
+  /* terceirizadas sem lista e observação */
+  const notas=[];
+  if(pe.semLista.length) notas.push(pe.semLista.map(x=>recNome(x.t)).join(', ')+': terceirizada sem a lista de pessoas no cadastro (documentação com a empresa).');
+  notas.push('PÁG. = página deste PDF onde o documento começa. VENCIDO ou FALTA: o documento não entrou no pacote. Em laranja: o documento entrou, mas está sem a data de validade no sistema.');
+  if(linhas.some(l=>l.itens.some(i=>i.d&&i.d.tipo!==i.t))) notas.push('RG: quando a pessoa não tem RG no sistema, vai a CNH no lugar.');
+  y+=4; notas.forEach(s=>{ fnt('normal',7.4); const ls=doc.splitTextToSize(pdfSafe(s),CW); tc(C.muted); ls.forEach(L=>{ if(y+4>BOT){ doc.addPage(); y=TOP; } T(L,ML,y+3); y+=3.6; }); y+=1.2; });
+  const np=doc.getNumberOfPages();
+  for(let i=1;i<=np;i++){ doc.setPage(i); fnt('normal',7); tc(C.faint); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,PH-11,PW-ML,PH-11); T('GRUPO TENDAS PLENART  ·  DOCUMENTAÇÃO  ·  '+clip(evNome,60),ML,PH-7); T('ÍNDICE '+i+' DE '+np,PW-ML,PH-7,{align:'right'}); }
+  return doc;
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
