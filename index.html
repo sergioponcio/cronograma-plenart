@@ -15,6 +15,10 @@ window.__SB_KEY = "sb_publishable_AGEijWwD2kwSIHV9gEZ5UQ_666WICol";
 </script>
 <style>body{margin:0}</style>
 <title>Demandas Plenart</title>
+<script>
+/* tema escolhido no botão claro/escuro (fica salvo neste navegador); sem escolha, segue o sistema */
+(function(){ try{ var t=localStorage.getItem('plenart.ui.tema'); if(t==='claro'||t==='escuro') document.documentElement.setAttribute('data-theme',t==='escuro'?'dark':'light'); }catch(e){} })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
@@ -848,6 +852,10 @@ button.thead:hover h3{color:var(--mblue)}
 .tbox.sem .arows{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));column-gap:22px}
 .tbox.sem .arow{border-top:0;border-bottom:1px solid var(--line)}
 
+/* botão claro / escuro */
+:root[data-theme="light"]{color-scheme:light}
+.btn.tema{display:inline-flex;align-items:center;gap:5px}
+.btn.tema svg{flex:none;display:block}
 /* importação do quadro */
 .imp-list{display:flex;flex-direction:column;gap:6px}
 .imp-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,14.5rem);gap:5px 12px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
@@ -892,7 +900,7 @@ button.thead:hover h3{color:var(--mblue)}
     </div>
   </header>
   <div class="banner" id="banner" hidden></div>
-  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div>
+  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm tema" id="btnTema" type="button"></button><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json" hidden></div>
   <div class="restorebar" id="restoreBar" hidden></div>
 
   <main>
@@ -3191,7 +3199,24 @@ function openRestoreFile(obj){
   bar.scrollIntoView({block:'center',behavior:'smooth'});
   bar.onclick=e=>{ const b=e.target.closest('[data-ra]'); if(!b) return; const act=b.dataset.ra; bar.hidden=true; bar.onclick=null; if(act==='sub') restoreData(obj,false); else if(act==='juntar') restoreData(obj,true); };
 }
+/* ---------- tema claro / escuro ---------- */
+const TEMA_KEY='plenart.ui.tema';
+const ICON_SOL='<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>';
+const ICON_LUA='<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" fill="currentColor"><path d="M20.4 14.7A8.4 8.4 0 0 1 9.3 3.6a.65.65 0 0 0-.85-.75A9.6 9.6 0 1 0 21.15 15.55a.65.65 0 0 0-.75-.85z"/></svg>';
+function temaSalvo(){ try{ const t=localStorage.getItem(TEMA_KEY); return t==='claro'||t==='escuro'?t:''; }catch(e){ return ''; } }
+function temaEscuro(){ const t=document.documentElement.getAttribute('data-theme'); if(t==='dark') return true; if(t==='light') return false; return !!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches); }
+function aplicaTema(){ const s=temaSalvo(), root=document.documentElement; if(s){ const want=s==='escuro'?'dark':'light'; if(root.getAttribute('data-theme')!==want) root.setAttribute('data-theme',want); } renderTemaBtn(); }
+function renderTemaBtn(){ const b=$('#btnTema'); if(!b) return; const dark=temaEscuro(), lbl='Mudar para o modo '+(dark?'claro':'escuro'); b.innerHTML=(dark?ICON_SOL:ICON_LUA)+'<span>'+(dark?'Modo claro':'Modo escuro')+'</span>'; b.setAttribute('aria-label',lbl); b.title=lbl; }
+function trocaTema(){ const novo=temaEscuro()?'claro':'escuro'; try{ localStorage.setItem(TEMA_KEY,novo); }catch(e){} if(!temaSalvo()) document.documentElement.setAttribute('data-theme',novo==='escuro'?'dark':'light'); aplicaTema(); }
+function wireTema(){
+  const b=$('#btnTema'); if(b) b.addEventListener('click',trocaTema);
+  aplicaTema();
+  try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',renderTemaBtn); }catch(e){}
+  /* se a página que hospeda trocar o tema, a escolha feita aqui continua valendo */
+  try{ new MutationObserver(aplicaTema).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']}); }catch(e){}
+}
 function wire(){
+  wireTema();
   document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
   $('#radarEv').addEventListener('change',ev=>{ radarEv=ev.target.value; render(); });
