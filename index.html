@@ -951,6 +951,20 @@ table.lst tr.arq td{color:var(--muted)}
 select.osi-sel,input.osi-nome{width:100%;min-width:0;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 13.5px/1.3 var(--cond);letter-spacing:.03em;padding:8px 9px;text-transform:uppercase}
 .osi-l{display:block;margin:10px 0 4px;font:700 11.5px/1.2 var(--cond);letter-spacing:.08em;color:var(--muted)}
 .osi-opts{margin-top:8px}
+/* ---------- pré-visualização do PDF ---------- */
+.pvwrap{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;background:color-mix(in srgb,var(--bg) 55%,#1b2430)}
+.pvwrap[hidden]{display:none}
+.pv-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--surface);border-bottom:2px solid var(--orange);box-shadow:var(--shadow)}
+.pv-tt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 240px}
+.pv-tt b{font:700 14.5px/1.2 var(--cond);letter-spacing:.03em;overflow-wrap:anywhere;color:var(--ink)}
+.pv-tt small{font:600 11.5px/1.3 var(--cond);letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+.pv-body{flex:1;min-height:0;overflow:auto;padding:18px 16px calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:14px;overscroll-behavior:contain}
+.pv-pg{width:min(100%,920px);flex:0 0 auto;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.28);position:relative;overflow:hidden}
+.pv-pg:not(.ok)::before{content:"desenhando…";position:absolute;inset:0;display:grid;place-items:center;font:600 12px var(--cond);letter-spacing:.06em;color:#9aa4b2}
+.pv-pg.bad::before{content:"não consegui desenhar esta página"}
+.pv-pg canvas{display:block;width:100%;height:auto}
+.pv-n{position:absolute;right:8px;bottom:6px;font:600 11px/1 var(--cond);letter-spacing:.04em;color:#8a94a3;background:rgba(255,255,255,.85);padding:2px 5px;border-radius:2px}
+body.pv-open{overflow:hidden}
 body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fixed;inset:10px;z-index:9999;display:grid;place-items:center;border:3px dashed var(--orange);border-radius:10px;background:color-mix(in srgb,var(--bg) 82%,transparent);font:700 22px/1.2 var(--cond);letter-spacing:.08em;color:var(--orange);pointer-events:none;text-align:center;padding:20px}
 @media (max-width:560px){ .actions #btnOS{padding:7px 10px} }
 </style>
@@ -1097,6 +1111,15 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
 </div>
 <div id="scrim" class="scrim" hidden></div>
 <aside id="panel" class="panel" role="dialog" aria-label="Detalhes" hidden></aside>
+<div class="pvwrap" id="pdfPrev" role="dialog" aria-modal="true" aria-labelledby="pdfPrevT" hidden>
+  <div class="pv-bar">
+    <div class="pv-tt"><b id="pdfPrevT"></b><small id="pdfPrevInfo"></small></div>
+    <button class="btn" id="pdfPrevAba" type="button" title="Abre no leitor de PDF do navegador (dá pra imprimir de lá)" hidden>Abrir em outra aba</button>
+    <button class="btn primary" id="pdfPrevBaixar" type="button">Baixar PDF</button>
+    <button class="btn" id="pdfPrevFechar" type="button">Fechar</button>
+  </div>
+  <div class="pv-body" id="pdfPrevBody"></div>
+</div>
 <div class="toast" id="toast" hidden></div>
 <datalist id="dlEquipes"></datalist>
 <datalist id="dlEquip"></datalist>
@@ -3641,6 +3664,7 @@ function wire(){
   wireTema();
   wireDocs();
   wireOSImport();
+  wirePDFPreview();
   document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
   $('#radarEv').addEventListener('change',ev=>{ radarEv=ev.target.value; render(); });
@@ -4217,8 +4241,7 @@ async function exportPDF(opts){
   }catch(err){ console.error(err); toast('Erro ao montar o PDF: '+(err&&err.message||err),true); return; }
   const CLI=O.modo==='CLIENTE', SIMP=O.modo==='SIMPLIFICADO', EF=O.equipeId&&regOf(O.equipeId)?O.equipeId:'';
   const suf=(CLI?'_CLIENTE':SIMP?'_SIMPLES':'')+(EF?'_'+slug(recNome(EF)):'');
-  const ok=await saveFile('CRONOGRAMA_'+slug(ev.nome)+suf+'_'+stampNow()+'.pdf',res.doc.output('arraybuffer'),'application/pdf');
-  toast(ok?'Cronograma gerado ('+res.pages+(res.pages===1?' página)':' páginas)'):'Download não concluído.',!ok);
+  abrirPDF('CRONOGRAMA_'+slug(ev.nome)+suf+'_'+stampNow()+'.pdf',res.doc.output('arraybuffer'),'Cronograma salvo ('+res.pages+(res.pages===1?' página)':' páginas)'));
 }
 
 function renderCrono(JsPDF,ev,O,S,tight){
@@ -4640,8 +4663,7 @@ async function exportRadarPDF(v){
   const np=doc.getNumberOfPages();
   for(let i=1;i<=np;i++){ doc.setPage(i); font('normal',7.5); tcol(C.muted); T('GRUPO TENDAS PLENART · RADAR · '+(evSel?(evSel.nome||''):'TODOS OS EVENTOS')+' · GERADO EM '+fmtLong(iso(new Date())),M,H-6); T('PÁGINA '+i+'/'+np,W-M,H-6,{align:'right'}); }
   const d=new Date(); const stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-  const ok=await saveFile('RADAR_'+(evSel?slug(evSel.nome):'TODOS')+'_'+stamp+'.pdf',doc.output('arraybuffer'),'application/pdf');
-  toast(ok?'Relatório gerado':'Download não concluído.',!ok);
+  abrirPDF('RADAR_'+(evSel?slug(evSel.nome):'TODOS')+'_'+stamp+'.pdf',doc.output('arraybuffer'),'Relatório salvo.');
 }
 /* ===================================================================
    PDF DO MAPA (o que está na tela, maior e em folhas) e PDF DA ESCALA (por equipe)
@@ -4750,8 +4772,7 @@ async function gerarPDFMapa(){
     const n=doc.getNumberOfPages();
     for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(...MUTED); doc.text(pdfS('GRUPO TENDAS PLENART · MAPA DE DIAS'),Mg,PH-3.5); doc.text(pdfS('PÁGINA '+i+' DE '+n),PW-Mg,PH-3.5,{align:'right'}); }
     const name='mapa-de-dias-'+slugTxt(w.nome)+(ft?'-'+slugTxt(recNome(ft)):'')+(M.f.ev?'-'+slugTxt(((evById(M.f.ev)||{}).nome||'evento')).slice(0,30):'')+(M.f.ph?'-'+M.f.ph:'')+'.pdf';
-    const ok=await saveFile(name,doc.output('arraybuffer'),'application/pdf');
-    toast(ok?'PDF do mapa pronto.':'Download não concluído.',!ok);
+    abrirPDF(name,doc.output('arraybuffer'),'PDF do mapa salvo.');
   }finally{ const b=$('#mp-go'); if(b){ b.disabled=false; b.textContent=old||'GERAR PDF'; } }
 }
 /* escala por equipe: pra mandar pro responsável de cada equipe */
@@ -4803,8 +4824,7 @@ async function gerarPDFEscala(w){
     if(sem.length){ const semT={nome:'FALTA EQUIPE NO PERÍODO'}; groupHead(semT,false,ORANGE,INK); sem.forEach(o=>row(pdfDates(o.a,o.b),PHN[o.k]+' · '+(o.ev.nome||''),'','',()=>groupHead(semT,true,ORANGE,INK))); }
     const n=doc.getNumberOfPages();
     for(let i=1;i<=n;i++){ doc.setPage(i); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...MUTED); doc.text(pdfS('PÁGINA '+i+' DE '+n),PW-Mg,PH-8,{align:'right'}); }
-    const ok=await saveFile('escala-equipes-'+slugTxt(w.nome)+'.pdf',doc.output('arraybuffer'),'application/pdf');
-    toast(ok?'PDF da escala pronto.':'Download não concluído.',!ok);
+    abrirPDF('escala-equipes-'+slugTxt(w.nome)+'.pdf',doc.output('arraybuffer'),'PDF da escala salvo.');
   }finally{ const b=$('#btnEscalaPDF'); if(b){ b.disabled=false; b.textContent=old||'PDF da escala (por equipe)'; } }
 }
 /* ===================================================================
@@ -4838,8 +4858,7 @@ async function gerarPacoteDocs(ev){
   out.setTitle('Documentação da equipe — '+(ev.nome||'evento')); out.setProducer('Demandas Plenart');
   const u8=await out.save(), buf=u8.buffer.slice(u8.byteOffset,u8.byteOffset+u8.byteLength);
   const pend=linhas.reduce((n,l)=>n+l.itens.filter(i=>i.s!=='ok'||i.erro).length,0);
-  const ok=await saveFile('DOCUMENTACAO_'+slug(ev.nome)+'_'+stampNow()+'.pdf',buf,'application/pdf');
-  toast(ok?'Pacote gerado'+(pend?' · '+pend+(pend>1?' pendências listadas na capa':' pendência listada na capa'):''):'Download não concluído.',!ok);
+  abrirPDF('DOCUMENTACAO_'+slug(ev.nome)+'_'+stampNow()+'.pdf',buf,'Pacote salvo'+(pend?' · '+pend+(pend>1?' pendências listadas na capa':' pendência listada na capa'):'')+'.');
 }
 
 function capaPacote(JsPDF,ev,tipos,fim,pe,linhas,offset){
@@ -4895,6 +4914,66 @@ function capaPacote(JsPDF,ev,tipos,fim,pe,linhas,offset){
   const np=doc.getNumberOfPages();
   for(let i=1;i<=np;i++){ doc.setPage(i); fnt('normal',7); tc(C.faint); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,PH-11,PW-ML,PH-11); T('GRUPO TENDAS PLENART  ·  DOCUMENTAÇÃO  ·  '+clip(evNome,60),ML,PH-7); T('ÍNDICE '+i+' DE '+np,PW-ML,PH-7,{align:'right'}); }
   return doc;
+}
+/* ===================================================================
+   PRÉ-VISUALIZAÇÃO DO PDF — nada é baixado sem ver antes
+   o PDF é desenhado na tela com o pdf.js (funciona no artifact, no site e no celular);
+   só o botão BAIXAR salva o arquivo (uma vez). No site, dá pra abrir no leitor do navegador.
+   =================================================================== */
+let PV=null; /* {nome, data:ArrayBuffer, msg, doc, obs, volta} */
+function pvEls(){ return {box:$('#pdfPrev'),t:$('#pdfPrevT'),info:$('#pdfPrevInfo'),body:$('#pdfPrevBody'),baixar:$('#pdfPrevBaixar'),aba:$('#pdfPrevAba')}; }
+async function abrirPDF(nome,data,msg){
+  fecharPDF();
+  const E=pvEls(); if(!E.box){ const ok=await saveFile(nome,data,'application/pdf'); toast(ok?(msg||'PDF salvo.'):'Download não concluído.',!ok); return; }
+  const me={nome:nome,data:data,msg:msg||'PDF salvo.',doc:null,obs:null,volta:document.activeElement}; PV=me;
+  E.t.textContent=nome; E.info.textContent='ABRINDO A PRÉ-VISUALIZAÇÃO…'; E.body.innerHTML='';
+  E.baixar.disabled=false; E.baixar.textContent='Baixar PDF';
+  E.aba.hidden=!!(window.claude&&typeof window.claude.use==='function'); /* no artifact o navegador não deixa abrir outra aba */
+  E.box.hidden=false; document.body.classList.add('pv-open'); setTimeout(()=>{ if(PV===me) E.baixar.focus({preventScroll:true}); },30);
+  try{
+    const L=await loadPdfJs();
+    const doc=await L.getDocument({data:new Uint8Array(data.slice(0)),isEvalSupported:false,verbosity:0}).promise;
+    if(PV!==me){ try{ doc.destroy(); }catch(e){} return; }
+    me.doc=doc; const n=doc.numPages, p1=await doc.getPage(1), v1=p1.getViewport({scale:1});
+    E.info.textContent=plural(n,'página','páginas')+' · '+(v1.width>v1.height?'deitado':'em pé')+' · confira antes de baixar';
+    const frag=document.createDocumentFragment();
+    for(let i=1;i<=n;i++){ const d=document.createElement('div'); d.className='pv-pg'; d.dataset.pg=i; d.style.aspectRatio=v1.width+' / '+v1.height; d.innerHTML='<span class="pv-n">'+i+' / '+n+'</span>'; frag.appendChild(d); }
+    E.body.appendChild(frag);
+    /* desenha só as páginas que aparecem na tela (o pacote de documentos tem dezenas) */
+    me.obs=new IntersectionObserver(ents=>ents.forEach(en=>{ if(!en.isIntersecting) return; const el=en.target; me.obs.unobserve(el); pvDesenha(me,el); }),{root:E.body,rootMargin:'600px 0px'});
+    E.body.querySelectorAll('.pv-pg').forEach(el=>me.obs.observe(el));
+  }catch(e){ if(PV===me) E.info.textContent='não consegui mostrar a prévia — dá pra baixar mesmo assim'; }
+}
+async function pvDesenha(me,el){
+  if(PV!==me||!me.doc) return;
+  try{
+    const page=await me.doc.getPage(+el.dataset.pg), v1=page.getViewport({scale:1});
+    el.style.aspectRatio=v1.width+' / '+v1.height;
+    const dpr=Math.min(2,window.devicePixelRatio||1), w=Math.max(320,el.clientWidth||800), s=Math.min(3,w/v1.width*dpr), vp=page.getViewport({scale:s});
+    const c=document.createElement('canvas'); c.width=Math.round(vp.width); c.height=Math.round(vp.height);
+    await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+    if(PV!==me) return; el.insertBefore(c,el.firstChild); el.classList.add('ok'); try{ page.cleanup(); }catch(e){}
+  }catch(e){ el.classList.add('bad'); }
+}
+async function baixarPDF(){
+  const me=PV; if(!me) return; const E=pvEls(); E.baixar.disabled=true; E.baixar.textContent='Baixando…';
+  const ok=await saveFile(me.nome,me.data,'application/pdf');
+  if(PV!==me) return;
+  if(ok){ toast(me.msg); fecharPDF(); } else { E.baixar.disabled=false; E.baixar.textContent='Baixar PDF'; toast('Download não concluído.',true); }
+}
+function abaPDF(){ if(!PV) return; const url=URL.createObjectURL(new Blob([PV.data],{type:'application/pdf'})); const w=window.open(url,'_blank'); if(!w) toast('O navegador bloqueou a nova aba — use Baixar PDF.',true); setTimeout(()=>URL.revokeObjectURL(url),120000); }
+function fecharPDF(){
+  const me=PV; if(!me) return; PV=null;
+  try{ if(me.obs) me.obs.disconnect(); }catch(e){} try{ if(me.doc) me.doc.destroy(); }catch(e){}
+  const E=pvEls(); if(E.box){ E.box.hidden=true; E.body.innerHTML=''; } document.body.classList.remove('pv-open');
+  try{ if(me.volta&&document.contains(me.volta)) me.volta.focus({preventScroll:true}); }catch(e){}
+}
+function wirePDFPreview(){
+  $('#pdfPrevBaixar').addEventListener('click',baixarPDF);
+  $('#pdfPrevAba').addEventListener('click',abaPDF);
+  $('#pdfPrevFechar').addEventListener('click',fecharPDF);
+  /* Esc fecha só a prévia (o painel de trás continua aberto) */
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&PV){ e.preventDefault(); e.stopImmediatePropagation(); fecharPDF(); } },true);
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
