@@ -1023,6 +1023,174 @@ body.pv-open{overflow:hidden}
 body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fixed;inset:10px;z-index:9999;display:grid;place-items:center;border:3px dashed var(--orange);border-radius:10px;background:color-mix(in srgb,var(--bg) 82%,transparent);font:700 22px/1.2 var(--cond);letter-spacing:.08em;color:var(--orange);pointer-events:none;text-align:center;padding:20px}
 @media (max-width:560px){ .actions #btnOS{padding:7px 10px} }
 </style>
+<style>
+/* ===================================================================
+   LAYOUT MAIS LIMPO (v38): abas novas, lista de eventos agrupada,
+   barra do mapa enxuta, evento com abas internas, menu "Mais"
+   =================================================================== */
+
+/* ---------- títulos em azul-marinho: no modo escuro clareiam (senão somem no fundo) ---------- */
+:root{--head:var(--navy)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--head:#A9C6EE} }
+:root[data-theme="dark"]{--head:#A9C6EE}
+.brand h1,.ptitle,.reppanel .rp-title,.eqsim .es-title,.eqfam-nome,.rline .rdt,.matsHead h2,.mhead .mlabel,.state h2,.ec-n,.p-head h2,.title-in,.thead h3,.lg-brand b,.restorebar b,.evsum b,.zb,.lst-gh h2,.guia h2,.phg-t{color:var(--head)}
+
+/* ---------- cabeçalho e linha de status ---------- */
+.top{gap:10px 18px;padding-bottom:10px}
+.brand h1{font-size:25px}
+.tab{padding:7px 13px}
+.statusline{margin-top:6px;gap:6px}
+.statusline #countTxt{color:var(--muted)}
+.statusline .btn.tema{display:inline-flex;align-items:center;justify-content:center;min-width:28px;padding:3px 6px}
+.vhint{margin:2px 0 0;color:var(--muted);font-size:13.5px;line-height:1.4;max-width:96ch}
+.okline{margin:10px 0 0;padding:8px 12px;border-left:4px solid var(--ok);background:var(--ok-soft);border-radius:0 4px 4px 0;font:600 12.5px/1.3 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+
+/* ---------- como funciona (3 passos, some no "Entendi") ---------- */
+.lst-help{margin-left:auto}
+.guia{position:relative;margin-top:12px;padding:12px 16px 14px;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:4px}
+.guia h2{margin:0 0 8px;font:700 13px/1 var(--cond);letter-spacing:.1em;text-transform:uppercase}
+.guia ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 24px;counter-reset:passo}
+.guia li{counter-increment:passo;display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:10px;align-items:start}
+.guia li::before{content:counter(passo);grid-row:1/3;width:26px;height:26px;border-radius:50%;background:var(--orange);color:#fff;font:700 15px/26px var(--cond);text-align:center}
+.guia li b{font:700 14.5px/1.2 var(--cond);letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+.guia li span{font-size:13px;line-height:1.4;color:var(--muted)}
+.guia li em{font-style:normal;font-weight:600;color:var(--ink)}
+.guia #guiaFechar{position:absolute;top:10px;right:12px}
+@media (max-width:760px){ .guia ol{grid-template-columns:minmax(0,1fr)} }
+
+/* ---------- lista de eventos: agrupada pelo momento ---------- */
+.lst-bar{margin-top:4px}
+.lst-g{margin-top:20px}
+.lst-g:first-child{margin-top:14px}
+.lst-gh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.lst-gh h2{margin:0;font:700 15px/1 var(--cond);letter-spacing:.09em;text-transform:uppercase}
+.lst-gh h2 b{font-weight:600;color:var(--muted);margin-left:6px;font-variant-numeric:tabular-nums}
+.g-agora .lst-gh{border-bottom-color:var(--orange)}
+.lst-g.g-agora .lst-gh h2{color:var(--orange-ink)}
+.lst-gs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-left:auto}
+.lst-q{font-size:13px;color:var(--muted)}
+.evlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.evr{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.35fr) minmax(0,1fr);align-items:center;gap:6px 20px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:4px;padding:10px 14px}
+.g-agora .evr{border-left-color:var(--orange)}
+.g-fim .evr,.g-sem .evr,.evr.arq{border-left-color:var(--line-strong)}
+.evr:hover{box-shadow:0 0 0 1px var(--navy)}
+.evr-main{appearance:none;background:none;border:0;padding:0;margin:0;text-align:left;display:flex;flex-direction:column;gap:3px;min-width:0;cursor:pointer;color:inherit;font:inherit}
+.evr-main::after{content:'';position:absolute;inset:0;border-radius:4px}
+.evr-main:focus-visible{outline:none}
+.evr-main:focus-visible::after{outline:2px solid var(--focus);outline-offset:2px}
+.evr-n{font:700 15.5px/1.15 var(--cond);letter-spacing:.03em;text-transform:uppercase;color:var(--ink)}
+.evr-l{font-size:12px;line-height:1.25;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.evr-when{display:flex;flex-wrap:wrap;gap:5px}
+.pd{display:inline-flex;align-items:center;gap:5px;padding:4px 8px 3px;border-radius:3px;font:600 11.5px/1.2 var(--cond);letter-spacing:.07em;color:var(--ink);white-space:nowrap}
+.pd b{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.pd i{display:none}
+.pd.on{box-shadow:inset 0 0 0 2px var(--navy)}
+.pd.on i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.pd.none{background:var(--grey-soft);color:var(--muted)}
+.pd.arqd{background:var(--ok-soft);color:var(--ok)}
+.evr.arq .pd:not(.arqd){opacity:.7}
+.evr-st{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px}
+.bdg{display:inline-block;padding:3px 7px 2px;border-radius:3px;font:700 11px/1.25 var(--cond);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:var(--orange-soft);color:var(--orange-ink)}
+.bdg.bad{background:var(--bad);color:var(--surface)}
+.bdg.warn{background:var(--surface);color:var(--orange-ink);border:1.5px dashed var(--orange);padding:2px 6px 1px}
+.evr-m{font:600 11.5px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.evr-act{position:relative;z-index:1;display:inline-flex;gap:6px;margin-left:auto}
+.evr.arq .evr-n{color:var(--muted)}
+@media (max-width:980px){
+  .evr{grid-template-columns:minmax(0,1fr);gap:8px}
+  .evr-st:empty{display:none}
+}
+
+/* ---------- mapa: barra enxuta ---------- */
+.m-bar{gap:8px}
+.m-sp{flex:1 1 0;min-width:0}
+.mt-s{max-width:210px;border:1px solid var(--line-strong);border-radius:3px;background:var(--surface);color:var(--ink);font:600 13px/1.2 var(--cond);letter-spacing:.03em;padding:6px 8px;text-transform:uppercase}
+.mt-s.on{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.pill.zero{opacity:.5}
+.pill.zero:hover{opacity:.8}
+.m-legrow{gap:4px 14px;margin-top:-2px}
+.m-leg4{gap:4px 14px;font-size:11px}
+.m-leg4 .lg{width:14px;height:11px;margin-right:5px}
+.m-howb{padding:2px 0;font-size:11.5px}
+.m-bar .m-hint{margin:0 0 2px}
+.zoom{margin-left:0}
+.zl{display:inline-block;min-width:78px;margin:0;text-align:center;font:700 11px/1.1 var(--cond);letter-spacing:.06em;color:var(--orange-ink)}
+.m-help{padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+@media (max-width:760px){
+  .m-sp{display:none}
+  .mt-s{flex:1 1 140px;max-width:none}
+}
+
+/* ---------- evento: botões de cima e menu "Mais" ---------- */
+.dtop .more{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 4px);z-index:30;min-width:290px;background:var(--surface);border:1px solid var(--line-strong);border-radius:4px;box-shadow:var(--shadow);padding:4px;display:flex;flex-direction:column}
+.menu button{appearance:none;background:none;border:0;text-align:left;display:block;padding:10px 12px;font:600 13px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);cursor:pointer;border-radius:3px}
+.menu button:hover,.menu button:focus-visible{background:var(--surface-2);outline:none}
+.menu button.danger{color:var(--danger)}
+.dtop .confirm{flex-basis:100%;justify-content:flex-end}
+
+/* ---------- evento: datas agrupadas por etapa ---------- */
+.hdr{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 12px}
+.phg{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:5px 8px;padding:7px 10px 9px;border-radius:4px;min-width:0}
+.phg-t{grid-column:1/-1;font:700 11.5px/1.2 var(--cond);letter-spacing:.1em;text-transform:uppercase}
+.phg-a{font:600 11px/1 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hdr .fld.wide2{grid-column:span 2}
+@media (max-width:760px){ .hdr{grid-template-columns:minmax(0,1fr)} .hdr .fld.wide2{grid-column:auto} }
+
+/* ---------- evento: abas internas ---------- */
+.evtabs{position:sticky;top:0;z-index:20;display:flex;align-items:flex-end;gap:3px;margin-top:16px;padding-top:6px;background:var(--bg);border-bottom:2px solid var(--navy)}
+.evt{min-height:39px;border:1px solid var(--line);border-bottom:0;background:var(--surface-2);color:var(--muted);padding:10px 16px 9px;font:700 13.5px/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:4px 4px 0 0;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.evt:hover{color:var(--ink);border-color:var(--line-strong)}
+.evt b{font:700 11.5px/1 var(--cond);letter-spacing:.02em;min-width:19px;padding:3px 6px 2px;border-radius:10px;background:var(--line);color:var(--ink);text-align:center}
+.evt b:empty{display:none}
+.evt.on{background:var(--navy);border-color:var(--navy);color:var(--on-accent)}
+.evt.on b{background:rgba(255,255,255,.22);color:var(--on-accent)}
+.evt.warn b{background:var(--orange);color:var(--surface)}
+.evt.bad b{background:var(--bad);color:var(--surface)}
+.evt.ok b{background:var(--ok-soft);color:var(--ok)}
+.evtabs .spacer{flex:1}
+.evradar{align-self:center;margin-bottom:5px;text-align:right}
+.evpane>.prods:first-child,.evpane>.matsHead:nth-child(2){margin-top:12px}
+.evpane .matsHead{margin-top:12px}
+.evpane .matsHead h2,.evpane .matsHead .cnt{display:none}
+/* cartões da escala: tirar do evento discreto, atalhos de etapa curtos */
+.ecard .ec-h .btn.danger{border-color:transparent;background:none;color:var(--muted);padding:3px 4px;font-size:10.5px}
+.ecard .ec-h .btn.danger:hover{color:var(--danger);border-color:var(--danger)}
+.ecard .pmore .chip{padding:3px 8px;font-size:10.5px}
+.ptitle.fixed{cursor:default}
+.ptitle.fixed:hover{background:none}
+@media (max-width:620px){
+  .evtabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .evtabs::-webkit-scrollbar{display:none}
+  .evt{padding:9px 10px 8px;font-size:12.5px;letter-spacing:.05em}
+  .evradar{display:none}
+}
+
+/* ---------- radar: o seletor de evento não passa da tela ---------- */
+#viewPend .sel.big{max-width:100%;min-width:0}
+#viewPend .sel.big select{min-width:0;max-width:min(520px,calc(100vw - 110px))}
+
+/* ---------- cadastro: equipes / equipamentos e frota ---------- */
+.recview .rec-top .toolbar{margin-top:2px}
+
+/* ---------- celular: linhas de botões rolam de lado em vez de virar 3 linhas ---------- */
+@media (max-width:620px){
+  .m-per,.m-pend,.rec-top .chips{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;max-width:100%;min-width:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .m-per::-webkit-scrollbar,.m-pend::-webkit-scrollbar,.rec-top .chips::-webkit-scrollbar{display:none}
+  .m-per>*,.m-pend>*,.rec-top .chips>*{flex:0 0 auto}
+  .mt-s{flex:1 1 0;min-width:0;padding:6px 4px;font-size:12px}
+  .m-tools .zoom{margin-left:auto}
+  .mt-pdf{flex:1 1 auto}
+  .rec-top .toolbar{gap:8px}
+  .rec-top .toolbar .lbl{flex-basis:100%}
+  .rec-top .toolbar .spacer{display:none}
+  .rec-top .toolbar .btn{flex:1 1 auto}
+  .bk-x{display:none}
+  .evt{padding:9px 9px 8px;font-size:12px;letter-spacing:.04em;gap:5px}
+  .lst-gs{margin-left:0}
+}
+
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -1030,17 +1198,17 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
       <span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <div>
         <h1>Demandas</h1>
-        <p class="sub">Demandas, contratações, fabricação e cronograma por evento</p>
       </div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Visão">
-      <button class="tab on" data-view="mapa" role="tab" aria-selected="true">Mapa de dias</button>
-      <button class="tab" data-view="eventos" role="tab" aria-selected="false">Eventos</button>
-      <button class="tab" data-view="pend" role="tab" aria-selected="false">Radar</button>
-      <button class="tab" data-view="recursos" role="tab" aria-selected="false">Equipes &amp; equipamentos</button>
+      <button class="tab on" data-view="eventos" role="tab" aria-selected="true">Eventos</button>
+      <button class="tab" data-view="mapa" role="tab" aria-selected="false">Mapa de dias</button>
+      <button class="tab" data-view="pend" role="tab" aria-selected="false" title="O que depende de terceiro: fabricação, locação, compra, frete e equipe de fora">Radar</button>
+      <button class="tab" data-view="equipes" role="tab" aria-selected="false">Equipes</button>
+      <button class="tab" data-view="frota" role="tab" aria-selected="false">Equipamentos e frota</button>
     </nav>
     <div class="actions">
-      <button class="btn" id="btnOS" type="button" title="Criar ou completar um evento pelo PDF da O.S. e/ou da planta (dá pra arrastar o PDF pra cá)">↑ O.S. / planta</button>
+      <button class="btn" id="btnOS" type="button" title="Criar ou completar um evento pelo PDF da O.S. e/ou da planta (dá pra arrastar o PDF pra cá)">↑ Subir O.S. / planta</button>
       <button class="btn primary" id="btnNovo" type="button">+ Novo evento</button>
     </div>
   </header>
@@ -1052,12 +1220,21 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
     <section id="viewMapa" role="tabpanel"></section>
 
     <section id="viewLista" role="tabpanel" hidden>
-      <p class="hint">Um evento por linha. Clique pra abrir: datas, produtores, a escala das equipes, fretes e os ambientes com seus itens, fabricação, locação e equipamento.</p>
-      <div class="toolbar">
-        <input id="q" class="search" type="search" placeholder="Buscar evento ou local" autocomplete="off">
+      <div class="toolbar lst-bar">
+        <input id="q" class="search" type="search" placeholder="Buscar evento ou local" autocomplete="off" aria-label="Buscar evento ou local">
         <div class="chips lst-arq" id="lstArq" role="group" aria-label="Ativos ou arquivados"></div>
+        <button type="button" class="link lst-help" id="guiaAbrir" hidden>Como funciona</button>
       </div>
-      <div class="tablewrap" id="listHost" style="margin-top:12px"></div>
+      <section class="guia" id="guia" aria-labelledby="guiaT" hidden>
+        <h2 id="guiaT">Como funciona</h2>
+        <ol>
+          <li><b>Crie o evento</b><span>Em <em>+ Novo evento</em>, ou suba o PDF da O.S. / planta que ele já vem com as datas e os ambientes.</span></li>
+          <li><b>Escale as equipes</b><span>Dentro do evento (aba Escala) ou no <em>Mapa de dias</em>: clique nos dias e escolha quem vai.</span></li>
+          <li><b>Mande pra equipe</b><span>O <em>Cronograma PDF</em> do evento, ou a <em>Mensagem do dia</em> pronta pro WhatsApp.</span></li>
+        </ol>
+        <button type="button" class="btn sm" id="guiaFechar">Entendi</button>
+      </section>
+      <div id="listHost"></div>
       <div class="emptymsg" id="listEmpty" hidden></div>
     </section>
 
@@ -1066,10 +1243,15 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
         <button class="btn" id="btnVoltar" type="button">← Voltar</button>
         <span class="spacer"></span>
         <button class="btn navy" id="btnPDF" type="button" aria-expanded="false">Cronograma PDF ▾</button>
-        <button class="btn navy" id="btnRel" type="button" aria-expanded="false">Relatório terceiros PDF ▾</button>
-        <button class="btn" id="btnOSEv" type="button" title="Completar este evento pelo PDF da O.S. e/ou da planta">↑ O.S. / planta</button>
-        <button class="btn okb" id="btnConcluir" type="button">✓ Concluir evento</button>
-        <button class="btn danger" id="btnDelEv" type="button">Excluir evento</button>
+        <button class="btn okb" id="btnConcluir" type="button">✓ Concluir</button>
+        <div class="more">
+          <button class="btn" id="btnMais" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="menuMais">Mais ▾</button>
+          <div class="menu" id="menuMais" role="menu" hidden>
+            <button type="button" role="menuitem" id="btnRel" aria-expanded="false">Relatório de terceiros (PDF)</button>
+            <button type="button" role="menuitem" id="btnOSEv" title="Completar este evento pelo PDF da O.S. e/ou da planta">Completar pela O.S. / planta</button>
+            <button type="button" role="menuitem" class="danger" id="btnDelEv">Excluir evento</button>
+          </div>
+        </div>
         <span class="confirm" id="delEvConfirm" hidden>Excluir o evento com tudo que tem dentro?
           <button class="btn danger solid sm" id="btnDelEvSim" type="button">Sim, excluir</button>
           <button class="btn sm" id="btnDelEvNao" type="button">Não</button>
@@ -1091,41 +1273,40 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
       </div>
       <div class="hdr" id="hdr">
         <div class="fld big wide"><label for="h_nome">Evento</label><input id="h_nome" data-k="nome" type="text" placeholder="NOME DO EVENTO" autocomplete="off"></div>
-        <div class="fld wide"><label for="h_local">Local / cidade</label><input id="h_local" data-k="local" type="text" placeholder="LOCAL / CIDADE - UF" autocomplete="off"></div>
-        <div class="fld"><label for="h_monInicio">Montagem — início</label><input id="h_monInicio" data-k="monInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld"><label for="h_monFim">Montagem — fim</label><input id="h_monFim" data-k="monFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld"><label for="h_evInicio">Evento — início</label><input id="h_evInicio" data-k="evInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld"><label for="h_evFim">Evento — fim</label><input id="h_evFim" data-k="evFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld"><label for="h_desInicio">Desmontagem — início</label><input id="h_desInicio" data-k="desInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld"><label for="h_desFim">Desmontagem — fim</label><input id="h_desFim" data-k="desFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div>
-        <div class="fld wide"><label for="h_obs">Observações do evento</label><input id="h_obs" data-k="obs" type="text" placeholder="HORÁRIO / JANELA, PERNOITE, CONTATO, O QUE MAIS PRECISAR" autocomplete="off"></div>
+        <div class="phg ph-mont" role="group" aria-labelledby="phg-mont"><span class="phg-t" id="phg-mont">Montagem</span><div class="fld"><label class="sr" for="h_monInicio">Montagem — início</label><input id="h_monInicio" data-k="monInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div><span class="phg-a" aria-hidden="true">até</span><div class="fld"><label class="sr" for="h_monFim">Montagem — fim</label><input id="h_monFim" data-k="monFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div></div>
+        <div class="phg ph-ev" role="group" aria-labelledby="phg-ev"><span class="phg-t" id="phg-ev">Evento</span><div class="fld"><label class="sr" for="h_evInicio">Evento — início</label><input id="h_evInicio" data-k="evInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div><span class="phg-a" aria-hidden="true">até</span><div class="fld"><label class="sr" for="h_evFim">Evento — fim</label><input id="h_evFim" data-k="evFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div></div>
+        <div class="phg ph-desm" role="group" aria-labelledby="phg-desm"><span class="phg-t" id="phg-desm">Desmontagem</span><div class="fld"><label class="sr" for="h_desInicio">Desmontagem — início</label><input id="h_desInicio" data-k="desInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div><span class="phg-a" aria-hidden="true">até</span><div class="fld"><label class="sr" for="h_desFim">Desmontagem — fim</label><input id="h_desFim" data-k="desFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div></div>
+        <div class="fld wide2"><label for="h_local">Local / cidade</label><input id="h_local" data-k="local" type="text" placeholder="LOCAL / CIDADE - UF" autocomplete="off"></div>
+        <div class="fld"><label for="h_obs">Observações</label><input id="h_obs" data-k="obs" type="text" placeholder="HORÁRIO, PERNOITE, CONTATO…" autocomplete="off"></div>
+      </div>
+
+      <div class="evtabs" id="evTabs" role="tablist" aria-label="Partes do evento">
+        <button type="button" class="evt" role="tab" data-evtab="escala" id="evt-escala" aria-controls="paneEscala">Escala<b id="etc-escala"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="amb" id="evt-amb" aria-controls="paneAmb">Ambientes<b id="etc-amb"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="fretes" id="evt-fretes" aria-controls="paneFretes">Fretes<b id="etc-fretes"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="docs" id="evt-docs" aria-controls="paneDocs">Documentos<b id="etc-docs"></b></button>
+        <span class="spacer"></span>
+        <button type="button" class="link evradar" id="evRadar" hidden></button>
+      </div>
+
+      <div class="evpane" id="paneEscala" role="tabpanel" aria-labelledby="evt-escala">
+      <div class="prods escala" id="escala">
+        <div class="ptitle fixed"><span class="pt">Quem trabalha em cada dia</span><span class="pc" id="escCnt"></span><small>clique num dia (ou arraste por vários) pra escalar equipe, pessoa ou produtor</small></div>
+        <div class="evmapa" id="evMapa"></div>
+        <div class="addline" id="escAdd"></div>
+        <div id="escTeams"></div>
       </div>
 
       <div class="prods" id="prods">
-        <div class="ptitle" data-act="fold" data-key="prods" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Produtores</span><span class="pc" id="prodCnt"></span><small>quem produz o evento (do cadastro) — em cada ambiente você escolhe quem responde por ele; os dias de cada um ficam na escala</small></div>
+        <div class="ptitle" data-act="fold" data-key="prods" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Produtores</span><span class="pc" id="prodCnt"></span><small>quem produz o evento; os dias de cada um ficam na escala</small></div>
         <div id="prodRows"></div>
         <div class="addline" id="prodAdd"></div>
       </div>
 
-      <div class="prods escala" id="escala">
-        <div class="ptitle" data-act="fold" data-key="escala" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Escala — quem trabalha em cada dia</span><span class="pc" id="escCnt"></span><small>clique num dia (ou arraste por vários) pra colocar equipe, pessoa ou produtor; aqui embaixo fica o resumo de cada equipe, com quem vai e o que faz</small></div>
-        <div class="evmapa" id="evMapa"></div>
-        <div id="escTeams"></div>
-        <div class="addline" id="escAdd"></div>
       </div>
 
-      <div class="prods docsev" id="docsEv">
-        <div class="ptitle" data-act="fold" data-key="docs" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Documentação da equipe</span><span class="pc" id="docsCnt"></span><small>ASO, NRs, ficha EPI, RG… de quem está na escala, conferidos até o último dia do evento</small></div>
-        <div id="docsBody"></div>
-      </div>
-
-      <div class="prods fretes" id="fretes">
-        <div class="ptitle" data-act="fold" data-key="fretes" role="button" tabindex="0" aria-expanded="true"><span class="fi" aria-hidden="true"></span><span class="pt">Fretes</span><span class="pc" id="freteCnt"></span><small id="freteSum">quando vai, quando volta, qual caminhão e o que ele leva — o mesmo frete pode levar mais de um ambiente</small><span class="tadd"><button type="button" class="chip frt" data-act="add-frete">+ Frete</button></span></div>
-        <div id="freteRows"></div>
-        <div class="quick"><button type="button" class="chip frt" id="btnAddFrete">+ Frete</button></div>
-      </div>
-
-      <div class="evsum" id="evSum"></div>
+      <div class="evpane" id="paneAmb" role="tabpanel" aria-labelledby="evt-amb" hidden>
+      <div class="evsum" id="evSum" hidden></div>
       <div class="matsHead">
         <h2>Ambientes</h2><span class="cnt" id="matCount"></span>
         <span class="spacer"></span>
@@ -1135,15 +1316,36 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
       </div>
       <div id="mats"></div>
       <div class="emptymsg" id="matsEmpty" hidden>Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma vá colocando os itens com data e equipe, o que fabricar, alugar ou comprar e os equipamentos.</div>
+      </div>
+
+      <div class="evpane" id="paneFretes" role="tabpanel" aria-labelledby="evt-fretes" hidden>
+      <div class="prods fretes" id="fretes">
+        <div class="ptitle fixed"><span class="pt">Fretes</span><span class="pc" id="freteCnt"></span><small id="freteSum">cada linha é um caminhão: quando vai, quando volta e o que leva</small></div>
+        <div id="freteRows"></div>
+        <div class="quick"><button type="button" class="chip frt" id="btnAddFrete">+ Frete</button></div>
+      </div>
+      </div>
+
+      <div class="evpane" id="paneDocs" role="tabpanel" aria-labelledby="evt-docs" hidden>
+      <div class="prods docsev" id="docsEv">
+        <div class="ptitle fixed"><span class="pt">Documentação de quem está na escala</span><span class="pc" id="docsCnt"></span><small>ASO, NRs, ficha EPI, RG… conferidos até o último dia do evento</small></div>
+        <div id="docsBody"></div>
+      </div>
+      </div>
     </section>
 
-    <section id="viewRecursos" role="tabpanel" hidden>
-      <div class="rec-top" id="recTop"></div>
-      <div id="recBody"></div>
+    <section id="viewEquipes" class="recview" role="tabpanel" hidden>
+      <div class="rec-top" id="eqTop"></div>
+      <div id="eqBody"></div>
+    </section>
+
+    <section id="viewFrota" class="recview" role="tabpanel" hidden>
+      <div class="rec-top" id="frTop"></div>
+      <div id="frBody"></div>
     </section>
 
     <section id="viewPend" role="tabpanel" hidden>
-      <p class="hint">Tudo que depende de terceiro: fabricação, locação, compra, equipe e produtor terceirizados, equipamento alugado e frete de fora. Escolha o evento, o tipo e veja o quê, com quem, quando retira, quando chega e quando sai. O status dá pra trocar aqui mesmo; clique no resto da linha pra abrir o evento.</p>
+      <p class="vhint">O que depende de terceiro — fabricação, locação, compra, frete e equipe ou produtor de fora. O status muda aqui mesmo; clique na linha pra abrir o evento.</p>
       <div class="toolbar">
         <label class="sel big" for="radarEv">Evento <select id="radarEv"><option value="TODOS">Todos os eventos</option></select></label>
         <input id="radarQ" class="search" type="search" placeholder="Buscar descrição ou fornecedor" autocomplete="off">
@@ -1158,9 +1360,9 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
         <div class="chips" id="radarChips" aria-label="Filtrar por status"></div>
         <span class="count" id="radarCount"></span>
       </div>
-      <div class="eqsim" id="eqSim" hidden></div>
       <div class="tablewrap" id="pendHost" style="margin-top:12px"></div>
       <div class="emptymsg" id="pendEmpty" hidden></div>
+      <div class="eqsim" id="eqSim" hidden></div>
     </section>
   </main>
 </div>
@@ -1199,7 +1401,8 @@ const QUICK_EQP=['EMPILHADEIRA','MUNCK','GUINDASTE','GENIE','PLATAFORMA','GERADO
 const CAMINHOES=['TOCO','TRUCK','CARRETA','VAN','OUTRO'];
 const HFIELDS=['nome','local','monInicio','monFim','evInicio','evFim','desInicio','desFim','obs'];
 const PHN={mont:'MONTAGEM',ev:'EVENTO',man:'MANUTENÇÃO',desm:'DESMONTAGEM'};
-const VIEWS=['mapa','eventos','pend','recursos'];
+const VIEWS=['eventos','mapa','pend','equipes','frota'];
+const isRecView=v=>(v==null?view:v)==='equipes'||(v==null?view:v)==='frota';
 const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const tr=v=>String(v==null?'':v).trim();
 const pad2=n=>String(n).padStart(2,'0');
@@ -1209,7 +1412,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let eventos=[], ambientes=[], legados=[], recursos=[];
 let db=null, storage='connecting', readOnly=false;
 let loaded={eventos:false,ambientes:false,recursos:false};
-let view='mapa', currentId=null, backView='mapa', q='';
+let view='eventos', currentId=null, backView='eventos', q='';
 let radarFilter=new Set(), radarKind=new Set(), radarEv='TODOS', radarQ='', radarView={items:[]};
 const LS_EV='plenart.demandas3.eventos', LS_AMB='plenart.demandas3.ambientes', LS_EV_OLD='plenart.demandas2.eventos', LS_MAT_OLD='plenart.demandas2.materiais', LS_FOLD='plenart.ui.fold', LS_REC='plenart.demandas3.recursos';
 function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
@@ -1228,9 +1431,9 @@ const M={
   zoom:+MS.zoom||0, cw:new Map(), nameW:0, lastBase:0, lastFit:0,
   panel:null, confirm:null, tdel:null,
   mp:Object.assign({folha:'a4',dias:7,fazer:true,quem:true},MS.mp||{}),
-  recWin:MS.recWin||''
+  recWin:MS.recWin||'', evTab:'escala', help:!!MS.help, datas:false
 };
-function saveM(){ lsSet('plenart.ui.mapa',{win:M.win,de:M.de,ate:M.ate,fteam:M.f.team,fph:M.f.ph,zoom:M.zoom,mp:M.mp,recWin:M.recWin}); }
+function saveM(){ lsSet('plenart.ui.mapa',{win:M.win,de:M.de,ate:M.ate,fteam:M.f.team,fph:M.f.ph,zoom:M.zoom,mp:M.mp,recWin:M.recWin,help:M.help}); }
 
 /* opções do cronograma PDF (persistidas neste navegador) */
 const CRONO_SECS=['resumo','escala','diaadia','ambiente','terceiros','fretes'];
@@ -2252,7 +2455,7 @@ async function reorderRecs(tipo,order){
   const seq=full.map(id=>set.has(id)?order[oi++]:id);
   const changed=[];
   seq.forEach((id,i)=>{ const r=recursos.find(x=>x.id===id); if(r&&(Number(r.ordem)||0)!==i+1){ const o=Object.assign({},r,{ordem:i+1,atualizadoEm:nowIso()}); upsertLocal('recursos',o); changed.push(id); } });
-  if(view==='recursos') renderRecursos();
+  if(isRecView()) renderRecursos();
   try{ for(const id of changed){ const r=recursos.find(x=>x.id===id); if(r) await setDoc('recursos',r); } }catch(err){ handleWriteError(err); }
 }
 function reorderAmbArray(aid,key,order){
@@ -2271,18 +2474,19 @@ let toastT=null;
 function toast(msg,err){ const t=$('#toast'); t.textContent=msg; t.className='toast'+(err?' err':''); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{ t.hidden=true; },err?4600:2600); }
 function setStatus(){
   const dot=$('#dot'); dot.className='dot '+(storage==='db'?'db':storage==='local'?'local':storage==='error'?'error':'');
-  const src=storage==='db'?'banco compartilhado':storage==='local'?'só neste navegador':storage==='error'?'sem conexão':storage==='login'?'entre com o seu acesso':'conectando…';
-  const nArq=eventos.filter(e=>e.concluido).length, nAt=eventos.length-nArq;
-  $('#countTxt').textContent=(storage==='connecting'||storage==='login'?'':nAt+' evento'+(nAt===1?'':'s')+(nArq?' (+'+nArq+' arquivado'+(nArq===1?'':'s')+')':'')+' · '+ambientes.length+' ambiente'+(ambientes.length===1?'':'s')+' · ')+src;
+  $('#countTxt').textContent=storage==='db'?'banco compartilhado':storage==='local'?'só neste navegador':storage==='error'?'sem conexão':storage==='login'?'entre com o seu acesso':'conectando…';
+  /* backup e restaurar: no site, só o administrador */
+  const adm=!AUTH||!!(ME&&ME.admin); $('#btnBackup').hidden=!adm; $('#btnRestore').hidden=!adm||readOnly;
   renderSaveState(); renderBkAviso();
 }
 /* lembrete de backup (neste computador): aparece depois de 7 dias sem baixar; no site, só pro administrador */
 const BK_KEY='plenart.ui.backupEm';
 function diasSemBackup(){ let t=null; try{ t=localStorage.getItem(BK_KEY); }catch(e){} const d=t?new Date(t):null; return d&&!isNaN(d)?Math.floor((Date.now()-d.getTime())/864e5):-1; }
-function renderBkAviso(){ const b=$('#bkAviso'); if(!b) return; const n=diasSemBackup(), pode=(storage==='db'||storage==='local')&&!readOnly&&(!AUTH||(ME&&ME.admin)), mostra=pode&&(n<0||n>=7); b.hidden=!mostra; if(mostra) b.textContent=n<0?'SEM BACKUP NESTE COMPUTADOR':'SEM BACKUP HÁ '+n+' DIAS'; }
+function renderBkAviso(){ const b=$('#bkAviso'); if(!b) return; const n=diasSemBackup(), pode=(storage==='db'||storage==='local')&&!readOnly&&(!AUTH||(ME&&ME.admin)), mostra=pode&&(n<0||n>=7); b.hidden=!mostra; if(mostra) b.innerHTML=n<0?'SEM BACKUP<span class="bk-x"> NESTE COMPUTADOR</span>':'SEM BACKUP HÁ '+n+' DIAS'; }
 function chip(v,map,cls){ if(!v) return ''; return '<span class="st st-'+((map||COT_TONE)[v]||'grey')+(cls?' '+cls:'')+'">'+esc(v)+'</span>'; }
 function setView(v){
-  if(VIEWS.indexOf(v)<0) v='mapa';
+  if(v==='recursos') v='equipes';
+  if(VIEWS.indexOf(v)<0) v='eventos';
   view=v;
   $$('.tab').forEach(b=>{ const on=b.dataset.view===v; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); });
   render();
@@ -2303,11 +2507,12 @@ function render(){
   $('#viewLista').hidden=!(view==='eventos'&&!showDet);
   $('#viewDetalhe').hidden=!showDet;
   $('#viewPend').hidden=view!=='pend';
-  $('#viewRecursos').hidden=view!=='recursos';
+  $('#viewEquipes').hidden=view!=='equipes';
+  $('#viewFrota').hidden=view!=='frota';
   renderDatalists();
   if(view==='mapa') renderMap();
   else if(view==='eventos'){ if(showDet) renderDetail(); else renderList(); }
-  else if(view==='recursos') renderRecursos();
+  else if(isRecView()) renderRecursos();
   else renderPend();
   syncPanel();
   setStatus();
@@ -2330,28 +2535,63 @@ function concluirEventos(ids,on){
   M.confirm=null; refresh();
   if(n) toast(on?(n>1?n+' eventos concluídos':'Evento concluído')+' — '+(n>1?'foram':'foi')+' pros ARQUIVADOS.':(n>1?n+' eventos reabertos.':'Evento reaberto — voltou pro mapa e pro radar.'));
 }
+/* datas curtas: 24/10 – 05/11 · 09 – 14/11 · 13/10 (ano só quando não é o deste ano) */
+function dmD(x,y){
+  if(!x) return ''; y=y||x; const yy=today0().getFullYear();
+  const f=(d,m)=>pad2(d.getDate())+(m?'/'+pad2(d.getMonth()+1)+(d.getFullYear()!==yy?'/'+String(d.getFullYear()).slice(2):''):'');
+  if(+sod(x)===+sod(y)) return f(x,true);
+  return f(x,!(x.getMonth()===y.getMonth()&&x.getFullYear()===y.getFullYear()))+' – '+f(y,true);
+}
+/* em que momento o evento está: acontecendo agora, próximo, já terminou, sem data */
+function evGrupo(e){ const s=e.span||evSpan(e), t=iso(today0()); if(!s.first) return 'sem'; if((s.last||s.first)<t) return 'fim'; if(s.first>t) return 'prox'; return 'agora'; }
+const LST_G={agora:'Acontecendo agora',prox:'Próximos',fim:'Já terminaram',sem:'Sem data'};
+/* choque daqui pra frente (o que já passou não pede mais atenção) */
+function choqueAdiante(ev){ const al=alOf(ev), t=iso(today0()); return Object.keys(al).some(k=>k>=t&&al[k].some(tm=>teamConf(ev,k,tm)||vehConf(ev,k,tm).length)); }
+function evRowHTML(e,arq){
+  const ps=evPS(e), t=today0(), g=arq?'arq':evGrupo(e);
+  const when=[['mont','MONT'],['ev','EVENTO'],['desm','DESM']].map(([k,l])=>ps[k].map(sp=>{ const on=!arq&&sp.a<=eod(t)&&sp.b>=t; return '<span class="pd ph-'+k+(on?' on':'')+'"'+(on?' title="É hoje"':'')+'><i aria-hidden="true"></i>'+l+' <b>'+dmD(sp.a,sp.b)+'</b>'+(on?'<span class="sr"> (hoje)</span>':'')+'</span>'; }).join('')).join('');
+  const st=[];
+  if(g==='agora'||g==='prox'||g==='sem'){
+    if(choqueAdiante(e)) st.push('<span class="bdg bad" title="Pessoa ou carro em dois lugares no mesmo dia">CHOQUE</span>');
+    const sem=semEquipeDays(e,null).length; if(sem) st.push('<span class="bdg warn" title="Dias de montagem, manutenção ou desmontagem sem ninguém escalado">FALTA EQUIPE · '+plural(sem,'DIA','DIAS')+'</span>');
+  }
+  if(!arq){ const ab=radarOfEv(e.id).filter(x=>isOpen(x.status)).length; if(ab) st.push('<span class="bdg" title="Pendências com terceiro no radar (fabricação, locação, compra, frete…)">'+ab+' EM ABERTO</span>'); }
+  const nt=teamsOfEv(e).length, na=ambsOf(e.id).length, meta=[nt?plural(nt,'equipe','equipes'):'',na?plural(na,'ambiente','ambientes'):''].filter(Boolean).join(' · ');
+  const act=readOnly?'':arq?'<button type="button" class="btn sm" data-reabrir="'+esc(e.id)+'">Reabrir</button>':(g==='fim'?'<button type="button" class="btn sm okb" data-concl="'+esc(e.id)+'">✓ Concluir</button>':'');
+  return '<li class="evr'+(arq?' arq':'')+'" data-id="'+esc(e.id)+'">'
+    +'<button type="button" class="evr-main" data-open-ev="'+esc(e.id)+'"><span class="evr-n">'+esc(e.nome||'(sem nome)')+'</span>'+(tr(e.local)?'<span class="evr-l">'+esc(e.local)+'</span>':'')+'</button>'
+    +'<div class="evr-when">'+(when||'<span class="pd none">SEM DATAS</span>')+(arq&&parseISO(e.concluido)?'<span class="pd arqd">CONCLUÍDO EM <b>'+fmtDate(e.concluido)+'</b></span>':'')+'</div>'
+    +'<div class="evr-st">'+st.join('')+(meta?'<span class="evr-m">'+meta+'</span>':'')+(act?'<span class="evr-act">'+act+'</span>':'')+'</div></li>';
+}
+/* "como funciona" (3 passos) pra quem chega agora — some no "Entendi" e volta no link */
+const GUIA_KEY='plenart.ui.guiaVisto';
+function guiaVisto(){ try{ return localStorage.getItem(GUIA_KEY)==='1'; }catch(e){ return false; } }
+function renderGuia(){ const g=$('#guia'), a=$('#guiaAbrir'); if(!g) return; const ver=!!M.guia||(!guiaVisto()&&!readOnly); g.hidden=!ver; a.hidden=ver; }
+function fechaGuia(){ try{ localStorage.setItem(GUIA_KEY,'1'); }catch(e){} M.guia=false; renderGuia(); }
 function renderList(){
+  renderGuia();
   const list=filteredEvents(), arq=!!M.lstArq, nArq=eventos.filter(e=>e.concluido).length;
   const ca=$('#lstArq'); if(ca) ca.innerHTML='<button type="button" class="chip'+(arq?'':' on')+'" data-arq="0" aria-pressed="'+(arq?'false':'true')+'">ATIVOS <b>'+(eventos.length-nArq)+'</b></button><button type="button" class="chip'+(arq?' on':'')+'" data-arq="1" aria-pressed="'+(arq?'true':'false')+'">ARQUIVADOS <b>'+nArq+'</b></button>';
-  const fins=arq?[]:list.filter(evTerminou);
-  let h='<table class="lst"><thead><tr><th>Evento</th><th>Montagem</th><th>Evento (datas)</th><th>Desmontagem</th><th class="n">Ambientes</th><th class="n">Itens</th><th class="n">Equipes na escala</th><th class="n">Fretes</th><th class="n">Equip. alugado</th><th class="n">Em aberto no radar</th></tr></thead><tbody>';
-  list.forEach(e=>{
-    const s=evStats(e), nt=teamsOfEv(e).length, ch=hasChoque(e);
-    const fimTag=arq?'<span class="tg-arq">CONCLUÍDO'+(parseISO(e.concluido)?' EM '+fmtDate(e.concluido):'')+'</span>'+(readOnly?'':'<button type="button" class="btn sm" data-reabrir="'+esc(e.id)+'">Reabrir</button>'):(evTerminou(e)?'<span class="tg-fim">TERMINOU</span>'+(readOnly?'':'<button type="button" class="btn sm okb" data-concl="'+esc(e.id)+'">✓ Concluir</button>'):'');
-    h+='<tr data-id="'+esc(e.id)+'"'+(arq?' class="arq"':'')+'><td class="ev">'+esc(e.nome||'(sem nome)')+'<small>'+esc(e.local||' ')+'</small>'+(fimTag?'<span class="ev-fim">'+fimTag+'</span>':'')+'</td>'
-      +'<td class="date">'+esc(fmtRange(e.monInicio,e.monFim))+'</td><td class="date">'+esc(fmtRange(e.evInicio,e.evFim))+'</td><td class="date">'+esc(fmtRange(e.desInicio,e.desFim))+'</td>'
-      +'<td class="n">'+(s.ambientes||'·')+'</td><td class="n">'+(s.itens||'·')+'</td><td class="n'+(ch?' hot':'')+'">'+(nt?nt+(s.equipesTerc?' <small>('+s.equipesTerc+' terc.)</small>':'')+(ch?' <small>· CHOQUE</small>':''):'·')+'</td><td class="n'+(s.fretes?' hot':'')+'">'+(s.fretes||'·')+'</td><td class="n">'+(s.equipAlug||'·')+'</td><td class="n'+(s.aberto?' hot':'')+'">'+(s.aberto||'·')+'</td></tr>';
-  });
-  h+='</tbody></table>';
-  /* os que já terminaram: concluir todos de uma vez */
-  const bar=fins.length&&!readOnly?'<div class="lst-fim">'+(M.confirm==='concl-todos'?'<span>Concluir os '+fins.length+'? Eles saem do mapa e do radar e ficam nos ARQUIVADOS (dá pra reabrir).</span><button type="button" class="btn sm okb solid" data-concl-sim>Sim, concluir</button><button type="button" class="btn sm" data-concl-nao>Não</button>':'<span>'+(fins.length===1?'1 evento já terminou e':fins.length+' eventos já terminaram e')+' ainda '+(fins.length===1?'está':'estão')+' aqui.</span><button type="button" class="btn sm okb" data-concl-todos>✓ Concluir '+(fins.length===1?'esse':'os '+fins.length)+'</button>')+'</div>':'';
-  $('#listHost').innerHTML=list.length?bar+h:''; $('#listHost').hidden=!list.length;
+  let h='';
+  if(arq) h='<ul class="evlist">'+list.map(e=>evRowHTML(e,true)).join('')+'</ul>';
+  else{
+    const G={agora:[],prox:[],fim:[],sem:[]}; list.forEach(e=>G[evGrupo(e)].push(e));
+    G.fim.sort((a,b)=>(b.span.last||'').localeCompare(a.span.last||''));
+    ['agora','prox','fim','sem'].forEach(g=>{ const L=G[g]; if(!L.length) return;
+      /* os que já terminaram: concluir todos de uma vez */
+      let side='';
+      if(g==='fim'&&!readOnly) side=M.confirm==='concl-todos'?'<span class="lst-q">Concluir os '+L.length+'? Saem do mapa e do radar e ficam nos ARQUIVADOS (dá pra reabrir).</span><button type="button" class="btn sm okb solid" data-concl-sim>Sim, concluir</button><button type="button" class="btn sm" data-concl-nao>Não</button>'
+        :'<span class="lst-q">Acabaram e ainda não foram concluídos.</span><button type="button" class="btn sm okb" data-concl-todos>✓ Concluir '+(L.length===1?'esse':'os '+L.length)+'</button>';
+      h+='<section class="lst-g g-'+g+'"><div class="lst-gh"><h2>'+LST_G[g]+' <b>'+L.length+'</b></h2>'+(side?'<div class="lst-gs">'+side+'</div>':'')+'</div><ul class="evlist">'+L.map(e=>evRowHTML(e,false)).join('')+'</ul></section>';
+    });
+  }
+  $('#listHost').innerHTML=list.length?h:''; $('#listHost').hidden=!list.length;
   const em=$('#listEmpty'); em.hidden=!!list.length;
-  em.innerHTML=arq?(nArq?'Nenhum arquivado bate com a busca.':'Nenhum evento arquivado ainda. Quando um evento acabar, clique em <b>✓ Concluir</b> que ele vem pra cá.'):eventos.length-nArq?'Nenhum evento bate com a busca.':'Nenhum evento ainda. Clique em <b>+ Novo evento</b> pra começar.';
+  em.innerHTML=arq?(nArq?'Nenhum arquivado bate com a busca.':'Nenhum evento arquivado ainda. Quando um evento acabar, clique em <b>✓ Concluir</b> que ele vem pra cá.'):eventos.length-nArq?'Nenhum evento bate com a busca.':'Nenhum evento ainda. Clique em <b>+ Novo evento</b> pra começar — ou em <b>↑ Subir O.S. / planta</b> pra criar a partir do PDF.';
 }
 /* ===== detalhe do evento ===== */
 function cur(){ return eventos.find(e=>e.id===currentId)||null; }
-function openEvent(id){ if(id!==currentId){ const p=$('#repPanel'); if(p&&!p.hidden) toggleRepPanel(false); const c=$('#cronoPanel'); if(c&&!c.hidden) toggleCronoPanel(false); } if(view!=='eventos') backView=view; else if(!currentId) backView='eventos'; currentId=id; if(view!=='eventos') setView('eventos'); else render(); window.scrollTo({top:0}); }
+function openEvent(id){ if(id!==currentId){ M.evTab='escala'; closeMenuMais(); const p=$('#repPanel'); if(p&&!p.hidden) toggleRepPanel(false); const c=$('#cronoPanel'); if(c&&!c.hidden) toggleCronoPanel(false); } if(view!=='eventos') backView=view; else if(!currentId) backView='eventos'; currentId=id; if(view!=='eventos') setView('eventos'); else render(); window.scrollTo({top:0}); }
 function closeEvent(){ flushAll(); currentId=null; M.confirm=null; if(backView&&backView!=='eventos') setView(backView); else render(); }
 const opt=(list,v,blank)=>(blank===false?'':'<option value="">—</option>')+list.map(o=>'<option value="'+esc(o)+'"'+(o===v?' selected':'')+'>'+esc(o)+'</option>').join('');
 const cell=(cls,label,ctl)=>'<label class="cell '+cls+'"><span class="cl">'+label+'</span>'+ctl+'</label>';
@@ -2385,7 +2625,7 @@ function prodCardHTML(ev,p){
     +'<span class="ec-d">'+(ds.length?esc(rangesTxt(ds,true))+' · '+plural(ds.length,'dia','dias'):'SEM DIA NA ESCALA')+(ambs.length?' · RESPONDE POR: '+esc(ambs.join(', ')):' · SEM AMBIENTE')+'</span>'
     +(ch.size?'<span class="pw">CHOQUE: '+esc(choqueTxt(ch))+'</span>':'')
     +(terc?'<div class="ec-terc"><label>COTAÇÃO <select data-pst="'+esc(p.id)+'"'+(ro?' disabled':'')+'>'+opt(COT,p.status||'')+'</select></label><label>CONTATO <input data-pct="'+esc(p.id)+'" value="'+esc(p.contato||'')+'" placeholder="TELEFONE / EMPRESA" autocomplete="off"'+(ro?' disabled':'')+'></label></div>':'')
-    +(ro||!ph.length?'':'<div class="pmore">'+ph.map(k=>'<button type="button" class="chip" data-act="ph-add" data-rid="'+esc(rid)+'" data-k="'+k+'">+ '+(k==='ev'?'EVENTO TODO':PHN[k]+' TODA')+'</button>').join('')+'</div>')
+    +(ro||!ph.length?'':'<div class="pmore">'+ph.map(k=>'<button type="button" class="chip" data-act="ph-add" data-rid="'+esc(rid)+'" data-k="'+k+'" title="Colocar em todos os dias '+(k==='ev'?'do evento':'da '+PHN[k].toLowerCase())+'">+ '+PHN[k]+'</button>').join('')+'</div>')
     +(conf?'<div class="confirm2"><span>Tirar '+esc(nome)+' do evento? Sai da escala e dos ambientes.</span><button type="button" class="btn danger solid sm" data-act="rm-prod-yes" data-pid="'+esc(p.id)+'">Tirar</button><button type="button" class="btn sm" data-act="rm-no">Cancelar</button></div>':'')
     +'</div>';
 }
@@ -2453,7 +2693,7 @@ function teamCardHTML(ev,rid){
     +fzl
     +'<label class="sr" for="tar-'+esc(rid)+'">O que '+esc(r.nome)+' vai fazer no evento</label><input class="ec-tar" id="tar-'+esc(rid)+'" data-tar="'+esc(rid)+'" value="'+esc(tarefaOf(ev,rid))+'" placeholder="'+(fzs.length?'O QUE FAZ NO EVENTO (GERAL) — O DE CADA DIA ESTÁ AÍ EM CIMA':'O QUE VAI FAZER NO EVENTO (OU ANOTE POR DIA NA GRADE)')+'" autocomplete="off"'+(ro?' disabled':'')+'>'
     +(terc&&entry?'<div class="ec-terc"><label>COTAÇÃO <select data-tst="'+esc(entry.id)+'"'+(ro?' disabled':'')+'>'+opt(COT,entry.status||'')+'</select></label><label>CONTATO <input data-tct="'+esc(entry.id)+'" value="'+esc(entry.contato||r.contato||'')+'" placeholder="TELEFONE / EMPRESA" autocomplete="off"'+(ro?' disabled':'')+'></label></div>':'')
-    +(ro||!ph.length?'':'<div class="pmore">'+ph.map(k=>'<button type="button" class="chip" data-act="ph-add" data-rid="'+esc(rid)+'" data-k="'+k+'">+ '+(k==='ev'?'EVENTO TODO':PHN[k]+' TODA')+'</button>').join('')+'</div>')
+    +(ro||!ph.length?'':'<div class="pmore">'+ph.map(k=>'<button type="button" class="chip" data-act="ph-add" data-rid="'+esc(rid)+'" data-k="'+k+'" title="Colocar em todos os dias '+(k==='ev'?'do evento':'da '+PHN[k].toLowerCase())+'">+ '+PHN[k]+'</button>').join('')+'</div>')
     +(conf?'<div class="confirm2"><span>Tirar '+esc(r.nome)+' do evento inteiro? Sai de todos os dias e dos itens.</span><button type="button" class="btn danger solid sm" data-act="rm-team-yes" data-rid="'+esc(rid)+'">Tirar</button><button type="button" class="btn sm" data-act="rm-no">Cancelar</button></div>':'')
     +'</div>';
 }
@@ -2461,7 +2701,7 @@ function renderEscala(ev){
   const box=$('#escala'); if(editingIn(box)) return;
   const teams=escRows(ev).filter(t=>!isProdId(t)), ch=hasChoque(ev), sem=semEquipeDays(ev,null).length, ter=teams.filter(t=>!isPropria(t)).length;
   $('#escCnt').textContent=teams.length?plural(teams.length,'equipe','equipes')+(ter?' · '+ter+' terc.':'')+(ch?' · CHOQUE':'')+(sem?' · falta equipe em '+plural(sem,'dia','dias'):''):(sem?'ninguém escalado · falta equipe em '+plural(sem,'dia','dias'):'ninguém escalado');
-  applyFold(box,foldKey(ev,'escala'),false);
+  box.classList.remove('folded');
   const cols=evCols(ev), host=$('#evMapa');
   if(!cols.length) host.innerHTML='<p class="hint" style="padding:6px 2px">Coloque as datas de montagem, evento e desmontagem lá em cima pra montar a grade de dias.</p>';
   else { const bw=host.clientWidth||900, nDays=cols.filter(c=>!c.gap).length, gaps=cols.length-nDays; const cw=Math.max(40,Math.min(110,Math.floor((bw-172-gaps*80)/Math.max(1,nDays)))); const old=$('.evmapwrap',host), sl=old?old.scrollLeft:0; host.innerHTML='<div class="mapwrap evmapwrap">'+evGridHTML(ev,cols,cw)+'</div>'; const nw=$('.evmapwrap',host); if(nw) nw.scrollLeft=sl; }
@@ -2491,9 +2731,9 @@ function renderFretes(ev){
   const fs=ev.fretes||[];
   const tot=fretesTot(ev), tt=fs.filter(f=>f.origem==='TERCEIRO').reduce((n,f)=>n+num(f.qtd),0);
   $('#freteCnt').textContent=fs.length?plural(tot,'frete','fretes')+(tt?' · '+tt+' de fora':''):'nenhum';
-  applyFold(box,foldKey(ev,'fretes'),!fs.length);
-  $('#freteRows').innerHTML=(fs.length?'<div class="frow fhead"><span>Vai (ida)</span><span>Volta</span><span>Fretes</span><span>Caminhão</span><span>O que vai</span><span>Próprio / terceiro</span><span>Cotação (se terc.)</span><span></span></div>':'<div class="pempty">Nenhum frete marcado ainda.</div>')+fs.map(f=>freteRowHTML(f,ev)).join('');
-  $('#freteSum').textContent=tot?'cada linha é um caminhão: quando vai, quando volta e o que leva':'quando vai, quando volta, qual caminhão e o que ele leva — o mesmo frete pode levar mais de um ambiente';
+  box.classList.remove('folded');
+  $('#freteRows').innerHTML=(fs.length?'<div class="frow fhead"><span>Vai (ida)</span><span>Volta</span><span>Fretes</span><span>Caminhão</span><span>O que vai</span><span>Próprio / terceiro</span><span>Cotação (se terc.)</span><span></span></div>':'<div class="pempty">Nenhum frete marcado ainda. Clique em + Frete pra colocar o caminhão.</div>')+fs.map(f=>freteRowHTML(f,ev)).join('');
+  $('#freteSum').textContent=tot?'cada linha é um caminhão: quando vai, quando volta e o que leva':'quando vai, quando volta, qual caminhão e o que leva — o mesmo frete pode levar mais de um ambiente';
 }
 /* painel do relatório de terceiros (dentro do evento) */
 function repItems(ev){ return radarItems().filter(it=>it.ev.id===ev.id); }
@@ -2654,7 +2894,7 @@ function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; } });
   renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderFretes(ev); renderArq(ev);
-  $('#evSum').innerHTML=summaryHTML(ev);
+  $('#btnOSEv').hidden=$('#btnDelEv').hidden=readOnly;
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
   const list=ambsOf(ev.id);
@@ -2674,7 +2914,32 @@ function renderDetail(){
   $('#btnFoldAll').hidden=$('#btnUnfoldAll').hidden=list.length<2;
   $('#btnPDF').disabled=!list.length&&!(ev.evInicio||ev.evFim||ev.monInicio);
   renderRepPanel(ev);
+  renderEvTabs(ev);
 }
+/* abas de dentro do evento: ESCALA / AMBIENTES / FRETES / DOCUMENTOS (com o número de cada uma) */
+const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['fretes','#paneFretes'],['docs','#paneDocs']];
+function renderEvTabs(ev){
+  if(!EV_TABS.some(([k])=>k===M.evTab)) M.evTab='escala';
+  const teams=escRows(ev).filter(t=>!isProdId(t)).length, ch=hasChoque(ev), sem=semEquipeDays(ev,null).length;
+  const na=ambsOf(ev.id).length, nf=fretesTot(ev), dp=M.docsPend||0, dn=M.docsN||0;
+  const set=(k,txt,cls,tip)=>{ const b=$('#evt-'+k); if(!b) return; $('b',b).textContent=txt; b.classList.remove('warn','bad','ok'); if(cls) b.classList.add(cls); if(tip) b.title=tip; else b.removeAttribute('title'); };
+  set('escala',teams?String(teams):'',ch?'bad':sem?'warn':'',ch?'Tem choque: pessoa ou carro em dois lugares no mesmo dia':sem?'Falta equipe em '+plural(sem,'dia','dias'):'');
+  set('amb',na?String(na):'');
+  set('fretes',nf?String(nf):'');
+  set('docs',dp?String(dp):(dn?'✓':''),dp?'warn':dn?'ok':'',dp?plural(dp,'pessoa','pessoas')+' com documento faltando ou vencido':dn?'Documentação em dia':'');
+  EV_TABS.forEach(([k,sel])=>{ const on=M.evTab===k, b=$('#evt-'+k); b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); b.tabIndex=on?0:-1; $(sel).hidden=!on; });
+  const ab=radarOfEv(ev.id).filter(x=>isOpen(x.status)).length, rl=$('#evRadar');
+  rl.hidden=!ab; rl.textContent=ab?plural(ab,'pendência','pendências')+' com terceiro no radar →':''; rl.title='Abrir o radar só com este evento';
+}
+function setEvTab(k,focus){
+  const ev=cur(); if(!ev) return; flushAll(); M.evTab=k; renderEvTabs(ev);
+  if(k==='escala') renderEscala(ev);
+  const hd=$('#hdr'), y=hd?hd.offsetTop+hd.offsetHeight-8:0; if(window.scrollY>y) window.scrollTo({top:y});
+  if(focus){ const b=$('#evt-'+k); if(b) b.focus(); }
+}
+/* menu "Mais" do evento */
+function openMenuMais(){ const m=$('#menuMais'), b=$('#btnMais'); if(!m) return; m.hidden=false; b.setAttribute('aria-expanded','true'); const f=$$('button:not([hidden])',m)[0]; if(f) f.focus(); }
+function closeMenuMais(focusBtn){ const m=$('#menuMais'), b=$('#btnMais'); if(!m||m.hidden) return; m.hidden=true; b.setAttribute('aria-expanded','false'); if(focusBtn) b.focus(); }
 function wireAmbDrag(el){
   if(!el) return; const aid=el.dataset.mid;
   const et=$('.etapas',el); if(et) makeDraggable(et,'.erow.etapa','.drag',order=>reorderAmbArray(aid,'itens',order));
@@ -2700,7 +2965,7 @@ async function saveAmb(aid){
   const el=$('.mat[data-mid="'+aid+'"]'); if(!el) return;
   const a=collectAmb(el); if(!a) return;
   upsertLocal('ambientes',a); setInd(el,'salvando…');
-  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev){ $('#evSum').innerHTML=summaryHTML(ev); } } }
+  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev) renderEvTabs(ev); } }
   catch(err){ setInd(el,'não salvou'); handleWriteError(err); }
 }
 function scheduleAmb(aid,ms){ const el=$('.mat[data-mid="'+aid+'"]'); if(el) setInd(el,'editando…'); schedule('amb:'+aid,()=>saveAmb(aid),ms); }
@@ -2908,21 +3173,30 @@ function renderMap(){
   MR={keys:days.map(iso),base:base,nameW:nameW,cwk:cwk};
   const counts={}; ['equipe','choque','terc'].forEach(p=>{ counts[p]=all.filter(ev=>pendOf(ev,w)[p]).length; });
   const wins=mapWins(), lv=zLevel(base), anyF=!!(ft||M.f.ev||M.f.ph||M.pend), custom=!!(M.zoom||M.cw.size||M.nameW);
-  const evOpt='<option value="">TODOS</option>'+all.map(c=>'<option value="'+esc(c.id)+'"'+(M.f.ev===c.id?' selected':'')+'>'+esc(clip(c.nome,46))+'</option>').join('')+(M.f.ev&&!all.some(c=>c.id===M.f.ev)?'<option value="'+esc(M.f.ev)+'" selected>'+esc(clip((evById(M.f.ev)||{}).nome||'EVENTO',38))+' (FORA DO PERÍODO)</option>':'');
+  const evOpt='<option value="">TODOS OS EVENTOS</option>'+all.map(c=>'<option value="'+esc(c.id)+'"'+(M.f.ev===c.id?' selected':'')+'>'+esc(clip(c.nome,46))+'</option>').join('')+(M.f.ev&&!all.some(c=>c.id===M.f.ev)?'<option value="'+esc(M.f.ev)+'" selected>'+esc(clip((evById(M.f.ev)||{}).nome||'EVENTO',38))+' (FORA DO PERÍODO)</option>':'');
+  const datas=!!M.datas;
   box.innerHTML='<div class="m-bar">'
-    +'<div class="m-row"><span class="m-lbl">PERÍODO</span><div class="m-chips">'+wins.map(x=>'<button type="button" class="wk'+(w.id===x.id?' on':'')+'" data-win="'+x.id+'">'+x.nome+'<b>'+evsAtivos().filter(ev=>inWin(ev,x)).length+'</b></button>').join('')+'</div>'
-    +'<div class="m-dates'+(w.id==='custom'?' on':'')+'"><label for="mDe">DE</label><input type="date" id="mDe" value="'+esc(M.de)+'"><label for="mAte">ATÉ</label><input type="date" id="mAte" value="'+esc(M.ate)+'">'+(w.id==='custom'?'<button type="button" class="link" id="mDatesClr">LIMPAR</button>':'')+'</div></div>'
-    +'<div class="m-row m-tools"><span class="m-lbl">VER SÓ</span><div class="m-chips">'+[['equipe','FALTA EQUIPE'],['choque','CHOQUE'],['terc','TERCEIRO EM ABERTO']].map(([id,nm])=>'<button type="button" class="pill'+(M.pend===id?' on':'')+'" data-pend="'+id+'"><b>'+counts[id]+'</b>'+nm+'</button>').join('')+'</div>'
-      +'<label class="mt-f'+(ft?' on':'')+'" for="mfTeam">EQUIPE <select id="mfTeam">'+teamFilterOptions(ft)+'</select></label>'
-      +'<label class="mt-f'+(M.f.ev?' on':'')+'" for="mfEv">EVENTO <select id="mfEv">'+evOpt+'</select></label>'
-      +'<label class="mt-f'+(M.f.ph?' on':'')+'" for="mfPh">ETAPA <select id="mfPh">'+PHF.map(([v,l])=>'<option value="'+v+'"'+(M.f.ph===v?' selected':'')+'>'+l+'</option>').join('')+'</select></label>'
-      +(anyF?'<button type="button" class="link" id="mfClear">LIMPAR</button>':'')
-      +'<div class="zoom" role="group" aria-label="Zoom"><span class="zl">ZOOM <b>'+ZL[lv].nome+'</b></span><button type="button" class="zb" data-zoom="-1" aria-label="Afastar">−</button><button type="button" class="zb" data-zoom="1" aria-label="Aproximar">+</button><button type="button" class="zb zt" data-zoom="0"'+(custom?'':' disabled')+'>AJUSTAR</button></div>'
-      +'<button type="button" class="btn-ghost mt-pdf mt-wa" id="mapWhats" title="Texto da escala de um dia, por equipe, pra colar no WhatsApp">MENSAGEM DO DIA</button>'
-      +'<button type="button" class="btn-primary mt-pdf" id="mapPrint">PDF DO MAPA</button>'
+    /* 1ª linha: período e as saídas (mensagem do dia, PDF) */
+    +'<div class="m-row"><div class="m-chips m-per" role="group" aria-label="Período">'+wins.map(x=>'<button type="button" class="wk'+(w.id===x.id?' on':'')+'" data-win="'+x.id+'" aria-pressed="'+(w.id===x.id)+'">'+x.nome+'</button>').join('')
+      +'<button type="button" class="wk'+(w.id==='custom'?' on':'')+'" id="mDatasBtn" aria-expanded="'+datas+'" title="Escolher as datas">'+(w.id==='custom'?esc(w.nome):'DATAS…')+'</button></div>'
+      +(datas?'<div class="m-dates'+(w.id==='custom'?' on':'')+'"><label for="mDe">DE</label><input type="date" id="mDe" value="'+esc(M.de)+'"><label for="mAte">ATÉ</label><input type="date" id="mAte" value="'+esc(M.ate)+'">'+(w.id==='custom'?'<button type="button" class="link" id="mDatesClr">LIMPAR</button>':'')+'</div>':'')
+      +'<span class="m-sp"></span><button type="button" class="btn-ghost mt-pdf mt-wa" id="mapWhats" title="Texto da escala de um dia, por equipe, pra colar no WhatsApp">MENSAGEM DO DIA</button>'
+      +'<button type="button" class="btn-primary mt-pdf" id="mapPrint">PDF DO MAPA</button></div>'
+    /* 2ª linha: ver só (equipe, evento, etapa, pendências) e zoom */
+    +'<div class="m-row m-tools">'
+      +'<select id="mfTeam" class="mt-s'+(ft?' on':'')+'" aria-label="Ver só a equipe">'+teamFilterOptions(ft)+'</select>'
+      +'<select id="mfEv" class="mt-s'+(M.f.ev?' on':'')+'" aria-label="Ver só o evento">'+evOpt+'</select>'
+      +'<select id="mfPh" class="mt-s'+(M.f.ph?' on':'')+'" aria-label="Ver só a etapa">'+PHF.map(([v,l])=>'<option value="'+v+'"'+(M.f.ph===v?' selected':'')+'>'+l+'</option>').join('')+'</select>'
+      +'<div class="m-chips m-pend" role="group" aria-label="Ver só o que tem pendência">'+[['equipe','FALTA EQUIPE'],['choque','CHOQUE'],['terc','TERCEIRO EM ABERTO']].map(([id,nm])=>'<button type="button" class="pill p-'+id+(M.pend===id?' on':'')+(counts[id]?'':' zero')+'" data-pend="'+id+'" aria-pressed="'+(M.pend===id)+'"><b>'+counts[id]+'</b>'+nm+'</button>').join('')+'</div>'
+      +(anyF?'<button type="button" class="link" id="mfClear">LIMPAR FILTROS</button>':'')
+      +'<span class="m-sp"></span>'
+      +'<div class="zoom" role="group" aria-label="Zoom"><button type="button" class="zb" data-zoom="-1" aria-label="Afastar" title="Afastar">−</button><span class="zl" title="O quanto aparece em cada dia (Ctrl + rolar também aproxima)">'+ZL[lv].nome+'</span><button type="button" class="zb" data-zoom="1" aria-label="Aproximar" title="Aproximar">+</button>'+(custom?'<button type="button" class="zb zt" data-zoom="0" title="Voltar ao tamanho que cabe na tela">AJUSTAR</button>':'')+'</div>'
     +'</div>'
-    +'<div class="m-row m-help"><div class="m-legend"><span><span class="lg ph-mont"></span>MONTAGEM</span><span><span class="lg ph-ev"></span>EVENTO</span><span><span class="lg ph-man"></span>MANUTENÇÃO</span><span><span class="lg ph-desm"></span>DESMONTAGEM</span><span><span class="lg m-need"></span>FALTA EQUIPE</span><span><span class="lgp">NOME 2/5</span>PARTE DA EQUIPE</span><span><span class="lgt">NOME</span>TERCEIRIZADA</span><span><span class="lgr">NOME</span>PRODUTOR</span><span><span class="lgc">NOME</span>CHOQUE</span></div>'
-    +'<p class="m-hint">Clique num dia (ou arraste por vários) pra escalar. <b>Ctrl + rolar</b> (ou pinça) aproxima no quadrinho e mostra mais: siglas → equipes → o que faz → quem vai → o dia completo. Clique na data pra aproximar naquele dia.'+(t.fzHid?' Triângulo laranja = tem o que vai fazer anotado.':'')+'</p></div>'
+    /* 3ª linha: cores das etapas + como ler (o resto da legenda e as dicas só quando pede) */
+    +'<div class="m-row m-legrow"><div class="m-legend m-leg4" aria-label="Cores das etapas"><span><span class="lg ph-mont"></span>MONTAGEM</span><span><span class="lg ph-ev"></span>EVENTO</span><span><span class="lg ph-man"></span>MANUTENÇÃO</span><span><span class="lg ph-desm"></span>DESMONTAGEM</span>'
+      +(M.help?'<span><span class="lg m-need"></span>FALTA EQUIPE</span><span><span class="lgp">NOME 2/5</span>PARTE DA EQUIPE</span><span><span class="lgt">NOME</span>TERCEIRIZADA</span><span><span class="lgr">NOME</span>PRODUTOR</span><span><span class="lgc">NOME</span>CHOQUE</span>':'')+'</div>'
+      +'<button type="button" class="link m-howb" id="mapHelp" aria-expanded="'+(M.help?'true':'false')+'" aria-controls="mapHelpBox">'+(M.help?'MENOS':'COMO LER O MAPA')+'</button></div>'
+    +(M.help?'<p class="m-hint" id="mapHelpBox">Clique num dia (ou arraste por vários) pra escalar. <b>Ctrl + rolar</b> (ou pinça) aproxima e mostra mais: siglas → equipes → o que faz → quem vai → o dia completo. Clique na data pra aproximar naquele dia; arraste a borda do cabeçalho pra alargar um dia.'+(t.fzHid?' Triângulo laranja = tem o que vai fazer anotado.':'')+'</p>':'')
     +'</div>'
     +(rows.length?'<div class="mapwrap" id="mapwrap">'+t.html+'</div>':(anyF?'<div class="state"><h2>NADA COM ESSES FILTROS</h2><p>Troque a equipe, o evento, a etapa ou a pendência, ou <button type="button" class="link" id="mfClear2">LIMPE OS FILTROS</button>.</p></div>':'<div class="state"><h2>NENHUM EVENTO NESSE PERÍODO</h2><p>Troque o período lá em cima. Evento aparece aqui quando tem montagem, desmontagem, abertura ou gente escalada dentro do período.</p></div>'));
   const nw=$('#mapwrap');
@@ -2934,7 +3208,7 @@ function renderMap(){
   }
   if(faId){ const el=document.getElementById(faId); if(el) el.focus({preventScroll:true}); }
 }
-function teamFilterOptions(sel){ const g=[['NOSSAS',recsSorted('EQUIPE').filter(r=>r.propria!==false)],['TERCEIRIZADAS',recsSorted('EQUIPE').filter(r=>r.propria===false)],['PRODUTORES',recsSorted('PRODUTOR')]].filter(x=>x[1].length); return '<option value="">TODAS</option>'+g.map(([l,list])=>'<optgroup label="'+l+'">'+list.map(t=>'<option value="'+esc(t.id)+'"'+(sel===t.id?' selected':'')+'>'+esc(tr(t.nome)||'SEM NOME')+'</option>').join('')+'</optgroup>').join(''); }
+function teamFilterOptions(sel,todas){ const g=[['NOSSAS',recsSorted('EQUIPE').filter(r=>r.propria!==false)],['TERCEIRIZADAS',recsSorted('EQUIPE').filter(r=>r.propria===false)],['PRODUTORES',recsSorted('PRODUTOR')]].filter(x=>x[1].length); return '<option value="">'+(todas||'TODAS AS EQUIPES')+'</option>'+g.map(([l,list])=>'<optgroup label="'+l+'">'+list.map(t=>'<option value="'+esc(t.id)+'"'+(sel===t.id?' selected':'')+'>'+esc(tr(t.nome)||'SEM NOME')+'</option>').join('')+'</optgroup>').join(''); }
 
 /* ---------- zoom: ancorado no quadrinho debaixo do mouse / dos dedos ---------- */
 let zoomPend=null, zoomRaf=0;
@@ -3234,13 +3508,15 @@ function wireMap(){
   const box=$('#viewMapa');
   wireMapGrid(box);
   box.addEventListener('click',e=>{
-    const wb=e.target.closest('[data-win]'); if(wb){ M.win=wb.dataset.win; if(M.win!=='custom'){ M.de=''; M.ate=''; } saveM(); refresh(); return; }
+    const wb=e.target.closest('[data-win]'); if(wb){ M.win=wb.dataset.win; if(M.win!=='custom'){ M.de=''; M.ate=''; M.datas=false; } saveM(); refresh(); return; }
     const pb=e.target.closest('[data-pend]'); if(pb){ M.pend=M.pend===pb.dataset.pend?'':pb.dataset.pend; refresh(); return; }
     const z=e.target.closest('[data-zoom]'); if(z){ if(!z.disabled) zoomStep(+z.dataset.zoom); return; }
     if(e.target.closest('#mfClear')||e.target.closest('#mfClear2')){ M.f={team:'',ev:'',ph:''}; M.pend=''; saveM(); refresh(); return; }
-    if(e.target.closest('#mDatesClr')){ M.de=''; M.ate=''; M.win='m0'; saveM(); refresh(); return; }
+    if(e.target.closest('#mDatesClr')){ M.de=''; M.ate=''; M.win='m0'; M.datas=false; saveM(); refresh(); return; }
     if(e.target.closest('#mapPrint')){ openMapPrint(); return; }
     if(e.target.closest('#mapWhats')){ openWhats(); return; }
+    if(e.target.closest('#mDatasBtn')){ M.datas=!M.datas; refresh(); if(M.datas) setTimeout(()=>{ const d=$('#mDe'); if(d) d.focus(); },30); return; }
+    if(e.target.closest('#mapHelp')){ M.help=!M.help; saveM(); refresh(); return; }
   });
   box.addEventListener('change',e=>{
     const el=e.target;
@@ -3373,7 +3649,7 @@ function renderPend(){
   radarView={items:items,ev:radarEv,kinds:Array.from(radarKind),status:Array.from(radarFilter),q:radarQ};
   const ab=items.filter(x=>isOpen(x.status)).length;
   $('#radarCount').textContent=items.length?items.length+' ite'+(items.length===1?'m':'ns')+' · '+ab+' em aberto':'';
-  const es=$('#eqSim'); const showEq=!radarKind.size||radarKind.has('EQUIPAMENTO'); const sh=showEq?eqListHTML(radarEv):'';
+  const es=$('#eqSim'); const showEq=radarKind.has('EQUIPAMENTO'); /* a lista de todos os equipamentos (nossos e alugados) só aparece quando escolhe o tipo EQUIPAMENTO */ const sh=showEq?eqListHTML(radarEv):'';
   es.innerHTML=sh; es.hidden=!sh;
 }
 
@@ -3441,23 +3717,38 @@ function recSec(key,tit,count,add,inner,def){
   const f=isFolded('rec:'+key,!!def);
   return '<section class="rsec'+(f?' folded':'')+'" data-rkey="'+key+'"><div class="ptitle rsec-h" data-act="rfold" role="button" tabindex="0" aria-expanded="'+(f?'false':'true')+'"><span class="fi" aria-hidden="true"></span><span class="pt">'+tit+'</span><span class="pc">'+count+'</span>'+(add?'<span class="rsec-add">'+add+'</span>':'')+'</div><div class="rsec-b">'+inner+'</div></section>';
 }
-function renderRecursos(){
-  const host=$('#recBody'); if(editingIn(host)) return;
-  const w=recWinSel(), ws=mapWins(), ro=readOnly;
-  $('#recTop').innerHTML='<p class="hint">Cadastro do que é nosso e de quem a gente chama. Cada equipe com responsável, motorista, carro e as pessoas — no mapa dá pra escolher quem da equipe vai em cada dia. A agenda de cada um segue o período escolhido aqui.</p>'
-    +'<div class="toolbar"><span class="lbl">AGENDA DE</span><div class="chips">'+ws.map(x=>'<button type="button" class="chip'+(w.id===x.id?' on':'')+'" data-rwin="'+x.id+'">'+x.nome+'</button>').join('')+'</div><span class="spacer"></span><button type="button" class="btn navy" id="btnEscalaPDF">PDF da escala (por equipe)</button></div>';
-  const own=recsSorted('EQUIPE').filter(r=>r.propria!==false), ter=recsSorted('EQUIPE').filter(r=>r.propria===false), prods=recsSorted('PRODUTOR'), vehs=recsOf('VEICULO'), eqps=recsOf('EQUIPAMENTO');
+/* as duas telas do cadastro: EQUIPES (nossas, terceirizadas, produtores, documentação) e EQUIPAMENTOS E FROTA */
+function recTopHTML(kind){
+  const w=recWinSel(), ws=mapWins();
+  return '<div class="toolbar"><span class="lbl">AGENDA DE</span><div class="chips">'+ws.map(x=>'<button type="button" class="chip'+(w.id===x.id?' on':'')+'" data-rwin="'+x.id+'">'+x.nome+'</button>').join('')+'</div><span class="spacer"></span>'
+    +(kind==='equipes'?'<button type="button" class="btn" data-whats title="Texto da escala de um dia, por equipe, pra colar no WhatsApp">Mensagem do dia</button><button type="button" class="btn navy" id="btnEscalaPDF">PDF da escala (por equipe)</button>':'')+'</div>';
+}
+function renderRecursos(){ if(view==='frota') renderFrota(); else renderEquipes(); }
+function renderEquipes(){
+  const host=$('#eqBody'); if(!host||editingIn(host)) return;
+  const w=recWinSel(), ro=readOnly;
+  $('#eqTop').innerHTML=recTopHTML('equipes');
+  const own=recsSorted('EQUIPE').filter(r=>r.propria!==false), ter=recsSorted('EQUIPE').filter(r=>r.propria===false), prods=recsSorted('PRODUTOR');
   const sem=opsSemEquipe(w);
-  const semBox='<article class="tbox sem"><div class="thead"><h3>FALTA EQUIPE · '+esc(w.nome)+'</h3><span class="tmeta">'+(sem.length?plural(sem.length,'trecho','trechos')+' de montagem, manutenção ou desmontagem sem ninguém':'Montagem, manutenção e desmontagem com equipe em todos os dias desse período.')+'</span></div>'+(sem.length?'<div class="orule" aria-hidden="true"></div><ul class="arows">'+sem.map(o=>'<li><button type="button" class="arow" data-open-cell="'+esc(o.ev.id)+'" data-days="'+esc((()=>{ const ks=[]; eachDay(o.a,o.b,k=>ks.push(k)); return ks.join(','); })())+'"><span class="ad">'+rangeD(o.a,o.b)+'</span><span class="af" aria-hidden="true"></span><span class="ar"><span class="at">'+PHN[o.k]+' · '+esc(o.ev.nome||'(SEM NOME)')+'</span></span></button></li>').join('')+'</ul>':'')+'</article>';
+  const semBox=sem.length?'<div class="tgrid one"><article class="tbox sem"><div class="thead"><h3>FALTA EQUIPE · '+esc(w.nome)+'</h3><span class="tmeta">'+plural(sem.length,'trecho','trechos')+' de montagem, manutenção ou desmontagem sem ninguém — clique pra escalar</span></div><div class="orule" aria-hidden="true"></div><ul class="arows">'+sem.map(o=>'<li><button type="button" class="arow" data-open-cell="'+esc(o.ev.id)+'" data-days="'+esc((()=>{ const ks=[]; eachDay(o.a,o.b,k=>ks.push(k)); return ks.join(','); })())+'"><span class="ad">'+rangeD(o.a,o.b)+'</span><span class="af" aria-hidden="true"></span><span class="ar"><span class="at">'+PHN[o.k]+' · '+esc(o.ev.nome||'(SEM NOME)')+'</span></span></button></li>').join('')+'</ul></article></div>'
+    :'<p class="okline">Montagem, manutenção e desmontagem com equipe em todos os dias desse período.</p>';
   const grid=list=>list.length?'<div class="tgrid">'+list.map(r=>teamBoxHTML(r,w)).join('')+'</div>':'';
-  const fams=new Map(); eqps.forEach(r=>{ const f=eqParse(r.nome).fam||'—'; if(!fams.has(f)) fams.set(f,[]); fams.get(f).push(r); });
-  let h='<div class="tgrid one">'+semBox+'</div>';
-  h+=docsSecHTML();
+  let h=semBox;
   h+=recSec('own','Nossas equipes',own.length?plural(own.length,'equipe','equipes'):'nenhuma',ro?'':'<button type="button" class="chip eqp" data-new-rec="EQUIPE" data-propria="1">+ Equipe nossa</button>',grid(own)||'<p class="pempty">Nenhuma equipe nossa cadastrada. Cadastre com o responsável e as pessoas — no mapa dá pra escolher quem vai em cada dia.</p>');
   h+=recSec('ter','Terceirizadas',ter.length?plural(ter.length,'equipe','equipes'):'nenhuma',ro?'':'<button type="button" class="chip eqp" data-new-rec="EQUIPE" data-propria="0">+ Terceirizada</button>',grid(ter)||'<p class="pempty">Nenhuma terceirizada ainda. Também dá pra cadastrar direto no mapa, digitando o nome num dia.</p>');
   h+=recSec('prod','Produtores',prods.length?plural(prods.length,'produtor','produtores'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="PRODUTOR">+ Produtor</button>',grid(prods)||'<p class="pempty">Nenhum produtor cadastrado.</p>');
-  h+=recSec('veic','Veículos das equipes',vehs.length?plural(vehs.length,'veículo','veículos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO">+ Veículo</button>',vehs.length?'<div class="tgrid">'+vehs.map(v=>vehBoxHTML(v,w)).join('')+'</div>':'<p class="pempty">Cadastre os carros (modelo e placa) e escolha em cada equipe qual ela usa — o mapa avisa quando o mesmo carro está em dois eventos no mesmo dia.</p>');
-  h+=recSec('eqps','Nossos equipamentos',eqps.length?plural(eqps.length,'unidade','unidades')+' · '+plural(fams.size,'tipo','tipos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="">+ Equipamento</button>','<p class="hint" style="margin:0 0 8px">Cada unidade pela placa / identificação (MUNCK LLN5851, MUNCK JBE2G77…) — a conta de aluguel é por tipo.</p><div id="recEqpRows">'+(eqps.length?Array.from(fams.keys()).sort().map(f=>recEqpFamHTML(f,fams.get(f))).join(''):'<div class="pempty">Nenhum equipamento cadastrado ainda.</div>')+'</div>'+(ro?'':'<div class="quick"><span class="lbl">+ equipamento</span>'+QUICK_EQP.map(n=>'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="'+esc(n)+' ">'+esc(n)+'</button>').join('')+'<button type="button" class="chip other" data-act="add-rec-eqp" data-nome="">Outro…</button></div>'));
+  h+=docsSecHTML();
+  host.innerHTML=h;
+}
+function renderFrota(){
+  const host=$('#frBody'); if(!host||editingIn(host)) return;
+  const w=recWinSel(), ro=readOnly;
+  $('#frTop').innerHTML=recTopHTML('frota');
+  const vehs=recsOf('VEICULO'), eqps=recsOf('EQUIPAMENTO');
+  const fams=new Map(); eqps.forEach(r=>{ const f=eqParse(r.nome).fam||'—'; if(!fams.has(f)) fams.set(f,[]); fams.get(f).push(r); });
+  let h='';
+  h+=recSec('eqps','Equipamentos',eqps.length?plural(eqps.length,'unidade','unidades')+' · '+plural(fams.size,'tipo','tipos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="">+ Equipamento</button>','<p class="hint" style="margin:0 0 8px">Cada unidade pela placa / identificação (MUNCK LLN5851, MUNCK JBE2G77…) — a conta de aluguel é por tipo.</p><div id="recEqpRows">'+(eqps.length?Array.from(fams.keys()).sort().map(f=>recEqpFamHTML(f,fams.get(f))).join(''):'<div class="pempty">Nenhum equipamento cadastrado ainda.</div>')+'</div>'+(ro?'':'<div class="quick"><span class="lbl">+ equipamento</span>'+QUICK_EQP.map(n=>'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="'+esc(n)+' ">'+esc(n)+'</button>').join('')+'<button type="button" class="chip other" data-act="add-rec-eqp" data-nome="">Outro…</button></div>'));
+  h+=recSec('veic','Frota — carros das equipes',vehs.length?plural(vehs.length,'veículo','veículos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO">+ Veículo</button>',vehs.length?'<div class="tgrid">'+vehs.map(v=>vehBoxHTML(v,w)).join('')+'</div>':'<p class="pempty">Cadastre os carros (modelo e placa) e escolha em cada equipe qual ela usa — o mapa avisa quando o mesmo carro está em dois eventos no mesmo dia.</p>');
   host.innerHTML=h;
   $$('#recEqpRows .eqfam').forEach(fam=>makeDraggable(fam,'.ritem.unit','.drag',order=>reorderRecs('EQUIPAMENTO',order)));
 }
@@ -3563,14 +3854,15 @@ async function delRecFull(id){
   try{ await delDoc('recursos',id); toast((r.tipo==='VEICULO'?'Veículo ':r.tipo==='PRODUTOR'?'Produtor ':'Equipe ')+(r.nome||'')+' excluído do cadastro.'); }catch(err){ handleWriteError(err); }
 }
 function wireRecursos(){
-  const rec=$('#viewRecursos');
+  ['#viewEquipes','#viewFrota'].forEach(sel=>{ const rec=$(sel);
   rec.addEventListener('input',ev=>{ const row=ev.target.closest('.ritem'); if(row){ setInd(row,'editando…'); schedule('rec:'+row.dataset.rid,()=>saveRec(row.dataset.rid),700); } });
   rec.addEventListener('change',ev=>{ const row=ev.target.closest('.ritem'); if(row) schedule('rec:'+row.dataset.rid,()=>saveRec(row.dataset.rid),150); });
-  rec.addEventListener('focusout',ev=>{ const row=ev.target.closest('.ritem'); if(row&&!row.contains(ev.relatedTarget)){ flush('rec:'+row.dataset.rid); setTimeout(()=>{ if(view==='recursos') renderRecursos(); },0); } });
+  rec.addEventListener('focusout',ev=>{ const row=ev.target.closest('.ritem'); if(row&&!row.contains(ev.relatedTarget)){ flush('rec:'+row.dataset.rid); setTimeout(()=>{ if(isRecView()) renderRecursos(); },0); } });
   rec.addEventListener('click',ev=>{
     const t=ev.target;
     const rw=t.closest('[data-rwin]'); if(rw){ M.recWin=rw.dataset.rwin; saveM(); renderRecursos(); return; }
     if(t.closest('#btnEscalaPDF')){ gerarPDFEscala(recWinSel()); return; }
+    if(t.closest('[data-whats]')){ openWhats(); return; }
     const nr=t.closest('[data-new-rec]'); if(nr){ openNewRec(nr.dataset.newRec,nr.dataset.propria!=='0'); return; }
     const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
     const oe=t.closest('[data-open-ev]'); if(oe){ openEvent(oe.dataset.openEv); return; }
@@ -3587,6 +3879,7 @@ function wireRecursos(){
     const ln=t.closest('.rline[data-id]'); if(ln) openEvent(ln.dataset.id);
   });
   rec.addEventListener('keydown',ev=>{ const t=ev.target; if((ev.key==='Enter'||ev.key===' ')&&t.classList&&t.classList.contains('ptitle')){ ev.preventDefault(); t.click(); } });
+  });
   /* painel de equipe / veículo / novo */
   const pn=$('#panel');
   pn.addEventListener('click',ev=>{
@@ -3757,7 +4050,7 @@ const ICON_LUA='<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="tru
 function temaSalvo(){ try{ const t=localStorage.getItem(TEMA_KEY); return t==='claro'||t==='escuro'?t:''; }catch(e){ return ''; } }
 function temaEscuro(){ const t=document.documentElement.getAttribute('data-theme'); if(t==='dark') return true; if(t==='light') return false; return !!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches); }
 function aplicaTema(){ const s=temaSalvo(), root=document.documentElement; if(s){ const want=s==='escuro'?'dark':'light'; if(root.getAttribute('data-theme')!==want) root.setAttribute('data-theme',want); } renderTemaBtn(); }
-function renderTemaBtn(){ const b=$('#btnTema'); if(!b) return; const dark=temaEscuro(), lbl='Mudar para o modo '+(dark?'claro':'escuro'); b.innerHTML=(dark?ICON_SOL:ICON_LUA)+'<span>'+(dark?'Modo claro':'Modo escuro')+'</span>'; b.setAttribute('aria-label',lbl); b.title=lbl; }
+function renderTemaBtn(){ const b=$('#btnTema'); if(!b) return; const dark=temaEscuro(), lbl='Mudar para o modo '+(dark?'claro':'escuro'); b.innerHTML=(dark?ICON_SOL:ICON_LUA)+'<span class="sr">'+(dark?'Modo claro':'Modo escuro')+'</span>'; b.setAttribute('aria-label',lbl); b.title=lbl; }
 function trocaTema(){ const novo=temaEscuro()?'claro':'escuro'; try{ localStorage.setItem(TEMA_KEY,novo); }catch(e){} if(!temaSalvo()) document.documentElement.setAttribute('data-theme',novo==='escuro'?'dark':'light'); aplicaTema(); }
 function wireTema(){
   const b=$('#btnTema'); if(b) b.addEventListener('click',trocaTema);
@@ -3782,8 +4075,21 @@ function wire(){
   $('#pendHost').addEventListener('change',ev=>{ const t=ev.target; if(t.classList.contains('rd-st')) setRadarStatus({col:t.dataset.col,id:t.dataset.id,list:t.dataset.list,itemId:t.dataset.item},t.value); });
   $$('.tab').forEach(b=>b.addEventListener('click',()=>{ flushAll(); if(b.dataset.view==='eventos'){ currentId=null; M.confirm=null; } setView(b.dataset.view); }));
   $('#btnNovo').addEventListener('click',newEvent);
+  $('#guiaFechar').addEventListener('click',fechaGuia);
+  $('#guiaAbrir').addEventListener('click',()=>{ M.guia=true; renderGuia(); const g=$('#guiaFechar'); if(g) g.focus(); });
   $('#btnOS').addEventListener('click',()=>openOSPicker(''));
-  $('#btnOSEv').addEventListener('click',()=>{ flushAll(); openOSPicker(currentId); });
+  $('#btnOSEv').addEventListener('click',()=>{ closeMenuMais(); flushAll(); openOSPicker(currentId); });
+  /* menu "Mais" do evento */
+  $('#btnMais').addEventListener('click',()=>{ if($('#menuMais').hidden) openMenuMais(); else closeMenuMais(); });
+  document.addEventListener('click',ev=>{ const m=$('#menuMais'); if(m&&!m.hidden&&!ev.target.closest('.more')) closeMenuMais(); });
+  $('#menuMais').addEventListener('keydown',ev=>{ const its=$$('#menuMais button:not([hidden])'), i=its.indexOf(document.activeElement);
+    if(ev.key==='Escape'){ ev.preventDefault(); ev.stopPropagation(); closeMenuMais(true); }
+    else if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){ ev.preventDefault(); const n=its.length; if(n) its[(i+(ev.key==='ArrowDown'?1:n-1))%n].focus(); }
+    else if(ev.key==='Tab') closeMenuMais(); });
+  /* abas de dentro do evento */
+  $('#evTabs').addEventListener('click',ev=>{ const b=ev.target.closest('[data-evtab]'); if(b){ setEvTab(b.dataset.evtab); return; }
+    if(ev.target.closest('#evRadar')&&currentId){ flushAll(); radarEv=currentId; radarFilter.clear(); radarKind.clear(); radarQ=''; const rq=$('#radarQ'); if(rq) rq.value=''; setView('pend'); window.scrollTo({top:0}); } });
+  $('#evTabs').addEventListener('keydown',ev=>{ const b=ev.target.closest('[data-evtab]'); if(!b||(ev.key!=='ArrowRight'&&ev.key!=='ArrowLeft')) return; ev.preventDefault(); const ks=EV_TABS.map(x=>x[0]), i=ks.indexOf(b.dataset.evtab), n=ks.length; setEvTab(ks[(i+(ev.key==='ArrowRight'?1:n-1))%n],true); });
   $('#btnConcluir').addEventListener('click',()=>{ if(!currentId) return; flushAll(); concluirEventos([currentId],true); });
   $('#arqBar').addEventListener('click',ev=>{ if(ev.target.closest('[data-arq-reabrir]')&&currentId) concluirEventos([currentId],false); });
   $('#lstArq').addEventListener('click',ev=>{ const b=ev.target.closest('[data-arq]'); if(!b) return; M.lstArq=b.dataset.arq==='1'; M.confirm=null; render(); });
@@ -3812,7 +4118,7 @@ function wire(){
   $('#cronoMode').addEventListener('click',ev=>{ const b=ev.target.closest('.chip'); if(!b) return; loadCrono().modo=b.dataset.m; saveCrono(); const e=cur(); if(e) renderCronoPanel(e); });
   $('#cronoSecs').addEventListener('click',ev=>{ const b=ev.target.closest('.chip'); if(!b) return; const o=loadCrono(); const k=b.dataset.sec; const i=o.secs.indexOf(k); if(i>=0) o.secs.splice(i,1); else o.secs.push(k); saveCrono(); const e=cur(); if(e) renderCronoPanel(e); });
   $('#cronoEquipe').addEventListener('change',ev=>{ loadCrono().equipeId=ev.target.value; saveCrono(); const e=cur(); if(e) renderCronoPanel(e); });
-  $('#btnRel').addEventListener('click',()=>{ flushAll(); toggleRepPanel(); });
+  $('#btnRel').addEventListener('click',()=>{ closeMenuMais(); flushAll(); toggleRepPanel(); });
   $('#btnRelFechar').addEventListener('click',()=>toggleRepPanel(false));
   $('#btnRelGerar').addEventListener('click',()=>{ flushAll(); const ev=cur(); if(ev) exportRadarPDF(repView(ev)); });
   $('#repKinds').addEventListener('click',ev=>{ const b=ev.target.closest('.chip'); if(!b) return; const k=b.dataset.k; if(repKinds.has(k)) repKinds.delete(k); else repKinds.add(k); const e=cur(); if(e) renderRepPanel(e); });
@@ -3825,7 +4131,7 @@ function wire(){
     const b=ev.target.closest('[data-act]'); if(!b||!det.contains(b)) return; const act=b.dataset.act; const e=cur(); if(!e) return;
     if(act==='fold'){ const box=b.closest('[data-fkey],#prods,#escala,#docsEv,#fretes'); if(!box) return; const key=box.dataset.fkey||foldKey(e,b.dataset.key); toggleFold(box,key); }
     else if(act==='fold-amb'){ const card=b.closest('.mat'); if(!card) return; const f=!card.classList.contains('folded'); setFold('a:'+card.dataset.mid,f); card.classList.toggle('folded',f); b.setAttribute('aria-expanded',f?'false':'true'); }
-    else if(act==='add-frete'){ toggleFold($('#fretes'),foldKey(e,'fretes'),false); addFrete(); }
+    else if(act==='add-frete'){ addFrete(); }
     else if(act==='rm-prod'){ M.confirm='rmp:'+b.dataset.pid; renderDetail(); }
     else if(act==='rm-team'){ M.confirm='rmt:'+b.dataset.rid; renderDetail(); }
     else if(act==='rm-no'){ M.confirm=null; renderDetail(); }
@@ -3852,12 +4158,12 @@ function wire(){
   det.addEventListener('focusout',ev=>{ const t=ev.target, e=cur(); if(!e||!t.dataset) return; if(t.dataset.tar) flush('tar:'+e.id+':'+t.dataset.tar); if(t.dataset.pct) flush('tar:pct:'+t.dataset.pct); if(t.dataset.tct) flush('tar:tct:'+t.dataset.tct); });
   det.addEventListener('keydown',ev=>{ const t=ev.target; if((ev.key==='Enter'||ev.key===' ')&&t.classList&&t.classList.contains('ptitle')){ ev.preventDefault(); t.click(); } if(ev.key==='Enter'&&t.id==='escNewNome'){ ev.preventDefault(); toast('Agora escolha em que dias: montagem, evento, manutenção ou desmontagem.'); } if(ev.key==='Enter'&&t.id==='prodNewNome'){ ev.preventDefault(); const b=$('[data-act="prod-new"]'); if(b) b.click(); } });
   wireMapGrid($('#evMapa'));
-  $('#btnDelEv').addEventListener('click',()=>{ $('#btnDelEv').hidden=true; $('#delEvConfirm').hidden=false; });
-  $('#btnDelEvNao').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; $('#btnDelEv').hidden=false; });
-  $('#btnDelEvSim').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; $('#btnDelEv').hidden=false; delEvent(); });
+  $('#btnDelEv').addEventListener('click',()=>{ closeMenuMais(); $('#delEvConfirm').hidden=false; const n=$('#btnDelEvNao'); if(n) n.focus(); });
+  $('#btnDelEvNao').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; });
+  $('#btnDelEvSim').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; delEvent(); });
   let qt=null; $('#q').addEventListener('input',ev=>{ clearTimeout(qt); qt=setTimeout(()=>{ q=ev.target.value; render(); },160); });
   const openRow=ev=>{ if(ev.target.closest('select,input,button')) return; const tr2=ev.target.closest('tr[data-id]'); if(tr2) openEvent(tr2.dataset.id); };
-  $('#listHost').addEventListener('click',openRow); $('#pendHost').addEventListener('click',openRow); $('#eqSim').addEventListener('click',openRow);
+  $('#listHost').addEventListener('click',ev=>{ const o=ev.target.closest('[data-open-ev]'); if(o) openEvent(o.dataset.openEv); }); $('#pendHost').addEventListener('click',openRow); $('#eqSim').addEventListener('click',openRow);
   wireHeaderBlock('#hdr');
   wireHeaderBlock('#fretes',t=>{ if(t.classList.contains('f-orig')){ const row=t.closest('.frow'); const terc=t.value==='TERCEIRO'; row.classList.toggle('terc',terc); const st=$('.f-st',row); if(terc&&st&&!st.value) st.value='A COTAR'; } });
   $('#fretes').addEventListener('click',ev=>{ const b=ev.target.closest('[data-act]'); if(!b) return; if(b.dataset.act==='del-frete'){ const row=b.closest('.fitem'); if(row) delFrete(row.dataset.fid); } });
@@ -3950,7 +4256,7 @@ function docsSecHTML(){
     inner='<div class="dwrap"><table class="dtab"><thead><tr><th scope="col">PESSOA</th>'+DOC_COLS.map(t=>'<th scope="col" class="dc">'+DOC_NOME[t]+'</th>').join('')+'<th scope="col" class="dc" title="Outros documentos">+</th></tr></thead><tbody>'+body+'</tbody></table></div>'
       +'<div class="dleg"><span><i class="ok"></i>EM DIA (VÁLIDO ATÉ)</span><span><i class="warn"></i>VENCE EM 30 DIAS</span><span><i class="bad"></i>VENCIDO</span><span>— FALTA</span><span class="dleg-n">Clique no nome pra ver, trocar ou mandar documento; na data, abre o arquivo. Quando o certificado não diz a validade: NR 10, NR 12 e NR 35 valem 2 anos, NR 11 e NR 06 1 ano.</span></div>';
   }
-  return recSec('docs','Documentação das pessoas',count,add,inner,false);
+  return recSec('docs','Documentação das pessoas',count,add,inner,true);
 }
 
 /* ---------- painel da pessoa ---------- */
@@ -4012,7 +4318,8 @@ function renderDocsEv(ev){
   const tipos=docsExigidos(ev), fim=evFimDate(ev), pe=pessoasDoEvento(ev), ro=readOnly;
   const linhas=pe.list.map(x=>({x:x,p:pendencias(x.nome,tipos,fim,0)})), com=linhas.filter(l=>l.p.length).length;
   $('#docsCnt').textContent=pe.list.length?plural(pe.list.length,'pessoa','pessoas')+(com?' · '+com+' com pendência':' · tudo em dia'):'ninguém na escala';
-  applyFold(box,foldKey(ev,'docs'),!pe.list.length);
+  M.docsPend=com; M.docsN=pe.list.length;
+  box.classList.remove('folded');
   const chips='<div class="toolbar sub"><span class="lbl">EXIGIDOS</span><div class="chips">'+DOC_TIPOS.filter(t=>t!=='OUTRO').map(t=>'<button type="button" class="chip'+(tipos.indexOf(t)>=0?' on':'')+'" data-dexige="'+t+'" aria-pressed="'+(tipos.indexOf(t)>=0)+'"'+(ro?' disabled':'')+'>'+DOC_NOME[t]+'</button>').join('')+'</div></div>';
   let table='';
   if(pe.list.length){
@@ -4030,6 +4337,7 @@ function renderDocsEv(ev){
 let DIMP=null;
 function openDocsPicker(){ const i=$('#docsFile'); if(i) i.click(); }
 async function openDocsImport(fileList){
+  setFold('rec:docs',false);
   const fl=Array.from(fileList||[]); const zips=fl.filter(f=>/\.zip$/i.test(f.name)), jsons=fl.filter(f=>/\.json$/i.test(f.name));
   if(!zips.length){ toast('Escolha o .zip da pasta do Drive (o arquivo de validades .json pode ir junto).',true); return; }
   if(!files().podeEnviar()){ toast('Só quem pode editar importa documentos.',true); return; }
@@ -4272,7 +4580,7 @@ async function applyOSImport(){
     OSI=null; closePanel();
     const nAmb=Array.from(touched.keys()).filter(id=>!antes.has(id)).length;
     toast(!nAmb&&!nIt&&!nLoc?'Já estava tudo no evento — nada novo.':(novo?'Evento criado':'Juntado em '+clip(ev.nome||'',32))+': '+[nAmb?plural(nAmb,'ambiente novo','ambientes novos'):'',nIt?plural(nIt,'item novo','itens novos'):'',nLoc?plural(nLoc,'locação','locações'):''].filter(Boolean).join(', ')+'. Agora é pôr data e equipe.');
-    openEvent(ev.id);
+    openEvent(ev.id); if(nAmb||nIt||nLoc) setEvTab('amb');
   }catch(err){ handleWriteError(err); if(btn){ btn.disabled=false; btn.textContent='TENTAR DE NOVO'; } }
 }
 function wireOSImport(){
@@ -5286,7 +5594,7 @@ function boot(data){
   data=data||{}; wire();
   if(data.q){ q=data.q; $('#q').value=q; }
   if(data.currentId) currentId=data.currentId;
-  setView(VIEWS.indexOf(data.view)>=0?data.view:'mapa');
+  setView(data.view==='recursos'?'equipes':VIEWS.indexOf(data.view)>=0?data.view:'eventos');
   connect();
 }
 let hot=null; try{ hot=(window.claude&&window.claude.hot)||null; }catch(e){ hot=null; }
