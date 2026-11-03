@@ -1274,6 +1274,112 @@ div.thead{cursor:default}
 }
 
 </style>
+<style>
+/* ===================== v40 ===================== */
+/* ---------- item do ambiente: equipe que monta e equipe que desmonta ---------- */
+.erow{grid-template-columns:20px minmax(150px,1.3fr) 100px 100px minmax(126px,.9fr) 100px 100px minmax(126px,.9fr) 30px}
+.erow .e-eq,.erow .e-eqd{border-left:3px solid var(--blue)}
+.erow .e-eq.terc,.erow .e-eqd.terc{border-left-color:var(--orange)}
+.erow .e-eqd:not(.set){color:var(--muted);border-left-color:var(--line-strong)}
+@media (min-width:641px) and (max-width:1020px){
+  .erow{grid-template-columns:20px 104px 104px minmax(0,1fr) 30px}
+  .erow .drag{grid-column:1;grid-row:1/span 3}
+  .erow .c-desc{grid-column:2/5;grid-row:1}
+  .erow>.icon-btn{grid-column:5;grid-row:1}
+  .erow .c-de{grid-column:2;grid-row:2} .erow .c-ate{grid-column:3;grid-row:2} .erow .c-eq{grid-column:4/6;grid-row:2}
+  .erow .c-dde{grid-column:2;grid-row:3} .erow .c-date{grid-column:3;grid-row:3} .erow .c-eqd{grid-column:4/6;grid-row:3}
+  .erow .cell .cl{display:block}
+  .erow .c-desc .cl{display:none}
+  .erow.ehead{display:none}
+  .etapa+.etapa{border-top:1px solid var(--line);padding-top:8px}
+}
+/* ---------- produtor geral (frente do evento) e apoio ---------- */
+.ecard.prodr.geral{border-left-width:6px;border-left-color:var(--mblue);background:linear-gradient(90deg,var(--blue-soft),var(--surface) 46%)}
+.st-geral{background:var(--mblue);color:var(--on-blue);border-color:var(--mblue)}
+.st-apoio{background:var(--surface);color:var(--muted);border-color:var(--line-strong)}
+.ec-papel{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.ec-papel .seg{flex:0 0 auto}
+.ec-papel .seg button{padding:5px 12px 4px;font-size:11.5px}
+.ec-resp{flex:1 1 220px;display:flex;align-items:center;gap:6px;min-width:0}
+.ec-resp span{font:700 10.5px/1 var(--cond);letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+.ec-resp input{flex:1;min-width:0;padding:4px 7px;border:1px solid var(--line-strong);background:var(--surface);border-radius:2px;font:600 12px/1.2 var(--cond);text-transform:uppercase}
+.evr-p{font:600 11.5px/1.25 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.evr-p b{color:var(--blue);font-weight:700}
+/* ---------- frota no padrão das equipes: cartão e ficha ---------- */
+.tbox.veh .thead{gap:5px}
+.fr-agr{align-self:flex-start;padding:2px 7px;border:1px solid var(--orange);background:var(--orange-soft);color:var(--orange-ink);font:700 10.5px/1.3 var(--cond);letter-spacing:.07em;text-transform:uppercase}
+.fr-spec{font:600 12px/1.3 var(--cond);letter-spacing:.04em;color:var(--ink);text-transform:uppercase}
+.fr-none{color:var(--faint)}
+.fr-docs,.cdocs{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.fr-docs i,.cdocs i{font:700 10.5px/1 var(--cond);font-style:normal;letter-spacing:.05em;text-transform:uppercase;padding:3px 6px;border-radius:3px;background:var(--surface-2);color:var(--muted)}
+.fr-docs i.ok,.cdocs i.ok{background:var(--ok-soft);color:var(--ok)}
+.fr-docs i.warn,.cdocs i.warn{background:var(--warn-soft);color:var(--warn)}
+.fr-docs i.bad,.cdocs i.bad{background:var(--danger-soft);color:var(--danger)}
+.fr-docs i.none{background:none;border:1px dashed var(--line-strong);color:var(--muted)}
+.tbox.truck.agr{border-left-style:dashed}
+.eqfam.boxes .tgrid{padding:10px 12px 12px}
+.fgrid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}
+.fgrid2[hidden]{display:none}
+.cond-info{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.cond-info .hint{font-size:12.5px}
+.cdocs .link{font:600 12px/1.2 var(--cond);letter-spacing:.03em;text-transform:uppercase}
+.fp-cam{margin:2px 0 12px;font-size:12px}
+.fp-copy{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.fp-copy .hint{font-size:12.5px}
+.frow.agr .c-cam select,.frow.agr .c-orig select{border-left:3px solid var(--orange)}
+/* ---------- veículos do evento (aba Documentos) ---------- */
+.veicev{margin-top:14px}
+.vevt td.vev-pl{font:700 13px/1.2 var(--cond);letter-spacing:.08em}
+.vevt td.vev-sp{white-space:normal;min-width:180px}
+.vevt td.vev-sp small{display:block;margin-top:2px;font:500 11px/1.3 var(--cond);letter-spacing:.03em;color:var(--muted)}
+.vevt td.vev-co{white-space:normal}
+.vev-falta{color:var(--faint)}
+.vev-agr{display:block;margin-top:1px;font:700 10px/1.2 var(--cond);letter-spacing:.06em;color:var(--orange-ink)}
+.vev-t{font:700 13px/1.2 var(--cond);letter-spacing:.02em}
+.vev-acts{flex-wrap:wrap;gap:8px 12px}
+.vev-acts .hint2{flex:1 1 280px;font:500 12px/1.35 var(--body);color:var(--muted);text-transform:none;letter-spacing:0}
+/* ---------- radar em quadro: fileira de eventos e uma faixa por evento ---------- */
+.rq-evrow .chips{flex-wrap:wrap;gap:5px}
+.rq-evrow .chip{padding:3px 8px;font-size:10.5px}
+.rq-evrow .chip b{margin-left:4px;padding:0 5px;border-radius:8px;background:var(--orange-soft);color:var(--orange-ink);font-variant-numeric:tabular-nums}
+.rq-evrow .chip.on b{background:rgba(255,255,255,.22);color:inherit}
+.rq.lanes{display:block}
+.rq-heads,.rq-row{display:grid;grid-template-columns:repeat(var(--rqn,3),minmax(0,1fr));gap:10px}
+.rq-heads{position:sticky;top:0;z-index:3;background:var(--bg);padding:2px 0 8px}
+.rq-hd{display:flex;justify-content:space-between;align-items:baseline;padding:9px 10px 8px;background:var(--surface-2);border:1px solid var(--line);border-top:3px solid var(--line-strong);border-radius:6px;font:700 12.5px/1 var(--cond);letter-spacing:.09em;text-transform:uppercase;color:var(--head)}
+.rq-hd b{color:var(--muted);font-variant-numeric:tabular-nums}
+.rq-hd.c-cotar{border-top-color:var(--warn)} .rq-hd.c-cotado{border-top-color:var(--blue)} .rq-hd.c-fechado{border-top-color:var(--ok)} .rq-hd.c-prod{border-top-color:var(--orange)} .rq-hd.c-pronto{border-top-color:var(--navy)}
+.rq-lane{margin-top:14px}
+.rq-lane:first-of-type{margin-top:4px}
+.rq-lh{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 12px;padding:0 2px 6px;margin-bottom:8px;border-bottom:2px solid var(--navy)}
+.rq-lev{appearance:none;border:0;background:none;padding:0;cursor:pointer;text-align:left;font:700 15.5px/1.15 var(--cond);letter-spacing:.03em;text-transform:uppercase;color:var(--head)}
+.rq-lev:hover{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.rq-lev:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.rq-lh small{font:600 11.5px/1.2 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.rq.lanes .rq-col{min-height:58px;padding:7px}
+.rq.lanes .rq-col h3.rq-mini{display:none}
+.rq.lanes .rq-empty{margin:8px 0}
+@media (max-width:760px){
+  .rq.lanes{overflow:visible;grid-auto-flow:row}
+  .rq-heads{display:none}
+  .rq-row{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:82%;overflow-x:auto;padding-bottom:6px}
+  .rq.lanes .rq-col h3.rq-mini{display:flex}
+}
+@media (max-width:620px){
+  .rq-evrow .lbl{flex-basis:100%}
+  .rq-evrow .chips{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto;max-width:100%;min-width:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .rq-evrow .chips::-webkit-scrollbar{display:none}
+  .rq-evrow .chip{flex:0 0 auto}
+}
+/* celular: item, depois montagem (datas + equipe), depois desmontagem (datas + equipe) */
+@media (max-width:640px){
+  .erow{grid-template-columns:1fr 1fr;gap:6px 8px}
+  .erow .drag{display:none}
+  .erow .c-desc,.erow .c-eq,.erow .c-eqd{grid-column:1/-1}
+  .erow>.icon-btn{grid-column:2;justify-self:end}
+  .etapa+.etapa{border-top:1px solid var(--line);padding-top:8px}
+}
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -1414,6 +1520,10 @@ div.thead{cursor:default}
         <div class="ptitle fixed"><span class="pt">Documentação de quem está na escala</span><span class="pc" id="docsCnt"></span><small>ASO, NRs, ficha EPI, RG… conferidos até o último dia do evento</small></div>
         <div id="docsBody"></div>
       </div>
+      <div class="prods docsev veicev" id="veicEv">
+        <div class="ptitle fixed"><span class="pt">Veículos e equipamentos que vão</span><span class="pc" id="veicCnt"></span><small>pra lista de acesso do local: placa, modelo e motorista de cada um — e os documentos, se o cliente pedir</small></div>
+        <div id="veicBody"></div>
+      </div>
       </div>
     </section>
 
@@ -1444,6 +1554,10 @@ div.thead{cursor:default}
         <div class="chips" id="radarChips" aria-label="Filtrar por status"></div>
         <span class="count" id="radarCount"></span>
       </div>
+      <div class="toolbar sub rq-evrow" id="rqEvRow" hidden>
+        <span class="lbl">Evento</span>
+        <div class="chips" id="radarEvChips" role="group" aria-label="Ver o quadro de um evento"></div>
+      </div>
       <div class="tablewrap" id="pendHost" style="margin-top:12px"></div>
       <div class="emptymsg" id="pendEmpty" hidden></div>
       <div class="eqsim" id="eqSim" hidden></div>
@@ -1466,6 +1580,7 @@ div.thead{cursor:default}
 <datalist id="dlFuncao"></datalist>
 <datalist id="dlEquipes"></datalist>
 <datalist id="dlEquip"></datalist>
+<datalist id="dlPessoas"></datalist>
 <script>
 (function(){
 'use strict';
@@ -1601,6 +1716,11 @@ function recsOf(tipo){ return recursos.filter(r=>r.tipo===tipo).sort((a,b)=>(Num
 function ambsOf(evId){ return ambientes.filter(a=>a.eventoId===evId).sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0)); }
 function ambName(evId,ambId){ const a=ambientes.find(x=>x.id===ambId&&x.eventoId===evId); return a?(a.nome||'(AMBIENTE SEM NOME)'):''; }
 function prodName(ev,pid){ const p=(ev.produtores||[]).find(x=>x.id===pid); return p?(p.nome||'(PRODUTOR SEM NOME)'):''; }
+/* produtor geral (a frente do evento): o marcado como GERAL; com um produtor só, ele mesmo — a não ser que esteja marcado como apoio */
+function prodGeral(ev){ const ps=(ev&&ev.produtores)||[]; return ps.find(p=>p.papel==='GERAL')||(ps.length===1&&ps[0].papel!=='APOIO'?ps[0]:null); }
+function prodNome(p){ const r=p&&p.regId?regOf(p.regId):null; return (r?r.nome:(p&&p.nome))||'PRODUTOR'; }
+function prodsOrdered(ev){ const g=prodGeral(ev), ps=((ev&&ev.produtores)||[]).slice(); return g?[g].concat(ps.filter(p=>p.id!==g.id)):ps; }
+function prodIsGeralRid(ev,rid){ const g=prodGeral(ev); return !!g&&!!rid&&g.regId===rid; }
 function prodAmbs(ev,pid){ return ambsOf(ev.id).filter(a=>a.produtorId===pid).map(a=>a.nome||'(SEM NOME)'); }
 function team(ev,tid){ return (ev.equipes||[]).find(t=>t.id===tid)||null; }
 /* nome da equipe do evento: o do cadastro manda (se mudar lá, muda aqui) */
@@ -1635,7 +1755,7 @@ function radarItems(){
   evsAtivos().forEach(e=>{
     /* produtor e equipe terceirizados: o período vem da escala (mapa de dias); sem escala, dos itens */
     (e.produtores||[]).forEach(p=>{ if(!prodIsTerc(p)) return; const ds=rDays(e,p.regId); const ambs=prodAmbs(e,p.id); const nome=p.regId&&regOf(p.regId)?regOf(p.regId).nome:p.nome; items.push({kind:'PRODUTOR',ev:e,desc:nome||'PRODUTOR',sub:[ambs.length?'RESPONDE POR: '+ambs.join(', '):'',ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':''].filter(Boolean).join(' · '),forn:p.contato||'',modo:'',retirada:'',chega:ds[0]||e.monInicio||e.evInicio||'',sai:ds[ds.length-1]||e.desFim||e.evFim||'',status:p.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'produtores',itemId:p.id}}); });
-    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDays(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ if(it.equipeId===t.id){ if(!ds.length) [[it.de,it.ate],[it.desDe,it.desAte]].forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); where.push((a.nome||'?')+': '+(it.desc||'ITEM')); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(' · ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
+    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDays(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ const mo=it.equipeId===t.id, de=(it.equipeDesId||it.equipeId)===t.id; if(mo||de){ if(!ds.length) [mo?[it.de,it.ate]:null,de?[it.desDe,it.desAte]:null].filter(Boolean).forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); where.push((a.nome||'?')+': '+(it.desc||'ITEM')+(mo&&!de?' (MONTA)':de&&!mo?' (DESMONTA)':'')); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(' · ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
     (e.fretes||[]).forEach(f=>{ if(f.origem==='TERCEIRO') items.push({kind:'FRETE',ev:e,desc:(num(f.qtd)||1)+'× '+(f.caminhao||'CAMINHÃO'),sub:freteOque(e,f),forn:'',modo:'',retirada:'',chega:f.ida||'',sai:f.volta||'',status:f.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'fretes',itemId:f.id}}); });
   });
   ambientes.forEach(a=>{
@@ -2162,11 +2282,12 @@ function evUsesRec(rid){ return eventos.filter(ev=>{ const al=allocsOf(ev); retu
 /* ---------- o que acontece no dia, além das equipes (zoom e cronograma) ---------- */
 function inSpan(k,a,b){ if(!a&&!b) return false; const x=a||b,y=b||a; return x<=y?(k>=x&&k<=y):k===x; }
 function itemTeamRid(ev,it){ const t=team(ev,it.equipeId); return t&&t.regId?t.regId:''; }
+function itemTeamRidDes(ev,it){ const t=team(ev,it.equipeDesId||it.equipeId); return t&&t.regId?t.regId:''; }
 const RVERB={'FABRICAÇÃO':{inicio:'COMEÇA A FABRICAR',prontoAte:'FICA PRONTO',retirada:'RETIRAR',chega:'CHEGA'},'LOCAÇÃO':{retirada:'RETIRAR',chega:'CHEGA',sai:'DEVOLVER'},'COMPRA':{retirada:'RETIRAR',chega:'CHEGA'},'EQUIPAMENTO':{chega:'CHEGA',sai:'SAI'}};
 function dayExtras(ev,k){
   const out={itens:[],equip:[],fretes:[],radar:[]};
   ambsOf(ev.id).forEach(a=>{
-    (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t}); });
+    (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t:itemTeamRidDes(ev,it)}); });
     (a.equip||[]).forEach(q=>{ if(inSpan(k,q.de,q.ate)){ const x=q.de||q.ate,y=q.ate||q.de; out.equip.push({nome:q.nome||'EQUIPAMENTO',origem:q.origem||'PRÓPRIO',amb:a.nome||'',forn:q.fornecedor||'',status:q.status||'',a:x,b:y<x?x:y}); } });
   });
   (ev.fretes||[]).forEach(f=>{ const base={qtd:num(f.qtd)||1,cam:f.caminhao||'CAMINHÃO',oque:freteOque(ev,f),terc:f.origem==='TERCEIRO',status:f.status||''}; if(f.ida===k) out.fretes.push(Object.assign({dir:'VAI'},base)); if(f.volta===k) out.fretes.push(Object.assign({dir:'VOLTA'},base)); });
@@ -2234,7 +2355,7 @@ function removeRecFromEvent(evId,rid,keepEntry){
   if(keepEntry) return;
   ambsOf(evId).forEach(a=>{
     let x=null;
-    if(entry&&(a.itens||[]).some(it=>it.equipeId===entry.id)) x=Object.assign({},a,{itens:a.itens.map(it=>it.equipeId===entry.id?Object.assign({},it,{equipeId:''}):it)});
+    if(entry&&(a.itens||[]).some(it=>it.equipeId===entry.id||it.equipeDesId===entry.id)) x=Object.assign({},a,{itens:a.itens.map(it=>{ if(it.equipeId!==entry.id&&it.equipeDesId!==entry.id) return it; const o=Object.assign({},it); if(o.equipeId===entry.id) o.equipeId=''; if(o.equipeDesId===entry.id) o.equipeDesId=''; return o; })});
     if(pent&&a.produtorId===pent.id) x=Object.assign({},x||a,{produtorId:''});
     if(x){ x.atualizadoEm=nowIso(); upsertLocal('ambientes',x); saveDocNow('ambientes',x.id); }
   });
@@ -2675,7 +2796,7 @@ function evRowHTML(e,arq){
   const nt=teamsOfEv(e).length, na=ambsOf(e.id).length, meta=[nt?plural(nt,'equipe','equipes'):'',na?plural(na,'ambiente','ambientes'):''].filter(Boolean).join(' · ');
   const act=readOnly?'':arq?'<button type="button" class="btn sm" data-reabrir="'+esc(e.id)+'">Reabrir</button>':(g==='fim'?'<button type="button" class="btn sm okb" data-concl="'+esc(e.id)+'">✓ Concluir</button>':'');
   return '<li class="evr'+(arq?' arq':'')+'" data-id="'+esc(e.id)+'">'
-    +'<button type="button" class="evr-main" data-open-ev="'+esc(e.id)+'"><span class="evr-n">'+esc(e.nome||'(sem nome)')+'</span>'+(tr(e.local)?'<span class="evr-l">'+esc(e.local)+'</span>':'')+'</button>'
+    +'<button type="button" class="evr-main" data-open-ev="'+esc(e.id)+'"><span class="evr-n">'+esc(e.nome||'(sem nome)')+'</span>'+(tr(e.local)?'<span class="evr-l">'+esc(e.local)+'</span>':'')+(()=>{ const pg=prodGeral(e), n=(e.produtores||[]).length; return pg?'<span class="evr-p">PRODUTOR GERAL: <b>'+esc(prodNome(pg))+'</b>'+(n>1?' + '+(n-1)+' DE APOIO':'')+'</span>':''; })()+'</button>'
     +'<div class="evr-when">'+(when||'<span class="pd none">SEM DATAS</span>')+(arq&&parseISO(e.concluido)?'<span class="pd arqd">CONCLUÍDO EM <b>'+fmtDate(e.concluido)+'</b></span>':'')+'</div>'
     +'<div class="evr-st">'+st.join('')+(meta?'<span class="evr-m">'+meta+'</span>':'')+(act?'<span class="evr-act">'+act+'</span>':'')+'</div></li>';
 }
@@ -2744,9 +2865,13 @@ function prodCardHTML(ev,p){
   const ch=new Map(); if(rid) ds.forEach(k=>addConf(ch,ev,k,rid));
   const ph=rid?['mont','ev','desm'].filter(k=>{ const ks=phaseDays(ev,k); return ks.length&&ks.some(x=>(al[x]||[]).indexOf(rid)<0); }):[];
   const nome=r?r.nome:(p.nome||'(SEM NOME)'), conf=M.confirm==='rmp:'+p.id;
-  return '<div class="ecard prodr'+(ch.size?' ch':'')+'" data-pid="'+esc(p.id)+'">'
-    +'<div class="ec-h"><span class="ec-n">'+esc(nome)+'</span><span class="st '+(terc?'st-orange':'st-blue')+'">'+(terc?'TERCEIRIZADO':'PRÓPRIO')+'</span>'+(ro||conf?'':'<button type="button" class="btn sm danger" data-act="rm-prod" data-pid="'+esc(p.id)+'">Tirar do evento</button>')+'</div>'
-    +'<span class="ec-d">'+(ds.length?esc(rangesTxt(ds,true))+' · '+plural(ds.length,'dia','dias'):'SEM DIA NA ESCALA')+(ambs.length?' · RESPONDE POR: '+esc(ambs.join(', ')):' · SEM AMBIENTE')+'</span>'
+  const g=prodGeral(ev), geral=!!g&&g.id===p.id, many=(ev.produtores||[]).length>1;
+  return '<div class="ecard prodr'+(geral?' geral':'')+(ch.size?' ch':'')+'" data-pid="'+esc(p.id)+'">'
+    +'<div class="ec-h"><span class="ec-n">'+esc(nome)+'</span>'+(geral?'<span class="st st-geral">PRODUTOR GERAL</span>':many?'<span class="st st-apoio">APOIO</span>':'')+'<span class="st '+(terc?'st-orange':'st-blue')+'">'+(terc?'TERCEIRIZADO':'PRÓPRIO')+'</span>'+(ro||conf?'':'<button type="button" class="btn sm danger" data-act="rm-prod" data-pid="'+esc(p.id)+'">Tirar do evento</button>')+'</div>'
+    +'<span class="ec-d">'+(ds.length?esc(rangesTxt(ds,true))+' · '+plural(ds.length,'dia','dias'):'SEM DIA NA ESCALA')+(ambs.length?' · AMBIENTES: '+esc(ambs.join(', ')):'')+'</span>'
+    +(ro?(tr(p.resp)?'<span class="ec-v">RESPONSÁVEL POR: '+esc(p.resp)+'</span>':'')
+      :'<div class="ec-papel"><div class="seg sm" role="group" aria-label="Papel de '+esc(nome)+' no evento"><button type="button" data-act="prod-papel" data-pid="'+esc(p.id)+'" data-v="GERAL" class="'+(geral?'on':'')+'" aria-pressed="'+geral+'" title="A frente do evento: quem responde por tudo">GERAL</button><button type="button" data-act="prod-papel" data-pid="'+esc(p.id)+'" data-v="APOIO" class="'+(geral?'':'on')+'" aria-pressed="'+(!geral)+'">APOIO</button></div>'
+      +'<label class="ec-resp"><span>RESPONSÁVEL POR</span><input data-presp="'+esc(p.id)+'" value="'+esc(p.resp||'')+'" placeholder="'+(geral?'EX: O EVENTO TODO, CONTATO COM O CLIENTE':'EX: GALPÃO E PISO, CREDENCIAMENTO, ELÉTRICA')+'" autocomplete="off"></label></div>')
     +(ch.size?'<span class="pw">CHOQUE: '+esc(choqueTxt(ch))+'</span>':'')
     +(terc?'<div class="ec-terc"><label>COTAÇÃO <select data-pst="'+esc(p.id)+'"'+(ro?' disabled':'')+'>'+opt(COT,p.status||'')+'</select></label><label>CONTATO <input data-pct="'+esc(p.id)+'" value="'+esc(p.contato||'')+'" placeholder="TELEFONE / EMPRESA" autocomplete="off"'+(ro?' disabled':'')+'></label></div>':'')
     +(ro||!ph.length?'':'<div class="pmore">'+phChips(ev,rid,ph)+'</div>')
@@ -2755,8 +2880,8 @@ function prodCardHTML(ev,p){
 }
 function renderProds(ev){
   const box=$('#prods'); if(editingIn(box)) return;
-  const prods=ev.produtores||[]; const terc=prods.filter(prodIsTerc).length;
-  $('#prodCnt').textContent=prods.length?plural(prods.length,'produtor','produtores')+(terc?' · '+terc+' terc.':''):'nenhum';
+  const prods=prodsOrdered(ev); const terc=prods.filter(prodIsTerc).length, pg=prodGeral(ev);
+  $('#prodCnt').textContent=prods.length?plural(prods.length,'produtor','produtores')+(terc?' · '+terc+' terc.':'')+(pg?' · geral: '+prodNome(pg):prods.length>1?' · marque quem é o geral':''):'nenhum';
   applyFold(box,foldKey(ev,'prods'),!prods.length);
   $('#prodRows').innerHTML=prods.length?prods.map(p=>prodCardHTML(ev,p)).join(''):'<div class="pempty">Nenhum produtor ainda.</div>';
   const have=new Set(prods.map(p=>p.regId)), opts=recsSorted('PRODUTOR').filter(r=>!have.has(r.id));
@@ -2840,14 +2965,14 @@ function renderEscala(ev){
 }
 /* --- fretes --- */
 function freteRowHTML(f,ev){
-  const terc=f.origem==='TERCEIRO';
-  return '<div class="fitem" data-fid="'+esc(f.id)+'"><div class="frow'+(terc?' terc':'')+'">'
+  const terc=f.origem==='TERCEIRO', agr=f.origem==='AGREGADO';
+  return '<div class="fitem" data-fid="'+esc(f.id)+'"><div class="frow'+(terc?' terc':'')+(agr?' agr':'')+'">'
     +cell('c-ida','Vai (ida)',''+dateInput('f-ida',f.ida||'')+'')
     +cell('c-volta','Volta',''+dateInput('f-volta',f.volta||'')+'')
     +cell('c-qtd','Fretes','<input class="f-qtd" type="number" min="1" step="1" inputmode="numeric" value="'+esc(f.qtd==null||f.qtd===''?1:f.qtd)+'">')
     +truckCell(f)
     +cell('c-oque','O que vai','<input class="f-oque" type="text" placeholder="EX: GALPÃO + QG, LONAS, MUNCK VAI JUNTO" value="'+esc(freteOque(ev,f))+'" autocomplete="off">')
-    +cell('c-orig','Próprio / terceiro','<select class="f-orig"><option value="PRÓPRIO"'+(terc?'':' selected')+'>PRÓPRIO</option><option value="TERCEIRO"'+(terc?' selected':'')+'>TERCEIRO (FRETE)</option></select>')
+    +cell('c-orig','Nosso / agregado / terceiro','<select class="f-orig"><option value="PRÓPRIO"'+(terc||agr?'':' selected')+'>PRÓPRIO</option><option value="AGREGADO"'+(agr?' selected':'')+'>AGREGADO</option><option value="TERCEIRO"'+(terc?' selected':'')+'>TERCEIRO (FRETE)</option></select>')
     +cell('c-st','Cotação','<select class="f-st">'+opt(COT,f.status||'')+'</select>')
     +'<button type="button" class="icon-btn" data-act="del-frete" title="Tirar frete" aria-label="Tirar frete">×</button></div>'+freteTruckWarn(ev,f)+'</div>';
 }
@@ -2857,7 +2982,7 @@ function renderFretes(ev){
   const tot=fretesTot(ev), tt=fs.filter(f=>f.origem==='TERCEIRO').reduce((n,f)=>n+num(f.qtd),0);
   $('#freteCnt').textContent=fs.length?plural(tot,'frete','fretes')+(tt?' · '+tt+' de fora':''):'nenhum';
   box.classList.remove('folded');
-  $('#freteRows').innerHTML=(fs.length?'<div class="frow fhead"><span>Vai (ida)</span><span>Volta</span><span>Fretes</span><span>Caminhão</span><span>O que vai</span><span>Próprio / terceiro</span><span>Cotação (se terc.)</span><span></span></div>':'<div class="pempty">Nenhum frete marcado ainda. Clique em + Frete pra colocar o caminhão.</div>')+fs.map(f=>freteRowHTML(f,ev)).join('');
+  $('#freteRows').innerHTML=(fs.length?'<div class="frow fhead"><span>Vai (ida)</span><span>Volta</span><span>Fretes</span><span>Caminhão</span><span>O que vai</span><span>Próprio / agregado / terceiro</span><span>Cotação (se terc.)</span><span></span></div>':'<div class="pempty">Nenhum frete marcado ainda. Clique em + Frete pra colocar o caminhão.</div>')+fs.map(f=>freteRowHTML(f,ev)).join('');
   $('#freteSum').textContent=tot?'cada linha é um caminhão: quando vai, quando volta e o que leva':'quando vai, quando volta, qual caminhão e o que leva — o mesmo frete pode levar mais de um ambiente';
 }
 /* painel do relatório de terceiros (dentro do evento) */
@@ -2899,20 +3024,28 @@ function toggleRepPanel(force){
   const ev=cur(); if(open){ toggleCronoPanel(false); if(ev) renderRepPanel(ev); }
 }
 /* --- ambientes --- */
+/* opções de equipe do item: as do evento e as do cadastro (que entram no evento ao escolher) */
+function itemTeamOpts(ev,val,blank){
+  const ts=ev.equipes||[]; const inEv=new Set(ts.map(x=>x.regId).filter(Boolean)), regs=recsSorted('EQUIPE').filter(r=>!inEv.has(r.id));
+  return '<option value="">'+blank+'</option>'+(ts.length?'<optgroup label="NO EVENTO">'+ts.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===val?' selected':'')+'>'+esc(entryName(x)||'(SEM NOME)')+(teamIsTercEntry(x)?' · TERC.':'')+'</option>').join('')+'</optgroup>':'')+(regs.length?'<optgroup label="DO CADASTRO">'+regs.map(r=>'<option value="reg:'+esc(r.id)+'">'+esc(r.nome)+(r.propria===false?' · TERC.':'')+'</option>').join('')+'</optgroup>':'');
+}
+/* quem desmonta o item: a equipe da desmontagem ou, em branco, a mesma que monta */
+function itemDesTeam(ev,it){ return team(ev,it.equipeDesId||it.equipeId); }
 function itemRowHTML(it,ev){
-  const ts=ev.equipes||[]; const t=team(ev,it.equipeId); const terc=t?teamIsTercEntry(t):false;
-  const inEv=new Set(ts.map(x=>x.regId).filter(Boolean)), regs=recsSorted('EQUIPE').filter(r=>!inEv.has(r.id));
-  /* a equipe do item precisa estar na escala nos dias do item */
-  let warn=''; const rid=t&&t.regId;
-  if(rid){ const have=new Set(rDays(ev,rid)), need=[]; [[it.de,it.ate],[it.desDe,it.desAte]].forEach(pr=>{ const rg=range(pr[0],pr[1]); if(rg) eachDay(rg[0],rg[1],k=>{ if(!have.has(k)&&need.indexOf(k)<0) need.push(k); }); }); if(need.length) warn='<div class="iwarn"><span>'+esc(entryName(t))+' não está na escala em '+esc(shortDays(need))+'</span>'+(readOnly?'':'<button type="button" class="btn sm" data-act="it-escala" data-rid="'+esc(rid)+'" data-days="'+esc(need.join(','))+'">Colocar na escala</button>')+'</div>'; }
+  const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null; const terc=t?teamIsTercEntry(t):false, tercD=td?teamIsTercEntry(td):false;
+  /* cada equipe do item precisa estar na escala nos dias dela (montagem e desmontagem) */
+  const need=new Map();
+  [[t,it.de,it.ate],[td||t,it.desDe,it.desAte]].forEach(([x,a,b])=>{ const rid=x&&x.regId; if(!rid) return; const rg=range(a,b); if(!rg||(rg[1]-rg[0])/864e5>120) return; const have=new Set(rDays(ev,rid)); eachDay(rg[0],rg[1],k=>{ if(have.has(k)) return; if(!need.has(rid)) need.set(rid,{t:x,ks:[]}); const n=need.get(rid); if(n.ks.indexOf(k)<0) n.ks.push(k); }); });
+  const warn=Array.from(need.entries()).map(([rid,n])=>{ const ks=n.ks.sort(); return '<div class="iwarn"><span>'+esc(entryName(n.t))+' não está na escala em '+esc(shortDays(ks))+'</span>'+(readOnly?'':'<button type="button" class="btn sm" data-act="it-escala" data-rid="'+esc(rid)+'" data-days="'+esc(ks.join(','))+'">Colocar na escala</button>')+'</div>'; }).join('');
   return '<div class="erow etapa'+(terc?' terc':'')+'" data-eid="'+esc(it.id)+'">'
     +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
     +cell('c-desc','Item / etapa','<input class="e-desc" type="text" placeholder="EX: TENDA 15X10, MONTAGEM ESTRUTURA, ELÉTRICA…" value="'+esc(it.desc||'')+'"'+(String(it.desc||'').length>48?' title="'+esc(it.desc)+'"':'')+' autocomplete="off">')
     +cell('c-de','Montagem — de',''+dateInput('e-de',it.de||'')+'')
     +cell('c-ate','Montagem — até',''+dateInput('e-ate',it.ate||'')+'')
+    +cell('c-eq','Equipe que monta','<select class="e-eq'+(terc?' terc':'')+'">'+itemTeamOpts(ev,it.equipeId,'— quem monta')+'</select>')
     +cell('c-dde','Desmontagem — de',''+dateInput('e-dde',it.desDe||'')+'')
     +cell('c-date','Desmontagem — até',''+dateInput('e-date',it.desAte||'')+'')
-    +cell('c-eq','Equipe (monta e desmonta)','<select class="e-eq"><option value="">— quem monta</option>'+(ts.length?'<optgroup label="NO EVENTO">'+ts.map(x=>'<option value="'+esc(x.id)+'"'+(x.id===it.equipeId?' selected':'')+'>'+esc(entryName(x)||'(SEM NOME)')+(teamIsTercEntry(x)?' · TERC.':'')+'</option>').join('')+'</optgroup>':'')+(regs.length?'<optgroup label="DO CADASTRO">'+regs.map(r=>'<option value="reg:'+esc(r.id)+'">'+esc(r.nome)+(r.propria===false?' · TERC.':'')+'</option>').join('')+'</optgroup>':'')+'</select>')
+    +cell('c-eqd','Equipe que desmonta','<select class="e-eqd'+(tercD?' terc':'')+(td?' set':'')+'">'+itemTeamOpts(ev,it.equipeDesId,t?'A MESMA ('+esc(clip(entryName(t)||'',18))+')':'— a mesma que monta')+'</select>')
     +'<button type="button" class="icon-btn" data-act="del-etapa" title="Tirar item" aria-label="Tirar item">×</button>'+warn+'</div>';
 }
 function provRowHTML(p){
@@ -2974,13 +3107,13 @@ function blockTitle(key,def,label,cnt,hint,add){
 function ambInnerHTML(a,idx,ev){
   const prods=ev.produtores||[]; const K='a:'+a.id;
   let h='<div class="mhead"><span class="drag amb" title="Arrastar pra reordenar" aria-hidden="true">\u2807</span><button type="button" class="fold" data-act="fold-amb" title="Recolher / abrir o ambiente" aria-label="Recolher / abrir o ambiente"><span class="fi" aria-hidden="true"></span></button><span class="mnum">#'+idx+'</span><span class="mlabel">Ambiente</span><input class="m-nome" type="text" placeholder="NOME DO AMBIENTE (EX: QG, GALPÃO 50X130, ÁREA EXTERNA, LOUNGE)" value="'+esc(a.nome||'')+'" autocomplete="off">';
-  h+='<label class="amb-sel">Produtor <select class="a-prod"><option value="">'+(prods.length?'—':'— cadastre em cima')+'</option>'+prods.map(p=>'<option value="'+esc(p.id)+'"'+(p.id===a.produtorId?' selected':'')+'>'+esc(p.nome||'(SEM NOME)')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+'</option>').join('')+'</select></label>';
+  h+='<label class="amb-sel">Produtor <select class="a-prod"><option value="">'+(prods.length?'—':'— cadastre em cima')+'</option>'+prods.map(p=>'<option value="'+esc(p.id)+'"'+(p.id===a.produtorId?' selected':'')+'>'+esc(p.nome||'(SEM NOME)')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+(prodGeral(ev)===p&&prods.length>1?' · GERAL':'')+'</option>').join('')+'</select></label>';
   h+='<span class="msum">'+esc(ambSummary(a))+'</span>';
   h+='<span class="saveind"></span><button type="button" class="icon-btn" data-act="del-amb" title="Excluir ambiente" aria-label="Excluir ambiente">×</button>'
     +'<span class="confirm" data-role="delconf" hidden>Excluir este ambiente e tudo dentro dele? <button type="button" class="btn danger solid sm" data-act="del-amb-yes">Sim</button> <button type="button" class="btn sm" data-act="del-amb-no">Não</button></span></div>';
   const itens=a.itens||[]; const itN=itens.filter(x=>x.desc||x.de||x.equipeId).length;
-  let t=blockTitle(K+':it',false,'Itens / etapas',itens.length?plural(itN||itens.length,'item','itens'):'nenhum','o que monta nesse ambiente, com data de montagem, desmontagem e equipe','<button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button>');
-  h+='<div class="etapas'+t.cls+'" data-fkey="'+K+':it">'+t.html+'<div class="erow ehead"><span class="dcol"></span><span>Item / etapa (o que monta aqui)</span><span>Montagem — de</span><span>Montagem — até</span><span>Desmontagem — de</span><span>Desmontagem — até</span><span>Equipe (monta e desmonta)</span><span></span></div>';
+  let t=blockTitle(K+':it',false,'Itens / etapas',itens.length?plural(itN||itens.length,'item','itens'):'nenhum','o que monta nesse ambiente: datas e equipe da montagem e da desmontagem','<button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button>');
+  h+='<div class="etapas'+t.cls+'" data-fkey="'+K+':it">'+t.html+'<div class="erow ehead"><span class="dcol"></span><span>Item / etapa (o que monta aqui)</span><span>Montagem de</span><span>até</span><span>Equipe que monta</span><span>Desmontagem de</span><span>até</span><span>Equipe que desmonta</span><span></span></div>';
   itens.forEach(it=>{ h+=itemRowHTML(it,ev); });
   h+='<div class="quick"><button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button></div></div>';
   const fabs=a.fab||[]; const fbAb=fabs.filter(f=>isOpen(f.status)).length;
@@ -3018,7 +3151,7 @@ function renderArq(ev){
 function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; } });
-  renderJanelas(ev); renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderFretes(ev); renderArq(ev);
+  renderJanelas(ev); renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderVeicEv(ev); renderFretes(ev); renderArq(ev);
   $('#btnOSEv').hidden=$('#btnDelEv').hidden=readOnly;
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
@@ -3046,12 +3179,12 @@ const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['fretes','#paneFrete
 function renderEvTabs(ev){
   if(!EV_TABS.some(([k])=>k===M.evTab)) M.evTab='escala';
   const teams=escRows(ev).filter(t=>!isProdId(t)).length, ch=hasChoque(ev), sem=semEquipeDays(ev,null).length;
-  const na=ambsOf(ev.id).length, nf=fretesTot(ev), dp=M.docsPend||0, dn=M.docsN||0;
+  const na=ambsOf(ev.id).length, nf=fretesTot(ev), dp=(M.docsPend||0)+(M.veicPend||0), dn=M.docsN||0;
   const set=(k,txt,cls,tip)=>{ const b=$('#evt-'+k); if(!b) return; $('b',b).textContent=txt; b.classList.remove('warn','bad','ok'); if(cls) b.classList.add(cls); if(tip) b.title=tip; else b.removeAttribute('title'); };
   set('escala',teams?String(teams):'',ch?'bad':sem?'warn':'',ch?'Tem choque: pessoa ou carro em dois lugares no mesmo dia':sem?'Falta equipe em '+plural(sem,'dia','dias'):'');
   set('amb',na?String(na):'');
   set('fretes',nf?String(nf):'');
-  set('docs',dp?String(dp):(dn?'✓':''),dp?'warn':dn?'ok':'',dp?plural(dp,'pessoa','pessoas')+' com documento faltando ou vencido':dn?'Documentação em dia':'');
+  set('docs',dp?String(dp):(dn?'✓':''),dp?'warn':dn?'ok':'',dp?dp+' com documento faltando ou vencido (pessoas e veículos)':dn?'Documentação em dia':'');
   EV_TABS.forEach(([k,sel])=>{ const on=M.evTab===k, b=$('#evt-'+k); b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); b.tabIndex=on?0:-1; $(sel).hidden=!on; });
   const ab=radarOfEv(ev.id).filter(x=>isOpen(x.status)).length, rl=$('#evRadar');
   rl.hidden=!ab; rl.textContent=ab?plural(ab,'pendência','pendências')+' com terceiro no radar →':''; rl.title='Abrir o radar só com este evento';
@@ -3078,7 +3211,7 @@ function collectAmb(el){
   const v=(s,r)=>{ const i=$(s,r||el); return i?String(i.value).trim():''; };
   return Object.assign({},base,{
     nome:v('.m-nome'), obs:v('.m-obs'), produtorId:v('.a-prod'),
-    itens:$$('.etapa',el).map(r=>({id:r.dataset.eid,desc:v('.e-desc',r),de:dv($('.e-de',r)),ate:dv($('.e-ate',r)),desDe:dv($('.e-dde',r)),desAte:dv($('.e-date',r)),equipeId:v('.e-eq',r)})),
+    itens:$$('.etapa',el).map(r=>({id:r.dataset.eid,desc:v('.e-desc',r),de:dv($('.e-de',r)),ate:dv($('.e-ate',r)),desDe:dv($('.e-dde',r)),desAte:dv($('.e-date',r)),equipeId:v('.e-eq',r),equipeDesId:v('.e-eqd',r)})),
     fab:$$('.fabitem[data-fbid]',el).map(r=>{ const quem=v('.fb-quem',r)||'NOSSA'; const terc=quem==='TERCEIRA'; const modo=terc?v('.fb-modo',r):''; return {id:r.dataset.fbid,oque:v('.fb-oque',r),qtd:v('.fb-qtd',r),material:v('.fb-mat',r),quem:quem,fornecedor:v('.fb-forn',r),inicio:dv($('.fb-ini',r)),prontoAte:dv($('.fb-pronto',r)),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.fb-ret',r)):'',chega:dv($('.fb-chega',r)),status:v('.fb-st',r),obs:v('.fb-obs',r)}; }),
     prov:$$('.prow[data-pid]',el).map(r=>{ const tipo=v('.p-tipo',r)||'ALUGAR'; const alu=tipo==='ALUGAR'; const modo=v('.p-modo',r); return {id:r.dataset.pid,tipo:tipo,oque:v('.p-oque',r),quem:'TERCEIRA',fornecedor:v('.p-forn',r),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.p-ret',r)):'',data:dv($('.p-data',r)),devolve:alu?dv($('.p-dev',r)):'',status:v('.p-st',r)}; }),
     equip:$$('.qrow[data-qid]',el).map(r=>{ const orig=v('.q-orig',r)||'PRÓPRIO'; const alug=orig==='ALUGADO'; const regId=pickVal(r,'q-pick'); const reg=regOf(regId); return {id:r.dataset.qid,regId:regId,nome:reg?reg.nome:v('.q-nome',r),origem:orig,fornecedor:alug?v('.q-forn',r):'',de:dv($('.q-de',r)),ate:dv($('.q-ate',r)),status:alug?v('.q-st',r):''}; }),
@@ -3092,9 +3225,8 @@ function autoEscalaItens(a){
   const add=new Map(), itens=new Map();
   const foco=document.activeElement, rowFoco=foco&&foco.closest?foco.closest('.erow.etapa'):null;
   (a.itens||[]).forEach(it=>{ if(!T.has(it.id)) return; if(rowFoco&&rowFoco.dataset.eid===it.id) return; /* ainda mexendo nessa linha: espera sair dela */
-    T.delete(it.id); const t=team(ev,it.equipeId), rid=t&&t.regId; if(!rid||!regOf(rid)) return;
-    const have=new Set(rDays(ev,rid));
-    [[it.de,it.ate],[it.desDe,it.desAte]].forEach(pr=>{ if(pr[0]&&pr[1]&&pr[1]<pr[0]) return; const rg=range(pr[0],pr[1]); if(!rg||(rg[1]-rg[0])/864e5>45) return; eachDay(rg[0],rg[1],k=>{ if(have.has(k)) return; if(!add.has(rid)){ add.set(rid,new Set()); itens.set(rid,it.desc||''); } add.get(rid).add(k); }); }); });
+    T.delete(it.id); const tm=team(ev,it.equipeId), td=itemDesTeam(ev,it);
+    [[tm,it.de,it.ate],[td,it.desDe,it.desAte]].forEach(([t,a0,b0])=>{ const rid=t&&t.regId; if(!rid||!regOf(rid)) return; if(a0&&b0&&b0<a0) return; const rg=range(a0,b0); if(!rg||(rg[1]-rg[0])/864e5>45) return; const have=new Set(rDays(ev,rid)); eachDay(rg[0],rg[1],k=>{ if(have.has(k)) return; if(!add.has(rid)){ add.set(rid,new Set()); itens.set(rid,it.desc||''); } add.get(rid).add(k); }); }); });
   add.forEach((ks,rid)=>{ const days=Array.from(ks).sort(); addTeamDays(ev.id,rid,days); toast(recNome(rid)+' entrou na escala em '+shortDays(days)+(itens.get(rid)?' (item '+clip(itens.get(rid),28)+')':'')+'.'); });
 }
 async function saveAmb(aid){
@@ -3164,7 +3296,7 @@ function mutateAmb(el,fn,focusSel){
   if(focusSel&&target){ const f=$(focusSel(target),el); if(f) f.focus(); }
   flush('amb:'+a.id); saveAmb(a.id);
 }
-function addItem(el,desc){ mutateAmb(el,a=>{ const it={id:newId(),desc:desc||'',de:'',ate:'',desDe:'',desAte:'',equipeId:''}; a.itens.push(it); return it; },it=>'.etapa[data-eid="'+it.id+'"] '+(desc?'.e-de':'.e-desc')); }
+function addItem(el,desc){ mutateAmb(el,a=>{ const it={id:newId(),desc:desc||'',de:'',ate:'',desDe:'',desAte:'',equipeId:'',equipeDesId:''}; a.itens.push(it); return it; },it=>'.etapa[data-eid="'+it.id+'"] '+(desc?'.e-de':'.e-desc')); }
 function delItem(el,eid){ mutateAmb(el,a=>{ a.itens=a.itens.filter(x=>x.id!==eid); return null; }); }
 function addProv(el,tipo){ mutateAmb(el,a=>{ const p={id:newId(),tipo:tipo==='COMPRAR'?'COMPRAR':'ALUGAR',oque:'',quem:'TERCEIRA',fornecedor:'',modo:'',retirada:'',data:'',devolve:'',status:'A COTAR'}; a.prov.push(p); return p; },p=>'.prow[data-pid="'+p.id+'"] .p-oque'); }
 function addFab(el){ mutateAmb(el,a=>{ const f={id:newId(),oque:'',qtd:'',material:'',quem:'NOSSA',fornecedor:'',inicio:'',prontoAte:'',modo:'',retirada:'',chega:'',status:'A COTAR',obs:''}; a.fab.push(f); return f; },f=>'.fabitem[data-fbid="'+f.id+'"] .fb-oque'); }
@@ -3436,7 +3568,7 @@ function buildPanel(){
   const p=M.panel,pn=$('#panel'); if(!p) return;
   if(p.kind==='cell') return buildCellPanel(pn,p);
   if(p.kind==='mapprint') return buildMapPrintPanel(pn,p);
-  if(typeof buildRecPanel==='function'&&(p.kind==='team'||p.kind==='newrec'||p.kind==='veic')) return buildRecPanel(pn,p);
+  if(typeof buildRecPanel==='function'&&(p.kind==='team'||p.kind==='newrec'||p.kind==='veic'||p.kind==='eqp')) return buildRecPanel(pn,p);
   if(typeof buildImportPanel==='function'&&p.kind==='import') return buildImportPanel(pn,p);
   if(p.kind==='pessoa') return buildPessoaPanel(pn,p);
   if(p.kind==='docimport') return buildDocsImportPanel(pn,p);
@@ -3448,7 +3580,7 @@ function syncPanel(){
   const p=M.panel; if(!p||$('#panel').hidden) return;
   if(p.kind==='cell'){ const ev=evById(p.id); if(!ev){ closePanel(); return; } cellParts(ev); }
   else if(p.kind==='mapprint') mapPrintParts();
-  else if((p.kind==='team'||p.kind==='veic')&&typeof recPanelParts==='function') recPanelParts();
+  else if((p.kind==='team'||p.kind==='veic'||p.kind==='eqp')&&typeof recPanelParts==='function') recPanelParts();
   else if(p.kind==='import'&&typeof importParts==='function') importParts();
   else if(p.kind==='pessoa') pessoaParts();
   else if(p.kind==='docimport') docsImportParts();
@@ -3792,17 +3924,25 @@ const RQ_COLS=[['cotar','A COTAR'],['cotado','COTADO'],['fechado','FECHADO / COM
 function rqColOf(st){ return st==='COTADO'?'cotado':st==='FECHADO'||st==='COMPRADO'?'fechado':st==='A PRODUZIR'||st==='EM PRODUÇÃO'?'prod':st==='PRONTO'?'pronto':'cotar'; }
 function rqTarget(it,col){ const L=it.statusList; const pick=c=>L.indexOf(c)>=0?c:'';
   return col==='cotar'?'A COTAR':col==='cotado'?pick('COTADO'):col==='fechado'?(pick('COMPRADO')||pick('FECHADO')):col==='prod'?(it.status==='A PRODUZIR'?'EM PRODUÇÃO':pick('A PRODUZIR')&&rqColOf(it.status)!=='prod'?'A PRODUZIR':pick('EM PRODUÇÃO')):col==='pronto'?pick('PRONTO'):''; }
-function radarQuadroHTML(items,t){
+function radarQuadroHTML(items,t,evsAll){
   const temFab=items.some(it=>it.kind==='FABRICAÇÃO'), cols=RQ_COLS.filter(([c])=>temFab||(c!=='prod'&&c!=='pronto'));
-  const by={}; cols.forEach(([c])=>by[c]=[]); items.forEach(it=>{ const c=rqColOf(it.status); (by[c]||by.cotar).push(it); });
+  const split=list=>{ const by={}; cols.forEach(([c])=>by[c]=[]); list.forEach(it=>{ const c=rqColOf(it.status); (by[c]||by.cotar).push(it); }); return by; };
+  const by=split(items), evIds=Array.from(new Set(items.map(it=>it.ev.id))), lanes=radarEv==='TODOS'&&evIds.length>1;
   const card=it=>{ const late=((it.chega&&it.chega<t)||(it.kind==='FABRICAÇÃO'&&!it.chega&&it.prontoAte&&it.prontoAte<t))&&isOpen(it.status);
     const dt=it.kind==='FABRICAÇÃO'&&isOpen(it.status)&&it.prontoAte?'PRONTO ATÉ '+fmtDM(it.prontoAte):it.chega?(it.kind==='FRETE'?'VAI ':'CHEGA ')+fmtDM(it.chega):it.retirada?'RETIRA '+fmtDM(it.retirada):'';
     return '<div class="rq-card'+(late?' late':'')+'" data-rk="'+rdKey(it,'card')+'"'+rdRef(it)+' data-ev="'+esc(it.ev.id)+'" tabindex="0">'
       +'<div class="rq-top"><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span>'+(late?'<span class="rq-late">ATRASADO</span>':'')+'<select class="rd-st rq-st t-'+(it.status?(COT_TONE[it.status]||'grey'):'grey')+'"'+rdRef(it)+' aria-label="Status de '+esc(it.desc)+'"'+(readOnly?' disabled':'')+'><option value="">SEM STATUS</option>'+it.statusList.map(o=>'<option value="'+esc(o)+'"'+(o===it.status?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select></div>'
-      +'<b class="rq-desc">'+esc(it.desc)+'</b>'+(radarEv==='TODOS'?'<span class="rq-ev">'+esc(it.ev.nome||'(sem nome)')+'</span>':'')
+      +'<b class="rq-desc">'+esc(it.desc)+'</b>'+(radarEv==='TODOS'&&!lanes?'<span class="rq-ev">'+esc(it.ev.nome||'(sem nome)')+'</span>':'')
       +'<span class="rq-meta">'+[it.forn?esc(clip(it.forn,40)):'',dt].filter(Boolean).join(' · ')+'</span>'
       +'</div>'; };
-  return '<div class="rq">'+cols.map(([c,l])=>'<section class="rq-col c-'+c+'" data-rqcol="'+c+'" aria-label="'+l+'"><h3>'+l+' <b>'+by[c].length+'</b></h3><div class="rq-list">'+(by[c].length?by[c].map(card).join(''):'<p class="rq-empty">—</p>')+'</div></section>').join('')+'</div>';
+  const col=(c,l,list,mini)=>'<section class="rq-col c-'+c+'" data-rqcol="'+c+'" aria-label="'+l+'"><h3'+(mini?' class="rq-mini"':'')+'>'+l+' <b>'+list.length+'</b></h3><div class="rq-list">'+(list.length?list.map(card).join(''):'<p class="rq-empty">—</p>')+'</div></section>';
+  if(!lanes) return '<div class="rq" style="--rqn:'+cols.length+'">'+cols.map(([c,l])=>col(c,l,by[c],false)).join('')+'</div>';
+  /* todos os eventos: uma faixa por evento, com as mesmas colunas (o nome do evento filtra o quadro só nele) */
+  let h='<div class="rq lanes" style="--rqn:'+cols.length+'"><div class="rq-heads" aria-hidden="true">'+cols.map(([c,l])=>'<div class="rq-hd c-'+c+'"><span>'+l+'</span><b>'+by[c].length+'</b></div>').join('')+'</div>';
+  (evsAll||[]).filter(e=>evIds.indexOf(e.id)>=0).forEach(e=>{ const list=items.filter(it=>it.ev.id===e.id), bl=split(list), ab=list.filter(x=>isOpen(x.status)).length, late=list.filter(it=>((it.chega&&it.chega<t)||(it.kind==='FABRICAÇÃO'&&!it.chega&&it.prontoAte&&it.prontoAte<t))&&isOpen(it.status)).length;
+    const sp=e.span||evSpan(e), dts=sp.first?fmtDM(sp.first)+(sp.last&&sp.last!==sp.first?' a '+fmtDM(sp.last):''):'';
+    h+='<section class="rq-lane" data-ev="'+esc(e.id)+'" aria-label="'+esc(e.nome||'evento')+'"><header class="rq-lh"><button type="button" class="rq-lev" data-rqev="'+esc(e.id)+'" title="Ver o quadro só deste evento">'+esc(e.nome||'(sem nome)')+'</button><small>'+[dts,plural(list.length,'item','itens'),ab+' em aberto'].filter(Boolean).join(' · ')+'</small>'+(late?'<span class="rq-late">'+late+' ATRASADO'+(late>1?'S':'')+'</span>':'')+'</header><div class="rq-row">'+cols.map(([c,l])=>col(c,l,bl[c],true)).join('')+'</div></section>'; });
+  return h+'</div>';
 }
 function renderPend(){
   const all=radarItems();
@@ -3820,7 +3960,7 @@ function renderPend(){
   const tone=st=>st?(COT_TONE[st]||'grey'):'grey';
   const quadro=M.radarModo==='quadro';
   const host=$('#pendHost'); host.classList.toggle('rq-host',quadro);
-  let h=quadro?radarQuadroHTML(byKind.filter(it=>!qq||(it.desc+' '+it.sub+' '+it.forn).toUpperCase().indexOf(qq)>=0).sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:String(a.desc).localeCompare(String(b.desc)); }),t):radarListaHTML(items,evsAll,t,tone);
+  let h=quadro?radarQuadroHTML(byKind.filter(it=>!qq||(it.desc+' '+it.sub+' '+it.forn).toUpperCase().indexOf(qq)>=0).sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:String(a.desc).localeCompare(String(b.desc)); }),t,evsAll):radarListaHTML(items,evsAll,t,tone);
   host.innerHTML=h; host.hidden=quadro?false:!items.length;
   const em=$('#pendEmpty'); em.hidden=quadro||!!items.length;
   em.innerHTML=all.length?'Nada com esse filtro.':'Nada no radar ainda. No ambiente, use <b>+ Fabricação</b>, <b>+ Alugar</b> / <b>+ Comprar</b> ou marque equipamento <b>alugado</b>; no evento, marque equipe, produtor ou frete como <b>terceirizado</b>.';
@@ -3834,6 +3974,11 @@ function renderPend(){
   const ab=items.filter(x=>isOpen(x.status)).length;
   $('#radarCount').textContent=items.length?items.length+' ite'+(items.length===1?'m':'ns')+' · '+ab+' em aberto':'';
   const rc=$('#radarChips'); if(rc&&rc.parentNode) rc.parentNode.hidden=M.radarModo==='quadro';
+  /* no quadro, a fileira de eventos (com o que está em aberto em cada um) troca a de status */
+  const er=$('#rqEvRow'), ec=$('#radarEvChips');
+  if(er&&ec){ er.hidden=!quadro;
+    if(quadro){ const cnt=new Map(); all.filter(it=>!radarKind.size||radarKind.has(it.kind)).forEach(it=>{ const c=cnt.get(it.ev.id)||{n:0,ab:0}; c.n++; if(isOpen(it.status)) c.ab++; cnt.set(it.ev.id,c); });
+      ec.innerHTML='<button type="button" class="chip'+(radarEv==='TODOS'?' on':'')+'" data-rqev="TODOS" aria-pressed="'+(radarEv==='TODOS')+'">TODOS</button>'+evsAll.filter(e=>cnt.has(e.id)).map(e=>{ const c=cnt.get(e.id), on=radarEv===e.id; return '<button type="button" class="chip'+(on?' on':'')+'" data-rqev="'+esc(e.id)+'" aria-pressed="'+on+'" title="'+esc((e.nome||'')+' — '+plural(c.n,'item','itens')+', '+c.ab+' em aberto')+'">'+esc(clip(e.nome||'(sem nome)',24))+(c.ab?' <b>'+c.ab+'</b>':'')+'</button>'; }).join(''); } }
   const rm=$('#radarModo'); if(rm) rm.innerHTML=[['lista','LISTA'],['quadro','QUADRO']].map(([v,l])=>'<button type="button" class="chip'+((M.radarModo||'lista')===v?' on':'')+'" data-rmodo="'+v+'" aria-pressed="'+((M.radarModo||'lista')===v)+'">'+l+'</button>').join('');
   const es=$('#eqSim'); const showEq=radarKind.has('EQUIPAMENTO'); /* a lista de todos os equipamentos (nossos e alugados) só aparece quando escolhe o tipo EQUIPAMENTO */ const sh=showEq?eqListHTML(radarEv):'';
   es.innerHTML=sh; es.hidden=!sh;
@@ -3847,6 +3992,8 @@ function renderDatalists(){
   a.innerHTML=recsOf('EQUIPE').filter(r=>r.nome).map(r=>'<option value="'+esc(r.nome)+'"></option>').join('');
   const names=recsOf('EQUIPAMENTO').map(r=>r.nome).filter(Boolean); QUICK_EQP.forEach(n=>{ if(names.map(normName).indexOf(n)<0) names.push(n); });
   b.innerHTML=names.map(n=>'<option value="'+esc(n)+'"></option>').join('');
+  /* pessoas (motorista / operador da frota): integrantes das equipes + quem tem documento no sistema */
+  const c=$('#dlPessoas'); if(c){ const set=new Set(); teamsOrdered().forEach(t=>membersOf(t.id).forEach(n=>set.add(n))); recursos.forEach(r=>{ if(r.tipo==='PESSOA'&&tr(r.nome)) set.add(normName(r.nome)); }); const k=Array.from(set).sort().join('|'); if(c.dataset.k!==k){ c.dataset.k=k; c.innerHTML=Array.from(set).sort().map(n=>'<option value="'+esc(n)+'"></option>').join(''); } }
 }
 function recWinSel(){ const ws=mapWins(); return ws.find(x=>x.id===M.recWin)||ws.find(x=>x.id==='30d'); }
 function agendaRow(x){
@@ -3864,7 +4011,7 @@ function teamBoxHTML(r,w){
 }
 function vehBoxHTML(v,w){
   const rows=vehAgenda(v.id,w), users=recsOf('EQUIPE').filter(r=>r.veiculoId===v.id), nCh=rows.filter(x=>x.ch).length;
-  return '<article class="tbox veh'+(nCh?' ch':'')+'"><button type="button" class="thead" data-open-rec="'+esc(v.id)+'"><h3>'+esc(tr(v.nome)||'VEÍCULO')+(v.placa?' <small>'+esc(v.placa)+'</small>':'')+'</h3><span class="tmeta">'+(users.length?'USADO POR: '+esc(users.map(r=>r.nome).join(', ')):'<span class="abad">NENHUMA EQUIPE USA</span>')+(nCh?' · <span class="abad">'+nCh+' '+(nCh>1?'CHOQUES':'CHOQUE')+'</span>':'')+'</span></button><div class="orule" aria-hidden="true"></div>'
+  return '<article class="tbox veh'+(nCh?' ch':'')+'">'+frotaHeadHTML(v,[users.length?'USADO POR: '+esc(users.map(r=>r.nome).join(', ')):'<span class="abad">NENHUMA EQUIPE USA</span>'].concat(nCh?['<span class="abad">'+nCh+' '+(nCh>1?'CHOQUES':'CHOQUE')+'</span>']:[]))+'<div class="orule" aria-hidden="true"></div>'
     +(rows.length?'<ul class="arows">'+rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af" aria-hidden="true"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'(SEM NOME)')+'</span><span class="ax">'+esc(x.teams.map(recNome).join(', '))+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo carro em outro evento nesse dia</span>':'')+'</span></button></li>').join('')+'</ul>':'<p class="hint" style="padding:2px 0 6px">Livre nesse período.</p>')+'</article>';
 }
 /* ---------- equipamentos (uma unidade por placa; a conta de aluguel é por tipo) ---------- */
@@ -3935,11 +4082,19 @@ function renderFrota(){
   const vehs=carrosEquipe(), trucks=caminhoes(), eqps=recsOf('EQUIPAMENTO');
   const fams=new Map(); eqps.forEach(r=>{ const f=eqParse(r.nome).fam||'—'; if(!fams.has(f)) fams.set(f,[]); fams.get(f).push(r); });
   let h='';
-  h+=recSec('trk','Caminhões (frete)',trucks.length?plural(trucks.length,'caminhão','caminhões'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO" data-cat="CAMINHAO">+ Caminhão</button>',trucks.length?'<div class="tgrid">'+trucks.map(r=>truckBoxHTML(r,w)).join('')+'</div>':'<p class="pempty">Cadastre os caminhões que levam material (modelo e placa) — aí dá pra escolher no frete do evento e o sistema avisa quando o mesmo caminhão está em dois lugares. Munck que também é equipamento: marque "também é caminhão" lá embaixo, no equipamento.</p>');
-  h+=recSec('veic','Carros das equipes',vehs.length?plural(vehs.length,'carro','carros'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO" data-cat="CARRO">+ Carro</button>',vehs.length?'<div class="tgrid">'+vehs.map(v=>vehBoxHTML(v,w)).join('')+'</div>':'<p class="pempty">Cadastre os carros que levam a equipe (modelo e placa) e escolha em cada equipe qual ela usa — o mapa avisa quando o mesmo carro está em dois eventos no mesmo dia.</p>');
-  h+=recSec('eqps','Equipamentos',eqps.length?plural(eqps.length,'unidade','unidades')+' · '+plural(fams.size,'tipo','tipos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="">+ Equipamento</button>','<p class="hint" style="margin:0 0 8px">Cada unidade pela placa / identificação (MUNCK LLN5851, MUNCK JBE2G77…) — a conta de aluguel é por tipo.</p><div id="recEqpRows">'+(eqps.length?Array.from(fams.keys()).sort().map(f=>recEqpFamHTML(f,fams.get(f))).join(''):'<div class="pempty">Nenhum equipamento cadastrado ainda.</div>')+'</div>'+(ro?'':'<div class="quick"><span class="lbl">+ equipamento</span>'+QUICK_EQP.map(n=>'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="'+esc(n)+' ">'+esc(n)+'</button>').join('')+'<button type="button" class="chip other" data-act="add-rec-eqp" data-nome="">Outro…</button></div>'));
+  const nAgr=trucks.filter(isAgregado).length;
+  h+=recSec('trk','Caminhões (frete)',trucks.length?plural(trucks.length,'caminhão','caminhões')+(nAgr?' · '+nAgr+(nAgr>1?' agregados':' agregado'):''):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO" data-cat="CAMINHAO">+ Caminhão</button><button type="button" class="chip eqp" data-new-rec="VEICULO" data-cat="CAMINHAO" data-agr="1" title="Não é da nossa frota, mas está no contrato">+ Agregado</button>',trucks.length?'<div class="tgrid">'+trucks.map(r=>truckBoxHTML(r,w)).join('')+'</div>':'<p class="pempty">Cadastre os caminhões que levam material (modelo e placa) — aí dá pra escolher no frete do evento e o sistema avisa quando o mesmo caminhão está em dois lugares. Agregado (não é nosso, mas está no contrato) entra aqui também. Munck que também é equipamento: marque "também é caminhão" na ficha dele, lá embaixo.</p>');
+  h+=recSec('veic','Carros das equipes',vehs.length?plural(vehs.length,'carro','carros'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-new-rec="VEICULO" data-cat="CARRO">+ Carro</button>',vehs.length?'<div class="tgrid">'+vehs.map(v=>vehBoxHTML(v,w)).join('')+'</div>':'<p class="pempty">Cadastre os carros que levam a equipe (modelo, placa e motorista) e escolha em cada equipe qual ela usa — o mapa avisa quando o mesmo carro está em dois eventos no mesmo dia.</p>');
+  h+=recSec('eqps','Equipamentos',eqps.length?plural(eqps.length,'unidade','unidades')+' · '+plural(fams.size,'tipo','tipos'):'nenhum',ro?'':'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="">+ Equipamento</button>','<p class="hint" style="margin:0 0 8px">Cada unidade pela placa / identificação (MUNCK LLN5851, EMPILHADEIRA 01…) — a conta de aluguel é por tipo. Clique na unidade pra abrir a ficha (placa, modelo, operador, documentos).</p><div id="recEqpRows">'+(eqps.length?Array.from(fams.keys()).sort().map(f=>eqFamBoxesHTML(f,fams.get(f),w)).join(''):'<div class="pempty">Nenhum equipamento cadastrado ainda.</div>')+'</div>'+(ro?'':'<div class="quick"><span class="lbl">+ equipamento</span>'+QUICK_EQP.map(n=>'<button type="button" class="chip eqp" data-act="add-rec-eqp" data-nome="'+esc(n)+' ">'+esc(n)+'</button>').join('')+'<button type="button" class="chip other" data-act="add-rec-eqp" data-nome="">Outro…</button></div>'));
   host.innerHTML=h;
-  $$('#recEqpRows .eqfam').forEach(fam=>makeDraggable(fam,'.ritem.unit','.drag',order=>reorderRecs('EQUIPAMENTO',order)));
+}
+/* equipamentos de um tipo: a conta de aluguel do tipo e um cartão por unidade */
+function eqFamBoxesHTML(fam,regs,w){
+  const nd=equipNeed(regs[0],equipAllocs(regs[0])), own=regs.length;
+  let head='<div class="eqfam boxes"><div class="eqfam-head"><span class="eqfam-nome">'+esc(fam)+'</span><span class="eqfam-cnt">'+plural(own,'unidade','unidades')+' nossa'+(own===1?'':'s')+'</span>';
+  if(nd.ranges.length) head+='<span class="eqfam-need need">Precisa alugar: '+nd.ranges.map(x=>'<b>+'+x.falta+'</b> '+esc(periodoDM(x.from,x.to))+' ('+x.n+' em uso, temos '+own+')').join(' · ')+'</span>';
+  else if(nd.peak) head+='<span class="eqfam-ok rok">Dá conta: máx. '+nd.peak+' ao mesmo tempo, temos '+own+'</span>';
+  return head+'</div><div class="tgrid">'+regs.map(r=>eqpBoxHTML(r,w)).join('')+'</div></div>';
 }
 function collectRec(row){
   const base=recursos.find(x=>x.id===row.dataset.rid); if(!base) return null;
@@ -3967,32 +4122,28 @@ async function delRec(id){
 }
 
 /* ---------- painel: equipe / produtor / veículo ---------- */
-function openRec(id){ leavePanel(); const r=regOf(id); if(!r) return; M.panel={kind:r.tipo==='VEICULO'?'veic':'team',id:id}; M.confirm=null; buildPanel(); showPanel(); }
-function openNewRec(tipo,propria,cat){ leavePanel(); M.panel={kind:'newrec',tipo:tipo,propria:propria,cat:cat||''}; buildPanel(); showPanel(); }
+function openRec(id){ leavePanel(); const r=regOf(id); if(!r) return; M.panel={kind:r.tipo==='VEICULO'?'veic':r.tipo==='EQUIPAMENTO'?'eqp':'team',id:id}; M.confirm=null; buildPanel(); showPanel(); }
+function openNewRec(tipo,propria,cat,agr){ leavePanel(); M.panel={kind:'newrec',tipo:tipo,propria:propria,cat:cat||'',agr:!!agr}; buildPanel(); showPanel(); }
 function motoristaOptions(r){ const mem=membersOf(r.id), mot=normName(r.motorista); return '<option value="">— ninguém fixo</option>'+mem.map(n=>'<option value="'+esc(n)+'"'+(n===mot?' selected':'')+'>'+esc(n)+'</option>').join('')+(mot&&mem.indexOf(mot)<0?'<option value="'+esc(mot)+'" selected>'+esc(mot)+' (FORA DA EQUIPE)</option>':''); }
 function veicOptions(r){ const vs=carrosEquipe().concat(recsOf('VEICULO').filter(v=>v.id===r.veiculoId&&vehCat(v)!=='CARRO')); return '<option value="">— sem carro fixo</option>'+vs.map(v=>'<option value="'+esc(v.id)+'"'+(v.id===r.veiculoId?' selected':'')+'>'+esc(vehName(v.id))+'</option>').join('')+'<option value="__new">+ CADASTRAR VEÍCULO</option>'; }
 function buildRecPanel(pn,p){
   const ro=readOnly, dis=ro?' disabled':'';
   if(p.kind==='newrec'){
     const tp=p.tipo, team=tp==='EQUIPE', nossa=team&&p.propria!==false, veh=tp==='VEICULO';
-    const tit=veh?(p.cat==='CAMINHAO'?'Cadastrar caminhão':'Cadastrar carro de equipe'):tp==='PRODUTOR'?'Cadastrar produtor':nossa?'Cadastrar equipe nossa':'Cadastrar terceirizada';
-    pn.innerHTML=headHTML('<span class="pchip blue">'+(veh?'VEÍCULO':tp==='PRODUTOR'?'PRODUTOR':nossa?'NOSSA EQUIPE':'TERCEIRIZADA')+'</span>','<h2>'+tit+'</h2>')
+    const tit=veh?(p.agr?'Cadastrar caminhão agregado':p.cat==='CAMINHAO'?'Cadastrar caminhão':'Cadastrar carro de equipe'):tp==='PRODUTOR'?'Cadastrar produtor':nossa?'Cadastrar equipe nossa':'Cadastrar terceirizada';
+    pn.innerHTML=headHTML('<span class="pchip blue">'+(veh?'VEÍCULO':tp==='PRODUTOR'?'PRODUTOR':nossa?'NOSSA EQUIPE':'TERCEIRIZADA')+'</span>'+(p.agr?'<span class="pchip o">AGREGADO</span>':''),'<h2>'+tit+'</h2>')
       +'<form class="p-body" id="newRecForm" novalidate>'
       +'<div class="fld"><label for="nr-nome">'+(veh?'MODELO / APELIDO':tp==='PRODUTOR'?'NOME DO PRODUTOR':'NOME DA EQUIPE')+'</label><input id="nr-nome" data-autofocus autocomplete="off" placeholder="'+(veh?'Ex.: SAVEIRO BRANCA, VAN DO JARDEL':nossa?'Ex.: JARDEL, BETEL, CARMO':'Como vocês chamam no dia a dia')+'"></div>'
       +(veh?'<div class="fld"><label for="nr-placa">PLACA</label><input id="nr-placa" autocomplete="off" placeholder="ABC1D23"></div>':'')
+      +(veh&&p.agr?'<div class="fld"><label for="nr-dono">DONO / EMPRESA DO AGREGADO</label><input id="nr-dono" autocomplete="off" placeholder="QUEM É O DONO"></div>':'')
+      +(veh?'<p class="hint">Depois de cadastrar, abre a ficha pra completar: marca/modelo, ano, cor, capacidade, motorista e documentos (CRLV, seguro…).</p>':'')
       +(nossa?'<div class="fld"><label for="nr-lider">RESPONSÁVEL</label><input id="nr-lider" autocomplete="off" placeholder="Quem responde pela equipe"></div><div class="fld"><label for="nr-int">INTEGRANTES</label><textarea id="nr-int" rows="6" placeholder="Um nome por linha (com o responsável e o motorista)"></textarea></div>':'')
       +(!nossa&&!veh?'<div class="fld"><label for="nr-cont">CONTATO</label><input id="nr-cont" autocomplete="off" placeholder="Telefone / empresa"></div>':'')
       +'<p class="err" id="nr-err" hidden></p><div class="actions"><button type="submit" class="btn-primary">CADASTRAR</button><button type="button" class="btn-ghost" data-cancel>CANCELAR</button></div></form>';
     return;
   }
   const r=regOf(p.id); if(!r){ closePanel(); return; }
-  if(p.kind==='veic'){
-    pn.innerHTML=headHTML('<span class="pchip blue">VEÍCULO</span>',ro?'<h2>'+esc(r.nome)+'</h2>':'<label class="sr" for="rp-nome">Modelo / apelido</label><input id="rp-nome" class="title-in" data-rf="nome" autocomplete="off">')
-      +'<div class="p-body"><div class="fld"><span class="lbl" id="l-vcat">TIPO</span><div class="seg" role="group" aria-labelledby="l-vcat" id="rp-vcat"></div></div><div class="fld"><label for="rp-placa">PLACA</label><input id="rp-placa" data-rf="placa" autocomplete="off" placeholder="ABC1D23"'+dis+'></div>'
-      +'<div class="fld"><label for="rp-obs">OBSERVAÇÕES</label><textarea id="rp-obs" data-rf="obs" rows="3" placeholder="Capacidade, quem pode dirigir, manutenção"'+dis+'></textarea></div>'
-      +'<div class="orule" aria-hidden="true"></div><section id="rp-users"></section><section><div class="sec-h"><h3>AGENDA</h3><span class="per" id="rp-per"></span></div><ul class="arows" id="rp-agenda"></ul></section><footer class="p-foot" id="rp-foot"></footer></div>';
-    fillRecInputs(r,true); recPanelParts(); return;
-  }
+  if(p.kind==='veic'||p.kind==='eqp') return buildFrotaPanel(pn,p);
   pn.innerHTML=headHTML('<span class="pchip" id="rp-chip"></span>',ro?'<h2>'+esc(r.nome)+'</h2>':'<label class="sr" for="rp-nome">Nome</label><input id="rp-nome" class="title-in" data-rf="nome" autocomplete="off">')
     +'<div class="p-body">'
     +'<div class="fld"><span class="lbl" id="l-rtipo">TIPO</span><div class="seg" role="group" aria-labelledby="l-rtipo" id="rp-tipo"></div></div>'
@@ -4012,25 +4163,9 @@ function buildRecPanel(pn,p){
 }
 function fillRecInputs(r,force){ $$('#panel [data-rf]').forEach(el=>{ const f=el.dataset.rf; if(el.tagName==='SELECT') return; if(force||document.activeElement!==el) el.value=r[f]||''; }); }
 function recPanelParts(){
-  const p=M.panel; if(!p) return; const r=regOf(p.id); if(!r){ closePanel(); return; }
+  const p=M.panel; if(!p) return; if(p.kind==='veic'||p.kind==='eqp') return frotaPanelParts(); const r=regOf(p.id); if(!r){ closePanel(); return; }
   const w=recWinSel(), ro=readOnly;
   const per=$('#rp-per'); if(per) per.textContent=w.nome;
-  if(p.kind==='veic'&&vehCat(r)==='CAMINHAO'){
-    const vc=$('#rp-vcat'); if(vc) vc.innerHTML=[['CARRO','CARRO DE EQUIPE'],['CAMINHAO','CAMINHÃO']].map(([v,l])=>'<button type="button" data-vcat="'+v+'" class="'+(vehCat(r)===v?'on':'')+'" aria-pressed="'+(vehCat(r)===v)+'"'+(ro?' disabled':'')+'>'+l+'</button>').join('');
-    const rows=truckAgenda(r.id,w);
-    $('#rp-users').innerHTML='<p class="hint">Aparece pra escolher no frete do evento (aba Fretes). Avisa quando o mesmo caminhão está em dois eventos no mesmo dia.</p>';
-    $('#rp-agenda').innerHTML=rows.length?rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'')+'</span><span class="ax">'+(x.kind==='EQUIP'?'NO EVENTO (EQUIPAMENTO)':'FRETE: '+x.what.join(' E '))+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo caminhão em outro evento</span>':'')+'</span></button></li>').join(''):'<li class="hint">Livre nesse período.</li>';
-    $('#rp-foot').innerHTML=ro?'':(M.tdel===r.id?'<div class="confirm2"><span>Excluir o caminhão '+esc(vehName(r.id))+'? Os fretes ficam com o nome digitado.</span><button type="button" class="btn danger solid sm" data-rdel-yes="'+esc(r.id)+'">Excluir</button><button type="button" class="btn sm" data-rdel-no>Cancelar</button></div>':'<div><button type="button" class="btn-ghost danger" data-rdel="'+esc(r.id)+'">EXCLUIR CAMINHÃO</button></div>');
-    return;
-  }
-  if(p.kind==='veic'){
-    const vc=$('#rp-vcat'); if(vc) vc.innerHTML=[['CARRO','CARRO DE EQUIPE'],['CAMINHAO','CAMINHÃO']].map(([v,l])=>'<button type="button" data-vcat="'+v+'" class="'+(vehCat(r)===v?'on':'')+'" aria-pressed="'+(vehCat(r)===v)+'"'+(ro?' disabled':'')+'>'+l+'</button>').join('');
-    const users=recsOf('EQUIPE').filter(x=>x.veiculoId===r.id), rows=vehAgenda(r.id,w);
-    $('#rp-users').innerHTML='<div class="sec-h"><h3>QUEM USA</h3></div>'+(users.length?'<ul class="plist">'+users.map(u=>'<li><button type="button" class="pl-r" data-open-rec="'+esc(u.id)+'"><span>'+esc(u.nome)+'</span></button></li>').join('')+'</ul>':'<p class="hint">Nenhuma equipe usa ainda. Escolha esse carro no cadastro da equipe.</p>');
-    $('#rp-agenda').innerHTML=rows.length?rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'')+'</span><span class="ax">'+esc(x.teams.map(recNome).join(', '))+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo carro em outro evento</span>':'')+'</span></button></li>').join(''):'<li class="hint">Livre nesse período.</li>';
-    $('#rp-foot').innerHTML=ro?'':(M.tdel===r.id?'<div class="confirm2"><span>Excluir o veículo '+esc(vehName(r.id))+'? As equipes ficam sem carro fixo.</span><button type="button" class="btn danger solid sm" data-rdel-yes="'+esc(r.id)+'">Excluir</button><button type="button" class="btn sm" data-rdel-no>Cancelar</button></div>':'<div><button type="button" class="btn-ghost danger" data-rdel="'+esc(r.id)+'">EXCLUIR VEÍCULO</button></div>');
-    return;
-  }
   const tp=recTipo(r), mem=membersOf(r.id);
   $('#rp-chip').textContent=tp==='nossa'?'NOSSA EQUIPE':tp==='ter'?'TERCEIRIZADA':'PRODUTOR';
   $('#rp-tipo').innerHTML=[['nossa','NOSSA'],['ter','TERCEIRIZADA'],['prod','PRODUTOR']].map(([v,l])=>'<button type="button" data-rtipo="'+v+'" class="'+(tp===v?'on':'')+'" aria-pressed="'+(tp===v)+'"'+(ro?' disabled':'')+'>'+l+'</button>').join('');
@@ -4047,14 +4182,14 @@ function recPanelParts(){
 }
 function savePanelRec(id){
   const r=regOf(id); if(!r) return; const o={};
-  $$('#panel [data-rf]').forEach(el=>{ const f=el.dataset.rf; let v=el.value; if(f==='veiculoId'&&v==='__new') return; if(['nome','sigla','placa','lider','motorista'].indexOf(f)>=0) v=normName(v); else if(f==='integrantes'||f==='faz') v=String(v).split('\n').map(x=>normName(x)).filter(Boolean).join('\n'); else v=tr(v); o[f]=v; });
+  $$('#panel [data-rf]').forEach(el=>{ const f=el.dataset.rf; let v=el.value; if(f==='veiculoId'&&v==='__new') return; if(['nome','sigla','placa','lider','motorista','modelo','cor','cap','condutor','donoNome'].indexOf(f)>=0) v=normName(v); else if(f==='integrantes'||f==='faz') v=String(v).split('\n').map(x=>normName(x)).filter(Boolean).join('\n'); else v=tr(v); o[f]=v; });
   patchRec(id,x=>Object.assign(x,o));
 }
 async function delRecFull(id){
   const r=regOf(id); if(!r) return;
   removeRecEverywhere(id);
   removeLocal('recursos',id); M.tdel=null; if(M.panel&&M.panel.id===id) closePanel(); else refresh();
-  try{ await delDoc('recursos',id); toast((r.tipo==='VEICULO'?'Veículo ':r.tipo==='PRODUTOR'?'Produtor ':'Equipe ')+(r.nome||'')+' excluído do cadastro.'); }catch(err){ handleWriteError(err); }
+  try{ await delDoc('recursos',id); toast((r.tipo==='VEICULO'?'Veículo ':r.tipo==='EQUIPAMENTO'?'Equipamento ':r.tipo==='PRODUTOR'?'Produtor ':'Equipe ')+(r.nome||'')+' excluído do cadastro.'); }catch(err){ handleWriteError(err); }
 }
 function wireRecursos(){
   ['#viewEquipes','#viewFrota'].forEach(sel=>{ const rec=$(sel);
@@ -4066,7 +4201,7 @@ function wireRecursos(){
     const rw=t.closest('[data-rwin]'); if(rw){ M.recWin=rw.dataset.rwin; saveM(); renderRecursos(); return; }
     if(t.closest('#btnEscalaPDF')){ gerarPDFEscala(recWinSel()); return; }
     if(t.closest('[data-whats]')){ openWhats(); return; }
-    const nr=t.closest('[data-new-rec]'); if(nr){ openNewRec(nr.dataset.newRec,nr.dataset.propria!=='0',nr.dataset.cat||''); return; }
+    const nr=t.closest('[data-new-rec]'); if(nr){ openNewRec(nr.dataset.newRec,nr.dataset.propria!=='0',nr.dataset.cat||'',nr.dataset.agr==='1'); return; }
     const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
     const oe=t.closest('[data-open-ev]'); if(oe){ openEvent(oe.dataset.openEv); return; }
     const oc=t.closest('[data-open-cell]'); if(oc){ openCell(oc.dataset.openCell,oc.dataset.days.split(',').filter(Boolean)); return; }
@@ -4074,7 +4209,7 @@ function wireRecursos(){
     const b=t.closest('[data-act]');
     if(b){ const act=b.dataset.act;
       if(act==='rfold'){ const sec=b.closest('.rsec'); const f=!sec.classList.contains('folded'); setFold('rec:'+sec.dataset.rkey,f); sec.classList.toggle('folded',f); b.setAttribute('aria-expanded',f?'false':'true'); }
-      else if(act==='add-rec-eqp') addRec('EQUIPAMENTO',b.dataset.nome||'');
+      else if(act==='add-rec-eqp') addEqpRec(b.dataset.nome||'');
       else if(act==='docs-import') openDocsPicker();
       else if(act==='del-rec'){ const row=b.closest('.ritem'); if(row) delRec(row.dataset.rid); }
       return; }
@@ -4086,16 +4221,16 @@ function wireRecursos(){
   /* painel de equipe / veículo / novo */
   const pn=$('#panel');
   pn.addEventListener('click',ev=>{
-    const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic'&&p.kind!=='newrec')) return; const t=ev.target;
+    const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic'&&p.kind!=='eqp'&&p.kind!=='newrec')) return; const t=ev.target;
     const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
     const vc=t.closest('[data-vcat]'); if(vc&&!vc.disabled&&p.kind==='veic'){ const v=vc.dataset.vcat; patchRec(p.id,o=>{ o.cat=v; }); return; }
     const tp=t.closest('[data-rtipo]'); if(tp&&!tp.disabled){ const v=tp.dataset.rtipo; flush('precf:'+p.id); patchRec(p.id,o=>{ o.tipo=v==='prod'?'PRODUTOR':'EQUIPE'; o.propria=v!=='ter'; }); return; }
-    const rd=t.closest('[data-rdel]'); if(rd){ M.tdel=rd.dataset.rdel; recPanelParts(); return; }
+    const rd=t.closest('[data-rdel]'); if(rd){ M.tdel=rd.dataset.rdel; recPanelParts(); const y=$('#panel [data-rdel-yes]'); if(y) y.focus(); return; }
     if(t.closest('[data-rdel-no]')){ M.tdel=null; recPanelParts(); return; }
     const ry=t.closest('[data-rdel-yes]'); if(ry){ delRecFull(ry.dataset.rdelYes); return; }
   });
-  pn.addEventListener('input',ev=>{ const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic')||readOnly) return; const el=ev.target; if(!el.dataset.rf||el.tagName==='SELECT') return; schedule('precf:'+p.id,()=>savePanelRec(p.id),650); });
-  pn.addEventListener('change',ev=>{ const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic')||readOnly) return; const el=ev.target; if(!el.dataset.rf) return;
+  pn.addEventListener('input',ev=>{ const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic'&&p.kind!=='eqp')||readOnly) return; const el=ev.target; if(!el.dataset.rf||el.tagName==='SELECT') return; schedule('precf:'+p.id,()=>savePanelRec(p.id),650); });
+  pn.addEventListener('change',ev=>{ const p=M.panel; if(!p||(p.kind!=='team'&&p.kind!=='veic'&&p.kind!=='eqp')||readOnly) return; const el=ev.target; if(!el.dataset.rf) return;
     if(el.dataset.rf==='veiculoId'&&el.value==='__new'){ el.value=regOf(p.id).veiculoId||''; const back=p.id; openNewRec('VEICULO'); M.panel.back=back; return; }
     flush('precf:'+p.id); savePanelRec(p.id); });
   pn.addEventListener('focusout',ev=>{ const p=M.panel; if(!p) return; if(ev.target.dataset&&ev.target.dataset.rf) flush('precf:'+p.id); });
@@ -4108,11 +4243,11 @@ function wireRecursos(){
     if(p.tipo==='EQUIPE') extra.propria=p.propria!==false;
     if(p.tipo==='PRODUTOR') extra.propria=true;
     const v=id=>{ const el=$(id); return el?el.value:''; };
-    if(p.tipo==='VEICULO'){ extra.placa=normName(v('#nr-placa')); extra.cat=p.cat==='CAMINHAO'?'CAMINHAO':'CARRO'; }
+    if(p.tipo==='VEICULO'){ extra.placa=normName(v('#nr-placa')); extra.cat=p.cat==='CAMINHAO'||p.agr?'CAMINHAO':'CARRO'; if(p.agr){ extra.dono='AGREGADO'; extra.donoNome=normName(v('#nr-dono')); } }
     if(p.tipo==='EQUIPE'&&p.propria!==false){ extra.lider=normName(v('#nr-lider')); extra.integrantes=String(v('#nr-int')).split('\n').map(normName).filter(Boolean).join('\n'); if(extra.lider&&extra.integrantes.split('\n').indexOf(extra.lider)<0) extra.integrantes=[extra.lider].concat(extra.integrantes?extra.integrantes.split('\n'):[]).join('\n'); }
     if(p.tipo!=='VEICULO'&&!(p.tipo==='EQUIPE'&&p.propria!==false)) extra.contato=tr(v('#nr-cont'));
     const id=newRecLocal(p.tipo,nome,extra); if(!id) return;
-    toast((p.tipo==='VEICULO'?'Veículo':p.tipo==='PRODUTOR'?'Produtor':'Equipe')+' cadastrado.');
+    toast((p.tipo==='VEICULO'?(p.agr?'Agregado':'Veículo'):p.tipo==='PRODUTOR'?'Produtor':'Equipe')+' cadastrado.'+(p.tipo==='VEICULO'?' Complete a ficha: modelo, motorista e documentos.':''));
     if(p.back){ const back=p.back; patchRec(back,o=>{ o.veiculoId=id; }); openRec(back); } else openRec(id);
   });
 }
@@ -4271,6 +4406,8 @@ function wire(){
   wireLogin();
   wireWhats();
   wirePerfil();
+  wireFrotaFicha();
+  wireVeicEv();
   $('#bkAviso').addEventListener('click',doBackup);
   document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
@@ -4284,13 +4421,16 @@ function wire(){
   document.addEventListener('pointermove',ev=>{ if(!rqD) return;
     if(!rqD.moved){ if(Math.hypot(ev.clientX-rqD.x,ev.clientY-rqD.y)<8) return; rqD.moved=true; dragging=true; const r=rqD.c.getBoundingClientRect(), g=rqD.c.cloneNode(true); g.classList.add('rq-ghost'); g.removeAttribute('data-rk'); g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;pointer-events:none;z-index:9999;margin:0'; document.body.appendChild(g); rqD.ghost=g; rqD.ox=ev.clientX-r.left; rqD.oy=ev.clientY-r.top; rqD.c.classList.add('drag'); document.body.classList.add('dragbusy'); }
     dragAt=Date.now(); ev.preventDefault(); rqD.ghost.style.left=(ev.clientX-rqD.ox)+'px'; rqD.ghost.style.top=(ev.clientY-rqD.oy)+'px';
-    const el=document.elementFromPoint(ev.clientX,ev.clientY), col=el&&el.closest?el.closest('#pendHost .rq-col'):null;
+    const el=document.elementFromPoint(ev.clientX,ev.clientY); let col=el&&el.closest?el.closest('#pendHost .rq-col'):null;
+    if(col&&col.closest('.rq-lane')!==rqD.c.closest('.rq-lane')) col=null; /* nas faixas por evento, o cartão só anda dentro do evento dele */
     if(col!==rqD.col){ if(rqD.col) rqD.col.classList.remove('over'); rqD.col=col; if(col) col.classList.add('over'); } },{passive:false});
   const rqEnd=()=>{ if(!rqD) return; const s=rqD; rqD=null; if(!s.moved) return; dragging=false; rqSup=Date.now(); document.body.classList.remove('dragbusy'); s.c.classList.remove('drag'); if(s.ghost) s.ghost.remove(); if(s.col) s.col.classList.remove('over');
     if(!s.col) { setTimeout(flushDirty,0); return; } const d=s.c.dataset, it=(radarView.all||[]).find(x=>x.ref.id===d.id&&x.ref.list===d.list&&x.ref.itemId===d.item); if(!it) return;
     const st=rqTarget(it,s.col.dataset.rqcol); if(!st){ toast('Esse tipo não tem esse status.',true); setTimeout(flushDirty,0); return; } if(st!==it.status) setRadarStatus(it.ref,st); else setTimeout(flushDirty,0); };
   document.addEventListener('pointerup',rqEnd); document.addEventListener('pointercancel',rqEnd);
-  ph.addEventListener('click',ev=>{ const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab=c.dataset.list==='fretes'?'fretes':c.dataset.list==='equipes'||c.dataset.list==='produtores'?'escala':'amb'; render(); });
+  const rqEv=ev=>{ const b=ev.target.closest('[data-rqev]'); if(!b) return false; radarEv=b.dataset.rqev; render(); if(radarEv!=='TODOS'){ const top=$('#viewPend'); if(top&&window.scrollY>top.offsetTop) window.scrollTo({top:Math.max(0,top.offsetTop-8)}); } return true; };
+  $('#radarEvChips').addEventListener('click',rqEv);
+  ph.addEventListener('click',ev=>{ if(rqEv(ev)) return; const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab=c.dataset.list==='fretes'?'fretes':c.dataset.list==='equipes'||c.dataset.list==='produtores'?'escala':'amb'; render(); });
   ph.addEventListener('keydown',ev=>{ const c=ev.target.closest&&ev.target.closest('.rq-card'); if(c&&ev.target===c&&ev.key==='Enter'){ ev.preventDefault(); c.click(); } });
   let rq=null; $('#radarQ').addEventListener('input',ev=>{ clearTimeout(rq); rq=setTimeout(()=>{ radarQ=ev.target.value; render(); },160); });
   $('#pendHost').addEventListener('change',ev=>{ const t=ev.target;
@@ -4366,6 +4506,7 @@ function wire(){
     else if(act==='prod-new'){ const nome=normName(($('#prodNewNome')||{}).value); if(!nome){ toast('Coloque o nome do produtor.'); return; } if(findRecByName('EQUIPE',nome)){ toast('Já existe uma equipe com esse nome.',true); return; } const ex=findRecByName('PRODUTOR',nome); const id=ex?ex.id:newRecLocal('PRODUTOR',nome,{propria:!($('#prodNewTerc')||{}).checked}); if(id) patchEv(e.id,o=>ensureEvTeam(o,id)); }
     else if(act==='esc-add'){ const sel=$('#escPick'); let rid=sel?sel.value:''; if(rid==='__new'){ const nome=normName(($('#escNewNome')||{}).value); if(!nome){ toast('Coloque o nome da terceirizada.'); return; } const ex=findRecByName('EQUIPE',nome); rid=ex?ex.id:newRecLocal('EQUIPE',nome,{propria:false}); } if(!rid){ toast('Escolha a equipe primeiro.'); return; } const k=b.dataset.k; if(k){ const ks=b.dataset.w!=null?windowDays(e,k,+b.dataset.w):phaseDays(e,k); if(!ks.length){ toast('Essa etapa não tem dias marcados.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocada em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+'.'); } else { patchEv(e.id,o=>ensureEvTeam(o,rid)); toast(recNome(rid)+' incluída no evento. Agora escolha os dias na grade.'); } }
     else if(act==='it-escala'){ const days=String(b.dataset.days||'').split(',').filter(Boolean); addTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' colocada na escala ('+plural(days.length,'dia','dias')+').'); }
+    else if(act==='prod-papel'&&!readOnly){ const pid=b.dataset.pid, v=b.dataset.v; flushAll(); patchEv(e.id,o=>{ o.produtores.forEach(x=>{ if(x.id===pid) x.papel=v==='GERAL'?'GERAL':'APOIO'; else if(v==='GERAL'&&x.papel==='GERAL') x.papel='APOIO'; }); }); }
   });
   det.addEventListener('change',ev=>{
     const t=ev.target, e=cur(); if(!e) return;
@@ -4378,9 +4519,10 @@ function wire(){
     const t=ev.target, e=cur(); if(!e) return;
     if(t.dataset.tar){ const rid=t.dataset.tar,v=t.value,id=e.id; schedule('tar:'+id+':'+rid,()=>setTarefa(id,rid,v),700); }
     else if(t.dataset.pct){ const pid=t.dataset.pct,v=t.value,id=e.id; schedule('tar:pct:'+pid,()=>patchEv(id,o=>{ const p=o.produtores.find(x=>x.id===pid); if(p) p.contato=normName(v); }),700); }
+    else if(t.dataset.presp){ const pid=t.dataset.presp,v=t.value,id=e.id; schedule('tar:presp:'+pid,()=>patchEv(id,o=>{ const p=o.produtores.find(x=>x.id===pid); if(p) p.resp=normName(v); }),700); }
     else if(t.dataset.tct){ const tid=t.dataset.tct,v=t.value,id=e.id; schedule('tar:tct:'+tid,()=>patchEv(id,o=>{ const x=o.equipes.find(y=>y.id===tid); if(x) x.contato=normName(v); }),700); }
   });
-  det.addEventListener('focusout',ev=>{ const t=ev.target, e=cur(); if(!e||!t.dataset) return; if(t.dataset.tar) flush('tar:'+e.id+':'+t.dataset.tar); if(t.dataset.pct) flush('tar:pct:'+t.dataset.pct); if(t.dataset.tct) flush('tar:tct:'+t.dataset.tct); });
+  det.addEventListener('focusout',ev=>{ const t=ev.target, e=cur(); if(!e||!t.dataset) return; if(t.dataset.tar) flush('tar:'+e.id+':'+t.dataset.tar); if(t.dataset.pct) flush('tar:pct:'+t.dataset.pct); if(t.dataset.presp) flush('tar:presp:'+t.dataset.presp); if(t.dataset.tct) flush('tar:tct:'+t.dataset.tct); });
   det.addEventListener('keydown',ev=>{ const t=ev.target; if((ev.key==='Enter'||ev.key===' ')&&t.classList&&t.classList.contains('ptitle')){ ev.preventDefault(); t.click(); } if(ev.key==='Enter'&&t.id==='escNewNome'){ ev.preventDefault(); toast('Agora escolha em que dias: montagem, evento, manutenção ou desmontagem.'); } if(ev.key==='Enter'&&t.id==='prodNewNome'){ ev.preventDefault(); const b=$('[data-act="prod-new"]'); if(b) b.click(); } });
   wireMapGrid($('#evMapa'));
   $('#btnDelEv').addEventListener('click',()=>{ closeMenuMais(); $('#delEvConfirm').hidden=false; const n=$('#btnDelEvNao'); if(n) n.focus(); });
@@ -4390,23 +4532,25 @@ function wire(){
   const openRow=ev=>{ if(ev.target.closest('select,input,button')) return; const tr2=ev.target.closest('tr[data-id]'); if(tr2) openEvent(tr2.dataset.id); };
   $('#listHost').addEventListener('click',ev=>{ const o=ev.target.closest('[data-open-ev]'); if(o) openEvent(o.dataset.openEv); }); $('#pendHost').addEventListener('click',openRow); $('#eqSim').addEventListener('click',openRow);
   wireHeaderBlock('#hdr');
-  wireHeaderBlock('#fretes',t=>{ if(t.classList.contains('f-camsel')){ const c=t.closest('.cell'), inp=c?$('.f-cam',c):null; const v=t.value; if(c) c.classList.toggle('outro',v==='__outro'); if(inp){ if(v&&v!=='__outro') inp.value=truckName(v); else if(v==='__outro'){ inp.value=''; setTimeout(()=>inp.focus(),30); } else inp.value=''; } return; }
-    if(t.classList.contains('f-orig')){ const row=t.closest('.frow'); const terc=t.value==='TERCEIRO'; row.classList.toggle('terc',terc); const st=$('.f-st',row); if(terc&&st&&!st.value) st.value='A COTAR'; } });
+  wireHeaderBlock('#fretes',t=>{ if(t.classList.contains('f-camsel')){ const c=t.closest('.cell'), inp=c?$('.f-cam',c):null; const v=t.value; if(c) c.classList.toggle('outro',v==='__outro'); if(inp){ if(v&&v!=='__outro') inp.value=truckName(v); else if(v==='__outro'){ inp.value=''; setTimeout(()=>inp.focus(),30); } else inp.value=''; }
+      /* escolheu um agregado: o frete vira AGREGADO (e um nosso volta a ser PRÓPRIO) */
+      const row=t.closest('.frow'), og=row?$('.f-orig',row):null, rg=v&&v!=='__outro'?regOf(v):null; if(og&&rg&&og.value!=='TERCEIRO'){ og.value=isAgregado(rg)?'AGREGADO':'PRÓPRIO'; row.classList.toggle('agr',og.value==='AGREGADO'); } return; }
+    if(t.classList.contains('f-orig')){ const row=t.closest('.frow'); const terc=t.value==='TERCEIRO'; row.classList.toggle('terc',terc); row.classList.toggle('agr',t.value==='AGREGADO'); const st=$('.f-st',row); if(terc&&st&&!st.value) st.value='A COTAR'; } });
   $('#fretes').addEventListener('click',ev=>{ const b=ev.target.closest('[data-act]'); if(!b) return; if(b.dataset.act==='del-frete'){ const row=b.closest('.fitem'); if(row) delFrete(row.dataset.fid); } });
   const mats=$('#mats');
   mats.addEventListener('input',ev=>{ const card=ev.target.closest('.mat'); if(card) scheduleAmb(card.dataset.mid,700); });
   mats.addEventListener('change',ev=>{
     const t=ev.target; const card=t.closest('.mat'); if(!card) return;
     /* item que ganhou equipe ou data: depois de salvar, a equipe entra na escala desses dias */
-    if(t.matches('.e-eq,.e-de,.e-ate,.e-dde,.e-date')){ const row=t.closest('.erow.etapa'); if(row&&row.dataset.eid) (M.itemTouched||(M.itemTouched=new Set())).add(row.dataset.eid); }
-    if(t.classList.contains('e-eq')&&t.value.indexOf('reg:')===0){
-      /* equipe do cadastro que ainda não está no evento: entra no evento e no item */
-      const rid=t.value.slice(4), row=t.closest('.erow'), e=cur(); if(!e) return; let eid='';
+    if(t.matches('.e-eq,.e-eqd,.e-de,.e-ate,.e-dde,.e-date')){ const row=t.closest('.erow.etapa'); if(row&&row.dataset.eid) (M.itemTouched||(M.itemTouched=new Set())).add(row.dataset.eid); }
+    if((t.classList.contains('e-eq')||t.classList.contains('e-eqd'))&&t.value.indexOf('reg:')===0){
+      /* equipe do cadastro que ainda não está no evento: entra no evento e no item (montagem ou desmontagem) */
+      const rid=t.value.slice(4), row=t.closest('.erow'), e=cur(); if(!e) return; let eid=''; const fld=t.classList.contains('e-eqd')?'equipeDesId':'equipeId';
       patchEv(e.id,o=>{ eid=ensureEvTeam(o,rid).id; });
-      const a=collectAmb(card); if(!a) return; a.itens=a.itens.map(it=>it.id===row.dataset.eid?Object.assign({},it,{equipeId:eid}):it);
+      const a=collectAmb(card); if(!a) return; a.itens=a.itens.map(it=>it.id===row.dataset.eid?Object.assign({},it,{[fld]:eid}):it);
       upsertLocal('ambientes',a); forceRenderAmb(a.id); flush('amb:'+a.id); saveAmb(a.id); return;
     }
-    if(t.classList.contains('e-eq')){ const ev2=cur(); const tm=ev2?team(ev2,t.value):null; t.closest('.erow').classList.toggle('terc',!!(tm&&teamIsTercEntry(tm))); }
+    if(t.classList.contains('e-eq')||t.classList.contains('e-eqd')){ const ev2=cur(); const tm=ev2&&t.value?team(ev2,t.value):null, tc=!!(tm&&teamIsTercEntry(tm)); t.classList.toggle('terc',tc); if(t.classList.contains('e-eq')) t.closest('.erow').classList.toggle('terc',tc); else t.classList.toggle('set',!!t.value); }
     if(t.classList.contains('p-tipo')||t.classList.contains('p-modo')){ const row=t.closest('.prow'); const com=$('.p-tipo',row).value==='COMPRAR'; row.classList.toggle('alu',!com); row.classList.toggle('com',com); row.classList.toggle('ret',$('.p-modo',row).value==='RETIRAMOS'); }
     if(t.classList.contains('fb-quem')||t.classList.contains('fb-modo')){ const row=t.closest('.fabitem'); const terc=$('.fb-quem',row).value==='TERCEIRA'; row.classList.toggle('terc',terc); row.classList.toggle('ret',terc&&$('.fb-modo',row).value==='RETIRAMOS'); const fc=$('.c-forn',row); if(fc){ const lb=$('.cl',fc), inp=$('.fb-forn',fc); if(lb) lb.textContent=terc?'Fornecedor':'Quem fabrica (pessoa / setor)'; if(inp) inp.placeholder=terc?'EMPRESA / QUEM FABRICA':'EX: PATRICIA, SETOR DE LONAS'; } }
     if(t.classList.contains('q-pick')) applyPick(t,'q-nome',null);
@@ -4977,11 +5121,11 @@ function renderCrono(JsPDF,ev,O,S,tight){
       const n=diasJanelas(ev,b[1]); fnt('normal',7.5); tc(C.muted); T(n?n+(n===1?' DIA':' DIAS'):'SEM DATA',x+5,y+16.8); });
     y+=25;
     /* quem é quem */
-    const prods=(ev.produtores||[]).filter(p=>!EF||p.regId===EF);
+    const prods=prodsOrdered(ev).filter(p=>!EF||p.regId===EF), pg=prodGeral(ev);
     const teams=escRows(ev).filter(t=>!isProdId(t)&&(!EF||t===EF));
     const rows=[];
     prods.forEach(p=>{ const r=regOf(p.regId), ambs=prodAmbs(ev,p.id), ds=rDays(ev,p.regId);
-      rows.push({k:'PRODUÇÃO',n:(r?r.nome:p.nome)||'PRODUTOR',d:[ambs.length?'RESPONDE POR: '+ambs.join(', '):'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),x:CLI?'':[prodIsTerc(p)?'TERCEIRIZADO':'',tr(p.contato)].filter(Boolean).join(' · ')}); });
+      rows.push({k:pg?(pg.id===p.id?'PROD. GERAL':'PROD. APOIO'):'PRODUÇÃO',n:(r?r.nome:p.nome)||'PRODUTOR',d:[tr(p.resp)?'RESPONSÁVEL POR: '+p.resp:'',ambs.length?'AMBIENTES: '+ambs.join(', '):'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),x:CLI?'':[prodIsTerc(p)?'TERCEIRIZADO':'',tr(p.contato)].filter(Boolean).join(' · ')}); });
     teams.forEach(t=>{ const r=regOf(t), mem=membersOf(t), ds=rDays(ev,t), te=(ev.equipes||[]).find(x=>x.regId===t);
       rows.push({k:'EQUIPE',n:r.nome,d:[tr(r.lider)?'RESPONSÁVEL: '+normName(r.lider):'',!CLI&&tr(r.motorista)?'MOTORISTA: '+normName(r.motorista):'',mem.length?mem.length+' PESSOAS':'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
         x:CLI?'':[r.propria===false?'TERCEIRIZADA':'',r.veiculoId?'CARRO '+vehName(r.veiculoId):'',r.propria===false&&te&&tr(te.status)?te.status:''].filter(Boolean).join(' · ')}); });
@@ -4992,7 +5136,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
         const dl=r.d?wrapT(r.d,CW-71-xw,'normal',7.8):[]; const h=Math.max(V(7.2),V(3.6)+Math.max(1,dl.length)*LH(7.8)+V(1.6));
         ensure(h);
         if(i%2===0){ fc(C.soft); doc.rect(ML,y,CW,h,'F'); }
-        fnt('bold',6.8); tc(r.k==='PRODUÇÃO'?C.navy:C.blue); T(r.k,ML+2,y+V(4.4),{charSpace:0.3});
+        fnt('bold',6.8); tc(r.k.indexOf('PROD')===0?C.navy:C.blue); T(r.k,ML+2,y+V(4.4),{charSpace:0.3});
         tc(C.ink); T(fitT(r.n,45,'bold',9.5),ML+23,y+V(4.6));
         fnt('normal',7.8); tc(C.muted); dl.forEach((l,j)=>T(l,ML+71,y+V(4.4)+j*LH(7.8)));
         if(xt){ fnt('bold',6.8); tc(C.orange); T(xt,PW-ML-2,y+V(4.4),{align:'right'}); }
@@ -5154,8 +5298,12 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const blocks=[];
     ambs.forEach((a,ai)=>{
       const rows=[]; const pn=prodName(ev,a.produtorId);
-      (a.itens||[]).filter(x=>tr(x.desc)).forEach(it=>{ const t=team(ev,it.equipeId), rid=t&&t.regId; if(EF&&rid!==EF) return;
-        rows.push({lab:'',txt:it.desc,sub:[it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',CLI?(t?entryName(t):''):(t?entryName(t)+(teamIsTercEntry(t)?' (TERC.)':''):'SEM EQUIPE')].filter(Boolean).join('  ·  ')}); });
+      (a.itens||[]).filter(x=>tr(x.desc)).forEach(it=>{ const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null, rid=t&&t.regId, ridD=td&&td.regId; if(EF&&rid!==EF&&ridD!==EF) return;
+        const tn=x=>x?entryName(x)+(!CLI&&teamIsTercEntry(x)?' (TERC.)':''):(CLI?'':'SEM EQUIPE');
+        /* equipe diferente na desmontagem: cada etapa com a sua equipe */
+        const sub=td&&td!==t?[(it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'MONTA')+(tn(t)?': '+tn(t):''),(it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'DESMONTA')+': '+tn(td)]
+          :[it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',tn(t)];
+        rows.push({lab:'',txt:it.desc,sub:sub.filter(Boolean).join('  ·  ')}); });
       if(!EF&&!CLI){
         (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(f.oque||'?')+(f.qtd?' · '+f.qtd:''),sub:[f.prontoAte?'PRONTO ATÉ '+fmtDM(f.prontoAte):'',f.chega?'CHEGA '+fmtDM(f.chega):'',nossa?'NOSSA':'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:''),f.status||''].filter(Boolean).join('  ·  ')}); });
         (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:p.oque||'?',sub:[p.fornecedor||'',p.data?'CHEGA '+fmtDM(p.data):'',!com&&p.devolve?'DEVOLVE '+fmtDM(p.devolve):'',p.status||''].filter(Boolean).join('  ·  ')}); });
@@ -5211,7 +5359,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
   const fretesSec=()=>{
     const fs=(ev.fretes||[]).slice().sort((a,b)=>((a.ida||a.volta||'9999')<(b.ida||b.volta||'9999'))?-1:1); if(!fs.length||EF) return;
     const cols=CLI?[['VAI',22],['VOLTA',22],['QTD',12],['CAMINHÃO',42],['O QUE VAI',CW-98]]:[['VAI',20],['VOLTA',20],['QTD',11],['CAMINHÃO',36],['ORIGEM',26],['O QUE VAI',CW-113]];
-    const rows=fs.map(f=>{ const v=CLI?[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',freteOque(ev,f)||'-']:[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',f.origem==='TERCEIRO'?'DE FORA'+(f.status?' · '+f.status:''):'PRÓPRIO',freteOque(ev,f)||'-']; const w=v.map((s,i)=>wrapT(s,cols[i][1]-2,'normal',8)); return {w:w,_h:Math.max.apply(null,w.map(x=>x.length))*LH(8)+V(2.4)}; });
+    const rows=fs.map(f=>{ const v=CLI?[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',freteOque(ev,f)||'-']:[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',f.origem==='TERCEIRO'?'DE FORA'+(f.status?' · '+f.status:''):f.origem==='AGREGADO'?'AGREGADO':'PRÓPRIO',freteOque(ev,f)||'-']; const w=v.map((s,i)=>wrapT(s,cols[i][1]-2,'normal',8)); return {w:w,_h:Math.max.apply(null,w.map(x=>x.length))*LH(8)+V(2.4)}; });
     const tot=fs.reduce((n,f)=>n+(num(f.qtd)||1),0);
     section('FRETES',tot+' CAMINH'+(tot===1?'ÃO':'ÕES')+' NO TOTAL',V(7)+rows.slice(0,3).reduce((s,r)=>s+r._h,0));
     const head=()=>{ fc(C.navy); doc.rect(ML,y,CW,V(6),'F'); let x=ML+1.5; fnt('bold',7); tc(C.white); cols.forEach(c=>{ T(c[0],x,y+V(4.1)); x+=c[1]; }); y+=V(6.5); };
@@ -5260,7 +5408,7 @@ async function exportRadarPDF(v){
     const bw=(CW-8)/3; const its=[['MONTAGEM',fmtJanelas(evSel,'mont'),C.blue],['EVENTO',fmtJanelas(evSel,'ev'),C.orange],['DESMONTAGEM',fmtJanelas(evSel,'desm'),C.navy]];
     its.forEach((it,i)=>{ const x=M+i*(bw+4); fill(C.grey); doc.rect(x,y,bw,12,'F'); fill(it[2]); doc.rect(x,y,bw,1.4,'F'); font('bold',7); tcol(C.muted); T(it[0],x+3,y+5.2,{charSpace:0.4}); font('bold',9.5); tcol(C.ink); T(it[1]||'—',x+3,y+10); });
     y+=16;
-    const meta=[evSel.local?'LOCAL: '+evSel.local:'',(evSel.produtores||[]).length?'PRODUTORES: '+(evSel.produtores||[]).map(p=>(p.nome||'?')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+(p.contato?' '+p.contato:'')).join(' / '):'',evSel.obs?'OBS: '+evSel.obs:''].filter(Boolean);
+    const meta=[evSel.local?'LOCAL: '+evSel.local:'',(evSel.produtores||[]).length?'PRODUTORES: '+prodsOrdered(evSel).map(p=>(p.nome||'?')+(prodGeral(evSel)===p&&(evSel.produtores||[]).length>1?' (GERAL)':'')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+(p.contato?' '+p.contato:'')).join(' / '):'',evSel.obs?'OBS: '+evSel.obs:''].filter(Boolean);
     font('normal',8.5); tcol(C.ink); meta.forEach(m=>{ wrap(m,CW).forEach(l=>{ ensure(5); T(l,M,y); y+=4.2; }); }); if(meta.length) y+=3;
   }
   /* resumo */
@@ -5766,7 +5914,7 @@ function escalaDoDia(k){
     const al=alOf(ev)[k]||[], ps=evPS(ev), ph=dayPhases(ev,ps,d,k);
     if(!noProd(al).length&&ph.some(p=>p==='mont'||p==='desm'||p==='man')) semEq.push({ev:ev,ph:ph});
     al.forEach(t=>{
-      if(isProdId(t)){ if(!prodEv.has(ev.id)) prodEv.set(ev.id,[]); prodEv.get(ev.id).push(recNome(t)); return; }
+      if(isProdId(t)){ if(!prodEv.has(ev.id)) prodEv.set(ev.id,[]); const geral=prodIsGeralRid(ev,t)&&(ev.produtores||[]).length>1; prodEv.get(ev.id)[geral?'unshift':'push'](recNome(t)+(geral?' (geral)':'')); return; }
       if(!por.has(t)) por.set(t,[]);
       por.get(t).push({ev:ev,ph:ph,g:going(ev,k,t),fazer:fazerEf(ev,k,t),car:carWith(ev,k,t)});
     });
@@ -5790,7 +5938,7 @@ function wBloco(E,x,o){
     if(o.fazer&&tr(it.fazer)) L.push('  Fazer: '+tr(it.fazer).toUpperCase());
     if(o.prod){ const ps=E.prodEv.get(it.ev.id); if(ps&&ps.length) L.push('  Produtor: '+ps.join(', ')); }
   });
-  if(o.carro&&r&&r.veiculoId){ const comCarro=x.itens.filter(it=>it.car); if(comCarro.length){ const mot=normName(r.motorista); L.push('Carro: '+vehName(r.veiculoId)+(mot?' — motorista '+pShort(mot):'')+(x.itens.length>1?' (vai pro '+tr(comCarro[0].ev.nome).toUpperCase()+')':'')); } }
+  if(o.carro&&r&&r.veiculoId){ const comCarro=x.itens.filter(it=>it.car); if(comCarro.length){ const mot=normName(r.motorista)||normName((regOf(r.veiculoId)||{}).condutor); L.push('Carro: '+vehName(r.veiculoId)+(mot?' — motorista '+pShort(mot):'')+(x.itens.length>1?' (vai pro '+tr(comCarro[0].ev.nome).toUpperCase()+')':'')); } }
   return L.join('\n');
 }
 function wTexto(E,o,so){ const bl=E.equipes.filter(x=>!so||x.t===so).map(x=>wBloco(E,x,o)); return wCab(E.k)+'\n\n'+(bl.length?bl.join('\n\n'):'Ninguém escalado nesse dia.'); }
@@ -5898,8 +6046,8 @@ function truckAgenda(id,w){
 function truckBoxHTML(r,w){
   const rows=truckAgenda(r.id,w), nCh=rows.filter(x=>x.ch).length, eq=r.tipo==='EQUIPAMENTO';
   const lbl=x=>x.kind==='EQUIP'?'NO EVENTO (EQUIPAMENTO)':x.what.indexOf('VAI')>=0&&x.what.indexOf('VOLTA')>=0?'FRETE: VAI E VOLTA':x.what.indexOf('VOLTA')>=0?'FRETE: VOLTA':'FRETE: VAI';
-  const head='<h3>'+esc(truckName(r.id)||'CAMINHÃO')+'</h3><span class="tmeta">'+(eq?'CAMINHÃO + EQUIPAMENTO (CONTA NOS DOIS)':'CAMINHÃO DE FRETE')+(nCh?' · <span class="abad">'+nCh+' '+(nCh>1?'CHOQUES':'CHOQUE')+'</span>':'')+'</span>';
-  return '<article class="tbox veh truck'+(nCh?' ch':'')+'">'+(eq?'<div class="thead">'+head+'</div>':'<button type="button" class="thead" data-open-rec="'+esc(r.id)+'">'+head+'</button>')+'<div class="orule" aria-hidden="true"></div>'
+  const extra=[eq?'CAMINHÃO + EQUIPAMENTO':''].filter(Boolean).concat(nCh?['<span class="abad">'+nCh+' '+(nCh>1?'CHOQUES':'CHOQUE')+'</span>']:[]);
+  return '<article class="tbox veh truck'+(isAgregado(r)?' agr':'')+(nCh?' ch':'')+'">'+frotaHeadHTML(r,extra)+'<div class="orule" aria-hidden="true"></div>'
     +(rows.length?'<ul class="arows">'+rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af" aria-hidden="true"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'(SEM NOME)')+'</span><span class="ax">'+lbl(x)+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo caminhão em outro evento nesse dia</span>':'')+'</span></button></li>').join('')+'</ul>':'<p class="hint" style="padding:2px 0 6px">Livre nesse período.</p>')+'</article>';
 }
 /* no frete do evento: escolher o caminhão nosso (ou digitar, quando é outro / terceiro) */
@@ -5908,13 +6056,379 @@ function truckCell(f){
   const has=f.veiculoId&&ts.some(t=>t.id===f.veiculoId), mode=has?f.veiculoId:(f.caminhao||!ts.length?'__outro':'');
   const inp='<input class="f-cam" type="text" placeholder="'+(terc?'EX: CARRETA DO FORNECEDOR, TRUCK DO ZÉ':'QUAL CAMINHÃO')+'" value="'+esc(f.caminhao||'')+'" autocomplete="off">';
   if(!ts.length) return cell('c-cam','Caminhão',inp);
-  const sel='<select class="pick f-camsel" aria-label="Caminhão nosso"><option value=""'+(mode===''?' selected':'')+'>— caminhão nosso</option>'+ts.map(t=>'<option value="'+esc(t.id)+'"'+(t.id===mode?' selected':'')+'>'+esc(truckName(t.id))+(t.tipo==='EQUIPAMENTO'?' (EQUIP.)':'')+'</option>').join('')+'<option value="__outro"'+(mode==='__outro'?' selected':'')+'>OUTRO (DIGITAR)</option></select>';
+  const nossos=ts.filter(t=>!isAgregado(t)), agrs=ts.filter(isAgregado), op=t=>'<option value="'+esc(t.id)+'"'+(t.id===mode?' selected':'')+'>'+esc(truckName(t.id))+(t.tipo==='EQUIPAMENTO'?' (EQUIP.)':'')+'</option>';
+  const sel='<select class="pick f-camsel" aria-label="Caminhão do cadastro"><option value=""'+(mode===''?' selected':'')+'>— caminhão do cadastro</option>'+(agrs.length?'<optgroup label="NOSSOS">'+nossos.map(op).join('')+'</optgroup><optgroup label="AGREGADOS">'+agrs.map(op).join('')+'</optgroup>':nossos.map(op).join(''))+'<option value="__outro"'+(mode==='__outro'?' selected':'')+'>OUTRO (DIGITAR)</option></select>';
   return cell('c-cam'+(mode==='__outro'||terc?' outro':'')+' haspick'+(terc?' soterc':''),'Caminhão','<span class="pickwrap">'+sel+inp+'</span>');
 }
 function freteTruckWarn(ev,f){
   if(!f.veiculoId||f.origem==='TERCEIRO') return '';
   const out=[]; [f.ida,f.volta].filter(Boolean).forEach(k=>truckConf(f.veiculoId,k,ev.id).forEach(cid=>{ const c=evById(cid); out.push(fmtDM(k)+' em '+clip(c?c.nome:'outro evento',36)); }));
   return out.length?'<div class="iwarn fwarn"><span>'+esc(truckName(f.veiculoId))+' também está '+esc(Array.from(new Set(out)).join('; '))+'</span></div>':'';
+}
+/* ===================================================================
+   FICHA DA FROTA — caminhão, carro e equipamento no padrão das equipes:
+   cartão com modelo, motorista / operador e documentos; ficha (painel) com placa, marca/modelo,
+   ano, cor, capacidade, motorista ou operador, agregado (dono), documentos com validade e agenda.
+   documentos do veículo: r.docs [ {id, tipo, titulo, validade, arq, tam, ct, criadoEm} ]
+   =================================================================== */
+const VDOC_TIPOS=['CRLV','SEGURO','LAUDO','ART','MANUT','CONTRATO','FOTO','OUTRO'];
+const VDOC_NOME={CRLV:'CRLV',SEGURO:'SEGURO',LAUDO:'LAUDO / INSPEÇÃO',ART:'ART',MANUT:'MANUTENÇÃO',CONTRATO:'CONTRATO (AGREGADO)',FOTO:'FOTO',OUTRO:'OUTRO'};
+const VDOC_CURTO={CRLV:'CRLV',SEGURO:'SEGURO',LAUDO:'LAUDO',ART:'ART',MANUT:'MANUT.',CONTRATO:'CONTRATO',FOTO:'FOTO',OUTRO:'OUTRO'};
+/* os que têm validade (o sistema avisa quando vence) */
+const VDOC_VAL={CRLV:1,SEGURO:1,LAUDO:1,ART:1,MANUT:1,CONTRATO:1};
+const isEqp=r=>!!r&&r.tipo==='EQUIPAMENTO';
+const isAgregado=r=>!!r&&r.tipo==='VEICULO'&&r.dono==='AGREGADO';
+function vdocTipoDoArquivo(nome){
+  const n=' '+fold(nome).replace(/[_.\-()]+/g,' ')+' ';
+  if(/ CRLV | CRV | CRLV ?E | DOC(UMENTO)? DO VEICULO /.test(n)) return 'CRLV';
+  if(/ SEGURO | APOLICE /.test(n)) return 'SEGURO';
+  if(/ LAUDO | INSPECAO | CERTIFICADO DE INSPECAO /.test(n)) return 'LAUDO';
+  if(/ ART /.test(n)) return 'ART';
+  if(/ MANUTENCAO | REVISAO /.test(n)) return 'MANUT';
+  if(/ CONTRATO /.test(n)) return 'CONTRATO';
+  if(/ FOTO /.test(n)) return 'FOTO';
+  return 'OUTRO';
+}
+function vdocStatus(d,ref){
+  if(!d) return 'falta'; if(!VDOC_VAL[d.tipo]) return 'ok';
+  const v=PD(d.validade); if(!v) return 'semdata';
+  const r=sod(ref||today0()); if(v<r) return 'vencido'; if((v-r)/864e5<=DOC_AVISO_DIAS) return 'vence'; return 'ok';
+}
+/* o documento que vale de cada tipo: o de validade mais longa (ou o mais novo) */
+function vdocAtual(r,tipo){ let best=null; ((r&&r.docs)||[]).forEach(d=>{ if(d.tipo!==tipo) return; const k=d.validade||d.criadoEm||''; if(!best||k>(best.validade||best.criadoEm||'')) best=d; }); return best; }
+/* motorista (carro / caminhão) ou operador (equipamento); carro sem motorista fixo usa o da equipe que anda nele */
+function condutorDe(r){ if(!r) return ''; if(tr(r.condutor)) return normName(r.condutor); if(r.tipo==='VEICULO'){ const t=recsOf('EQUIPE').find(x=>x.veiculoId===r.id&&tr(x.motorista)); if(t) return normName(t.motorista); } return ''; }
+const placaNoNome=r=>{ const p=String(r.placa||'').replace(/[^A-Z0-9]/gi,'').toUpperCase(); return !!p&&String(r.nome||'').replace(/[^A-Z0-9]/gi,'').toUpperCase().indexOf(p)>=0; };
+/* a placa: a da ficha ou, no equipamento, a que está no nome (MUNCK JBE2G77) */
+function placaDe(r){ const p=normName(r&&r.placa).replace(/[^A-Z0-9]/g,''); if(p) return p; const m=normName(r&&r.nome).match(/\b([A-Z]{3})-?(\d[A-Z0-9]\d{2})\b/); return m?m[1]+m[2]:''; }
+function frotaSpecTxt(r){ return [isEqp(r)&&tr(r.placa)&&!placaNoNome(r)?'PLACA '+normName(r.placa):'',tr(r.modelo),tr(r.cor),tr(r.ano),tr(r.cap)].filter(Boolean).map(normName).join(' · '); }
+function frotaDocsChips(r){
+  const docs=r.docs||[], tipos=VDOC_TIPOS.filter(t=>t!=='FOTO'&&t!=='OUTRO'&&docs.some(d=>d.tipo===t));
+  const semCrlv=(r.tipo==='VEICULO'||tr(r.placa))&&tipos.indexOf('CRLV')<0;
+  if(!tipos.length&&!semCrlv) return '';
+  return '<span class="fr-docs">'+(semCrlv?'<i class="none">SEM CRLV</i>':'')+tipos.map(t=>{ const d=vdocAtual(r,t), s=vdocStatus(d), v=d&&d.validade; return '<i class="'+DOC_CLS[s]+'">'+VDOC_CURTO[t]+(s==='vencido'?' VENCIDO':v?' '+fmtDMY(v):s==='semdata'?' SEM DATA':'')+'</i>'; }).join('')+'</span>';
+}
+/* cabeçalho do cartão (abre a ficha) — o mesmo pra caminhão, carro e equipamento */
+function frotaHeadHTML(r,extra){
+  const eq=isEqp(r), agr=isAgregado(r), spec=frotaSpecTxt(r), cond=condutorDe(r);
+  const meta=[cond?(eq?'OPERADOR: ':'MOTORISTA: ')+esc(pShort(cond)):'<span class="fr-none">'+(eq?'SEM OPERADOR FIXO':'SEM MOTORISTA FIXO')+'</span>'].concat(extra||[]);
+  return '<button type="button" class="thead" data-open-rec="'+esc(r.id)+'"><h3>'+esc(tr(r.nome)||(eq?'EQUIPAMENTO':'VEÍCULO'))+(!eq&&tr(r.placa)?' <small>'+esc(normName(r.placa))+'</small>':'')+'</h3>'
+    +(agr?'<span class="fr-agr">AGREGADO'+(tr(r.donoNome)?' · '+esc(normName(r.donoNome)):'')+'</span>':'')
+    +(spec?'<span class="fr-spec">'+esc(spec)+'</span>':'')
+    +'<span class="tmeta">'+meta.join(' · ')+'</span>'+frotaDocsChips(r)+'</button>';
+}
+/* ---------- agenda da unidade de equipamento: os eventos (ambientes) e, se for caminhão, os fretes ---------- */
+function eqpAgenda(r,w){
+  const t0=w&&w.a?w.a:null, t1=w&&w.b?w.b:null, rows=new Map();
+  eqUnitAllocs(r).forEach(x=>{ const a=PD(x.de||x.ate), b=PD(x.ate||x.de);
+    if(a&&b&&((t1&&a>t1)||(t0&&eod(b)<t0))) return;
+    const k=x.ev.id; let g=rows.get(k); if(!g){ g={ev:x.ev,a:a,b:b,ambs:[],alug:false,kind:'EQUIP'}; rows.set(k,g); }
+    if(a&&(!g.a||a<g.a)) g.a=a; if(b&&(!g.b||b>g.b)) g.b=b; if(g.ambs.indexOf(x.amb)<0) g.ambs.push(x.amb); if(x.origem==='ALUGADO') g.alug=true; });
+  const out=Array.from(rows.values()).map(g=>Object.assign(g,{lbl:(g.alug?'ALUGADO · ':'')+g.ambs.join(', ')}));
+  if(r.caminhao) truckAgenda(r.id,w).filter(x=>x.kind==='FRETE').forEach(x=>out.push({ev:x.ev,a:x.a,b:x.b,kind:'FRETE',lbl:'FRETE: '+x.what.join(' E '),ch:x.ch}));
+  /* choque: a mesma unidade em dois eventos no mesmo dia */
+  const days=new Map(); out.forEach(x=>{ if(!x.a||!x.b||(x.b-x.a)/864e5>150) return; eachDay(x.a,x.b,k=>{ const s=days.get(k)||new Set(); s.add(x.ev.id); days.set(k,s); }); });
+  out.forEach(x=>{ if(x.ch||!x.a||!x.b) return; let c=false; eachDay(x.a,x.b,k=>{ const s=days.get(k); if(s&&s.size>1) c=true; }); x.ch=c; });
+  return out.sort((x,y)=>(x.a?+x.a:9e15)-(y.a?+y.a:9e15));
+}
+const eqpRowHTML=x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+(x.a?rangeD(x.a,x.b):'SEM DATA')+'</span><span class="af" aria-hidden="true"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'(SEM NOME)')+'</span><span class="ax">'+esc(x.lbl||'')+'</span>'+(x.ch?'<span class="ac">CHOQUE: a mesma unidade em outro evento nesses dias</span>':'')+'</span></button></li>';
+function eqpBoxHTML(r,w){
+  const rows=eqpAgenda(r,w), nCh=rows.filter(x=>x.ch).length;
+  const extra=[r.caminhao?'TAMBÉM É CAMINHÃO':''].filter(Boolean).concat(nCh?['<span class="abad">'+nCh+' '+(nCh>1?'CHOQUES':'CHOQUE')+'</span>']:[]);
+  return '<article class="tbox veh eqp'+(r.caminhao?' truck':'')+(nCh?' ch':'')+'">'+frotaHeadHTML(r,extra)+'<div class="orule" aria-hidden="true"></div>'
+    +(rows.length?'<ul class="arows">'+rows.map(eqpRowHTML).join('')+'</ul>':'<p class="hint" style="padding:2px 0 6px">Livre nesse período.</p>')+'</article>';
+}
+/* ---------- ficha (painel) ---------- */
+function buildFrotaPanel(pn,p){
+  const r=regOf(p.id); if(!r){ closePanel(); return; }
+  const ro=readOnly, dis=ro?' disabled':'', eq=isEqp(r);
+  const fld=(id,lab,f,ph,extra)=>'<div class="fld"><label for="'+id+'">'+lab+'</label><input id="'+id+'" data-rf="'+f+'" autocomplete="off" placeholder="'+esc(ph)+'"'+(extra||'')+dis+'></div>';
+  pn.innerHTML=headHTML('<span class="pchip blue" id="fp-chip"></span><span class="pchip o" id="fp-agr" hidden>AGREGADO</span>',ro?'<h2>'+esc(r.nome)+'</h2>':'<label class="sr" for="rp-nome">'+(eq?'Identificação do equipamento':'Apelido / modelo')+'</label><input id="rp-nome" class="title-in" data-rf="nome" autocomplete="off" placeholder="'+(eq?'EX: MUNCK JBE2G77, EMPILHADEIRA 01':'EX: SAVEIRO BRANCA, TRUCK BAÚ')+'">')
+    +'<div class="p-body">'
+    +(eq?'':'<div class="fld"><span class="lbl" id="l-vcat">TIPO</span><div class="seg" role="group" aria-labelledby="l-vcat" id="rp-vcat"></div></div>'
+      +'<div class="fld"><span class="lbl" id="l-vdono">DE QUEM É</span><div class="seg" role="group" aria-labelledby="l-vdono" id="rp-vdono"></div><span class="hint" style="font-size:12.5px">Agregado: não é da nossa frota, mas está no contrato — roda igual aos nossos (agenda, choque, frete).</span></div>'
+      +'<div class="fgrid2" id="rp-agrbox" hidden>'+fld('rp-donoNome','DONO / EMPRESA','donoNome','QUEM É O DONO')+fld('rp-donoContato','CONTATO','donoContato','TELEFONE')+'</div>')
+    +'<div class="fgrid2">'+fld('rp-placa','PLACA','placa',eq?(placaDe(r)?placaDe(r)+' (DO NOME)':'SE TIVER'):'ABC1D23',' maxlength="10"')+fld('rp-modelo','MARCA / MODELO','modelo',eq?'EX: HYSTER H50, MADAL MD 45':'EX: VW 24.280, FIAT STRADA')
+    +fld('rp-ano','ANO','ano','EX: 2019',' inputmode="numeric" maxlength="9"')+fld('rp-cor','COR','cor','EX: BRANCO')+'</div>'
+    +fld('rp-cap','CAPACIDADE','cap',eq?'EX: 2,5 T · LANÇA 12 M':'EX: CARGA 14 T · BAÚ 8,5 M · 5 LUGARES')
+    +'<div class="fld"><label for="rp-cond" id="rp-condlbl">'+(eq?'OPERADOR':'MOTORISTA')+'</label><input id="rp-cond" data-rf="condutor" list="dlPessoas" autocomplete="off" placeholder="'+(eq?'QUEM OPERA':'QUEM DIRIGE')+'"'+dis+'><div class="cond-info" id="rp-condinfo"></div></div>'
+    +(eq?'<label class="chkl fp-cam"><input type="checkbox" id="rp-eqcam"'+(r.caminhao?' checked':'')+dis+'> também é caminhão (leva material no frete — ex.: munck)</label>':'')
+    +'<div class="fld"><label for="rp-obs">OBSERVAÇÕES</label><textarea id="rp-obs" data-rf="obs" rows="2" placeholder="'+(eq?'MANUTENÇÃO, DETALHE, ONDE FICA':'MANUTENÇÃO, QUEM PODE DIRIGIR, DETALHE')+'"'+dis+'></textarea></div>'
+    +'<div class="fp-copy"><button type="button" class="btn sm" data-act="fp-copiar">Copiar os dados</button><span class="hint">placa, modelo e '+(eq?'operador':'motorista')+' em texto, pra mandar pro local da montagem</span></div>'
+    +'<section><div class="sec-h"><h3>DOCUMENTOS</h3><span class="per" id="fp-dsum"></span></div><div id="fp-docs"></div>'+(ro?'':'<div class="pp-addrow" id="fp-add"></div>')+'<input type="file" id="fp-file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple hidden></section>'
+    +'<div class="orule" aria-hidden="true"></div><section id="rp-users"></section><section><div class="sec-h"><h3>AGENDA</h3><span class="per" id="rp-per"></span></div><ul class="arows" id="rp-agenda"></ul></section><footer class="p-foot" id="rp-foot"></footer></div>';
+  fillRecInputs(r,true); frotaPanelParts(true);
+}
+function condutorInfoHTML(r){
+  const eq=isEqp(r), own=tr(r.condutor), nome=condutorDe(r);
+  if(!nome) return '<span class="hint">'+(eq?'Quem opera. No pacote do evento vão a CNH e a NR 11 dessa pessoa.':'Quem dirige. No pacote do evento vai a CNH dessa pessoa. Em branco, vale o motorista da equipe que usa o carro.')+'</span>';
+  const tipos=eq?['CNH','NR11']:['CNH'];
+  return (own?'':'<span class="hint">Da equipe que usa o carro: <b>'+esc(nome)+'</b>.</span>')
+    +'<span class="cdocs">'+tipos.map(t=>{ const d=docAtual(nome,t), s=docStatus(d), v=docValidade(d); return '<i class="'+DOC_CLS[s]+'">'+DOC_NOME[t]+': '+(s==='falta'?'NÃO TEM NO SISTEMA':s==='vencido'?'VENCIDA'+(v?' EM '+fmtDMY(v):''):DOC_ST_TXT[s]+(v?' ATÉ '+fmtDMY(v):''))+'</i>'; }).join('')
+    +'<button type="button" class="link" data-pessoa="'+esc(nome)+'">documentos de '+esc(pShort(nome))+'</button></span>';
+}
+function frotaDocsHTML(r){
+  const ro=readOnly, docs=((r.docs)||[]).slice().sort((a,b)=>VDOC_TIPOS.indexOf(a.tipo)-VDOC_TIPOS.indexOf(b.tipo)||String(b.validade||'').localeCompare(String(a.validade||'')));
+  if(!docs.length) return '<p class="hint">Nenhum documento ainda.'+(ro?'':' Mande o CRLV, o seguro, o laudo… (PDF ou foto).')+'</p>';
+  return docs.map(d=>{ const s=vdocStatus(d), href=arqHref(d.arq), dis=ro?' disabled':'', conf=M.confirm==='vdel:'+d.id, comVal=!!VDOC_VAL[d.tipo];
+    return '<div class="drow st-'+s+'" data-vdid="'+esc(d.id)+'"><div class="dr-top"><select data-vk="tipo" aria-label="Tipo do documento"'+dis+'>'+VDOC_TIPOS.map(x=>'<option value="'+x+'"'+(x===d.tipo?' selected':'')+'>'+VDOC_NOME[x]+'</option>').join('')+'</select>'
+      +'<span class="dst">'+(comVal?DOC_ST_TXT[s]:'GUARDADO')+'</span><span class="spacer"></span>'
+      +(href?'<a class="btn sm" href="'+esc(href)+'" data-arq="'+esc(d.arq)+'" target="_blank" rel="noopener">Abrir</a>':'<span class="hint">sem arquivo nesta tela</span>')
+      +(ro?'':(conf?'<span class="confirm2"><span>Apagar o documento e o arquivo?</span><button type="button" class="btn danger solid sm" data-vdel-yes="'+esc(d.id)+'">Apagar</button><button type="button" class="btn sm" data-vdel-no>Não</button></span>':'<button type="button" class="btn sm danger" data-vdel="'+esc(d.id)+'">Excluir</button>'))+'</div>'
+      +(comVal?'<label>VÁLIDO ATÉ<input type="date" data-vk="validade" value="'+esc(d.validade||'')+'"'+dis+'>'+(!d.validade?'<small>coloque a data pra o sistema avisar quando vencer</small>':'')+'</label>':'')
+      +'<div class="dr-f">'+esc(d.titulo||'')+'</div></div>'; }).join('');
+}
+function frotaPanelParts(force){
+  const p=M.panel; if(!p||(p.kind!=='veic'&&p.kind!=='eqp')) return; const r=regOf(p.id); if(!r){ closePanel(); return; }
+  const w=recWinSel(), ro=readOnly, eq=isEqp(r), cam=!eq&&vehCat(r)==='CAMINHAO', agr=isAgregado(r);
+  const chip=$('#fp-chip'); if(chip) chip.textContent=eq?(r.caminhao?'EQUIPAMENTO + CAMINHÃO':'EQUIPAMENTO'):cam?'CAMINHÃO':'CARRO DE EQUIPE';
+  const ag=$('#fp-agr'); if(ag) ag.hidden=!agr;
+  const per=$('#rp-per'); if(per) per.textContent=w.nome;
+  const vc=$('#rp-vcat'); if(vc) vc.innerHTML=[['CARRO','CARRO DE EQUIPE'],['CAMINHAO','CAMINHÃO']].map(([v,l])=>'<button type="button" data-vcat="'+v+'" class="'+(vehCat(r)===v?'on':'')+'" aria-pressed="'+(vehCat(r)===v)+'"'+(ro?' disabled':'')+'>'+l+'</button>').join('');
+  const vd=$('#rp-vdono'); if(vd) vd.innerHTML=[['','NOSSO'],['AGREGADO','AGREGADO']].map(([v,l])=>{ const on=(r.dono==='AGREGADO'?'AGREGADO':'')===v; return '<button type="button" data-vdono="'+v+'" class="'+(on?'on':'')+'" aria-pressed="'+on+'"'+(ro?' disabled':'')+'>'+l+'</button>'; }).join('');
+  const ab=$('#rp-agrbox'); if(ab) ab.hidden=!agr;
+  const ci=$('#rp-condinfo'), cin=$('#rp-cond'); if(ci&&!(cin&&document.activeElement===cin)) ci.innerHTML=condutorInfoHTML(r);
+  const cb=$('#rp-eqcam'); if(cb&&document.activeElement!==cb) cb.checked=!!r.caminhao;
+  /* documentos */
+  const box=$('#fp-docs'), fa=document.activeElement, editing=!!(box&&fa&&box.contains(fa)&&fa.matches('input,select'));
+  if(box&&(force||!editing)) box.innerHTML=frotaDocsHTML(r);
+  const docs=r.docs||[], venc=docs.filter(d=>vdocStatus(d)==='vencido').length;
+  const sum=$('#fp-dsum'); if(sum) sum.textContent=docs.length?plural(docs.length,'documento','documentos')+(venc?' · '+venc+(venc>1?' vencidos':' vencido'):''):'';
+  const add=$('#fp-add'); if(add) add.innerHTML=files().podeEnviar()?'<button type="button" class="btn-primary" data-act="fp-add">+ DOCUMENTO</button><span class="hint">CRLV, seguro, laudo, ART… em PDF ou foto. O tipo vem do nome do arquivo e dá pra trocar aqui.</span>':'<span class="hint">Só quem pode editar manda arquivo.</span>';
+  /* quem usa (carro) e agenda */
+  const us=$('#rp-users'), ag2=$('#rp-agenda');
+  if(eq){ if(us) us.innerHTML='<p class="hint">Aparece pra escolher no equipamento dos ambientes'+(r.caminhao?' e no frete do evento':'')+'. Avisa quando a mesma unidade está em dois eventos nos mesmos dias.</p>';
+    const rows=eqpAgenda(r,w); if(ag2) ag2.innerHTML=rows.length?rows.map(eqpRowHTML).join(''):'<li class="hint">Livre nesse período.</li>'; }
+  else if(cam){ if(us) us.innerHTML='<p class="hint">Aparece pra escolher no frete do evento (aba Fretes)'+(agr?' como AGREGADO':'')+'. Avisa quando o mesmo caminhão está em dois eventos no mesmo dia.</p>';
+    const rows=truckAgenda(r.id,w); if(ag2) ag2.innerHTML=rows.length?rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'')+'</span><span class="ax">'+(x.kind==='EQUIP'?'NO EVENTO (EQUIPAMENTO)':'FRETE: '+x.what.join(' E '))+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo caminhão em outro evento</span>':'')+'</span></button></li>').join(''):'<li class="hint">Livre nesse período.</li>'; }
+  else { const users=recsOf('EQUIPE').filter(x=>x.veiculoId===r.id), rows=vehAgenda(r.id,w);
+    if(us) us.innerHTML='<div class="sec-h"><h3>QUEM USA</h3></div>'+(users.length?'<ul class="plist">'+users.map(u=>'<li><button type="button" class="pl-r" data-open-rec="'+esc(u.id)+'"><span>'+esc(u.nome)+'</span></button></li>').join('')+'</ul>':'<p class="hint">Nenhuma equipe usa ainda. Escolha esse carro no cadastro da equipe.</p>');
+    if(ag2) ag2.innerHTML=rows.length?rows.map(x=>'<li><button type="button" class="arow'+(x.ch?' ch':'')+'" data-open-ev="'+esc(x.ev.id)+'"><span class="ad">'+rangeD(x.a,x.b)+'</span><span class="af"></span><span class="ar"><span class="at">'+esc(x.ev.nome||'')+'</span><span class="ax">'+esc(x.teams.map(recNome).join(', '))+'</span>'+(x.ch?'<span class="ac">CHOQUE: o mesmo carro em outro evento</span>':'')+'</span></button></li>').join(''):'<li class="hint">Livre nesse período.</li>'; }
+  const what=eq?'EQUIPAMENTO':cam?'CAMINHÃO':'VEÍCULO', foot=$('#rp-foot');
+  if(foot) foot.innerHTML=ro?'':(M.tdel===r.id?'<div class="confirm2"><span>Excluir '+esc(eq?r.nome:vehName(r.id))+' do cadastro?'+(eq?' Nos ambientes fica o nome digitado.':cam?' Os fretes ficam com o nome digitado.':' As equipes ficam sem carro fixo.')+'</span><button type="button" class="btn danger solid sm" data-rdel-yes="'+esc(r.id)+'">Excluir</button><button type="button" class="btn sm" data-rdel-no>Cancelar</button></div>':'<div><button type="button" class="btn-ghost danger" data-rdel="'+esc(r.id)+'">EXCLUIR '+what+'</button></div>');
+}
+async function frotaUpload(fileList){
+  const p=M.panel; if(!p||(p.kind!=='veic'&&p.kind!=='eqp')) return; const r=regOf(p.id); if(!r) return;
+  const fl=Array.from(fileList||[]).filter(f=>arqAceito(f.name)||/^image\/|pdf$/.test(f.type||''));
+  if(!fl.length){ toast('Mande PDF ou foto (JPG, PNG).',true); return; }
+  toast('Enviando '+plural(fl.length,'arquivo','arquivos')+'…');
+  const novos=[]; let erro=null;
+  for(const f of fl){ try{ const ct=tipoMime(f.name,f.type)||'application/pdf'; const ref=await files().put(f,ct,'v-'+slugId(r.nome||r.id)); const tp=vdocTipoDoArquivo(f.name); novos.push({id:newId(),tipo:tp==="OUTRO"&&!(r.docs&&r.docs.length)&&!isEqp(r)?'CRLV':tp,titulo:f.name,validade:'',arq:ref,tam:f.size,ct:ct,criadoEm:nowIso()}); }catch(e){ erro=e; } }
+  if(novos.length) patchRec(r.id,o=>{ o.docs=(Array.isArray(o.docs)?o.docs:[]).concat(novos); });
+  if(erro) toast(arqErroTxt(erro),true); else toast(plural(novos.length,'documento enviado','documentos enviados')+'. Confira o tipo e coloque a validade.');
+  frotaPanelParts(true);
+}
+/* os dados de um veículo em texto (pra mandar pro local da montagem) */
+function frotaTexto(r){
+  const eq=isEqp(r), pl=placaDe(r), cond=condutorDe(r);
+  return [normName(r.nome)+(isAgregado(r)?' (agregado'+(tr(r.donoNome)?' '+normName(r.donoNome):'')+')':''),pl?'placa '+pl:'',[tr(r.modelo),tr(r.cor),tr(r.ano)].filter(Boolean).map(normName).join(' · '),tr(r.cap)?'capacidade '+normName(r.cap):'',cond?(eq?'operador ':'motorista ')+cond:''].filter(Boolean).join(' — ');
+}
+/* cadastrar equipamento: cria a unidade e abre a ficha com o nome pra completar */
+function addEqpRec(nome){
+  if(readOnly) return; flushAll();
+  const id=newRecLocal('EQUIPAMENTO',nome||'',{}); if(!id) return;
+  setFold('rec:eqps',false); openRec(id);
+  setTimeout(()=>{ const f=$('#rp-nome'); if(f){ f.focus(); const L=f.value.length; try{ f.setSelectionRange(L,L); }catch(e){} } },60);
+}
+function wireFrotaFicha(){
+  const pn=$('#panel');
+  pn.addEventListener('click',ev=>{
+    const p=M.panel; if(!p||(p.kind!=='veic'&&p.kind!=='eqp')) return; const t=ev.target;
+    if(t.closest('[data-act="fp-add"]')){ const i=$('#fp-file'); if(i) i.click(); return; }
+    if(t.closest('[data-act="fp-copiar"]')){ flush('precf:'+p.id); const r=regOf(p.id); if(r) wCopia(frotaTexto(r)); return; }
+    const vd=t.closest('[data-vdono]'); if(vd&&!vd.disabled){ const v=vd.dataset.vdono; flush('precf:'+p.id); patchRec(p.id,o=>{ o.dono=v==='AGREGADO'?'AGREGADO':''; if(v==='AGREGADO'&&!o.cat) o.cat='CAMINHAO'; }); frotaPanelParts(); if(v==='AGREGADO') setTimeout(()=>{ const d=$('#rp-donoNome'); if(d&&!d.value) d.focus(); },40); return; }
+    const pe=t.closest('[data-pessoa]'); if(pe){ openPessoa(pe.dataset.pessoa); return; }
+    const dd=t.closest('[data-vdel]'); if(dd){ M.confirm='vdel:'+dd.dataset.vdel; frotaPanelParts(true); return; }
+    if(t.closest('[data-vdel-no]')){ M.confirm=null; frotaPanelParts(true); return; }
+    const dy=t.closest('[data-vdel-yes]'); if(dy){ const id=dy.dataset.vdelYes, r=regOf(p.id), d=r&&(r.docs||[]).find(x=>x.id===id); M.confirm=null; if(!d) return;
+      patchRec(p.id,o=>{ o.docs=(o.docs||[]).filter(x=>x.id!==id); });
+      if(d.arq) files().del(d.arq).catch(()=>{}); toast('Documento apagado.'); frotaPanelParts(true); return; }
+  });
+  pn.addEventListener('change',ev=>{
+    const p=M.panel; if(!p||(p.kind!=='veic'&&p.kind!=='eqp')) return; const el=ev.target;
+    if(el.id==='fp-file'){ const fl=el.files; frotaUpload(fl).finally(()=>{ try{ el.value=''; }catch(e){} }); return; }
+    if(el.id==='rp-eqcam'){ const v=el.checked; patchRec(p.id,o=>{ o.caminhao=v; }); frotaPanelParts(); return; }
+    const row=el.closest('[data-vdid]'); if(row&&el.dataset.vk){ const id=row.dataset.vdid, k=el.dataset.vk, v=el.value;
+      patchRec(p.id,o=>{ o.docs=(o.docs||[]).map(d=>d.id===id?Object.assign({},d,{[k]:v}):d); }); frotaPanelParts(true); return; }
+  });
+  /* o motorista / operador: ao sair do campo, mostra a CNH (e a NR 11) dele */
+  pn.addEventListener('focusout',ev=>{ const p=M.panel; if(!p||(p.kind!=='veic'&&p.kind!=='eqp')) return; if(ev.target.id==='rp-cond') setTimeout(()=>frotaPanelParts(),0); });
+}
+/* ===================================================================
+   VEÍCULOS DO EVENTO — o que entra na montagem pra lista de acesso do local:
+   carro das equipes escaladas, caminhões dos fretes (nossos e agregados), equipamentos nossos
+   dos ambientes; e, à parte, o que é de terceiro (dados com o fornecedor).
+   Copiar em texto (WhatsApp / e-mail) ou PDF: a lista e, se marcar, os documentos de cada um
+   (CRLV, seguro, laudo, ART do veículo; CNH do motorista; NR 11 do operador).
+   ev.docsVeic = tipos exigidos (começa sem nenhum)
+   =================================================================== */
+const VEV_TIPOS=['CRLV','SEGURO','LAUDO','ART','CNH','NR11'];
+const VEV_NOME={CRLV:'CRLV',SEGURO:'SEGURO',LAUDO:'LAUDO',ART:'ART',CNH:'CNH DO MOTORISTA',NR11:'NR 11 DO OPERADOR'};
+const VEV_CURTO={CRLV:'CRLV',SEGURO:'SEGURO',LAUDO:'LAUDO',ART:'ART',CNH:'CNH',NR11:'NR 11'};
+const VEV_GRUPO={CAMINHAO:'CAMINHÕES',CARRO:'CARROS DAS EQUIPES',EQUIP:'EQUIPAMENTOS',TERC:'DE TERCEIROS (DADOS COM O FORNECEDOR)'};
+function docsVeic(ev){ return Array.isArray(ev.docsVeic)?ev.docsVeic.filter(t=>VEV_TIPOS.indexOf(t)>=0):[]; }
+function veiculosDoEvento(ev){
+  const m=new Map(), terc=[];
+  const row=(r,g)=>{ let x=m.get(r.id); if(!x){ x={r:r,g:g,dias:new Set(),via:[]}; m.set(r.id,x); } else if(g==='CAMINHAO') x.g='CAMINHAO'; return x; };
+  const via=(x,s)=>{ if(s&&x.via.indexOf(s)<0) x.via.push(s); };
+  /* carro de cada equipe escalada (nos dias em que o carro vai com ela) */
+  escRows(ev).filter(t=>!isProdId(t)).forEach(t=>{ const tm=regOf(t), v=tm&&regOf(tm.veiculoId); if(!v) return; const ks=rDays(ev,t).filter(k=>carWith(ev,k,t)); if(!ks.length) return; const x=row(v,vehCat(v)==='CAMINHAO'?'CAMINHAO':'CARRO'); ks.forEach(k=>x.dias.add(k)); via(x,'CARRO DA EQUIPE '+tm.nome); if(!x.mot&&tr(tm.motorista)) x.mot=normName(tm.motorista); });
+  /* caminhões dos fretes */
+  (ev.fretes||[]).forEach(f=>{ const v=f.origem!=='TERCEIRO'?regOf(f.veiculoId):null;
+    const qd=[f.ida?'VAI '+fmtDM(f.ida):'',f.volta?'VOLTA '+fmtDM(f.volta):''].filter(Boolean).join(' · ');
+    if(v){ const x=row(v,'CAMINHAO'); [f.ida,f.volta].filter(Boolean).forEach(k=>x.dias.add(k)); via(x,'FRETE'+(qd?' ('+qd+')':'')); return; }
+    if(f.origem==='TERCEIRO'||tr(f.caminhao)) terc.push({g:'TERC',nome:tr(f.caminhao)||'CAMINHÃO',via:(f.origem==='TERCEIRO'?'FRETE DE TERCEIRO':'FRETE')+(qd?' ('+qd+')':''),dias:new Set([f.ida,f.volta].filter(Boolean)),qtd:num(f.qtd)||1}); });
+  /* equipamentos dos ambientes: nossos (ficha) e alugados (fornecedor) */
+  ambsOf(ev.id).forEach(a=>(a.equip||[]).forEach(q=>{ const orig=q.origem||'PRÓPRIO', rg=range(q.de,q.ate), ks=[]; if(rg&&(rg[1]-rg[0])/864e5<=150) eachDay(rg[0],rg[1],k=>ks.push(k));
+    const r=orig==='PRÓPRIO'?regOf(q.regId):null;
+    if(r){ const x=row(r,r.caminhao?'CAMINHAO':'EQUIP'); ks.forEach(k=>x.dias.add(k)); via(x,'EQUIPAMENTO · '+(a.nome||'AMBIENTE')); return; }
+    if(orig==='ALUGADO') terc.push({g:'TERC',nome:tr(q.nome)||'EQUIPAMENTO',via:'ALUGADO'+(tr(q.fornecedor)?' · '+normName(q.fornecedor):'')+' · '+(a.nome||'AMBIENTE'),dias:new Set(ks)}); }));
+  const ord={CAMINHAO:0,CARRO:1,EQUIP:2,TERC:3};
+  const out=Array.from(m.values()).map(x=>Object.assign(x,{nome:tr(x.r.nome)||'VEÍCULO',placa:placaDe(x.r),spec:[tr(x.r.modelo),tr(x.r.cor),tr(x.r.ano)].filter(Boolean).map(normName).join(' · '),cond:tr(x.r.condutor)?normName(x.r.condutor):(x.mot||condutorDe(x.r)),eq:isEqp(x.r),agr:isAgregado(x.r)}))
+    .concat(terc.map(x=>Object.assign(x,{r:null,placa:'',spec:'',cond:'',eq:false,agr:false,via:[x.via]})));
+  out.forEach(x=>{ x.ks=Array.from(x.dias).filter(Boolean).sort(); });
+  return out.sort((a,b)=>ord[a.g]-ord[b.g]||(a.agr?1:0)-(b.agr?1:0)||String(a.nome).localeCompare(String(b.nome)));
+}
+/* o documento exigido vale pra essa linha? (CRLV / seguro: quem tem placa; laudo, ART e NR 11: equipamento; CNH: todos) */
+function vevAplica(x,t){ if(!x.r) return false; if(t==='CRLV'||t==='SEGURO') return x.r.tipo==='VEICULO'||!!x.placa; if(t==='LAUDO'||t==='ART'||t==='NR11') return x.eq; return true; }
+function vevDoc(x,t,fim){
+  if(!vevAplica(x,t)) return {s:'na'};
+  if(t==='CNH'||t==='NR11'){ if(!x.cond) return {s:'semcond'}; const d=docAtual(x.cond,t); return {d:d,s:docStatus(d,fim,0),pessoa:x.cond}; }
+  const d=vdocAtual(x.r,t); return {d:d,s:vdocStatus(d,fim)};
+}
+const VEV_ST={ok:'ok',vence:'ok',semdata:'warn',vencido:'bad',falta:'bad',semcond:'warn',na:'none'};
+function vevCellHTML(x,t,fim){
+  const o=vevDoc(x,t,fim), cls=VEV_ST[o.s]||'none';
+  if(o.s==='na') return '<td class="dc none"><span title="Não se aplica">—</span></td>';
+  if(o.s==='semcond') return '<td class="dc warn"><span title="Coloque o '+(x.eq?'operador':'motorista')+' na ficha">SEM '+(x.eq?'OPERADOR':'MOTORISTA')+'</span></td>';
+  if(!o.d) return '<td class="dc bad"><span title="'+esc(VEV_NOME[t]+': falta')+'">FALTA</span></td>';
+  const v=o.pessoa?docValidade(o.d):o.d.validade, lbl=o.s==='vencido'?'VENCIDO':v?fmtDMY(v):(o.s==='semdata'?'SEM DATA':'OK'), href=arqHref(o.d.arq);
+  return '<td class="dc '+cls+'">'+(href?'<a href="'+esc(href)+'" data-arq="'+esc(o.d.arq)+'" target="_blank" rel="noopener" title="'+esc(VEV_NOME[t]+' — abrir')+'">'+lbl+'</a>':'<span>'+lbl+'</span>')+'</td>';
+}
+function renderVeicEv(ev){
+  const box=$('#veicEv'); if(!box||editingIn(box)) return;
+  const list=veiculosDoEvento(ev), tipos=docsVeic(ev), fim=evFimDate(ev), ro=readOnly, nossos=list.filter(x=>x.r);
+  const pend=tipos.length?nossos.filter(x=>tipos.some(t=>{ const s=vevDoc(x,t,fim).s; return s==='falta'||s==='vencido'||s==='semcond'; })).length:0;
+  M.veicPend=pend;
+  $('#veicCnt').textContent=list.length?plural(nossos.length,'nosso','nossos')+(list.length>nossos.length?' · '+(list.length-nossos.length)+' de terceiro':'')+(tipos.length?(pend?' · '+pend+' com pendência':' · documentos em dia'):''):'nenhum';
+  const chips='<div class="toolbar sub"><span class="lbl">EXIGIDOS</span><div class="chips">'+VEV_TIPOS.map(t=>'<button type="button" class="chip'+(tipos.indexOf(t)>=0?' on':'')+'" data-vexige="'+t+'" aria-pressed="'+(tipos.indexOf(t)>=0)+'"'+(ro?' disabled':'')+'>'+VEV_NOME[t]+'</button>').join('')+'</div></div>';
+  if(!list.length){ $('#veicBody').innerHTML='<p class="pempty">Nenhum veículo nesse evento ainda. Entram aqui sozinhos: o carro das equipes escaladas (cadastre o carro na equipe), os caminhões dos fretes e os equipamentos dos ambientes.</p>'; return; }
+  let body='', g=null;
+  list.forEach(x=>{ if(x.g!==g){ g=x.g; body+='<tr class="dg"><th colspan="'+(4+tipos.length)+'" scope="rowgroup">'+VEV_GRUPO[g]+'</th></tr>'; }
+    const nome=x.r?'<button type="button" class="dn" data-open-rec="'+esc(x.r.id)+'" title="Abrir a ficha">'+esc(x.nome)+'</button>':'<span class="vev-t">'+esc(x.nome)+(x.qtd>1?' ×'+x.qtd:'')+'</span>';
+    body+='<tr><th scope="row">'+nome+(x.agr?'<small class="vev-agr">AGREGADO'+(tr(x.r.donoNome)?' · '+esc(normName(x.r.donoNome)):'')+'</small>':'')+'</th>'
+      +'<td class="vev-pl">'+(x.placa?esc(x.placa):x.r?'<span class="vev-falta">SEM PLACA</span>':'<span class="vev-falta">PEDIR</span>')+'</td>'
+      +'<td class="vev-sp">'+(x.spec?esc(x.spec):x.r?'<span class="vev-falta">—</span>':'')+'<small>'+esc(x.via.join(' · ')+(x.ks.length?' · '+rangesTxt(x.ks,true):''))+'</small></td>'
+      +'<td class="vev-co">'+(x.cond?'<button type="button" class="dn" data-pessoa="'+esc(x.cond)+'">'+esc(x.cond)+'</button>':x.r?'<span class="vev-falta">'+(x.eq?'SEM OPERADOR':'SEM MOTORISTA')+'</span>':'<span class="vev-falta">PEDIR</span>')+'</td>'
+      +tipos.map(t=>x.r?vevCellHTML(x,t,fim):'<td class="dc none"><span title="Com o fornecedor">—</span></td>').join('')+'</tr>'; });
+  const table='<div class="dwrap"><table class="dtab vevt"><thead><tr><th scope="col">VEÍCULO / EQUIPAMENTO</th><th scope="col">PLACA</th><th scope="col">MARCA / MODELO · COR · ANO</th><th scope="col">MOTORISTA / OPERADOR</th>'+tipos.map(t=>'<th scope="col" class="dc">'+VEV_CURTO[t]+'</th>').join('')+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+  const acts='<div class="toolbar sub vev-acts"><button type="button" class="btn" data-act="veic-copiar">Copiar a lista</button><button type="button" class="btn navy" data-act="veic-pdf">'+(tipos.length?'Baixar pacote dos veículos (PDF)':'Lista dos veículos (PDF)')+'</button><span class="hint2">'+(tipos.length?'A lista com placa, modelo e motorista na frente e, depois, os documentos marcados de cada um (conferidos até '+fmtLong(iso(fim))+').':'Placa, modelo e motorista de cada um, pra mandar pro local. Marque acima os documentos que o cliente pedir pra eles irem juntos no PDF.')+'</span></div>';
+  $('#veicBody').innerHTML=chips+table+acts;
+}
+/* texto pra colar no WhatsApp / e-mail */
+function veicTexto(ev){
+  const list=veiculosDoEvento(ev), ps=evPS(ev); let a=null,b=null; ['mont','ev','desm'].forEach(k=>ps[k].forEach(sp=>{ if(!a||sp.a<a) a=sp.a; if(!b||sp.b>b) b=sp.b; }));
+  const L=['*VEÍCULOS E EQUIPAMENTOS — '+tr(ev.nome||'EVENTO').toUpperCase()+'*']; if(tr(ev.local)) L.push('Local: '+tr(ev.local)); if(a) L.push('Período: '+fmtDM(iso(a))+(b&&+b!==+a?' a '+fmtDM(iso(b)):''));
+  let g=null; list.forEach(x=>{ if(x.g!==g){ g=x.g; L.push(''); L.push('*'+VEV_GRUPO[g]+'*'); }
+    const p=[x.nome+(x.qtd>1?' ×'+x.qtd:'')+(x.agr?' (agregado'+(tr(x.r.donoNome)?' '+normName(x.r.donoNome):'')+')':''),x.placa?'placa '+x.placa:(x.r?'sem placa':''),x.spec,x.cond?(x.eq?'operador ':'motorista ')+x.cond:(x.r?(x.eq?'operador a definir':'motorista a definir'):''),x.r?'':x.via.join(' · ')].filter(Boolean);
+    L.push('• '+p.join(' — ')); });
+  return L.join('\n');
+}
+/* ---------- PDF: a lista (e os documentos marcados) ---------- */
+async function gerarPacoteVeiculos(ev){
+  const list=veiculosDoEvento(ev), tipos=docsVeic(ev), fim=evFimDate(ev);
+  if(!list.length){ toast('Nenhum veículo nesse evento ainda.',true); return; }
+  let PL=null,JsPDF; try{ JsPDF=await loadJsPDF(); if(tipos.length) PL=await loadPdfLib(); }catch(e){ toast('Não consegui carregar o gerador de PDF.',true); return; }
+  toast(tipos.length?'Montando o pacote dos veículos…':'Montando a lista dos veículos…');
+  const linhas=list.map(x=>({x:x,itens:tipos.map(t=>{ const o=x.r?vevDoc(x,t,fim):{s:'na'}; return Object.assign({t:t,pag:0,erro:''},o); })}));
+  let body=null;
+  if(PL){ body=await PL.PDFDocument.create(); const usados=new Map();
+    for(const l of linhas) for(const it of l.itens){
+      if(!it.d||!it.d.arq||it.s==='vencido') continue;
+      if(usados.has(it.d.arq)){ it.pag=usados.get(it.d.arq); continue; } /* a mesma CNH pra dois veículos: entra uma vez só */
+      try{ const bytes=await files().bytes(it.d.arq), start=body.getPageCount(); const ct=it.d.ct||tipoMime(it.d.titulo||'')||'application/pdf';
+        if(ct==='application/pdf'){ const src=await PL.PDFDocument.load(bytes,{ignoreEncryption:true}); (await body.copyPages(src,src.getPageIndices())).forEach(p=>body.addPage(p)); }
+        else if(ct==='image/png'||ct==='image/jpeg'){ const img=ct==='image/png'?await body.embedPng(bytes):await body.embedJpg(bytes); const W=595.28,H=841.89,mg=28,s=Math.min((W-2*mg)/img.width,(H-2*mg)/img.height,1); body.addPage([W,H]).drawImage(img,{x:(W-img.width*s)/2,y:(H-img.height*s)/2,width:img.width*s,height:img.height*s}); }
+        else throw new Error('formato');
+        it.pag=start+1; usados.set(it.d.arq,it.pag);
+      }catch(e){ it.erro=String(e&&e.message)==='formato'?'FORMATO':'NÃO ABRIU'; } }
+  }
+  let capa=capaVeiculos(JsPDF,ev,tipos,fim,linhas,0); const nCapa=capa.getNumberOfPages(); if(tipos.length) capa=capaVeiculos(JsPDF,ev,tipos,fim,linhas,nCapa);
+  const nome='VEICULOS_'+slug(ev.nome)+'_'+stampNow()+'.pdf';
+  if(!PL||!body||!body.getPageCount()){ abrirPDF(nome,capa.output('arraybuffer'),'Lista dos veículos salva.'); return; }
+  const out=await PL.PDFDocument.create(), cdoc=await PL.PDFDocument.load(capa.output('arraybuffer'));
+  (await out.copyPages(cdoc,cdoc.getPageIndices())).forEach(p=>out.addPage(p));
+  (await out.copyPages(body,body.getPageIndices())).forEach(p=>out.addPage(p));
+  out.setTitle('Veículos e equipamentos — '+(ev.nome||'evento')); out.setProducer('Demandas Plenart');
+  const u8=await out.save(), buf=u8.buffer.slice(u8.byteOffset,u8.byteOffset+u8.byteLength);
+  const pend=linhas.reduce((n,l)=>n+l.itens.filter(i=>i.s!=='na'&&(i.s==='falta'||i.s==='vencido'||i.s==='semcond'||i.erro)).length,0);
+  abrirPDF(nome,buf,'Pacote dos veículos salvo'+(pend?' · '+pend+(pend>1?' pendências listadas na capa':' pendência listada na capa'):'')+'.');
+}
+function capaVeiculos(JsPDF,ev,tipos,fim,linhas,offset){
+  const doc=new JsPDF({unit:'mm',format:'a4',compress:true});
+  const PW=210,PH=297,ML=14,CW=PW-2*ML,TOP=20,BOT=PH-16;
+  const C={navy:[31,59,99],blue:[46,117,182],orange:[232,116,26],ink:[27,36,48],muted:[96,108,124],faint:[150,160,174],line:[214,221,230],soft:[243,246,250],white:[255,255,255],ok:[34,128,86],okS:[222,242,231],bad:[178,56,38],badS:[248,220,214],warnS:[253,236,214],warn:[176,98,20]};
+  const fnt=(st,sz)=>{ doc.setFont('helvetica',st); doc.setFontSize(sz); }, tc=c=>doc.setTextColor(c[0],c[1],c[2]), fc=c=>doc.setFillColor(c[0],c[1],c[2]), dc=c=>doc.setDrawColor(c[0],c[1],c[2]);
+  const T=(s,x,y,o)=>doc.text(pdfSafe(s),x,y,o||{});
+  const fit=(s,w,st,sz)=>{ fnt(st,sz); s=pdfSafe(s); if(doc.getTextWidth(s)<=w) return s; while(s.length>1&&doc.getTextWidth(s+'...')>w) s=s.slice(0,-1); return s.trim()+'...'; };
+  const wrap=(s,w,st,sz)=>{ fnt(st,sz); return doc.splitTextToSize(pdfSafe(s),w); };
+  const evNome=(tr(ev.nome)||'EVENTO').toUpperCase();
+  const ps=evPS(ev); let a=null; ['mont','ev','desm'].forEach(k=>ps[k].forEach(sp=>{ if(!a||sp.a<a) a=sp.a; }));
+  /* cabeçalho */
+  fc(C.navy); doc.rect(0,0,PW,34,'F'); fc(C.orange); doc.rect(0,34,PW,1.2,'F');
+  [[0,0,C.white],[1,0,C.orange],[0,1,C.orange],[1,1,C.blue]].forEach(([i,j,c])=>{ fc(c); doc.rect(ML+i*3.6,8.6+j*3.6,3,3,'F'); });
+  fnt('bold',8.5); tc([200,214,235]); T('VEÍCULOS E EQUIPAMENTOS',ML+10,12.2,{charSpace:0.6});
+  fnt('normal',7.2); tc([170,190,222]); T('GERADO EM '+fdt(new Date()),PW-ML,12.2,{align:'right'});
+  tc(C.white); T(fit(evNome,CW,'bold',17),ML,23);
+  if(tr(ev.local)){ tc([214,226,242]); T(fit(ev.local,CW,'normal',8.6),ML,29.5); }
+  let y=43;
+  fnt('bold',8); tc(C.navy); T('PERÍODO',ML,y); fnt('normal',8.6); tc(C.ink); T((a?fmtLong(iso(a))+' A ':'')+fmtLong(iso(fim)),ML+24,y);
+  if(tipos.length){ y+=5.2; fnt('bold',8); tc(C.navy); T('DOCUMENTOS',ML,y); fnt('normal',8.6); tc(C.ink); T(tipos.map(t=>VEV_NOME[t]).join('  ·  '),ML+24,y); }
+  y+=6;
+  /* tabela: veículo (nome, placa, modelo, motorista, por quê) e os documentos à direita */
+  const n=tipos.length, tw=n?Math.max(13,Math.min(17,72/n)):0, nw=CW-n*tw;
+  const head=()=>{ fc(C.navy); doc.rect(ML,y,CW,7,'F'); fnt('bold',7); tc(C.white); T('VEÍCULO / EQUIPAMENTO  ·  PLACA  ·  MOTORISTA / OPERADOR',ML+2,y+4.7); tipos.forEach((t,i)=>T(fit(VEV_CURTO[t],tw-1.5,'bold',6.8),ML+nw+i*tw+tw/2,y+4.7,{align:'center'})); y+=7; };
+  const pageBreak=()=>{ doc.addPage(); y=TOP; fnt('bold',8.5); tc(C.navy); T(fit(evNome,CW-40,'bold',8.5),ML,13); fnt('normal',7.5); tc(C.muted); T('VEÍCULOS E EQUIPAMENTOS (CONTINUAÇÃO)',PW-ML,13,{align:'right'}); dc(C.orange); doc.setLineWidth(0.6); doc.line(ML,15.5,PW-ML,15.5); head(); };
+  head();
+  let g=null, zebra=0;
+  linhas.forEach(l=>{ const x=l.x;
+    const l1=x.nome+(x.qtd>1?' x'+x.qtd:'')+(x.placa?'   ·   PLACA '+x.placa:'');
+    const l2=[x.spec,x.cond?(x.eq?'OPERADOR: ':'MOTORISTA: ')+x.cond:(x.r?(x.eq?'SEM OPERADOR':'SEM MOTORISTA'):'DADOS COM O FORNECEDOR'),x.agr?'AGREGADO'+(tr(x.r.donoNome)?' '+normName(x.r.donoNome):''):''].filter(Boolean).join('  ·  ');
+    const l3=x.via.join('  ·  ')+(x.ks.length?'  ·  '+rangesTxt(x.ks,true):'');
+    const w1=wrap(l1,nw-4,'bold',8.6), w2=wrap(l2,nw-4,'normal',7.6), w3=wrap(l3,nw-4,'normal',6.8);
+    const h=3.2+w1.length*3.9+w2.length*3.4+w3.length*3.1+1.6;
+    if(x.g!==g){ if(y+h+7>BOT) pageBreak(); g=x.g; fnt('bold',7.6); tc(C.blue); T(VEV_GRUPO[g],ML+2,y+4.8,{charSpace:0.3}); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,y+7,PW-ML,y+7); y+=7; zebra=0; }
+    if(y+h>BOT) pageBreak();
+    if(zebra++%2){ fc(C.soft); doc.rect(ML,y,CW,h,'F'); }
+    let yy=y+3.9; fnt('bold',8.6); tc(C.ink); w1.forEach(s=>{ T(s,ML+2,yy); yy+=3.9; });
+    fnt('normal',7.6); tc(C.ink); w2.forEach(s=>{ T(s,ML+2,yy); yy+=3.4; });
+    fnt('normal',6.8); tc(C.muted); w3.forEach(s=>{ T(s,ML+2,yy); yy+=3.1; });
+    l.itens.forEach((it,i)=>{ const cx=ML+nw+i*tw, mid=cx+tw/2; let txt,bg,fg;
+      if(it.s==='na'){ txt='—'; bg=null; fg=C.faint; }
+      else if(it.erro){ txt=it.erro; bg=C.badS; fg=C.bad; }
+      else if(it.s==='semcond'){ txt=x.eq?'SEM OPER.':'SEM MOT.'; bg=C.warnS; fg=C.warn; }
+      else if(it.s==='falta'){ txt='FALTA'; bg=C.badS; fg=C.bad; }
+      else if(it.s==='vencido'){ txt='VENCIDO'; bg=C.badS; fg=C.bad; }
+      else if(it.s==='semdata'){ txt=it.pag?'PÁG. '+(it.pag+offset):'SEM DATA'; bg=C.warnS; fg=C.warn; }
+      else { txt=it.pag?'PÁG. '+(it.pag+offset):'OK'; bg=C.okS; fg=C.ok; }
+      if(bg){ fc(bg); doc.roundedRect(cx+0.8,y+1.4,tw-1.6,5.6,0.8,0.8,'F'); } tc(fg); T(fit(txt,tw-2.4,'bold',6.4),mid,y+5.1,{align:'center'}); });
+    dc(C.line); doc.setLineWidth(0.15); doc.line(ML,y+h,PW-ML,y+h); y+=h; });
+  const notas=[];
+  if(tipos.length) notas.push('PÁG. = página deste PDF onde o documento começa. FALTA ou VENCIDO: o documento não entrou no pacote. Em laranja: entrou, mas está sem a validade no sistema (ou falta o motorista / operador na ficha).');
+  if(linhas.some(l=>!l.x.r)) notas.push('DE TERCEIROS: placa, modelo e motorista com a transportadora ou a locadora.');
+  y+=4; notas.forEach(s=>{ fnt('normal',7.4); const ls=doc.splitTextToSize(pdfSafe(s),CW); tc(C.muted); ls.forEach(L2=>{ if(y+4>BOT){ doc.addPage(); y=TOP; } T(L2,ML,y+3); y+=3.6; }); y+=1.2; });
+  const np=doc.getNumberOfPages();
+  for(let i=1;i<=np;i++){ doc.setPage(i); fnt('normal',7); tc(C.faint); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,PH-11,PW-ML,PH-11); T('GRUPO TENDAS PLENART  ·  VEÍCULOS  ·  '+clip(evNome,60),ML,PH-7); T((tipos.length?'ÍNDICE ':'PÁGINA ')+i+' DE '+np,PW-ML,PH-7,{align:'right'}); }
+  return doc;
+}
+function wireVeicEv(){
+  const box=$('#veicEv'); if(!box) return;
+  box.addEventListener('click',ev=>{ const e=cur(); if(!e) return; const t=ev.target;
+    const vx=t.closest('[data-vexige]'); if(vx){ if(vx.disabled) return; const k=vx.dataset.vexige; patchEv(e.id,o=>{ const c0=docsVeic(o); const i=c0.indexOf(k); if(i>=0) c0.splice(i,1); else c0.push(k); o.docsVeic=VEV_TIPOS.filter(x=>c0.indexOf(x)>=0); }); return; }
+    if(t.closest('[data-act="veic-copiar"]')){ wCopia(veicTexto(e)); return; }
+    if(t.closest('[data-act="veic-pdf"]')){ flushAll(); gerarPacoteVeiculos(e); return; }
+    const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
+    const pe=t.closest('[data-pessoa]'); if(pe){ openPessoa(pe.dataset.pessoa); return; } });
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
