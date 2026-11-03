@@ -1379,6 +1379,69 @@ div.thead{cursor:default}
   .erow>.icon-btn{grid-column:2;justify-self:end}
   .etapa+.etapa{border-top:1px solid var(--line);padding-top:8px}
 }
+/* ===================== v41: abas por tipo nos ambientes + carregadores ===================== */
+/* abas do evento: mais compactas e rolam de lado quando não cabem */
+.evtabs{overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.evtabs::-webkit-scrollbar{display:none}
+.evt{padding:10px 12px 9px;letter-spacing:.06em;font-size:13px;gap:6px;flex:0 0 auto}
+.evradar{white-space:nowrap;flex:0 0 auto;padding-left:10px}
+/* aba Ambientes: o que está ligado a cada ambiente */
+.mlinks{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:9px 12px;border-top:1px solid var(--line);background:var(--surface-2)}
+.mlinks .lbl{font:700 10.5px/1 var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.mlink{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line-strong);border-radius:3px;background:var(--surface);color:var(--head);font:700 11px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.mlink b{font-weight:700;color:var(--ink);letter-spacing:.02em}
+.mlink i{font-style:normal;font-weight:600;color:var(--faint)}
+.mlink em{font-style:normal;padding:1px 6px;border-radius:8px;background:var(--orange-soft);color:var(--orange-ink);letter-spacing:.02em}
+.mlink.vazio{color:var(--muted);border-style:dashed}
+.mlink:hover{border-color:var(--navy)}
+.mlink:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+/* abas de locação, equipamentos, fabricação e carregadores: cada ambiente é um grupo */
+.mats-hint{margin:10px 0 0;font:500 13px/1.45 var(--body);color:var(--muted)}
+.mats-hint b{color:var(--ink);font-weight:700}
+.mats-hint em{font-style:normal;color:var(--orange-ink);font-weight:700}
+.mat.m-modo{border-left-width:4px}
+.mhead.mh-mode{gap:6px 10px;padding:8px 12px;background:var(--surface)}
+.mh-mode .mname{font:700 14.5px/1.15 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--head)}
+.mh-mode .mprod{font:600 11px/1.2 var(--cond);letter-spacing:.05em;color:var(--muted)}
+.mh-mode .mcnt{font:700 11.5px/1.2 var(--cond);letter-spacing:.05em;text-transform:uppercase;color:var(--blue)}
+.mh-mode .mcnt.none{color:var(--faint);font-weight:600}
+.mh-mode .spacer{flex:1}
+.mh-mode .tadd{display:inline-flex;flex-wrap:wrap;gap:6px}
+.mh-mode .tadd .chip{padding:3px 9px}
+.mh-mode .tadd .chip.fab{border-color:var(--orange);color:var(--orange)} .mh-mode .tadd .chip.alu{border-color:var(--blue);color:var(--blue)} .mh-mode .tadd .chip.com{border-color:var(--teal);color:var(--teal)} .mh-mode .tadd .chip.eqp,.mh-mode .tadd .chip.mo{border-color:var(--navy);color:var(--navy)}
+.provs.inmode{border-top:1px solid var(--line)}
+.mat.m-vazio{margin-top:6px;border-left-color:var(--line-strong)}
+.mat.m-vazio .provs.inmode{display:none}
+.mat.m-vazio .mhead{border-bottom:0}
+/* carregadores e mão de obra de apoio */
+.morow{display:grid;grid-template-columns:20px 128px 74px minmax(150px,1.3fr) 104px 104px 104px minmax(120px,1fr) 104px 30px;gap:6px;align-items:end;margin-bottom:6px}
+.morow.mohead{margin-bottom:2px;align-items:center}
+.morow.mohead span{font:700 10.5px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.morow .mo-tipo{border-left:3px solid var(--navy)}
+.morow .mo-qtd{font-weight:700;text-align:center}
+.morow .icon-btn{width:28px;height:28px;font-size:18px;align-self:end}
+.morow .drag{align-self:center}
+.m-x .x-mo{border-left-color:var(--teal)} .m-x .x-mo.open{border-left-color:var(--orange);color:var(--orange-ink)}
+.m-f.okc{color:var(--ok)} .m-f.carab{color:var(--orange-ink);background:var(--orange-soft)}
+@media (max-width:1320px){
+  .evt{padding:9px 9px 8px;font-size:12px;letter-spacing:.035em;gap:5px}
+  .evradar{font-size:12px;padding-left:6px}
+}
+@media (max-width:1180px){
+  .morow{grid-template-columns:20px 136px 70px minmax(0,1fr) 104px 104px 30px}
+  .morow .c-hor{grid-column:2/4} .morow .c-forn{grid-column:4/5} .morow .c-st{grid-column:5/7}
+  .morow.mohead{display:none}
+  .morow .cell .cl{display:block}
+}
+@media (max-width:640px){
+  .morow{grid-template-columns:1fr 1fr;gap:6px 8px}
+  .morow .drag{display:none}
+  .morow .c-fun,.morow .c-forn{grid-column:1/-1}
+  .morow .c-hor,.morow .c-st{grid-column:auto}
+  .morow>.icon-btn{grid-column:2;justify-self:end}
+  .mh-mode .spacer{display:none}
+  .mh-mode .tadd{flex-basis:100%}
+}
 </style>
 
 <div class="wrap">
@@ -1472,6 +1535,10 @@ div.thead{cursor:default}
       <div class="evtabs" id="evTabs" role="tablist" aria-label="Partes do evento">
         <button type="button" class="evt" role="tab" data-evtab="escala" id="evt-escala" aria-controls="paneEscala">Escala<b id="etc-escala"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="amb" id="evt-amb" aria-controls="paneAmb">Ambientes<b id="etc-amb"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="loc" id="evt-loc" aria-controls="paneAmb">Locação e compra<b id="etc-loc"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="eqp" id="evt-eqp" aria-controls="paneAmb">Equipamentos<b id="etc-eqp"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="fab" id="evt-fab" aria-controls="paneAmb">Fabricação<b id="etc-fab"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="mo" id="evt-mo" aria-controls="paneAmb">Carregadores<b id="etc-mo"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="fretes" id="evt-fretes" aria-controls="paneFretes">Fretes<b id="etc-fretes"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="docs" id="evt-docs" aria-controls="paneDocs">Documentos<b id="etc-docs"></b></button>
         <span class="spacer"></span>
@@ -1503,6 +1570,7 @@ div.thead{cursor:default}
         <button class="btn sm" id="btnUnfoldAll" type="button" title="Abrir todos os ambientes">Abrir todos</button>
         <button class="btn primary" id="btnAddAmb" type="button">+ Ambiente</button>
       </div>
+      <p class="mats-hint" id="matsHint" hidden></p>
       <div id="mats"></div>
       <div class="emptymsg" id="matsEmpty" hidden>Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma vá colocando os itens com data e equipe, o que fabricar, alugar ou comprar e os equipamentos.</div>
       </div>
@@ -1762,6 +1830,7 @@ function radarItems(){
     const e=eventos.find(x=>x.id===a.eventoId); if(!evAtivo(e)) return;
     (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; items.push({kind:'FABRICAÇÃO',ev:e,desc:f.oque||'?',sub:[f.qtd||'',f.material||'',f.obs||''].filter(Boolean).join(' · '),forn:nossa?('NOSSA'+(f.fornecedor?' — '+f.fornecedor:'')):(f.fornecedor||'TERCEIRA (A DEFINIR)'),modo:nossa?'':(f.modo||''),inicio:f.inicio||'',prontoAte:f.prontoAte||'',retirada:(!nossa&&f.modo==='RETIRAMOS')?(f.retirada||''):'',chega:f.chega||'',sai:'',status:f.status||'',statusList:COT_FAB,ref:{col:'ambientes',id:a.id,list:'fab',itemId:f.id}}); });
     (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; items.push({kind:com?'COMPRA':'LOCAÇÃO',ev:e,desc:p.oque||'?',sub:'',forn:p.fornecedor||'',modo:p.modo||'',retirada:p.modo==='RETIRAMOS'?(p.retirada||''):'',chega:p.data||'',sai:com?'':(p.devolve||''),status:p.status||'',statusList:com?COT_COM:COT,ref:{col:'ambientes',id:a.id,list:'prov',itemId:p.id}}); });
+    (a.mo||[]).forEach(m=>{ items.push({kind:'MÃO DE OBRA',ev:e,desc:moNome(m),sub:[a.nome||'',m.tipo!=='OUTRO'?m.funcao||'':'',m.horario||''].filter(Boolean).join(' · '),forn:m.fornecedor||'',modo:'',retirada:'',chega:m.de||'',sai:m.ate||'',status:m.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'mo',itemId:m.id}}); });
     (a.equip||[]).forEach(q=>{ if(q.origem==='ALUGADO') items.push({kind:'EQUIPAMENTO',ev:e,desc:q.nome||'EQUIPAMENTO',sub:'',forn:q.fornecedor||'',modo:'',retirada:'',chega:q.de||'',sai:q.ate||'',status:q.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'equip',itemId:q.id}}); });
   });
   items.forEach(it=>{ it.data=it.chega||it.prontoAte||it.retirada||it.sai||''; it.oque=it.desc; it.amb=it.sub; it.quem=it.forn; it.devolve=it.sai;
@@ -2284,10 +2353,14 @@ function inSpan(k,a,b){ if(!a&&!b) return false; const x=a||b,y=b||a; return x<=
 function itemTeamRid(ev,it){ const t=team(ev,it.equipeId); return t&&t.regId?t.regId:''; }
 function itemTeamRidDes(ev,it){ const t=team(ev,it.equipeDesId||it.equipeId); return t&&t.regId?t.regId:''; }
 const RVERB={'FABRICAÇÃO':{inicio:'COMEÇA A FABRICAR',prontoAte:'FICA PRONTO',retirada:'RETIRAR',chega:'CHEGA'},'LOCAÇÃO':{retirada:'RETIRAR',chega:'CHEGA',sai:'DEVOLVER'},'COMPRA':{retirada:'RETIRAR',chega:'CHEGA'},'EQUIPAMENTO':{chega:'CHEGA',sai:'SAI'}};
+/* mão de obra de apoio: "10 CARREGADORES", "2 MARCENEIROS", "1 ELETRICISTA" (OUTRO usa a função) */
+function moNome(m){ const n=num(m.qtd)||0, t=m.tipo==='OUTRO'?(normName(m.funcao)||'MÃO DE OBRA'):m.tipo==='MARCENEIRO'?(n===1?'MARCENEIRO':'MARCENEIROS'):(n===1?'CARREGADOR':'CARREGADORES'); return (n?n+' ':'')+t; }
+function moTxt(m,o){ o=o||{}; return moNome(m)+(m.tipo!=='OUTRO'&&tr(m.funcao)?' — '+normName(m.funcao):'')+(tr(m.horario)?' · '+normName(m.horario):'')+(o.amb&&m.amb?' ('+m.amb+')':'')+(o.forn&&tr(m.forn||m.fornecedor)?' · '+normName(m.forn||m.fornecedor):'')+(o.st&&m.status?' ['+m.status+']':''); }
 function dayExtras(ev,k){
-  const out={itens:[],equip:[],fretes:[],radar:[]};
+  const out={itens:[],equip:[],fretes:[],radar:[],mo:[]};
   ambsOf(ev.id).forEach(a=>{
     (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t:itemTeamRidDes(ev,it)}); });
+    (a.mo||[]).forEach(m=>{ if(inSpan(k,m.de,m.ate)) out.mo.push({tipo:m.tipo||'CARREGADOR',funcao:m.funcao||'',qtd:m.qtd,horario:m.horario||'',forn:m.fornecedor||'',status:m.status||'',open:isOpen(m.status),amb:a.nome||''}); });
     (a.equip||[]).forEach(q=>{ if(inSpan(k,q.de,q.ate)){ const x=q.de||q.ate,y=q.ate||q.de; out.equip.push({nome:q.nome||'EQUIPAMENTO',origem:q.origem||'PRÓPRIO',amb:a.nome||'',forn:q.fornecedor||'',status:q.status||'',a:x,b:y<x?x:y}); } });
   });
   (ev.fretes||[]).forEach(f=>{ const base={qtd:num(f.qtd)||1,cam:f.caminhao||'CAMINHÃO',oque:freteOque(ev,f),terc:f.origem==='TERCEIRO',status:f.status||''}; if(f.ida===k) out.fretes.push(Object.assign({dir:'VAI'},base)); if(f.volta===k) out.fretes.push(Object.assign({dir:'VOLTA'},base)); });
@@ -3097,57 +3170,110 @@ function equipRowHTML(e){
 function ambSummary(a){
   const it=(a.itens||[]).filter(x=>x.desc||x.de||x.equipeId).length, fb=(a.fab||[]).length, fbAb=(a.fab||[]).filter(f=>isOpen(f.status)).length;
   const alu=(a.prov||[]).filter(p=>p.tipo!=='COMPRAR').length, com=(a.prov||[]).filter(p=>p.tipo==='COMPRAR').length, eq=(a.equip||[]).length, eqA=(a.equip||[]).filter(e=>e.origem==='ALUGADO').length;
-  const p=[]; if(it) p.push(plural(it,'item','itens')); if(fb) p.push(fb+' fab.'+(fbAb?' ('+fbAb+' em aberto)':'')); if(alu) p.push(alu+' loc.'); if(com) p.push(com+' compra'+(com===1?'':'s')); if(eq) p.push(eq+' equip.'+(eqA?' ('+eqA+' alug.)':''));
+  const mo=a.mo||[], mp=moPessoas(mo);
+  const p=[]; if(it) p.push(plural(it,'item','itens')); if(alu) p.push(alu+' loc.'); if(com) p.push(com+' compra'+(com===1?'':'s')); if(eq) p.push(eq+' equip.'+(eqA?' ('+eqA+' alug.)':'')); if(fb) p.push(fb+' fab.'+(fbAb?' ('+fbAb+' em aberto)':'')); if(mo.length) p.push(mp?mp+' carreg.':plural(mo.length,'mão de obra','mãos de obra'));
   return p.length?p.join(' · '):'vazio';
 }
 function blockTitle(key,def,label,cnt,hint,add){
   const f=isFolded(key,def);
   return {cls:f?' folded':'',html:'<div class="ptitle" data-act="fold" role="button" tabindex="0" aria-expanded="'+(f?'false':'true')+'"><span class="fi" aria-hidden="true"></span><span class="pt">'+label+'</span><span class="pc">'+esc(cnt)+'</span><small>'+hint+'</small><span class="tadd">'+add+'</span></div>'};
 }
+/* ---------- carregadores e mão de obra de apoio (quem vem de fora ajudar) ---------- */
+const MO_TIPOS=['CARREGADOR','MARCENEIRO','OUTRO'];
+const moPessoas=list=>(list||[]).reduce((n,m)=>n+(num(m.qtd)||0),0);
+function moRowHTML(m){
+  const tipo=MO_TIPOS.indexOf(m.tipo)>=0?m.tipo:'CARREGADOR';
+  return '<div class="morow'+(tipo==='OUTRO'?' outro':'')+'" data-moid="'+esc(m.id)+'">'
+    +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
+    +cell('c-tipo','Tipo','<select class="mo-tipo">'+MO_TIPOS.map(x=>'<option value="'+x+'"'+(x===tipo?' selected':'')+'>'+x+'</option>').join('')+'</select>')
+    +cell('c-qtd','Pessoas','<input class="mo-qtd" type="number" min="1" step="1" inputmode="numeric" placeholder="QTD" value="'+esc(m.qtd==null?'':m.qtd)+'">')
+    +cell('c-fun',tipo==='OUTRO'?'Função / o que vai fazer':'O que vai fazer','<input class="mo-fun" type="text" placeholder="'+(tipo==='CARREGADOR'?'EX: DESCARREGAR A CARRETA DO GALPÃO':tipo==='MARCENEIRO'?'EX: BALCÃO DO LOUNGE':'EX: ELETRICISTA, PINTOR, LIMPEZA')+'" value="'+esc(m.funcao||'')+'" autocomplete="off">')
+    +cell('c-de','De',dateInput('mo-de',m.de||''))
+    +cell('c-ate','Até',dateInput('mo-ate',m.ate||''))
+    +cell('c-hor','Horário','<input class="mo-hor" type="text" placeholder="EX: 6H ÀS 14H" value="'+esc(m.horario||'')+'" autocomplete="off">')
+    +cell('c-forn','Quem fornece','<input class="mo-forn" type="text" placeholder="EMPRESA / PESSOA / TELEFONE" value="'+esc(m.fornecedor||'')+'" autocomplete="off">')
+    +cell('c-st','Cotação','<select class="mo-st">'+opt(COT,m.status||'')+'</select>')
+    +'<button type="button" class="icon-btn" data-act="del-mo" title="Tirar" aria-label="Tirar">×</button></div>';
+}
+/* ---------- as abas do que está ligado aos ambientes (cada uma mostra os ambientes com só aquele tipo) ---------- */
+const AMB_MODES=['amb','loc','eqp','fab','mo'];
+const ambMode=()=>AMB_MODES.indexOf(M.evTab)>=0?M.evTab:'amb';
+const BLK={
+  loc:{list:'prov',cls:'provs loc',nome:'locação ou compra',
+    add:()=>'<button type="button" class="chip alu" data-act="add-prov" data-tipo="ALUGAR">+ Alugar</button><button type="button" class="chip com" data-act="add-prov" data-tipo="COMPRAR">+ Comprar</button>',
+    cnt:a=>{ const L=a.prov||[], alu=L.filter(p=>p.tipo!=='COMPRAR').length, com=L.length-alu, ab=L.filter(p=>isOpen(p.status)).length; return L.length?[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+(ab?' · '+ab+' em aberto':' · tudo fechado'):'nada'; },
+    head:'<div class="prow phead"><span class="dcol"></span><span>Tipo</span><span>O quê</span><span>Fornecedor</span><span>Entrega / retirada</span><span>Retirada no fornecedor</span><span>Chega na montagem</span><span>Devolve</span><span>Cotação</span><span></span></div>',
+    row:p=>provRowHTML(p)},
+  eqp:{list:'equip',cls:'provs eqps',nome:'equipamento',
+    add:()=>'<button type="button" class="chip eqp" data-act="add-equip" data-nome="EMPILHADEIRA">+ Empilhadeira</button><button type="button" class="chip eqp" data-act="add-equip" data-nome="MUNCK">+ Munck</button><button type="button" class="chip other" data-act="add-equip" data-nome="">+ Outro equipamento</button>',
+    cnt:a=>{ const L=a.equip||[], al=L.filter(e=>e.origem==='ALUGADO').length; return L.length?plural(L.length,'equipamento','equipamentos')+(al?' · '+al+' alugado'+(al===1?'':'s'):''):'nenhum'; },
+    head:'<div class="qrow qhead"><span class="dcol"></span><span>Equipamento</span><span>Próprio / alugado</span><span>Fornecedor</span><span>De</span><span>Até</span><span>Cotação (se alugado)</span><span></span></div>',
+    row:e=>equipRowHTML(e)},
+  fab:{list:'fab',cls:'provs fabs',nome:'fabricação',
+    add:()=>'<button type="button" class="chip fab" data-act="add-fab">+ Fabricação</button>',
+    cnt:a=>{ const L=a.fab||[], ab=L.filter(f=>isOpen(f.status)).length; return L.length?plural(L.length,'peça','peças')+(ab?' · '+ab+' em aberto':' · tudo pronto'):'nada'; },
+    head:'',row:f=>fabRowHTML(f)},
+  mo:{list:'mo',cls:'provs mo',nome:'contratação de carregador',
+    add:()=>'<button type="button" class="chip mo" data-act="add-mo" data-tipo="CARREGADOR">+ Carregador</button><button type="button" class="chip mo" data-act="add-mo" data-tipo="MARCENEIRO">+ Marceneiro</button><button type="button" class="chip other" data-act="add-mo" data-tipo="OUTRO">+ Outra mão de obra</button>',
+    cnt:a=>{ const L=a.mo||[], mp=moPessoas(L), ab=L.filter(m=>isOpen(m.status)).length; return L.length?(mp?plural(mp,'pessoa','pessoas'):plural(L.length,'contratação','contratações'))+(ab?' · '+ab+' em aberto':' · tudo fechado'):'ninguém'; },
+    head:'<div class="morow mohead"><span class="dcol"></span><span>Tipo</span><span>Pessoas</span><span>O que vai fazer</span><span>De</span><span>Até</span><span>Horário</span><span>Quem fornece</span><span>Cotação</span><span></span></div>',
+    row:m=>moRowHTML(m)}
+};
+/* aba Ambientes: o que está ligado a cada ambiente (clica e vai pra aba) */
+function ambLinksHTML(a){
+  const L=[['loc','LOCAÇÃO E COMPRA',a.prov,p=>isOpen(p.status)],['eqp','EQUIPAMENTOS',a.equip,q=>q.origem==='ALUGADO'&&isOpen(q.status)],['fab','FABRICAÇÃO',a.fab,f=>isOpen(f.status)],['mo','CARREGADORES',a.mo,m=>isOpen(m.status)]];
+  return '<div class="mlinks"><span class="lbl">Ligado a este ambiente</span>'+L.map(([k,l,arr,op])=>{ const n=(arr||[]).length, ab=(arr||[]).filter(op).length, t=n?BLK[k].cnt(a).split(' · ')[0]:'';
+    return '<button type="button" class="mlink'+(n?'':' vazio')+(ab?' ab':'')+'" data-go="'+k+'" title="Abrir a aba '+esc(l.toLowerCase())+' neste ambiente">'+l+(n?'<b>'+esc(t)+'</b>':'<i>+ pôr</i>')+(ab?'<em>'+ab+' em aberto</em>':'')+'</button>'; }).join('')+'</div>';
+}
 function ambInnerHTML(a,idx,ev){
+  const mode=ambMode(); if(mode!=='amb') return ambModeHTML(a,idx,ev,mode);
   const prods=ev.produtores||[]; const K='a:'+a.id;
-  let h='<div class="mhead"><span class="drag amb" title="Arrastar pra reordenar" aria-hidden="true">\u2807</span><button type="button" class="fold" data-act="fold-amb" title="Recolher / abrir o ambiente" aria-label="Recolher / abrir o ambiente"><span class="fi" aria-hidden="true"></span></button><span class="mnum">#'+idx+'</span><span class="mlabel">Ambiente</span><input class="m-nome" type="text" placeholder="NOME DO AMBIENTE (EX: QG, GALPÃO 50X130, ÁREA EXTERNA, LOUNGE)" value="'+esc(a.nome||'')+'" autocomplete="off">';
+  let h='<div class="mhead"><span class="drag amb" title="Arrastar pra reordenar" aria-hidden="true">⠇</span><button type="button" class="fold" data-act="fold-amb" title="Recolher / abrir o ambiente" aria-label="Recolher / abrir o ambiente"><span class="fi" aria-hidden="true"></span></button><span class="mnum">#'+idx+'</span><span class="mlabel">Ambiente</span><input class="m-nome" type="text" placeholder="NOME DO AMBIENTE (EX: QG, GALPÃO 50X130, ÁREA EXTERNA, LOUNGE)" value="'+esc(a.nome||'')+'" autocomplete="off">';
   h+='<label class="amb-sel">Produtor <select class="a-prod"><option value="">'+(prods.length?'—':'— cadastre em cima')+'</option>'+prods.map(p=>'<option value="'+esc(p.id)+'"'+(p.id===a.produtorId?' selected':'')+'>'+esc(p.nome||'(SEM NOME)')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+(prodGeral(ev)===p&&prods.length>1?' · GERAL':'')+'</option>').join('')+'</select></label>';
   h+='<span class="msum">'+esc(ambSummary(a))+'</span>';
   h+='<span class="saveind"></span><button type="button" class="icon-btn" data-act="del-amb" title="Excluir ambiente" aria-label="Excluir ambiente">×</button>'
-    +'<span class="confirm" data-role="delconf" hidden>Excluir este ambiente e tudo dentro dele? <button type="button" class="btn danger solid sm" data-act="del-amb-yes">Sim</button> <button type="button" class="btn sm" data-act="del-amb-no">Não</button></span></div>';
+    +'<span class="confirm" data-role="delconf" hidden>Excluir este ambiente e tudo dentro dele (itens, locação, equipamentos, fabricação, carregadores)? <button type="button" class="btn danger solid sm" data-act="del-amb-yes">Sim</button> <button type="button" class="btn sm" data-act="del-amb-no">Não</button></span></div>';
   const itens=a.itens||[]; const itN=itens.filter(x=>x.desc||x.de||x.equipeId).length;
-  let t=blockTitle(K+':it',false,'Itens / etapas',itens.length?plural(itN||itens.length,'item','itens'):'nenhum','o que monta nesse ambiente: datas e equipe da montagem e da desmontagem','<button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button>');
+  const t=blockTitle(K+':it',false,'Itens / etapas',itens.length?plural(itN||itens.length,'item','itens'):'nenhum','o que monta nesse ambiente: datas e equipe da montagem e da desmontagem','<button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button>');
   h+='<div class="etapas'+t.cls+'" data-fkey="'+K+':it">'+t.html+'<div class="erow ehead"><span class="dcol"></span><span>Item / etapa (o que monta aqui)</span><span>Montagem de</span><span>até</span><span>Equipe que monta</span><span>Desmontagem de</span><span>até</span><span>Equipe que desmonta</span><span></span></div>';
   itens.forEach(it=>{ h+=itemRowHTML(it,ev); });
   h+='<div class="quick"><button type="button" class="chip frt" data-act="add-etapa" data-desc="">+ Item</button></div></div>';
-  const fabs=a.fab||[]; const fbAb=fabs.filter(f=>isOpen(f.status)).length;
-  t=blockTitle(K+':fab',!fabs.length,'Fabricação',fabs.length?plural(fabs.length,'peça','peças')+(fbAb?' · '+fbAb+' em aberto':' · tudo pronto'):'nada','o que tem que fabricar pra esse ambiente — lona, bandeira, fechamento, peça especial — com quem faz e os prazos','<button type="button" class="chip fab" data-act="add-fab">+ Fabricação</button>');
-  h+='<div class="provs fabs'+t.cls+'" data-fkey="'+K+':fab">'+t.html;
-  if(!fabs.length) h+='<div class="pempty">Nada pra fabricar.</div>';
-  fabs.forEach(f=>{ h+=fabRowHTML(f); });
-  h+='<div class="quick"><button type="button" class="chip fab" data-act="add-fab">+ Fabricação</button></div></div>';
-  const prov=a.prov||[]; const alu=prov.filter(p=>p.tipo!=='COMPRAR').length, com=prov.length-alu, pvAb=prov.filter(p=>isOpen(p.status)).length;
-  t=blockTitle(K+':prov',!prov.length,'Locação / compra',prov.length?[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+(pvAb?' · '+pvAb+' em aberto':' · tudo fechado'):'nada','o que alugar ou comprar fora — só a lona, só a ferragem, banheiro, mobiliário, parafuso…','<button type="button" class="chip alu" data-act="add-prov" data-tipo="ALUGAR">+ Alugar</button><button type="button" class="chip com" data-act="add-prov" data-tipo="COMPRAR">+ Comprar</button>');
-  h+='<div class="provs'+t.cls+'" data-fkey="'+K+':prov">'+t.html;
-  if(prov.length) h+='<div class="prow phead"><span class="dcol"></span><span>Tipo</span><span>O quê</span><span>Fornecedor</span><span>Entrega / retirada</span><span>Retirada no fornecedor</span><span>Chega na montagem</span><span>Devolve</span><span>Cotação</span><span></span></div>';
-  else h+='<div class="pempty">Nada pra alugar ou comprar — é tudo nosso.</div>';
-  prov.forEach(p=>{ h+=provRowHTML(p); });
-  h+='<div class="quick"><button type="button" class="chip alu" data-act="add-prov" data-tipo="ALUGAR">+ Alugar</button><button type="button" class="chip com" data-act="add-prov" data-tipo="COMPRAR">+ Comprar</button></div></div>';
-  const eq=a.equip||[]; const eqA=eq.filter(e=>e.origem==='ALUGADO').length;
-  t=blockTitle(K+':eqp',!eq.length,'Equipamentos',eq.length?plural(eq.length,'equipamento','equipamentos')+(eqA?' · '+eqA+' alugado'+(eqA===1?'':'s'):''):'nenhum','o que precisa pra executar — e se é nosso, alugado ou do cliente','<button type="button" class="chip eqp" data-act="add-equip" data-nome="">+ Equipamento</button>');
-  h+='<div class="provs eqps'+t.cls+'" data-fkey="'+K+':eqp">'+t.html;
-  if(eq.length) h+='<div class="qrow qhead"><span class="dcol"></span><span>Equipamento</span><span>Próprio / alugado</span><span>Fornecedor</span><span>De</span><span>Até</span><span>Cotação (se alugado)</span><span></span></div>';
-  else h+='<div class="pempty">Nenhum equipamento marcado.</div>';
-  eq.forEach(e=>{ h+=equipRowHTML(e); });
-  h+='<div class="quick"><span class="lbl">+ equipamento</span>'+QUICK_EQP.map(d=>'<button type="button" class="chip eqp" data-act="add-equip" data-nome="'+esc(d)+'">'+esc(d)+'</button>').join('')+'<button type="button" class="chip other" data-act="add-equip" data-nome="">Outro…</button></div></div>';
+  h+=ambLinksHTML(a);
   h+='<div class="mobs"><label>Obs</label><input class="m-obs" type="text" placeholder="OBSERVAÇÕES DO AMBIENTE (O QUE LEVAR, DETALHES)" value="'+esc(a.obs||'')+'" autocomplete="off"></div>';
   return h;
 }
-function applyAmbFolds(){ $$('#mats .mat').forEach(el=>{ const f=isFolded('a:'+el.dataset.mid,false); el.classList.toggle('folded',f); const b=$('.fold',el); if(b) b.setAttribute('aria-expanded',f?'false':'true'); }); }
+/* nas abas de locação, equipamentos, fabricação e carregadores: o ambiente vira um grupo com só aquele tipo */
+function ambModeHTML(a,idx,ev,mode){
+  const b=BLK[mode], L=a[b.list]||[], pn=prodName(ev,a.produtorId);
+  return '<div class="mhead mh-mode"><span class="mnum">#'+idx+'</span><span class="mname">'+esc(a.nome||'(AMBIENTE SEM NOME)')+'</span>'+(pn?'<span class="mprod">PRODUTOR '+esc(pn)+'</span>':'')+'<span class="mcnt'+(L.length?'':' none')+'">'+esc(b.cnt(a))+'</span><span class="spacer"></span>'+(readOnly?'':'<span class="tadd">'+b.add()+'</span>')+'<span class="saveind"></span></div>'
+    +'<div class="'+b.cls+' inmode">'+(L.length?b.head:'')+L.map(b.row).join('')+'</div>';
+}
+function applyAmbFolds(){ const m=ambMode(); $$('#mats .mat').forEach(el=>{ const f=m==='amb'&&isFolded('a:'+el.dataset.mid,false); el.classList.toggle('folded',f); const b=$('.fold',el); if(b) b.setAttribute('aria-expanded',f?'false':'true'); }); }
 function foldAllAmbs(f){ ambsOf(currentId).forEach(a=>setFold('a:'+a.id,f)); applyAmbFolds(); }
-function revOf(a,ev){ return JSON.stringify([a.nome,a.produtorId,a.itens,a.fab,a.prov,a.equip,a.obs,(ev.equipes||[]).map(t=>[t.id,t.regId,entryName(t),teamIsTercEntry(t)]),(ev.produtores||[]).map(p=>[p.id,p.regId,p.tipo]),recsOf('EQUIPAMENTO').map(r=>[r.id,r.nome]),recsSorted('EQUIPE').map(r=>[r.id,r.nome,r.propria]),ev.dias]); }
+function revOf(a,ev){ return JSON.stringify([ambMode(),a.nome,a.produtorId,a.itens,a.fab,a.prov,a.equip,a.mo,a.obs,(ev.equipes||[]).map(t=>[t.id,t.regId,entryName(t),teamIsTercEntry(t)]),(ev.produtores||[]).map(p=>[p.id,p.regId,p.tipo,p.papel]),recsOf('EQUIPAMENTO').map(r=>[r.id,r.nome]),recsSorted('EQUIPE').map(r=>[r.id,r.nome,r.propria]),ev.dias]); }
+/* desenha o cartão / grupo do ambiente no modo da aba */
+function paintAmb(el,a,idx,ev,rev){
+  const mode=ambMode(); el.innerHTML=ambInnerHTML(a,idx,ev); el.dataset.rev=rev||'';
+  el.classList.toggle('m-modo',mode!=='amb'); el.classList.toggle('m-vazio',mode!=='amb'&&!(a[(BLK[mode]||{}).list]||[]).length);
+  el.classList.toggle('folded',mode==='amb'&&isFolded('a:'+a.id,false));
+}
 /* evento concluído: faixa no topo e botão de reabrir */
 function renderArq(ev){
   const ab=$('#arqBar'), bc=$('#btnConcluir'), fim=evSpan(ev).last, acabou=!!fim&&fim<iso(today0());
   if(ab){ ab.hidden=!ev.concluido; ab.innerHTML=ev.concluido?'<b>EVENTO CONCLUÍDO'+(parseISO(ev.concluido)?' EM '+fmtLong(ev.concluido):'')+'</b><span>Está nos ARQUIVADOS: não aparece no mapa, no radar, nos choques nem nas agendas das equipes.</span>'+(readOnly?'':'<button type="button" class="btn sm" data-arq-reabrir>Reabrir</button>'):''; }
   if(bc){ bc.hidden=readOnly||!!ev.concluido; bc.classList.toggle('hot',acabou); bc.title=acabou?'O evento já terminou: concluir tira ele do mapa e do radar (fica nos ARQUIVADOS)':'Concluir tira o evento do mapa e do radar (fica nos ARQUIVADOS)'; }
 }
+const AMB_EMPTY='Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma coloque os itens com data e equipe. Locação, equipamentos, fabricação e carregadores ficam nas abas deles, ligados ao ambiente.';
+/* resumo do evento no topo das abas de cada tipo */
+function modeHintHTML(ev,mode){
+  const as=ambsOf(ev.id), all=k=>as.reduce((arr,a)=>arr.concat(a[k]||[]),[]);
+  if(mode==='loc'){ const L=all('prov'), alu=L.filter(p=>p.tipo!=='COMPRAR').length, com=L.length-alu, ab=L.filter(p=>isOpen(p.status)).length; return L.length?'<b>'+[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo fechado')+' — o que é de fora e ainda não fechou aparece também no radar.':'Nada pra alugar ou comprar ainda. Use <b>+ Alugar</b> ou <b>+ Comprar</b> no ambiente onde vai ficar.'; }
+  if(mode==='eqp'){ const L=all('equip'), al=L.filter(e=>e.origem==='ALUGADO').length, ab=L.filter(e=>e.origem==='ALUGADO'&&isOpen(e.status)).length; return L.length?'<b>'+plural(L.length,'equipamento','equipamentos')+'</b>'+(al?' · '+al+' alugado'+(al===1?'':'s'):'')+(ab?' · <em>'+ab+' em aberto</em>':'')+' — os nossos aparecem na agenda de cada unidade (Equipamentos e frota), no mapa de dias e na lista de veículos do evento.':'Nenhum equipamento marcado ainda. Escolha a unidade do cadastro (ou digite, se for alugado) no ambiente onde vai trabalhar.'; }
+  if(mode==='fab'){ const L=all('fab'), ab=L.filter(f=>isOpen(f.status)).length; return L.length?'<b>'+plural(L.length,'peça','peças')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo pronto')+' — os prazos (início, pronto, chega) aparecem no radar e no cronograma.':'Nada pra fabricar ainda. Use <b>+ Fabricação</b> no ambiente da peça.'; }
+  const L=all('mo'), mp=moPessoas(L), ab=L.filter(m=>isOpen(m.status)).length;
+  return L.length?'<b>'+(mp?plural(mp,'pessoa','pessoas')+' em ':'')+plural(L.length,'contratação','contratações')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo fechado')+' — aparece no mapa de dias (linha CARREGADORES), no radar e no cronograma da equipe.':'Ninguém de fora ainda. <b>+ Carregador</b> pra quem vem descarregar ou carregar caminhão; marceneiro e outras mãos de obra também entram aqui.';
+}
+function renderMatsHint(ev){ const hint=$('#matsHint'), mode=ambMode(), n=ambsOf(ev.id).length; if(hint){ hint.hidden=mode==='amb'||!n; hint.innerHTML=mode==='amb'||!n?'':modeHintHTML(ev,mode); } }
 function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; } });
@@ -3155,45 +3281,58 @@ function renderDetail(){
   $('#btnOSEv').hidden=$('#btnDelEv').hidden=readOnly;
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
-  const list=ambsOf(ev.id);
+  const list=ambsOf(ev.id), mode=ambMode();
   const existing=new Map($$('.mat',host).map(el=>[el.dataset.mid,el]));
   list.forEach((a,i)=>{
-    let el=existing.get(a.id);
-    if(el){ existing.delete(a.id); if(el!==focused){ const r=revOf(a,ev)+'|'+(i+1); if(el.dataset.rev!==r){ el.innerHTML=ambInnerHTML(a,i+1,ev); el.dataset.rev=r; } } }
-    else{ el=document.createElement('section'); el.className='mat'; el.dataset.mid=a.id; el.dataset.rev=revOf(a,ev)+'|'+(i+1); el.innerHTML=ambInnerHTML(a,i+1,ev); }
+    let el=existing.get(a.id); const r=revOf(a,ev)+'|'+(i+1);
+    if(el){ existing.delete(a.id); if(el!==focused&&el.dataset.rev!==r) paintAmb(el,a,i+1,ev,r); }
+    else{ el=document.createElement('section'); el.className='mat'; el.dataset.mid=a.id; paintAmb(el,a,i+1,ev,r); }
     if(host.children[i]!==el&&el!==focused) host.insertBefore(el,host.children[i]||null);
   });
   existing.forEach(el=>{ if(el!==focused) el.remove(); });
   applyAmbFolds();
   $$('#mats .mat').forEach(wireAmbDrag);
   makeDraggable($('#mats'),'.mat','.drag.amb',order=>reorderAmbs(order));
+  host.dataset.mode=mode;
   $('#matCount').textContent=list.length?list.length+' ambiente'+(list.length===1?'':'s'):'';
-  $('#matsEmpty').hidden=!!list.length;
-  $('#btnFoldAll').hidden=$('#btnUnfoldAll').hidden=list.length<2;
+  renderMatsHint(ev);
+  const me=$('#matsEmpty'); me.hidden=!!list.length; if(!list.length) me.innerHTML=mode==='amb'?AMB_EMPTY:'Crie os ambientes primeiro, na aba <b>Ambientes</b>: cada '+BLK[mode].nome+' fica ligada a um ambiente — é assim que sai no cronograma, no radar e no mapa de dias.';
+  $('#btnAddAmb').hidden=mode!=='amb'||readOnly;
+  $('#btnFoldAll').hidden=$('#btnUnfoldAll').hidden=mode!=='amb'||list.length<2;
   $('#btnPDF').disabled=!list.length&&!(ev.evInicio||ev.evFim||ev.monInicio);
   renderRepPanel(ev);
   renderEvTabs(ev);
 }
-/* abas de dentro do evento: ESCALA / AMBIENTES / FRETES / DOCUMENTOS (com o número de cada uma) */
-const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['fretes','#paneFretes'],['docs','#paneDocs']];
+/* abas de dentro do evento (com o número de cada uma); locação, equipamentos, fabricação e carregadores mostram os ambientes em outro modo */
+const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['loc','#paneAmb'],['eqp','#paneAmb'],['fab','#paneAmb'],['mo','#paneAmb'],['fretes','#paneFretes'],['docs','#paneDocs']];
 function renderEvTabs(ev){
   if(!EV_TABS.some(([k])=>k===M.evTab)) M.evTab='escala';
   const teams=escRows(ev).filter(t=>!isProdId(t)).length, ch=hasChoque(ev), sem=semEquipeDays(ev,null).length;
-  const na=ambsOf(ev.id).length, nf=fretesTot(ev), dp=(M.docsPend||0)+(M.veicPend||0), dn=M.docsN||0;
+  const as=ambsOf(ev.id), na=as.length, nf=fretesTot(ev), dp=(M.docsPend||0)+(M.veicPend||0), dn=M.docsN||0;
+  const cnt=(k,op)=>{ let n=0,ab=0; as.forEach(a=>(a[k]||[]).forEach(x=>{ n++; if(op(x)) ab++; })); return {n:n,ab:ab}; };
   const set=(k,txt,cls,tip)=>{ const b=$('#evt-'+k); if(!b) return; $('b',b).textContent=txt; b.classList.remove('warn','bad','ok'); if(cls) b.classList.add(cls); if(tip) b.title=tip; else b.removeAttribute('title'); };
   set('escala',teams?String(teams):'',ch?'bad':sem?'warn':'',ch?'Tem choque: pessoa ou carro em dois lugares no mesmo dia':sem?'Falta equipe em '+plural(sem,'dia','dias'):'');
   set('amb',na?String(na):'');
+  const cl=cnt('prov',p=>isOpen(p.status)), cq=cnt('equip',q=>q.origem==='ALUGADO'&&isOpen(q.status)), cf=cnt('fab',f=>isOpen(f.status)), cm=cnt('mo',m=>isOpen(m.status)), mp=as.reduce((n,a)=>n+moPessoas(a.mo),0);
+  set('loc',cl.n?String(cl.n):'',cl.ab?'warn':'',cl.ab?cl.ab+' em aberto (a cotar ou cotado)':'');
+  set('eqp',cq.n?String(cq.n):'',cq.ab?'warn':'',cq.ab?cq.ab+' alugado em aberto':'');
+  set('fab',cf.n?String(cf.n):'',cf.ab?'warn':'',cf.ab?cf.ab+' em aberto (ainda não está pronto)':'');
+  set('mo',cm.n?String(mp||cm.n):'',cm.ab?'warn':'',cm.n?(mp?plural(mp,'pessoa','pessoas')+' contratada'+(mp===1?'':'s'):'')+(cm.ab?' · '+cm.ab+' em aberto':''):'');
   set('fretes',nf?String(nf):'');
   set('docs',dp?String(dp):(dn?'✓':''),dp?'warn':dn?'ok':'',dp?dp+' com documento faltando ou vencido (pessoas e veículos)':dn?'Documentação em dia':'');
-  EV_TABS.forEach(([k,sel])=>{ const on=M.evTab===k, b=$('#evt-'+k); b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); b.tabIndex=on?0:-1; $(sel).hidden=!on; });
+  const act=(EV_TABS.find(([k])=>k===M.evTab)||EV_TABS[0])[1];
+  EV_TABS.forEach(([k])=>{ const on=M.evTab===k, b=$('#evt-'+k); if(!b) return; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); b.tabIndex=on?0:-1; });
+  Array.from(new Set(EV_TABS.map(x=>x[1]))).forEach(sel=>{ $(sel).hidden=sel!==act; });
+  const pa=$('#paneAmb'); if(pa) pa.setAttribute('aria-labelledby','evt-'+(act==='#paneAmb'?ambMode():'amb'));
   const ab=radarOfEv(ev.id).filter(x=>isOpen(x.status)).length, rl=$('#evRadar');
-  rl.hidden=!ab; rl.textContent=ab?plural(ab,'pendência','pendências')+' com terceiro no radar →':''; rl.title='Abrir o radar só com este evento';
+  rl.hidden=!ab; rl.textContent=ab?ab+' no radar →':''; rl.title=ab?plural(ab,'pendência','pendências')+' com terceiro — abrir o radar só com este evento':'';
 }
 function setEvTab(k,focus){
-  const ev=cur(); if(!ev) return; flushAll(); M.evTab=k; renderEvTabs(ev);
+  const ev=cur(); if(!ev) return; flushAll(); const prev=M.evTab; M.evTab=k;
+  if(AMB_MODES.indexOf(k)>=0&&k!==prev) renderDetail(); else renderEvTabs(ev);
   if(k==='escala') renderEscala(ev);
   const hd=$('#hdr'), y=hd?hd.offsetTop+hd.offsetHeight-8:0; if(window.scrollY>y) window.scrollTo({top:y});
-  if(focus){ const b=$('#evt-'+k); if(b) b.focus(); }
+  const b=$('#evt-'+k); if(b){ if(focus) b.focus(); if(b.scrollIntoView&&b.parentNode&&b.parentNode.scrollWidth>b.parentNode.clientWidth) b.scrollIntoView({block:'nearest',inline:'nearest'}); }
 }
 /* menu "Mais" do evento */
 function openMenuMais(){ const m=$('#menuMais'), b=$('#btnMais'); if(!m) return; m.hidden=false; b.setAttribute('aria-expanded','true'); const f=$$('button:not([hidden])',m)[0]; if(f) f.focus(); }
@@ -3202,21 +3341,23 @@ function wireAmbDrag(el){
   if(!el) return; const aid=el.dataset.mid;
   const et=$('.etapas',el); if(et) makeDraggable(et,'.erow.etapa','.drag',order=>reorderAmbArray(aid,'itens',order));
   const fb=$('.provs.fabs',el); if(fb) makeDraggable(fb,'.fabitem','.drag',order=>reorderAmbArray(aid,'fab',order));
-  const pv=$$('.provs',el).find(b=>!b.classList.contains('fabs')&&!b.classList.contains('eqps')); if(pv) makeDraggable(pv,'.prow[data-pid]','.drag',order=>reorderAmbArray(aid,'prov',order));
+  const pv=$('.provs.loc',el); if(pv) makeDraggable(pv,'.prow[data-pid]','.drag',order=>reorderAmbArray(aid,'prov',order));
   const eq=$('.provs.eqps',el); if(eq) makeDraggable(eq,'.qrow[data-qid]','.drag',order=>reorderAmbArray(aid,'equip',order));
+  const mo=$('.provs.mo',el); if(mo) makeDraggable(mo,'.morow[data-moid]','.drag',order=>reorderAmbArray(aid,'mo',order));
 }
-function forceRenderAmb(aid){ const ev=cur(); const el=$('.mat[data-mid="'+aid+'"]'); const a=ambientes.find(x=>x.id===aid); if(!el||!a||!ev) return; const idx=Array.from(el.parentNode.children).indexOf(el)+1; el.innerHTML=ambInnerHTML(a,idx,ev); el.dataset.rev=''; el.classList.toggle('folded',isFolded('a:'+aid,false)); wireAmbDrag(el); }
+function forceRenderAmb(aid){ const ev=cur(); const el=$('.mat[data-mid="'+aid+'"]'); const a=ambientes.find(x=>x.id===aid); if(!el||!a||!ev) return; const idx=Array.from(el.parentNode.children).indexOf(el)+1; paintAmb(el,a,idx,ev,''); wireAmbDrag(el); }
+/* lê da tela só a parte do ambiente que está desenhada (na aba Ambientes: nome, itens, obs; nas outras: só aquele tipo) — o resto continua como está */
 function collectAmb(el){
   const base=ambientes.find(x=>x.id===el.dataset.mid); if(!base) return null;
-  const v=(s,r)=>{ const i=$(s,r||el); return i?String(i.value).trim():''; };
-  return Object.assign({},base,{
-    nome:v('.m-nome'), obs:v('.m-obs'), produtorId:v('.a-prod'),
-    itens:$$('.etapa',el).map(r=>({id:r.dataset.eid,desc:v('.e-desc',r),de:dv($('.e-de',r)),ate:dv($('.e-ate',r)),desDe:dv($('.e-dde',r)),desAte:dv($('.e-date',r)),equipeId:v('.e-eq',r),equipeDesId:v('.e-eqd',r)})),
-    fab:$$('.fabitem[data-fbid]',el).map(r=>{ const quem=v('.fb-quem',r)||'NOSSA'; const terc=quem==='TERCEIRA'; const modo=terc?v('.fb-modo',r):''; return {id:r.dataset.fbid,oque:v('.fb-oque',r),qtd:v('.fb-qtd',r),material:v('.fb-mat',r),quem:quem,fornecedor:v('.fb-forn',r),inicio:dv($('.fb-ini',r)),prontoAte:dv($('.fb-pronto',r)),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.fb-ret',r)):'',chega:dv($('.fb-chega',r)),status:v('.fb-st',r),obs:v('.fb-obs',r)}; }),
-    prov:$$('.prow[data-pid]',el).map(r=>{ const tipo=v('.p-tipo',r)||'ALUGAR'; const alu=tipo==='ALUGAR'; const modo=v('.p-modo',r); return {id:r.dataset.pid,tipo:tipo,oque:v('.p-oque',r),quem:'TERCEIRA',fornecedor:v('.p-forn',r),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.p-ret',r)):'',data:dv($('.p-data',r)),devolve:alu?dv($('.p-dev',r)):'',status:v('.p-st',r)}; }),
-    equip:$$('.qrow[data-qid]',el).map(r=>{ const orig=v('.q-orig',r)||'PRÓPRIO'; const alug=orig==='ALUGADO'; const regId=pickVal(r,'q-pick'); const reg=regOf(regId); return {id:r.dataset.qid,regId:regId,nome:reg?reg.nome:v('.q-nome',r),origem:orig,fornecedor:alug?v('.q-forn',r):'',de:dv($('.q-de',r)),ate:dv($('.q-ate',r)),status:alug?v('.q-st',r):''}; }),
-    atualizadoEm:nowIso()
-  });
+  const v=(s,r)=>{ const i=$(s,r||el); return i?String(i.value).trim():''; }, has=s=>!!$(s,el);
+  const o=Object.assign({},base,{atualizadoEm:nowIso()});
+  if(has('.m-nome')) o.nome=v('.m-nome'); if(has('.m-obs')) o.obs=v('.m-obs'); if(has('.a-prod')) o.produtorId=v('.a-prod');
+  if(has('.etapas')) o.itens=$$('.etapa',el).map(r=>({id:r.dataset.eid,desc:v('.e-desc',r),de:dv($('.e-de',r)),ate:dv($('.e-ate',r)),desDe:dv($('.e-dde',r)),desAte:dv($('.e-date',r)),equipeId:v('.e-eq',r),equipeDesId:v('.e-eqd',r)}));
+  if(has('.provs.fabs')) o.fab=$$('.fabitem[data-fbid]',el).map(r=>{ const quem=v('.fb-quem',r)||'NOSSA'; const terc=quem==='TERCEIRA'; const modo=terc?v('.fb-modo',r):''; return {id:r.dataset.fbid,oque:v('.fb-oque',r),qtd:v('.fb-qtd',r),material:v('.fb-mat',r),quem:quem,fornecedor:v('.fb-forn',r),inicio:dv($('.fb-ini',r)),prontoAte:dv($('.fb-pronto',r)),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.fb-ret',r)):'',chega:dv($('.fb-chega',r)),status:v('.fb-st',r),obs:v('.fb-obs',r)}; });
+  if(has('.provs.loc')) o.prov=$$('.prow[data-pid]',el).map(r=>{ const tipo=v('.p-tipo',r)||'ALUGAR'; const alu=tipo==='ALUGAR'; const modo=v('.p-modo',r); return {id:r.dataset.pid,tipo:tipo,oque:v('.p-oque',r),quem:'TERCEIRA',fornecedor:v('.p-forn',r),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.p-ret',r)):'',data:dv($('.p-data',r)),devolve:alu?dv($('.p-dev',r)):'',status:v('.p-st',r)}; });
+  if(has('.provs.eqps')) o.equip=$$('.qrow[data-qid]',el).map(r=>{ const orig=v('.q-orig',r)||'PRÓPRIO'; const alug=orig==='ALUGADO'; const regId=pickVal(r,'q-pick'); const reg=regOf(regId); return {id:r.dataset.qid,regId:regId,nome:reg?reg.nome:v('.q-nome',r),origem:orig,fornecedor:alug?v('.q-forn',r):'',de:dv($('.q-de',r)),ate:dv($('.q-ate',r)),status:alug?v('.q-st',r):''}; });
+  if(has('.provs.mo')) o.mo=$$('.morow[data-moid]',el).map(r=>{ const q=Math.round(num(v('.mo-qtd',r))); return {id:r.dataset.moid,tipo:v('.mo-tipo',r)||'CARREGADOR',qtd:q>0?q:'',funcao:v('.mo-fun',r),de:dv($('.mo-de',r)),ate:dv($('.mo-ate',r)),horario:v('.mo-hor',r),fornecedor:v('.mo-forn',r),status:v('.mo-st',r)}; });
+  return o;
 }
 function setInd(el,txt,ok){ const s=$('.saveind',el); if(s){ s.textContent=txt; s.className='saveind'+(ok?' ok':''); } }
 /* ligação cronograma → escala: item que ganhou equipe ou data põe a equipe na escala desses dias (mexe lá, mexe cá) */
@@ -3233,7 +3374,7 @@ async function saveAmb(aid){
   const el=$('.mat[data-mid="'+aid+'"]'); if(!el) return;
   const a=collectAmb(el); if(!a) return;
   upsertLocal('ambientes',a); setInd(el,'salvando…'); autoEscalaItens(a);
-  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev) renderEvTabs(ev); } }
+  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev){ renderEvTabs(ev); renderMatsHint(ev); const md=ambMode(), c=$('.mcnt',el); if(c&&BLK[md]){ const L=a[BLK[md].list]||[]; c.textContent=BLK[md].cnt(a); c.classList.toggle('none',!L.length); } } } }
   catch(err){ setInd(el,'não salvou'); handleWriteError(err); }
 }
 function scheduleAmb(aid,ms){ const el=$('.mat[data-mid="'+aid+'"]'); if(el) setInd(el,'editando…'); schedule('amb:'+aid,()=>saveAmb(aid),ms); }
@@ -3285,7 +3426,7 @@ function delFrete(fid){ mutateHeader(o=>{ o.fretes=o.fretes.filter(f=>f.id!==fid
 async function addAmb(){
   const ev=cur(); if(!ev||readOnly) return;
   const ordem=ambsOf(ev.id).reduce((n,a)=>Math.max(n,Number(a.ordem)||0),0)+1;
-  const a={id:newId(),eventoId:ev.id,ordem:ordem,nome:'',produtorId:'',itens:[{id:newId(),desc:'',de:'',ate:'',desDe:'',desAte:'',equipeId:''}],fab:[],prov:[],equip:[],obs:'',criadoEm:nowIso(),atualizadoEm:nowIso()};
+  const a={id:newId(),eventoId:ev.id,ordem:ordem,nome:'',produtorId:'',itens:[{id:newId(),desc:'',de:'',ate:'',desDe:'',desAte:'',equipeId:''}],fab:[],prov:[],equip:[],mo:[],obs:'',criadoEm:nowIso(),atualizadoEm:nowIso()};
   upsertLocal('ambientes',a); renderDetail();
   const el=$('.mat[data-mid="'+a.id+'"]'); if(el){ el.scrollIntoView({block:'center',behavior:'smooth'}); const n=$('.m-nome',el); if(n) setTimeout(()=>n.focus(),60); }
   try{ await setDoc('ambientes',a); }catch(err){ handleWriteError(err); }
@@ -3304,6 +3445,8 @@ function delFab(el,id){ mutateAmb(el,a=>{ a.fab=a.fab.filter(x=>x.id!==id); retu
 function delProv(el,pid){ mutateAmb(el,a=>{ a.prov=a.prov.filter(x=>x.id!==pid); return null; }); }
 function addEquip(el,nome){ const fam=nome?eqParse(nome).fam:''; const same=fam?recsOf('EQUIPAMENTO').filter(r=>eqParse(r.nome).fam===fam):[]; const reg=same.length===1?same[0]:null; mutateAmb(el,a=>{ const e={id:newId(),regId:reg?reg.id:'',nome:reg?reg.nome:(nome||''),origem:'PRÓPRIO',fornecedor:'',de:'',ate:'',status:''}; a.equip.push(e); return e; },e=>'.qrow[data-qid="'+e.id+'"] '+(nome?'.q-orig':(recsOf('EQUIPAMENTO').some(r=>r.nome)?'.q-pick':'.q-nome'))); }
 function delEquip(el,qid){ mutateAmb(el,a=>{ a.equip=a.equip.filter(x=>x.id!==qid); return null; }); }
+function addMo(el,tipo){ mutateAmb(el,a=>{ const m={id:newId(),tipo:MO_TIPOS.indexOf(tipo)>=0?tipo:'CARREGADOR',qtd:'',funcao:'',de:'',ate:'',horario:'',fornecedor:'',status:'A COTAR'}; a.mo=(a.mo||[]).concat([m]); return m; },m=>'.morow[data-moid="'+m.id+'"] .mo-qtd'); }
+function delMo(el,id){ mutateAmb(el,a=>{ a.mo=(a.mo||[]).filter(x=>x.id!==id); return null; }); }
 async function delAmb(aid){
   const a=ambientes.find(x=>x.id===aid); if(!a) return;
   pending.delete('amb:'+aid);
@@ -3370,6 +3513,7 @@ function extrasHTML(ev,k,lv){
   x.itens.forEach(i=>L.push({c:i.tipo==='desm'?'x-des':'x-mon',t:(i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA'))+' · '+i.desc+(lv>=5&&i.amb?' ('+i.amb+')':'')+(i.t&&lv>=5?' — '+rShort(i.t):'')}));
   x.equip.forEach(q=>L.push({c:'x-eqp'+(q.origem==='ALUGADO'?' alug':''),t:'EQUIP. · '+q.nome+(q.origem==='ALUGADO'?' (ALUGADO'+(lv>=5&&q.forn?' '+q.forn:'')+')':q.origem==='CLIENTE'?' (DO CLIENTE)':'')}));
   x.fretes.forEach(f=>L.push({c:'x-frt',t:'FRETE · '+f.dir+' '+f.qtd+'× '+f.cam+(f.terc?' (DE FORA)':'')+(lv>=5&&f.oque?' — '+f.oque:'')}));
+  (x.mo||[]).forEach(m=>L.push({c:'x-mo'+(m.open?' open':''),t:moTxt(m,{amb:lv>=5,forn:lv>=5,st:lv>=5&&m.open})}));
   x.radar.forEach(r=>L.push({c:'x-rad'+(r.open?' open':''),t:r.verb+' · '+r.desc+(r.forn&&lv>=5?' — '+r.forn:'')+(lv>=5&&r.status?' ['+r.status+']':'')}));
   if(!L.length) return '';
   const max=lv>=5?99:6, more=L.length-max;
@@ -3405,12 +3549,14 @@ function cellHTML(ev,d,k,cw,ps,al,o){
 /* linhas de totais por dia (todos os eventos): gente, caminhão, equipamento, choque */
 function footRows(days,o){
   const keys=days.map(iso), today=today0();
-  const ppl=keys.map(()=>new Set()), cnt=keys.map(()=>0), sem=keys.map(()=>new Set()), frt=keys.map(()=>0), chq=keys.map(()=>0), eqp=new Map();
+  const ppl=keys.map(()=>new Set()), cnt=keys.map(()=>0), sem=keys.map(()=>new Set()), frt=keys.map(()=>0), chq=keys.map(()=>0), eqp=new Map(), car=keys.map(()=>({n:0,q:0,ab:0}));
   const idx=new Map(keys.map((k,i)=>[k,i]));
   evsAtivos().forEach(ev=>{
     const al=alOf(ev);
     keys.forEach((k,i)=>(al[k]||[]).forEach(t=>{ if(isProdId(t)) return; const g=going(ev,k,t); if(g){ g.forEach(n=>ppl[i].add(n)); return; } const r=regOf(t), n=r?Math.round(num(r.pessoas)):0; if(n>0) cnt[i]+=n; else sem[i].add(t); }));
     (ev.fretes||[]).forEach(f=>{ [f.ida,f.volta].forEach(k=>{ const i=idx.get(k); if(i!=null) frt[i]+=num(f.qtd)||1; }); });
+    /* carregadores contratados (todos os eventos): quantas pessoas em cada dia */
+    ambsOf(ev.id).forEach(a=>(a.mo||[]).forEach(m=>{ if((m.tipo||'CARREGADOR')!=='CARREGADOR') return; keys.forEach((k,i)=>{ if(!inSpan(k,m.de,m.ate)) return; const n=num(m.qtd)||0; if(n) car[i].n+=n; else car[i].q++; if(isOpen(m.status)) car[i].ab++; }); }));
     ambsOf(ev.id).forEach(a=>(a.equip||[]).forEach(q=>{ if((q.origem||'PRÓPRIO')!=='PRÓPRIO') return; const p=eqParse(q.nome); if(!p.fam) return; keys.forEach((k,i)=>{ if(inSpan(k,q.de,q.ate)){ let x=eqp.get(p.fam); if(!x){ x=keys.map(()=>0); eqp.set(p.fam,x); } x[i]+=p.n; } }); }));
   });
   if(IX){ IX.pday.forEach((evs,key)=>{ if(evs.length<2) return; const k=key.split('|').pop(); const i=idx.get(k); if(i!=null) chq[i]++; }); IX.vday.forEach((evs,key)=>{ if(evs.length<2) return; const i=idx.get(key.split('|').pop()); if(i!=null) chq[i]++; }); }
@@ -3419,6 +3565,7 @@ function footRows(days,o){
   let h='';
   h+=row('PESSOAS','todos os eventos',keys.map((k,i)=>{ const n=ppl[i].size+cnt[i]; return {t:(n?n:'')+(sem[i].size?'<small>+'+sem[i].size+' EQ.</small>':''),c:''}; }));
   if(frt.some(Boolean)) h+=row('CAMINHÕES','fretes indo ou voltando',frt.map(v=>({t:v||'',c:v?'hot':''})));
+  if(car.some(c=>c.n||c.q)) h+=row('CARREGADORES','contratados (laranja: em aberto)',car.map(c=>({t:(c.n?String(c.n):'')+(c.q?'<small>+'+c.q+'?</small>':''),c:(c.n||c.q)?(c.ab?'carab':'okc'):''})));
   Array.from(eqp.keys()).sort().forEach(f=>{ const n=own(f); h+=row(esc(f),n?'temos '+n:'não temos (alugar)',eqp.get(f).map(v=>({t:v?(v+(n?'/'+n:'')):'',c:v&&v>n?'bad':''}))); });
   if(chq.some(Boolean)) h+=row('CHOQUES','pessoa ou carro em 2 lugares',chq.map(v=>({t:v||'',c:v?'bad':''})));
   return h;
@@ -3887,10 +4034,10 @@ function eqListHTML(evId){
   return h+'</tbody></table>';
 }
 /* ===== radar ===== */
-const KINDS=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','FRETE'];
-const KT={'FABRICAÇÃO':'st-orange','LOCAÇÃO':'st-blue','COMPRA':'st-ok','EQUIPE TERC.':'st-navy','PRODUTOR':'st-navy','EQUIPAMENTO':'st-warn','FRETE':'st-grey'};
+const KINDS=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','MÃO DE OBRA','FRETE'];
+const KT={'FABRICAÇÃO':'st-orange','LOCAÇÃO':'st-blue','COMPRA':'st-ok','EQUIPE TERC.':'st-navy','PRODUTOR':'st-navy','EQUIPAMENTO':'st-warn','MÃO DE OBRA':'st-navy','FRETE':'st-grey'};
 /* o que dá pra editar no radar, por tipo (nome do campo na origem) */
-const RADAR_FIELDS={'PRODUTOR':{forn:'contato'},'EQUIPE TERC.':{forn:'contato'},'FRETE':{forn:'caminhao',chega:'ida',sai:'volta'},'FABRICAÇÃO':{forn:'fornecedor',inicio:'inicio',prontoAte:'prontoAte',retirada:'retirada',chega:'chega'},'LOCAÇÃO':{forn:'fornecedor',retirada:'retirada',chega:'data',sai:'devolve'},'COMPRA':{forn:'fornecedor',retirada:'retirada',chega:'data'},'EQUIPAMENTO':{forn:'fornecedor',chega:'de',sai:'ate'}};
+const RADAR_FIELDS={'PRODUTOR':{forn:'contato'},'EQUIPE TERC.':{forn:'contato'},'FRETE':{forn:'caminhao',chega:'ida',sai:'volta'},'FABRICAÇÃO':{forn:'fornecedor',inicio:'inicio',prontoAte:'prontoAte',retirada:'retirada',chega:'chega'},'LOCAÇÃO':{forn:'fornecedor',retirada:'retirada',chega:'data',sai:'devolve'},'COMPRA':{forn:'fornecedor',retirada:'retirada',chega:'data'},'EQUIPAMENTO':{forn:'fornecedor',chega:'de',sai:'ate'},'MÃO DE OBRA':{forn:'fornecedor',chega:'de',sai:'ate'}};
 const rdRef=it=>' data-col="'+esc(it.ref.col)+'" data-id="'+esc(it.ref.id)+'" data-list="'+esc(it.ref.list)+'" data-item="'+esc(it.ref.itemId)+'"';
 const rdKey=(it,f)=>esc(it.ref.id+'|'+it.ref.list+'|'+it.ref.itemId+'|'+f);
 function rdFld(it,f){ const m=RADAR_FIELDS[it.kind]; return m&&m[f]&&it.src&&!readOnly?m[f]:''; }
@@ -3908,7 +4055,7 @@ function radarListaHTML(items,evsAll,t,tone){
       const r=it.ref, ret=it.modo==='RETIRAMOS';
       h+='<tr data-id="'+esc(it.ev.id)+'"><td><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span></td>'
         +'<td class="m">'+esc(it.desc)+(it.sub?'<small>'+esc(it.sub)+'</small>':'')+'</td>'
-        +'<td class="ed">'+rdTxt(it,'forn',it.kind==='FABRICAÇÃO'&&(it.src&&(it.src.quem||'NOSSA')==='NOSSA')?'QUEM FABRICA':it.kind==='FRETE'?'QUAL CAMINHÃO / DE QUEM':it.kind==='PRODUTOR'||it.kind==='EQUIPE TERC.'?'CONTATO':'FORNECEDOR',it.forn)+'</td>'
+        +'<td class="ed">'+rdTxt(it,'forn',it.kind==='FABRICAÇÃO'&&(it.src&&(it.src.quem||'NOSSA')==='NOSSA')?'QUEM FABRICA':it.kind==='FRETE'?'QUAL CAMINHÃO / DE QUEM':it.kind==='PRODUTOR'||it.kind==='EQUIPE TERC.'?'CONTATO':it.kind==='MÃO DE OBRA'?'QUEM FORNECE':'FORNECEDOR',it.forn)+'</td>'
         +'<td class="date ed">'+(it.kind==='FABRICAÇÃO'?'<span class="rd-2">'+rdDate(it,'inicio',it.inicio)+'<i>→</i>'+rdDate(it,'prontoAte',it.prontoAte)+'</span>':'<span style="color:var(--faint)">—</span>')+'</td>'
         +'<td>'+esc(it.modo||'—')+'</td>'
         +'<td class="date ed">'+(ret?rdDate(it,'retirada',it.retirada):'<span style="color:var(--faint)">—</span>')+'</td>'
@@ -3929,7 +4076,7 @@ function radarQuadroHTML(items,t,evsAll){
   const split=list=>{ const by={}; cols.forEach(([c])=>by[c]=[]); list.forEach(it=>{ const c=rqColOf(it.status); (by[c]||by.cotar).push(it); }); return by; };
   const by=split(items), evIds=Array.from(new Set(items.map(it=>it.ev.id))), lanes=radarEv==='TODOS'&&evIds.length>1;
   const card=it=>{ const late=((it.chega&&it.chega<t)||(it.kind==='FABRICAÇÃO'&&!it.chega&&it.prontoAte&&it.prontoAte<t))&&isOpen(it.status);
-    const dt=it.kind==='FABRICAÇÃO'&&isOpen(it.status)&&it.prontoAte?'PRONTO ATÉ '+fmtDM(it.prontoAte):it.chega?(it.kind==='FRETE'?'VAI ':'CHEGA ')+fmtDM(it.chega):it.retirada?'RETIRA '+fmtDM(it.retirada):'';
+    const dt=it.kind==='FABRICAÇÃO'&&isOpen(it.status)&&it.prontoAte?'PRONTO ATÉ '+fmtDM(it.prontoAte):it.chega?(it.kind==='FRETE'?'VAI ':it.kind==='MÃO DE OBRA'?'DE ':'CHEGA ')+fmtDM(it.chega):it.retirada?'RETIRA '+fmtDM(it.retirada):'';
     return '<div class="rq-card'+(late?' late':'')+'" data-rk="'+rdKey(it,'card')+'"'+rdRef(it)+' data-ev="'+esc(it.ev.id)+'" tabindex="0">'
       +'<div class="rq-top"><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span>'+(late?'<span class="rq-late">ATRASADO</span>':'')+'<select class="rd-st rq-st t-'+(it.status?(COT_TONE[it.status]||'grey'):'grey')+'"'+rdRef(it)+' aria-label="Status de '+esc(it.desc)+'"'+(readOnly?' disabled':'')+'><option value="">SEM STATUS</option>'+it.statusList.map(o=>'<option value="'+esc(o)+'"'+(o===it.status?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select></div>'
       +'<b class="rq-desc">'+esc(it.desc)+'</b>'+(radarEv==='TODOS'&&!lanes?'<span class="rq-ev">'+esc(it.ev.nome||'(sem nome)')+'</span>':'')
@@ -4430,7 +4577,7 @@ function wire(){
   document.addEventListener('pointerup',rqEnd); document.addEventListener('pointercancel',rqEnd);
   const rqEv=ev=>{ const b=ev.target.closest('[data-rqev]'); if(!b) return false; radarEv=b.dataset.rqev; render(); if(radarEv!=='TODOS'){ const top=$('#viewPend'); if(top&&window.scrollY>top.offsetTop) window.scrollTo({top:Math.max(0,top.offsetTop-8)}); } return true; };
   $('#radarEvChips').addEventListener('click',rqEv);
-  ph.addEventListener('click',ev=>{ if(rqEv(ev)) return; const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab=c.dataset.list==='fretes'?'fretes':c.dataset.list==='equipes'||c.dataset.list==='produtores'?'escala':'amb'; render(); });
+  ph.addEventListener('click',ev=>{ if(rqEv(ev)) return; const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab={fretes:'fretes',equipes:'escala',produtores:'escala',prov:'loc',fab:'fab',equip:'eqp',mo:'mo'}[c.dataset.list]||'amb'; render(); });
   ph.addEventListener('keydown',ev=>{ const c=ev.target.closest&&ev.target.closest('.rq-card'); if(c&&ev.target===c&&ev.key==='Enter'){ ev.preventDefault(); c.click(); } });
   let rq=null; $('#radarQ').addEventListener('input',ev=>{ clearTimeout(rq); rq=setTimeout(()=>{ radarQ=ev.target.value; render(); },160); });
   $('#pendHost').addEventListener('change',ev=>{ const t=ev.target;
@@ -4561,6 +4708,8 @@ function wire(){
   mats.addEventListener('focusout',ev=>{ const row=ev.target.closest('.erow.etapa'); if(!row||row.contains(ev.relatedTarget)||!M.itemTouched||!M.itemTouched.has(row.dataset.eid)) return; const card=row.closest('.mat'); if(card) setTimeout(()=>{ if(pending.has('amb:'+card.dataset.mid)) flush('amb:'+card.dataset.mid); else { const a=ambientes.find(x=>x.id===card.dataset.mid); if(a) autoEscalaItens(a); } },0); });
   mats.addEventListener('focusout',ev=>{ const card=ev.target.closest('.mat'); if(card&&!card.contains(ev.relatedTarget)){ flush('amb:'+card.dataset.mid); setTimeout(()=>{ if(view==='eventos'&&currentId) renderDetail(); },0); } });
   mats.addEventListener('click',ev=>{
+    /* "ligado a este ambiente": vai pra aba do tipo, já no ambiente */
+    const go=ev.target.closest('[data-go]'); if(go){ const mid=(go.closest('.mat')||{}).dataset; setEvTab(go.dataset.go); setTimeout(()=>{ const el=mid&&$('.mat[data-mid="'+mid.mid+'"]'); if(el){ el.scrollIntoView({block:'start'}); window.scrollBy(0,-64); } },30); return; }
     const b=ev.target.closest('[data-act]'); if(!b) return; const act=b.dataset.act; const card=b.closest('.mat'); if(!card) return;
     if(/^add-/.test(act)){ const blk=b.closest('[data-fkey]'); if(blk&&blk.classList.contains('folded')) toggleFold(blk,blk.dataset.fkey,false); }
     if(act==='add-etapa') addItem(card,b.dataset.desc||'');
@@ -4571,6 +4720,8 @@ function wire(){
     else if(act==='del-prov'){ const row=b.closest('.prow'); if(row) delProv(card,row.dataset.pid); }
     else if(act==='add-equip') addEquip(card,b.dataset.nome||'');
     else if(act==='del-equip'){ const row=b.closest('.qrow'); if(row) delEquip(card,row.dataset.qid); }
+    else if(act==='add-mo') addMo(card,b.dataset.tipo||'CARREGADOR');
+    else if(act==='del-mo'){ const row=b.closest('.morow'); if(row) delMo(card,row.dataset.moid); }
     else if(act==='del-amb'){ b.hidden=true; $('[data-role="delconf"]',$('.mhead',card)).hidden=false; }
     else if(act==='del-amb-no'){ $('[data-role="delconf"]',$('.mhead',card)).hidden=true; $('[data-act="del-amb"]',card).hidden=false; }
     else if(act==='del-amb-yes') delAmb(card.dataset.mid);
@@ -5197,7 +5348,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const d=PD(k), ph=dayPhases(ev,ps,d,k), ts=(al[k]||[]).filter(t=>!EF||t===EF);
     const teams=noProd(ts).map(t=>{ const g=going(ev,k,t), mem=membersOf(t), mot=motoristaOf(t); return {t:t,nome:recNome(t),terc:!CLI&&!isPropria(t),g:g,mem:mem,part:!!g&&g.length<mem.length,fz:fazerEf(ev,k,t),ch:!CLI&&(teamConf(ev,k,t)||vehConf(ev,k,t).length>0),semMot:CLI?'':semMotorista(ev,k,t)}; });
     const prods=ts.filter(isProdId).map(t=>recNome(t));
-    let x={itens:[],equip:[],fretes:[],radar:[]};
+    let x={itens:[],equip:[],fretes:[],radar:[],mo:[]}; const xmo=CLI||EF?[]:(dayExtras(ev,k).mo||[]);
     if(!SIMP){
       x=dayExtras(ev,k);
       /* equipamento aparece no dia que chega e no dia que sai (alugado já vem pelo radar) */
@@ -5208,9 +5359,10 @@ function renderCrono(JsPDF,ev,O,S,tight){
       if(CLI) x.radar=[];
       if(EF) x={itens:x.itens.filter(i=>i.t===EF),equip:[],fretes:[],radar:[]};
     }
+    x.mo=xmo; /* carregadores: no detalhado e no simplificado (pra equipe), fora do cliente */
     const need=!EF&&!CLI&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!teams.length;
-    const sig=JSON.stringify([ph,teams.map(m=>[m.t,m.g,m.fz,m.ch,m.semMot]),prods,x.itens.map(i=>[i.tipo,i.desc,i.amb,i.t]),x.equip.map(q=>[q.lab,q.nome,q.origem]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque]),x.radar.map(r=>[r.verb,r.desc]),need]);
-    const empty=!teams.length&&!prods.length&&!x.itens.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!need;
+    const sig=JSON.stringify([ph,teams.map(m=>[m.t,m.g,m.fz,m.ch,m.semMot]),prods,x.itens.map(i=>[i.tipo,i.desc,i.amb,i.t]),x.equip.map(q=>[q.lab,q.nome,q.origem]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque]),x.radar.map(r=>[r.verb,r.desc]),x.mo.map(m=>[m.tipo,m.qtd,m.funcao,m.horario,m.amb]),need]);
+    const empty=!teams.length&&!prods.length&&!x.itens.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!x.mo.length&&!need;
     return {k:k,d:d,ph:ph,teams:teams,prods:prods,x:x,need:need,sig:sig,empty:empty};
   };
   const LABW=19;
@@ -5230,11 +5382,12 @@ function renderCrono(JsPDF,ev,O,S,tight){
     });
     if(b.prods.length) add('PRODUÇÃO: '+b.prods.join(', '),'bold',8.2,C.navy,0);
     if(b.need) add('SEM EQUIPE ESCALADA','bold',8.6,C.warn,0);
-    const x=b.x; const hasX=x.itens.length||x.equip.length||x.fretes.length||x.radar.length;
+    const x=b.x; const hasX=x.itens.length||x.equip.length||x.fretes.length||x.radar.length||x.mo.length;
     if(hasX&&(b.teams.length||b.prods.length||b.need)) L.push({gap:V(1.2),rule:true});
     x.itens.forEach(i=>add(i.desc+(i.amb?' ('+i.amb+')':'')+(i.t&&!EF?' — '+rShort(i.t):''),'normal',8,C.ink,0,i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA')));
     x.equip.forEach(q=>add(q.nome+(!CLI&&q.origem==='ALUGADO'?' (ALUGADO'+(q.forn?' · '+q.forn:'')+')':q.origem==='CLIENTE'?' (DO CLIENTE)':''),'normal',8,C.ink,0,q.lab));
     x.fretes.forEach(f=>add(f.qtd+'X '+f.cam+(f.oque?' — '+f.oque:'')+(!CLI&&f.terc?' (FRETE DE FORA)':''),'normal',8,C.ink,0,'FRETE '+f.dir));
+    x.mo.forEach(m=>add(moTxt(m,{amb:true,forn:!SIMP,st:m.open})+(!m.qtd?' (QUANTOS?)':''),'normal',8,m.open?C.ink:C.ink,0,m.tipo==='CARREGADOR'?'CARREG.':m.tipo==='MARCENEIRO'?'MARCEN.':'APOIO',m.open?C.warn:C.teal));
     x.radar.forEach(r=>add(r.desc+(r.forn?' — '+r.forn:'')+(r.status?'  ['+r.status+']':''),'normal',8,C.ink,0,RLAB[r.verb]||r.verb,r.open?C.warn:C.teal));
     while(L.length&&L[L.length-1].gap) L.pop();
     return L;
@@ -5308,6 +5461,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
         (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(f.oque||'?')+(f.qtd?' · '+f.qtd:''),sub:[f.prontoAte?'PRONTO ATÉ '+fmtDM(f.prontoAte):'',f.chega?'CHEGA '+fmtDM(f.chega):'',nossa?'NOSSA':'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:''),f.status||''].filter(Boolean).join('  ·  ')}); });
         (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:p.oque||'?',sub:[p.fornecedor||'',p.data?'CHEGA '+fmtDM(p.data):'',!com&&p.devolve?'DEVOLVE '+fmtDM(p.devolve):'',p.status||''].filter(Boolean).join('  ·  ')}); });
       }
+      if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ rows.push({lab:m.tipo==='CARREGADOR'?'CARREG.':m.tipo==='MARCENEIRO'?'MARCEN.':'APOIO',txt:moNome(m)+(m.tipo!=='OUTRO'&&tr(m.funcao)?' — '+normName(m.funcao):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
       if(!EF&&!SIMP) (a.equip||[]).forEach(q=>{ rows.push({lab:'EQUIP.',txt:q.nome||'EQUIPAMENTO',sub:[q.de||q.ate?periodoDM(q.de,q.ate):'',CLI?'':((q.origem||'PRÓPRIO')==='ALUGADO'?'ALUGADO'+(q.fornecedor?' · '+q.fornecedor:''):'')].filter(Boolean).join('  ·  ')}); });
       const obs=tr(a.obs)&&!EF&&!CLI?a.obs:'';
       if(!rows.length&&!obs) return;
@@ -5336,7 +5490,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
   /* ---------- 5. radar: o que precisa ficar pronto ---------- */
   const radarSec=()=>{
     const items=radarItems().filter(it=>it.ev.id===ev.id); if(!items.length||EF) return;
-    const RO=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPAMENTO','EQUIPE TERC.','PRODUTOR','FRETE'];
+    const RO=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPAMENTO','MÃO DE OBRA','EQUIPE TERC.','PRODUTOR','FRETE'];
     const groups=RO.map(k=>({k:k,list:items.filter(it=>it.kind===k)})).filter(g=>g.list.length);
     const keyd=it=>it.chega||it.prontoAte||it.retirada||it.sai||'9999';
     const W=CW-8;
@@ -5346,7 +5500,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
         return {it:it,dts:dts.join(' · '),tl:tl,sl:sl,_h:tl.length*LH(8.4)+sl.length*LH(7.2)+V(2.4)}; });
       g.h=V(7)+g.rows.reduce((s,r)=>s+r._h,0)+V(3); });
     section('RADAR — O QUE PRECISA FICAR PRONTO','fabricação, locação, compra, equipamento alugado, equipe e frete de fora · marque quando estiver resolvido',Math.min(groups[0].h,V(50)));
-    const KC={'FABRICAÇÃO':C.orange,'LOCAÇÃO':C.blue,'COMPRA':C.teal,'EQUIPAMENTO':C.warn,'EQUIPE TERC.':C.navy,'PRODUTOR':C.navy,'FRETE':C.muted};
+    const KC={'FABRICAÇÃO':C.orange,'LOCAÇÃO':C.blue,'COMPRA':C.teal,'EQUIPAMENTO':C.warn,'MÃO DE OBRA':C.navy,'EQUIPE TERC.':C.navy,'PRODUTOR':C.navy,'FRETE':C.muted};
     groups.forEach(g=>{
       const ab=g.list.filter(x=>isOpen(x.status)).length;
       const head=(cont)=>{ fc(KC[g.k]); doc.rect(ML,y+V(0.4),2.2,V(4.6),'F'); fnt('bold',9); tc(C.navy); T(g.k+'  ·  '+g.list.length+(g.list.length===1?' ITEM':' ITENS')+(ab?'  ·  '+ab+' EM ABERTO':'  ·  TUDO RESOLVIDO')+(cont?'  (CONTINUAÇÃO)':''),ML+4.5,y+V(4),{charSpace:0.3}); y+=V(7); };
@@ -5386,7 +5540,7 @@ async function exportRadarPDF(v){
   const doc=new jsPDF({unit:'mm',format:'a4',orientation:'landscape',compress:true});
   const W=297,H=210,M=10,CW=W-2*M; let y=M;
   const C={navy:[31,59,99],blue:[46,117,182],orange:[232,116,26],teal:[42,157,143],ink:[27,36,48],muted:[91,104,120],line:[211,218,228],white:[255,255,255],grey:[236,239,243],warn:[184,98,27],ok:[46,139,87]};
-  const KCOL={'FABRICAÇÃO':C.orange,'LOCAÇÃO':C.blue,'COMPRA':C.teal,'EQUIPE TERC.':C.navy,'PRODUTOR':C.navy,'EQUIPAMENTO':C.warn,'FRETE':C.muted};
+  const KCOL={'FABRICAÇÃO':C.orange,'LOCAÇÃO':C.blue,'COMPRA':C.teal,'EQUIPE TERC.':C.navy,'PRODUTOR':C.navy,'EQUIPAMENTO':C.warn,'MÃO DE OBRA':C.navy,'FRETE':C.muted};
   const fill=c=>doc.setFillColor(c[0],c[1],c[2]), draw=c=>doc.setDrawColor(c[0],c[1],c[2]), tcol=c=>doc.setTextColor(c[0],c[1],c[2]);
   const font=(w,s)=>{ doc.setFont('helvetica',w); doc.setFontSize(s); };
   const T=(s,x,yy,o)=>doc.text(pdfSafe(s),x,yy,o||{});
@@ -5415,7 +5569,7 @@ async function exportRadarPDF(v){
   const ab=items.filter(x=>isOpen(x.status)).length;
   font('bold',9); tcol(C.navy); T(items.length+' ITE'+(items.length===1?'M':'NS')+' · '+ab+' EM ABERTO · '+(items.length-ab)+' RESOLVIDO'+(items.length-ab===1?'':'S'),M,y); y+=7;
   /* tabelas por evento (se todos) e por tipo */
-  const ORDER=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','FRETE'];
+  const ORDER=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','MÃO DE OBRA','FRETE'];
   const evGroups=new Map(); items.forEach(it=>{ if(!evGroups.has(it.ev.id)) evGroups.set(it.ev.id,[]); evGroups.get(it.ev.id).push(it); });
   const evOrder=eventos.slice().map(e=>Object.assign({span:evSpan(e)},e)).sort((a,b)=>{ const fa=a.span.first||'9999', fb=b.span.first||'9999'; return fa<fb?-1:fa>fb?1:String(a.nome||'').localeCompare(String(b.nome||'')); }).filter(e=>evGroups.has(e.id));
   const colsFor=k=>{ const fab=k==='FABRICAÇÃO'; const c=[{h:'O QUÊ',w:fab?66:94},{h:k==='EQUIPE TERC.'||k==='PRODUTOR'?'CONTATO':'FORNECEDOR / QUEM',w:48}]; if(fab) c.push({h:'INÍCIO -> PRONTO',w:28}); c.push({h:'ENTREGA / RETIRADA',w:24},{h:k==='FABRICAÇÃO'||k==='LOCAÇÃO'||k==='COMPRA'?'RETIRA NO FORNEC.':'-',w:22},{h:k==='FRETE'?'VAI':k==='EQUIPE TERC.'||k==='EQUIPAMENTO'||k==='PRODUTOR'?'DE':'CHEGA NA MONTAGEM',w:22},{h:k==='LOCAÇÃO'?'DEVOLVE':k==='FRETE'?'VOLTA':k==='FABRICAÇÃO'||k==='COMPRA'?'-':'ATÉ',w:22},{h:'STATUS',w:CW-(fab?66:94)-48-(fab?28:0)-24-22-22-22}); return c; };
@@ -5530,7 +5684,7 @@ async function gerarPDFMapa(){
       ts.filter(isProdId).forEach(t=>items.push({t:'PROD. '+recNome(t),s:teamConf(ev,k,t)?'bad':'prod'}));
       const need=!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts0).length&&d>=today;
       if(need) items.push({t:'FALTA EQUIPE',s:'need'});
-      if(mp.extras){ const x=dayExtras(ev,k); x.itens.forEach(i=>items.push({t:(i.tipo==='desm'?'DESMONTA ':'MONTA ')+i.desc,s:'ex'})); x.equip.forEach(q=>items.push({t:'EQUIP. '+q.nome+(q.origem==='ALUGADO'?' (ALUG.)':''),s:'ex'})); x.fretes.forEach(f=>items.push({t:'FRETE '+f.dir+' '+f.qtd+'X '+f.cam,s:'ex'})); x.radar.forEach(r=>items.push({t:r.verb+' '+r.desc,s:'ex'})); }
+      if(mp.extras){ const x=dayExtras(ev,k); x.itens.forEach(i=>items.push({t:(i.tipo==='desm'?'DESMONTA ':'MONTA ')+i.desc,s:'ex'})); x.equip.forEach(q=>items.push({t:'EQUIP. '+q.nome+(q.origem==='ALUGADO'?' (ALUG.)':''),s:'ex'})); x.fretes.forEach(f=>items.push({t:'FRETE '+f.dir+' '+f.qtd+'X '+f.cam,s:'ex'})); x.radar.forEach(r=>items.push({t:r.verb+' '+r.desc,s:'ex'})); (x.mo||[]).forEach(m=>items.push({t:moNome(m),s:'ex'})); }
       return {ph:ph,items:items,need:need};
     };
     const wrapI=items=>items.map(it=>{ const st=STY[it.s],fs=st.z*F; doc.setFont('helvetica',st.f); doc.setFontSize(fs); const lines=doc.splitTextToSize(pdfS(it.t),CW-2.6-(st.ind||0)); return {lines:lines,st:st,fs:fs,h:lines.length*MM(fs)*1.2}; });
@@ -5904,7 +6058,7 @@ function wireLogin(){
    =================================================================== */
 const DIAS_LONG=['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 const WOPT_KEY='plenart.ui.whats';
-function wOpt(){ let o=null; try{ o=JSON.parse(localStorage.getItem(WOPT_KEY)||'null'); }catch(e){} return Object.assign({local:true,fazer:true,prod:true,carro:true},o||{}); }
+function wOpt(){ let o=null; try{ o=JSON.parse(localStorage.getItem(WOPT_KEY)||'null'); }catch(e){} return Object.assign({local:true,fazer:true,prod:true,carro:true,carreg:true},o||{}); }
 function wOptSave(o){ try{ localStorage.setItem(WOPT_KEY,JSON.stringify(o)); }catch(e){} }
 function openWhats(){ leavePanel(); M.panel={kind:'whats',dia:iso(addDays(today0(),1))}; buildPanel(); showPanel(); }
 /* o que cada equipe faz no dia k */
@@ -5937,6 +6091,7 @@ function wBloco(E,x,o){
     if(o.local&&tr(it.ev.local)) L.push('  Local: '+tr(it.ev.local));
     if(o.fazer&&tr(it.fazer)) L.push('  Fazer: '+tr(it.fazer).toUpperCase());
     if(o.prod){ const ps=E.prodEv.get(it.ev.id); if(ps&&ps.length) L.push('  Produtor: '+ps.join(', ')); }
+    if(o.carreg){ const mo=(dayExtras(it.ev,E.k).mo||[]); if(mo.length) L.push('  Mão de obra: '+mo.map(m=>moTxt(m)).join('; ')); }
   });
   if(o.carro&&r&&r.veiculoId){ const comCarro=x.itens.filter(it=>it.car); if(comCarro.length){ const mot=normName(r.motorista)||normName((regOf(r.veiculoId)||{}).condutor); L.push('Carro: '+vehName(r.veiculoId)+(mot?' — motorista '+pShort(mot):'')+(x.itens.length>1?' (vai pro '+tr(comCarro[0].ev.nome).toUpperCase()+')':'')); } }
   return L.join('\n');
@@ -5950,7 +6105,7 @@ function whatsParts(){
   const txt=wTexto(E,o);
   let h='<div class="w-dia"><button type="button" class="chip'+(p.dia===hoje?' on':'')+'" data-wd="'+hoje+'">HOJE</button><button type="button" class="chip'+(p.dia===amanha?' on':'')+'" data-wd="'+amanha+'">AMANHÃ</button>'
     +'<button type="button" class="zb" data-wn="-1" aria-label="Dia anterior">◀</button><b class="w-d">'+DIAS_LONG[E.d.getDay()]+' '+fmtLong(p.dia)+'</b><button type="button" class="zb" data-wn="1" aria-label="Próximo dia">▶</button></div>'
-    +'<div class="mp-opts w-opts">'+[['local','ENDEREÇO DO EVENTO'],['fazer','O QUE VAI FAZER'],['prod','PRODUTOR'],['carro','CARRO']].map(([k,l])=>'<button type="button" class="pp'+(o[k]?' on':'')+'" data-wo="'+k+'" aria-pressed="'+(o[k]?'true':'false')+'"><span class="pp-box"></span><span class="pp-n">'+l+'</span></button>').join('')+'</div>';
+    +'<div class="mp-opts w-opts">'+[['local','ENDEREÇO DO EVENTO'],['fazer','O QUE VAI FAZER'],['prod','PRODUTOR'],['carro','CARRO'],['carreg','CARREGADORES']].map(([k,l])=>'<button type="button" class="pp'+(o[k]?' on':'')+'" data-wo="'+k+'" aria-pressed="'+(o[k]?'true':'false')+'"><span class="pp-box"></span><span class="pp-n">'+l+'</span></button>').join('')+'</div>';
   if(E.semEq.length) h+='<p class="w-aviso">SEM EQUIPE NESSE DIA: '+E.semEq.map(s=>esc(tr(s.ev.nome).toUpperCase())+' ('+esc(phLabel(s.ph))+')').join(' · ')+'</p>';
   h+='<section><div class="sec-h"><h3>TODAS AS EQUIPES</h3></div><textarea class="w-txt" id="wTxt" readonly rows="'+Math.min(18,Math.max(5,txt.split('\n').length+1))+'" aria-label="Mensagem do dia">'+esc(txt)+'</textarea>'
     +'<div class="lg-acts"><button type="button" class="btn primary" data-wcp="">Copiar tudo</button><a class="btn" href="https://wa.me/?text='+encodeURIComponent(txt)+'" target="_blank" rel="noopener">Abrir no WhatsApp</a></div></section>';
