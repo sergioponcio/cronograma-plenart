@@ -1443,6 +1443,104 @@ div.thead{cursor:default}
   .mh-mode .tadd{flex-basis:100%}
 }
 </style>
+<style>
+/* ===================== v42: suprimentos como cadastro (lista + ficha) ===================== */
+.sup{margin-top:12px}
+.sup-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;margin-bottom:10px}
+.sup-t{flex:1 1 300px;min-width:0}
+.sup-t h2{margin:0;font:700 19px/1.1 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--head)}
+.sup-sum{margin:4px 0 0;font:500 13px/1.4 var(--body);color:var(--muted)}
+.sup-sum b{color:var(--ink);font-weight:700}
+.sup-sum em{font-style:normal;font-weight:700;color:var(--orange-ink)}
+.sup-add{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;margin-left:auto}
+.btn.sadd{border-left:4px solid var(--kc,var(--navy));padding:8px 14px 7px;font-size:13px}
+.btn.sadd.a-alu{--kc:var(--blue)} .btn.sadd.a-com{--kc:var(--teal)} .btn.sadd.a-nos{--kc:var(--navy)} .btn.sadd.a-ter{--kc:var(--orange)} .btn.sadd.a-car{--kc:var(--teal)} .btn.sadd.a-apo{--kc:var(--navy)}
+.btn.sadd:hover{border-color:var(--kc);border-left-color:var(--kc)}
+.sup-dest{flex-basis:100%;text-align:right;font:500 12px/1.3 var(--body);color:var(--muted)}
+.sup-dest b{color:var(--ink);font-weight:700}
+.sup-filt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:10px}
+.sup-filt .spacer{flex:1}
+.sup-filt .chip b{margin-left:4px;padding:0 5px;border-radius:8px;background:var(--grey-soft);color:var(--ink);font-variant-numeric:tabular-nums}
+.sup-filt .chip.on b{background:rgba(255,255,255,.22);color:inherit}
+.sup-filt .chip.zero{border-style:dashed}
+.sup-filt .chip.ab b{background:var(--orange-soft);color:var(--orange-ink)}
+.sup-filt .chip.ab.on{background:var(--orange);border-color:var(--orange);color:var(--on-accent)}
+.sup-filt .chip.ab.on b{background:rgba(255,255,255,.25);color:inherit}
+.sup-empty{margin:4px 0 0;padding:18px 16px;border:1px dashed var(--line-strong);background:var(--surface);color:var(--muted);font:500 13.5px/1.45 var(--body)}
+.sup-empty b{color:var(--ink)}
+/* uma linha por cadastro: clica e abre a ficha; a cotação muda direto na lista */
+.sup-list{display:flex;flex-direction:column;gap:6px}
+.srow{--kc:var(--line-strong);display:grid;grid-template-columns:minmax(0,1fr) 132px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--kc);border-radius:3px}
+.srow.k-alu{--kc:var(--blue)} .srow.k-com{--kc:var(--teal)} .srow.k-nos{--kc:var(--navy)} .srow.k-ter{--kc:var(--orange)} .srow.k-cli{--kc:var(--grey-head)} .srow.k-car{--kc:var(--teal)} .srow.k-apo{--kc:var(--navy)}
+.srow.sel{background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--focus)}
+.s-open{display:grid;grid-template-columns:88px minmax(0,1.6fr) minmax(0,1fr) minmax(0,1.1fr) minmax(0,.75fr);grid-template-areas:"k m f w a";gap:4px 14px;align-items:center;min-width:0;padding:9px 10px 9px 12px;background:none;border:0;color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+.s-open:hover{background:var(--surface-2)}
+.s-open:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.s-k{grid-area:k;font:700 11px/1.15 var(--cond);letter-spacing:.07em;text-transform:uppercase;color:var(--kc)}
+.srow.k-nos .s-k,.srow.k-apo .s-k{color:var(--head)}
+.s-m{grid-area:m;min-width:0}
+.s-m b{display:block;font:700 14.5px/1.2 var(--cond);letter-spacing:.03em;text-transform:uppercase;color:var(--head);overflow-wrap:anywhere}
+.s-m b.vazio{color:var(--faint);font-weight:600}
+.s-f{grid-area:f} .s-w{grid-area:w}
+.s-f,.s-w{min-width:0;font:600 12.5px/1.25 var(--cond);letter-spacing:.035em;text-transform:uppercase;color:var(--ink);overflow-wrap:anywhere}
+.s-f i,.s-w i{font-style:normal;font-weight:500;color:var(--faint);text-transform:none;letter-spacing:0;font-family:var(--body)}
+.s-open small{display:block;margin-top:2px;font:500 11.5px/1.3 var(--body);letter-spacing:0;color:var(--muted);text-transform:uppercase;overflow-wrap:anywhere}
+.s-a{grid-area:a;justify-self:start;max-width:100%;padding:3px 7px 2px;border-radius:3px;background:var(--grey-soft);color:var(--muted);font:700 10.5px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s-a.geral{background:var(--blue-soft);color:var(--mblue)}
+.srow select.s-st{justify-self:stretch;margin:0 10px 0 0;padding:6px 6px 5px;border:1px solid var(--line-strong);border-left-width:4px;background:var(--surface);color:var(--ink);border-radius:2px;font:700 11px/1.2 var(--cond);letter-spacing:.04em;text-transform:uppercase;min-width:0}
+.srow select.s-st.t-warn{border-left-color:var(--warn)} .srow select.s-st.t-blue{border-left-color:var(--blue)} .srow select.s-st.t-ok{border-left-color:var(--ok)} .srow select.s-st.t-navy{border-left-color:var(--navy)} .srow select.s-st.t-grey{border-left-color:var(--line-strong)}
+.srow.shead{background:none;border:0;border-left:4px solid transparent;margin-bottom:-2px}
+.srow.shead .s-open{cursor:default;padding-top:0;padding-bottom:0}
+.srow.shead .s-open:hover{background:none}
+.srow.shead span,.srow.shead .s-st{font:700 10.5px/1.2 var(--cond);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+/* aba Ambientes: o EVENTO TODO em cima */
+.ageral{margin:12px 0 0;border:1px solid var(--line);border-left:4px solid var(--mblue);border-radius:3px;background:var(--surface)}
+.ageral .ag-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:9px 12px 0}
+.ageral .ag-t b{font:700 14.5px/1.1 var(--cond);letter-spacing:.05em;color:var(--head)}
+.ageral .ag-t span{font:500 12.5px/1.3 var(--body);color:var(--muted)}
+.ageral .mlinks{border-top:0;background:none;padding-top:7px}
+.ageral .mlinks .lbl{display:none}
+/* ficha */
+.sp-ev{grid-column:1/-1;margin:3px 0 0;font:600 12.5px/1.3 var(--cond);letter-spacing:.05em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-body .fgrid2{align-items:end}
+.sp-body{gap:0}
+.sp-sec{display:flex;flex-direction:column;gap:12px;padding:16px 0;border-top:1px solid var(--line)}
+.sp-sec:first-child{border-top:0;padding-top:2px}
+.sp-sec[hidden]{display:none}
+.sp-sec>h3{margin:0;font:700 12px/1.2 var(--cond);letter-spacing:.1em;color:var(--head);text-transform:uppercase}
+.panel .sp-body .fld[hidden]{display:none}
+.sp-seg.wrap{flex-wrap:wrap}
+.sp-seg.wrap button{flex:1 1 30%;border-bottom:1px solid var(--line)}
+.sp-seg button[disabled]{cursor:default}
+.sp-sh{margin-top:-2px!important}
+.panel .sp-body #sp-oque{font-size:15.5px;line-height:1.4;min-height:88px}
+.sp-warn{padding:9px 11px;border-radius:3px;background:var(--orange-soft);color:var(--orange-ink);font:600 13px/1.4 var(--body)}
+.sp-warn[hidden]{display:none}
+.sp-warn .link{padding:0;font-size:12.5px;color:inherit;text-decoration:underline}
+#sp-regh .link{padding:0 0 0 2px;font-size:12px}
+.sp-foot{margin-top:4px}
+.sp-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.sp-acts .hint{flex-basis:100%}
+/* radar: rótulo da data (retira / na empresa) */
+.rd-lb{display:block;font:700 9.5px/1.1 var(--cond);letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+@media (max-width:1100px){
+  .s-open{grid-template-columns:82px minmax(0,1.3fr) minmax(0,1fr) auto;grid-template-areas:"k m m a" "k f w w";gap:3px 12px}
+  .srow.shead{display:none}
+}
+/* com a ficha aberta do lado, a lista fica mais estreita: cada linha em duas */
+@media (min-width:1000px) and (max-width:1580px){
+  body.panel-open .s-open{grid-template-columns:82px minmax(0,1.3fr) minmax(0,1fr) auto;grid-template-areas:"k m m a" "k f w w";gap:3px 12px}
+  body.panel-open .srow.shead{display:none}
+}
+@media (max-width:640px){
+  .sup-add{justify-content:flex-start;margin-left:0}
+  .sup-dest{text-align:left}
+  .srow{grid-template-columns:minmax(0,1fr)}
+  .s-open{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"k a" "m m" "f f" "w w";gap:3px 10px;padding:10px 10px 8px 12px}
+  .srow select.s-st{margin:0 10px 10px 12px}
+  .srow span.s-st{display:none}
+}
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -1535,10 +1633,10 @@ div.thead{cursor:default}
       <div class="evtabs" id="evTabs" role="tablist" aria-label="Partes do evento">
         <button type="button" class="evt" role="tab" data-evtab="escala" id="evt-escala" aria-controls="paneEscala">Escala<b id="etc-escala"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="amb" id="evt-amb" aria-controls="paneAmb">Ambientes<b id="etc-amb"></b></button>
-        <button type="button" class="evt" role="tab" data-evtab="loc" id="evt-loc" aria-controls="paneAmb">Locação e compra<b id="etc-loc"></b></button>
-        <button type="button" class="evt" role="tab" data-evtab="eqp" id="evt-eqp" aria-controls="paneAmb">Equipamentos<b id="etc-eqp"></b></button>
-        <button type="button" class="evt" role="tab" data-evtab="fab" id="evt-fab" aria-controls="paneAmb">Fabricação<b id="etc-fab"></b></button>
-        <button type="button" class="evt" role="tab" data-evtab="mo" id="evt-mo" aria-controls="paneAmb">Carregadores<b id="etc-mo"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="loc" id="evt-loc" aria-controls="paneSup">Locação e compra<b id="etc-loc"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="eqp" id="evt-eqp" aria-controls="paneSup">Equipamentos<b id="etc-eqp"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="fab" id="evt-fab" aria-controls="paneSup">Fabricação<b id="etc-fab"></b></button>
+        <button type="button" class="evt" role="tab" data-evtab="mo" id="evt-mo" aria-controls="paneSup">Carregadores<b id="etc-mo"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="fretes" id="evt-fretes" aria-controls="paneFretes">Fretes<b id="etc-fretes"></b></button>
         <button type="button" class="evt" role="tab" data-evtab="docs" id="evt-docs" aria-controls="paneDocs">Documentos<b id="etc-docs"></b></button>
         <span class="spacer"></span>
@@ -1570,9 +1668,13 @@ div.thead{cursor:default}
         <button class="btn sm" id="btnUnfoldAll" type="button" title="Abrir todos os ambientes">Abrir todos</button>
         <button class="btn primary" id="btnAddAmb" type="button">+ Ambiente</button>
       </div>
-      <p class="mats-hint" id="matsHint" hidden></p>
+      <div class="ageral" id="ambGeral" hidden></div>
       <div id="mats"></div>
-      <div class="emptymsg" id="matsEmpty" hidden>Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma vá colocando os itens com data e equipe, o que fabricar, alugar ou comprar e os equipamentos.</div>
+      <div class="emptymsg" id="matsEmpty" hidden>Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma coloque os itens com data e equipe.</div>
+      </div>
+
+      <div class="evpane" id="paneSup" role="tabpanel" aria-labelledby="evt-loc" hidden>
+      <div class="sup" id="supBox"></div>
       </div>
 
       <div class="evpane" id="paneFretes" role="tabpanel" aria-labelledby="evt-fretes" hidden>
@@ -1768,8 +1870,30 @@ function normalizeAmb(a){
   o.prov=Array.isArray(o.prov)?o.prov:[]; o.fab=Array.isArray(o.fab)?o.fab:[]; o.equip=(Array.isArray(o.equip)?o.equip:[]).map(q=>Object.assign({regId:''},q)); o.produtorId=o.produtorId||''; o.obs=o.obs||'';
   const oldFab=o.prov.filter(p=>p.tipo==='FABRICAR');
   if(oldFab.length){ oldFab.forEach(p=>{ const terc=(p.quem||'NOSSA')==='TERCEIRA'; o.fab.push({id:p.id,oque:p.oque||'',qtd:'',material:'',quem:p.quem||'NOSSA',fornecedor:p.fornecedor||'',inicio:'',prontoAte:terc?'':(p.data||''),modo:terc?(p.modo||''):'',retirada:terc?(p.retirada||''):'',chega:terc?(p.data||''):'',status:p.status||'',obs:''}); }); o.prov=o.prov.filter(p=>p.tipo!=='FABRICAR'); }
+  /* v42: a entrega antiga "ENTREGA" é a entrega no local; carregador: o que vai fazer fica em "oque"; marceneiro vira "outra mão de obra" */
+  const ent=x=>x&&x.modo==='ENTREGA'?Object.assign({},x,{modo:'ENTREGA NO LOCAL'}):x;
+  o.prov=o.prov.map(ent); o.fab=o.fab.map(ent);
+  o.mo=(Array.isArray(o.mo)?o.mo:[]).filter(m=>m&&typeof m==='object').map(moNorm);
+  if(o.id&&o.eventoId&&o.id===geralId(o.eventoId)){ o.geral=true; o.nome='EVENTO TODO'; o.ordem=-1; }
   return o;
 }
+function moNorm(m){
+  const x=Object.assign({},m);
+  if(x.tipo==='MARCENEIRO'){ x.tipo='OUTRO'; if(!tr(x.oque)&&tr(x.funcao)) x.oque=x.funcao; x.funcao='MARCENEIRO'; }
+  else if(x.tipo!=='OUTRO'){ x.tipo='CARREGADOR'; if(!tr(x.oque)&&tr(x.funcao)){ x.oque=x.funcao; x.funcao=''; } }
+  return x;
+}
+/* texto de várias linhas (o "o que é" da ficha): a 1ª linha é o título; o resto vai junto com " / " */
+const linhasDe=s=>String(s==null?'':s).split('\n').map(tr).filter(Boolean);
+const linha1=s=>linhasDe(s)[0]||'';
+const linhaResto=s=>linhasDe(s).slice(1).join(' / ');
+const linhas=s=>linhasDe(s).join(' / ');
+/* EVENTO TODO: o que atende o evento inteiro (não é de um ambiente só) mora num ambiente especial, com id fixo por evento */
+const geralId=evId=>'g-'+evId;
+const isGeral=a=>!!a&&(a.geral===true||(!!a.eventoId&&a.id===geralId(a.eventoId)));
+function ambGeral(evId){ return ambientes.find(a=>a.id===geralId(evId))||null; }
+function ambsReais(evId){ return ambsOf(evId).filter(a=>!isGeral(a)); }
+function ambTitulo(a){ return isGeral(a)?'EVENTO TODO':((a&&a.nome)||'(AMBIENTE SEM NOME)'); }
 /* cadastro: EQUIPE (nossa ou terceirizada, com integrantes, responsável, motorista e carro), PRODUTOR, EQUIPAMENTO (uma unidade por placa) e VEICULO (carro das equipes) */
 function normalizeRec(r){
   const o=Object.assign({tipo:'EQUIPE',nome:'',sigla:'',pessoas:'',funcao:'',qtd:1,contato:'',obs:'',ordem:0,lider:'',integrantes:'',motorista:'',veiculoId:'',placa:''},r);
@@ -1805,14 +1929,14 @@ function evSpan(ev){
   const push=(a,b)=>{ if(a&&(!min||a<min)) min=a; const z=b||a; if(z&&(!max||z>max)) max=z; };
   ['ev','mon','des'].forEach(k=>{ const a=ev[k+'Inicio'],b=ev[k+'Fim']; if(a||b) push(a||b,b||a); });
   if(isObj(ev.janelas)) ['mont','ev','desm'].forEach(k=>(Array.isArray(ev.janelas[k])?ev.janelas[k]:[]).forEach(x=>{ if(x&&(x.a||x.b)) push(x.a||x.b,x.b||x.a); }));
-  ambsOf(ev.id).forEach(a=>{ (a.itens||[]).forEach(it=>{ if(it.de||it.ate) push(it.de||it.ate, it.ate||it.de); if(it.desDe||it.desAte) push(it.desDe||it.desAte, it.desAte||it.desDe); }); (a.prov||[]).forEach(p=>{ if(p.data) push(p.data); if(p.devolve) push(p.devolve); if(p.retirada) push(p.retirada); }); (a.fab||[]).forEach(f=>{ ['inicio','prontoAte','retirada','chega'].forEach(k=>{ if(f[k]) push(f[k]); }); }); (a.equip||[]).forEach(e=>{ if(e.de||e.ate) push(e.de||e.ate,e.ate||e.de); }); });
+  ambsOf(ev.id).forEach(a=>{ (a.itens||[]).forEach(it=>{ if(it.de||it.ate) push(it.de||it.ate, it.ate||it.de); if(it.desDe||it.desAte) push(it.desDe||it.desAte, it.desAte||it.desDe); }); (a.prov||[]).forEach(p=>{ ['data','devolve','retirada','empresa'].forEach(k=>{ if(p[k]) push(p[k]); }); }); (a.fab||[]).forEach(f=>{ ['inicio','prontoAte','retirada','empresa','chega'].forEach(k=>{ if(f[k]) push(f[k]); }); }); (a.equip||[]).forEach(e=>{ if(e.de||e.ate) push(e.de||e.ate,e.ate||e.de); }); (a.mo||[]).forEach(m=>{ if(m.de||m.ate) push(m.de||m.ate,m.ate||m.de); }); });
   (ev.fretes||[]).forEach(f=>{ if(f.ida) push(f.ida); if(f.volta) push(f.volta); });
   const dd=isObj(ev.dias)?ev.dias:{}; Object.keys(dd).forEach(k=>{ if(Array.isArray(dd[k])&&dd[k].length) push(k); });
   return {first:min,last:max};
 }
 function evStats(ev){
   const as=ambsOf(ev.id); const r=radarItems().filter(x=>x.ev.id===ev.id);
-  return {fab:as.reduce((n,a)=>n+(a.fab||[]).length,0),loc:as.reduce((n,a)=>n+(a.prov||[]).length,0),ambientes:as.length,itens:as.reduce((n,a)=>n+(a.itens||[]).filter(x=>x.desc||x.de||x.equipeId).length,0),fretes:fretesTot(ev),fretesTerc:(ev.fretes||[]).filter(f=>f.origem==='TERCEIRO').reduce((n,f)=>n+num(f.qtd),0),equip:as.reduce((n,a)=>n+(a.equip||[]).length,0),equipAlug:as.reduce((n,a)=>n+(a.equip||[]).filter(e=>e.origem==='ALUGADO').length,0),equipes:(ev.equipes||[]).length,equipesTerc:(ev.equipes||[]).filter(teamIsTercEntry).length,radar:r.length,aberto:r.filter(x=>isOpen(x.status)).length};
+  return {fab:as.reduce((n,a)=>n+(a.fab||[]).length,0),loc:as.reduce((n,a)=>n+(a.prov||[]).length,0),ambientes:as.filter(a=>!isGeral(a)).length,itens:as.reduce((n,a)=>n+(a.itens||[]).filter(x=>x.desc||x.de||x.equipeId).length,0),fretes:fretesTot(ev),fretesTerc:(ev.fretes||[]).filter(f=>f.origem==='TERCEIRO').reduce((n,f)=>n+num(f.qtd),0),equip:as.reduce((n,a)=>n+(a.equip||[]).length,0),equipAlug:as.reduce((n,a)=>n+(a.equip||[]).filter(e=>e.origem==='ALUGADO').length,0),equipes:(ev.equipes||[]).length,equipesTerc:(ev.equipes||[]).filter(teamIsTercEntry).length,radar:r.length,aberto:r.filter(x=>isOpen(x.status)).length};
 }
 /* evento concluído fica arquivado: sai do mapa, do radar, dos choques e das agendas */
 const evAtivo=e=>!!e&&!e.concluido;
@@ -1828,12 +1952,13 @@ function radarItems(){
   });
   ambientes.forEach(a=>{
     const e=eventos.find(x=>x.id===a.eventoId); if(!evAtivo(e)) return;
-    (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; items.push({kind:'FABRICAÇÃO',ev:e,desc:f.oque||'?',sub:[f.qtd||'',f.material||'',f.obs||''].filter(Boolean).join(' · '),forn:nossa?('NOSSA'+(f.fornecedor?' — '+f.fornecedor:'')):(f.fornecedor||'TERCEIRA (A DEFINIR)'),modo:nossa?'':(f.modo||''),inicio:f.inicio||'',prontoAte:f.prontoAte||'',retirada:(!nossa&&f.modo==='RETIRAMOS')?(f.retirada||''):'',chega:f.chega||'',sai:'',status:f.status||'',statusList:COT_FAB,ref:{col:'ambientes',id:a.id,list:'fab',itemId:f.id}}); });
-    (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; items.push({kind:com?'COMPRA':'LOCAÇÃO',ev:e,desc:p.oque||'?',sub:'',forn:p.fornecedor||'',modo:p.modo||'',retirada:p.modo==='RETIRAMOS'?(p.retirada||''):'',chega:p.data||'',sai:com?'':(p.devolve||''),status:p.status||'',statusList:com?COT_COM:COT,ref:{col:'ambientes',id:a.id,list:'prov',itemId:p.id}}); });
-    (a.mo||[]).forEach(m=>{ items.push({kind:'MÃO DE OBRA',ev:e,desc:moNome(m),sub:[a.nome||'',m.tipo!=='OUTRO'?m.funcao||'':'',m.horario||''].filter(Boolean).join(' · '),forn:m.fornecedor||'',modo:'',retirada:'',chega:m.de||'',sai:m.ate||'',status:m.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'mo',itemId:m.id}}); });
-    (a.equip||[]).forEach(q=>{ if(q.origem==='ALUGADO') items.push({kind:'EQUIPAMENTO',ev:e,desc:q.nome||'EQUIPAMENTO',sub:'',forn:q.fornecedor||'',modo:'',retirada:'',chega:q.de||'',sai:q.ate||'',status:q.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'equip',itemId:q.id}}); });
+    const onde=ambTitulo(a);
+    (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA', md=nossa?'':(f.modo||''); items.push({kind:'FABRICAÇÃO',ev:e,desc:linhas(f.oque)||'?',sub:[onde,f.qtd||'',f.material||'',f.obs||''].filter(Boolean).join(' · '),forn:nossa?('NOSSA'+(f.fornecedor?' — '+f.fornecedor:'')):(f.fornecedor||'TERCEIRA (A DEFINIR)'),modo:md,inicio:f.inicio||'',prontoAte:f.prontoAte||'',retirada:md==='RETIRAMOS'?(f.retirada||''):'',empresa:md==='ENTREGA NA EMPRESA'?(f.empresa||''):'',chega:f.chega||'',sai:'',status:f.status||'',statusList:COT_FAB,ref:{col:'ambientes',id:a.id,list:'fab',itemId:f.id}}); });
+    (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR', md=p.modo||''; items.push({kind:com?'COMPRA':'LOCAÇÃO',ev:e,desc:(linhas(p.oque)||'?')+(tr(p.qtd)?' · '+tr(p.qtd):''),sub:onde,forn:p.fornecedor||'',modo:md,retirada:md==='RETIRAMOS'?(p.retirada||''):'',empresa:md==='ENTREGA NA EMPRESA'?(p.empresa||''):'',chega:p.data||'',sai:com?'':(p.devolve||''),status:p.status||'',statusList:com?COT_COM:COT,ref:{col:'ambientes',id:a.id,list:'prov',itemId:p.id}}); });
+    (a.mo||[]).forEach(m=>{ items.push({kind:'MÃO DE OBRA',ev:e,desc:moNome(m),sub:[onde,linhas(m.oque),m.horario||''].filter(Boolean).join(' · '),forn:m.fornecedor||'',modo:'',retirada:'',chega:m.de||'',sai:m.ate||'',status:m.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'mo',itemId:m.id}}); });
+    (a.equip||[]).forEach(q=>{ if(q.origem==='ALUGADO') items.push({kind:'EQUIPAMENTO',ev:e,desc:q.nome||'EQUIPAMENTO',sub:onde,forn:q.fornecedor||'',modo:'',retirada:'',chega:q.de||'',sai:q.ate||'',status:q.status||'',statusList:COT,ref:{col:'ambientes',id:a.id,list:'equip',itemId:q.id}}); });
   });
-  items.forEach(it=>{ it.data=it.chega||it.prontoAte||it.retirada||it.sai||''; it.oque=it.desc; it.amb=it.sub; it.quem=it.forn; it.devolve=it.sai;
+  items.forEach(it=>{ it.data=it.chega||it.prontoAte||it.retirada||it.empresa||it.sai||''; it.oque=it.desc; it.amb=it.sub; it.quem=it.forn; it.devolve=it.sai;
     const r=it.ref, o=(r.col==='eventos'?eventos:ambientes).find(x=>x.id===r.id); it.src=o?((o[r.list]||[]).find(x=>x.id===r.itemId)||null):null; });
   return items;
 }
@@ -1998,6 +2123,7 @@ function mergeIncoming(col,incoming){
   const keep=new Map(); arrOf(col).forEach(o=>{ if(savingDoc.has(col+'/'+o.id)||(pre&&typeof pending!=='undefined'&&pending.has(pre+o.id))) keep.set(o.id,o); });
   const out=incoming.map(o=>keep.has(o.id)?keep.get(o.id):o);
   keep.forEach((o,id)=>{ if(!out.some(x=>x.id===id)) out.push(o); });
+  if(typeof baseFromIncoming==='function') baseFromIncoming(col,incoming,new Set(keep.keys()));
   return out;
 }
 /* muda um evento (escala, equipes, produtores) e grava */
@@ -2082,6 +2208,7 @@ async function connect(){
       ME=pf; loginFecha(); renderEu();
       const got=await Promise.all([sbFetch('eventos'),sbFetch('ambientes'),sbFetch('recursos')]);
       storage='db'; eventos=got[0]; ambientes=got[1]; recursos=got[2];
+      ['eventos','ambientes','recursos'].forEach((c,i)=>baseFromIncoming(c,got[i]));
       loaded={eventos:true,ambientes:true,recursos:true};
       onData(); setStatus(); if(ME.admin) atualizaPendentes();
       ['eventos','ambientes','recursos'].forEach(col=>{ try{ sb.channel('rt-'+col).on('postgres_changes',{event:'*',schema:'public',table:col},()=>sbReload(col)).subscribe(); }catch(e){} });
@@ -2096,13 +2223,16 @@ async function connect(){
   setStatus();
 }
 async function setDoc(col,obj){
-  const body=Object.assign({},obj); delete body.id;
   if(storage==='db'){
+    /* junta o que eu mudei com o que está no banco agora (outra pessoa pode ter gravado nesse meio tempo) */
+    const out=await mergeAntes(col,obj,async()=>{ const q=await sb.from(col).select('id,data').eq('id',obj.id).maybeSingle(); if(q.error) throw q.error; return q.data?sbMap(col,q.data):null; });
+    const body=Object.assign({},out); delete body.id;
     let r=await sb.from(col).upsert({id:obj.id,data:body,updated_at:new Date().toISOString()});
     if(r.error&&/fetch|network|timeout/i.test(String(r.error.message||''))){ await sleep(500+Math.random()*500); r=await sb.from(col).upsert({id:obj.id,data:body,updated_at:new Date().toISOString()}); }
     if(r.error) throw r.error;
+    mergeDepois(col,obj,out);
   }
-  else if(storage==='local'){ upsertLocal(col,obj); lsSet(lsKey(col),arrOf(col)); }
+  else if(storage==='local'){ const body=Object.assign({},obj); delete body.id; upsertLocal(col,obj); lsSet(lsKey(col),arrOf(col)); }
   else throw {code:'connecting'};
 }
 async function delDoc(col,id){
@@ -2149,6 +2279,73 @@ function handleWriteError(err){
   if(code==='invalid_argument'){ readOnly=true; setBanner('Você não tem permissão pra editar aqui. Peça acesso de colaborador ao dono da página.'); toast('Sem permissão pra salvar.',true); return; }
   if(code==='quota_exceeded'){ toast('Limite de registros do banco atingido. Exclua eventos antigos.',true); return; }
   toast('Não consegui salvar ('+(code||'erro')+'). Tenta de novo.',true);
+}
+/* ===================================================================
+   VÁRIAS PESSOAS MEXENDO AO MESMO TEMPO (reunião de alinhamento do evento)
+   Cada documento (evento, ambiente, cadastro) guarda a BASE: a última versão do banco que esta tela viu.
+   Na hora de gravar, o que EU mudei (base → minha versão) é aplicado em cima do que está no banco AGORA:
+   item por item nas listas com id (locações, fretes, itens…), chave por chave nos mapas (escala por dia),
+   campo por campo nos objetos. Assim ninguém apaga o que o outro acabou de colocar.
+   =================================================================== */
+const BASE=new Map(), SRVNEW=new Map();
+const jclone=o=>o==null?o:JSON.parse(JSON.stringify(o));
+/* comparação estável (a ordem das chaves não importa) */
+function stab(o){ if(Array.isArray(o)) return '['+o.map(stab).join(',')+']'; if(o&&typeof o==='object') return '{'+Object.keys(o).filter(k=>o[k]!==undefined).sort().map(k=>JSON.stringify(k)+':'+stab(o[k])).join(',')+'}'; return JSON.stringify(o===undefined?null:o); }
+const same=(a,b)=>stab(a)===stab(b);
+const isIdList=v=>Array.isArray(v)&&v.every(x=>x&&typeof x==='object'&&!Array.isArray(x)&&x.id!=null);
+const isPrimList=v=>Array.isArray(v)&&v.every(x=>x==null||typeof x!=='object');
+/* base = o que eu tinha visto · local = o meu · server = o que está no banco agora */
+function merge3(base,local,server){
+  if(base===undefined) return local===undefined?server:local;
+  if(same(local,base)) return server;   /* eu não mexi: vale o do banco */
+  if(same(server,base)) return local;   /* só eu mexi */
+  if(local===undefined) return server;  /* eu apaguei, o outro mudou: fica o do outro */
+  if(server===undefined) return local;  /* o outro apagou, eu mudei: fica o meu */
+  const A=Array.isArray(base)||Array.isArray(local)||Array.isArray(server);
+  if(A){
+    const B=Array.isArray(base)?base:[], L=Array.isArray(local)?local:[], S=Array.isArray(server)?server:[];
+    if(isIdList(B)&&isIdList(L)&&isIdList(S)) return mergeIdList(B,L,S);
+    if(isPrimList(B)&&isPrimList(L)&&isPrimList(S)) return mergePrimList(B,L,S);
+    return local;
+  }
+  if(base&&local&&server&&typeof base==='object'&&typeof local==='object'&&typeof server==='object'){
+    const out={}; new Set(Object.keys(base).concat(Object.keys(local),Object.keys(server))).forEach(k=>{ const r=merge3(base[k],local[k],server[k]); if(r!==undefined) out[k]=r; });
+    return out;
+  }
+  return local; /* valor simples que os dois mudaram: fica o meu (sou o último a gravar) */
+}
+function mergeIdList(B,L,S){
+  const bm=new Map(B.map(x=>[x.id,x])), lm=new Map(L.map(x=>[x.id,x])), sm=new Map(S.map(x=>[x.id,x])), out=[];
+  S.forEach(s=>{ const b=bm.get(s.id), l=lm.get(s.id);
+    if(b&&!l){ if(same(s,b)) return; out.push(s); return; } /* eu tirei: some (se o outro não mexeu nele) */
+    if(b&&l){ out.push(merge3(b,l,s)); return; }
+    out.push(l||s); });
+  /* o que eu incluí: entra perto de onde está na minha lista */
+  L.forEach((l,i)=>{ if(bm.has(l.id)||sm.has(l.id)) return; let at=-1; for(let j=i-1;j>=0&&at<0;j--){ const p=L[j]; at=out.findIndex(x=>x.id===p.id); } out.splice(at+1,0,l); });
+  return out;
+}
+function mergePrimList(B,L,S){ const rem=B.filter(x=>L.indexOf(x)<0), add=L.filter(x=>B.indexOf(x)<0); const out=S.filter(x=>rem.indexOf(x)<0); add.forEach(x=>{ if(out.indexOf(x)<0) out.push(x); }); return out; }
+const normCol=(col,o)=>col==='eventos'?normalizeEv(o):col==='ambientes'?normalizeAmb(o):col==='recursos'?normalizeRec(o):o;
+/* guarda a base de tudo que chegou do banco (o que ainda está gravando aqui guarda à parte, como "novo do banco") */
+function baseFromIncoming(col,incoming,keepIds){ incoming.forEach(o=>{ const key=col+'/'+o.id; if(keepIds&&keepIds.has(o.id)) SRVNEW.set(key,o); else BASE.set(key,jclone(o)); }); }
+/* antes de gravar: junta o meu com o que está no banco agora; depois de gravar: a base vira o que foi gravado e
+   a tela recebe o que os outros tinham colocado (sem perder o que eu digitei enquanto gravava) */
+/* base "em branco" (listas vazias): pra juntar um documento novo daqui com o mesmo documento criado por outra pessoa */
+function blankOf(o){ if(Array.isArray(o)) return []; if(o&&typeof o==='object'){ const b={}; Object.keys(o).forEach(k=>{ const v=o[k]; if(v&&typeof v==='object') b[k]=blankOf(v); }); return b; } return undefined; }
+async function mergeAntes(col,obj,fresh){
+  const key=col+'/'+obj.id, base=BASE.get(key);
+  let srv=null; try{ srv=await fresh(); }catch(e){ srv=SRVNEW.get(key)||null; }
+  /* documento que nasceu aqui: se outra pessoa já criou o mesmo (id fixo, ex.: o EVENTO TODO), fica o dos dois */
+  if(!base) return srv?merge3(blankOf(srv),obj,srv):obj;
+  if(!srv||same(srv,base)) return obj;
+  return merge3(base,obj,srv);
+}
+function mergeDepois(col,obj,out){
+  const key=col+'/'+obj.id; BASE.set(key,jclone(out)); SRVNEW.delete(key);
+  if(out===obj||same(out,obj)) return;
+  const curr=arrOf(col).find(x=>x.id===obj.id); if(!curr) return;
+  const nl=same(curr,obj)?out:merge3(obj,curr,out);
+  if(!same(nl,curr)){ upsertLocal(col,nl); if(typeof refresh==='function') setTimeout(refresh,0); }
 }
 /* ===================================================================
    ESCALA — quem está onde em cada dia (mapa de dias)
@@ -2352,15 +2549,15 @@ function evUsesRec(rid){ return eventos.filter(ev=>{ const al=allocsOf(ev); retu
 function inSpan(k,a,b){ if(!a&&!b) return false; const x=a||b,y=b||a; return x<=y?(k>=x&&k<=y):k===x; }
 function itemTeamRid(ev,it){ const t=team(ev,it.equipeId); return t&&t.regId?t.regId:''; }
 function itemTeamRidDes(ev,it){ const t=team(ev,it.equipeDesId||it.equipeId); return t&&t.regId?t.regId:''; }
-const RVERB={'FABRICAÇÃO':{inicio:'COMEÇA A FABRICAR',prontoAte:'FICA PRONTO',retirada:'RETIRAR',chega:'CHEGA'},'LOCAÇÃO':{retirada:'RETIRAR',chega:'CHEGA',sai:'DEVOLVER'},'COMPRA':{retirada:'RETIRAR',chega:'CHEGA'},'EQUIPAMENTO':{chega:'CHEGA',sai:'SAI'}};
-/* mão de obra de apoio: "10 CARREGADORES", "2 MARCENEIROS", "1 ELETRICISTA" (OUTRO usa a função) */
-function moNome(m){ const n=num(m.qtd)||0, t=m.tipo==='OUTRO'?(normName(m.funcao)||'MÃO DE OBRA'):m.tipo==='MARCENEIRO'?(n===1?'MARCENEIRO':'MARCENEIROS'):(n===1?'CARREGADOR':'CARREGADORES'); return (n?n+' ':'')+t; }
-function moTxt(m,o){ o=o||{}; return moNome(m)+(m.tipo!=='OUTRO'&&tr(m.funcao)?' — '+normName(m.funcao):'')+(tr(m.horario)?' · '+normName(m.horario):'')+(o.amb&&m.amb?' ('+m.amb+')':'')+(o.forn&&tr(m.forn||m.fornecedor)?' · '+normName(m.forn||m.fornecedor):'')+(o.st&&m.status?' ['+m.status+']':''); }
+const RVERB={'FABRICAÇÃO':{inicio:'COMEÇA A FABRICAR',prontoAte:'FICA PRONTO',retirada:'RETIRAR',empresa:'CHEGA NA EMPRESA',chega:'CHEGA'},'LOCAÇÃO':{retirada:'RETIRAR',empresa:'CHEGA NA EMPRESA',chega:'CHEGA',sai:'DEVOLVER'},'COMPRA':{retirada:'RETIRAR',empresa:'CHEGA NA EMPRESA',chega:'CHEGA'},'EQUIPAMENTO':{chega:'CHEGA',sai:'SAI'}};
+/* mão de obra de apoio: "10 CARREGADORES", "1 ELETRICISTA" (outra mão de obra usa a função); o que vai fazer fica em "oque" */
+function moNome(m){ const n=num(m.qtd)||0, t=m.tipo==='OUTRO'?(normName(m.funcao)||'MÃO DE OBRA'):(n===1?'CARREGADOR':'CARREGADORES'); return (n?n+' ':'')+t; }
+function moTxt(m,o){ o=o||{}; const oq=linhas(m.oque); return moNome(m)+(oq?' — '+normName(oq):'')+(tr(m.horario)?' · '+normName(m.horario):'')+(o.amb&&m.amb?' ('+m.amb+')':'')+(o.forn&&tr(m.forn||m.fornecedor)?' · '+normName(m.forn||m.fornecedor):'')+(o.st&&m.status?' ['+m.status+']':''); }
 function dayExtras(ev,k){
   const out={itens:[],equip:[],fretes:[],radar:[],mo:[]};
   ambsOf(ev.id).forEach(a=>{
     (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t:itemTeamRidDes(ev,it)}); });
-    (a.mo||[]).forEach(m=>{ if(inSpan(k,m.de,m.ate)) out.mo.push({tipo:m.tipo||'CARREGADOR',funcao:m.funcao||'',qtd:m.qtd,horario:m.horario||'',forn:m.fornecedor||'',status:m.status||'',open:isOpen(m.status),amb:a.nome||''}); });
+    (a.mo||[]).forEach(m=>{ if(inSpan(k,m.de,m.ate)) out.mo.push({tipo:m.tipo||'CARREGADOR',funcao:m.funcao||'',oque:m.oque||'',qtd:m.qtd,horario:m.horario||'',forn:m.fornecedor||'',status:m.status||'',open:isOpen(m.status),amb:a.nome||''}); });
     (a.equip||[]).forEach(q=>{ if(inSpan(k,q.de,q.ate)){ const x=q.de||q.ate,y=q.ate||q.de; out.equip.push({nome:q.nome||'EQUIPAMENTO',origem:q.origem||'PRÓPRIO',amb:a.nome||'',forn:q.fornecedor||'',status:q.status||'',a:x,b:y<x?x:y}); } });
   });
   (ev.fretes||[]).forEach(f=>{ const base={qtd:num(f.qtd)||1,cam:f.caminhao||'CAMINHÃO',oque:freteOque(ev,f),terc:f.origem==='TERCEIRO',status:f.status||''}; if(f.ida===k) out.fretes.push(Object.assign({dir:'VAI'},base)); if(f.volta===k) out.fretes.push(Object.assign({dir:'VOLTA'},base)); });
@@ -2866,7 +3063,7 @@ function evRowHTML(e,arq){
     const sem=semEquipeDays(e,null).length; if(sem) st.push('<span class="bdg warn" title="Dias de montagem, manutenção ou desmontagem sem ninguém escalado">FALTA EQUIPE · '+plural(sem,'DIA','DIAS')+'</span>');
   }
   if(!arq){ const ab=radarOfEv(e.id).filter(x=>isOpen(x.status)).length; if(ab) st.push('<span class="bdg" title="Pendências com terceiro no radar (fabricação, locação, compra, frete…)">'+ab+' EM ABERTO</span>'); }
-  const nt=teamsOfEv(e).length, na=ambsOf(e.id).length, meta=[nt?plural(nt,'equipe','equipes'):'',na?plural(na,'ambiente','ambientes'):''].filter(Boolean).join(' · ');
+  const nt=teamsOfEv(e).length, na=ambsReais(e.id).length, meta=[nt?plural(nt,'equipe','equipes'):'',na?plural(na,'ambiente','ambientes'):''].filter(Boolean).join(' · ');
   const act=readOnly?'':arq?'<button type="button" class="btn sm" data-reabrir="'+esc(e.id)+'">Reabrir</button>':(g==='fim'?'<button type="button" class="btn sm okb" data-concl="'+esc(e.id)+'">✓ Concluir</button>':'');
   return '<li class="evr'+(arq?' arq':'')+'" data-id="'+esc(e.id)+'">'
     +'<button type="button" class="evr-main" data-open-ev="'+esc(e.id)+'"><span class="evr-n">'+esc(e.nome||'(sem nome)')+'</span>'+(tr(e.local)?'<span class="evr-l">'+esc(e.local)+'</span>':'')+(()=>{ const pg=prodGeral(e), n=(e.produtores||[]).length; return pg?'<span class="evr-p">PRODUTOR GERAL: <b>'+esc(prodNome(pg))+'</b>'+(n>1?' + '+(n-1)+' DE APOIO':'')+'</span>':''; })()+'</button>'
@@ -3121,52 +3318,6 @@ function itemRowHTML(it,ev){
     +cell('c-eqd','Equipe que desmonta','<select class="e-eqd'+(tercD?' terc':'')+(td?' set':'')+'">'+itemTeamOpts(ev,it.equipeDesId,t?'A MESMA ('+esc(clip(entryName(t)||'',18))+')':'— a mesma que monta')+'</select>')
     +'<button type="button" class="icon-btn" data-act="del-etapa" title="Tirar item" aria-label="Tirar item">×</button>'+warn+'</div>';
 }
-function provRowHTML(p){
-  const com=p.tipo==='COMPRAR'; const ret=p.modo==='RETIRAMOS';
-  return '<div class="prow '+(com?'com':'alu')+(ret?' ret':'')+'" data-pid="'+esc(p.id)+'">'
-    +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
-    +cell('c-tipo','Tipo','<select class="p-tipo"><option value="ALUGAR"'+(com?'':' selected')+'>ALUGAR</option><option value="COMPRAR"'+(com?' selected':'')+'>COMPRAR</option></select>')
-    +cell('c-oque','O quê','<input class="p-oque" type="text" placeholder="'+(com?'EX: PARAFUSOS, CARPETE, LIXEIRAS':'EX: LONA, FERRAGEM, BANHEIRO, MOBILIÁRIO')+'" value="'+esc(p.oque||'')+'" autocomplete="off">')
-    +cell('c-forn','Fornecedor','<input class="p-forn" type="text" placeholder="'+(com?'ONDE COMPRA':'DE QUEM ALUGA')+'" value="'+esc(p.fornecedor||'')+'" autocomplete="off">')
-    +cell('c-modo','Entrega / retirada','<select class="p-modo">'+opt(['ENTREGA','RETIRAMOS'],p.modo||'')+'</select>')
-    +cell('c-ret','Retirada no fornecedor',dateInput('p-ret',p.retirada))
-    +cell('c-data','Chega na montagem',dateInput('p-data',p.data))
-    +cell('c-dev','Devolve',dateInput('p-dev',p.devolve))
-    +cell('c-st','Cotação','<select class="p-st">'+opt(com?COT_COM:COT,p.status||'')+'</select>')
-    +'<button type="button" class="icon-btn" data-act="del-prov" title="Tirar item" aria-label="Tirar item">×</button></div>';
-}
-function fabRowHTML(f){
-  const terc=(f.quem||'NOSSA')==='TERCEIRA'; const ret=terc&&f.modo==='RETIRAMOS';
-  return '<div class="fabitem'+(terc?' terc':'')+(ret?' ret':'')+'" data-fbid="'+esc(f.id)+'">'
-    +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
-    +'<div class="fabrow r1">'
-    +cell('c-oque','O que fabricar','<input class="fb-oque" type="text" placeholder="EX: LONA 6X40, BANDEIRA, FECHAMENTO LATERAL" value="'+esc(f.oque||'')+'" autocomplete="off">')
-    +cell('c-qtd','Quantidade / medidas','<input class="fb-qtd" type="text" placeholder="EX: 2 PEÇAS 8,30X4,00H" value="'+esc(f.qtd||'')+'" autocomplete="off">')
-    +cell('c-mat','Material','<input class="fb-mat" type="text" placeholder="EX: LONA CRISTAL, FERRO, MADEIRA" value="'+esc(f.material||'')+'" autocomplete="off">')
-    +cell('c-quem','Quem fabrica','<select class="fb-quem"><option value="NOSSA"'+(terc?'':' selected')+'>NOSSA</option><option value="TERCEIRA"'+(terc?' selected':'')+'>TERCEIRA</option></select>')
-    +cell('c-forn',terc?'Fornecedor':'Quem fabrica (pessoa / setor)','<input class="fb-forn" type="text" placeholder="'+(terc?'EMPRESA / QUEM FABRICA':'EX: PATRICIA, SETOR DE LONAS')+'" value="'+esc(f.fornecedor||'')+'" autocomplete="off">')
-    +cell('c-st','Status','<select class="fb-st">'+opt(COT_FAB,f.status||'')+'</select>')
-    +'<button type="button" class="icon-btn" data-act="del-fab" title="Tirar fabricação" aria-label="Tirar fabricação">×</button></div><div class="fabrow r2">'
-    +cell('c-ini','Início da fabricação',dateInput('fb-ini',f.inicio))
-    +cell('c-pronto','Pronto até',dateInput('fb-pronto',f.prontoAte))
-    +cell('c-modo','Entrega / retirada','<select class="fb-modo">'+opt(['ENTREGA','RETIRAMOS'],f.modo||'')+'</select>')
-    +cell('c-ret','Retirada no fornecedor',dateInput('fb-ret',f.retirada))
-    +cell('c-chega','Chega na montagem',dateInput('fb-chega',f.chega))
-    +cell('c-obs','Obs','<input class="fb-obs" type="text" placeholder="DETALHES, ACABAMENTO, COR, REFERÊNCIA" value="'+esc(f.obs||'')+'" autocomplete="off">')
-    +'</div></div>';
-}
-function equipRowHTML(e){
-  const orig=e.origem||'PRÓPRIO'; const alug=orig==='ALUGADO';
-  return '<div class="qrow '+(alug?'alug':'prop')+'" data-qid="'+esc(e.id)+'">'
-    +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
-    +pickCell('c-nome','Equipamento','q-pick','EQUIPAMENTO',e.regId,e.nome,'<input class="q-nome" type="text" list="dlEquip" placeholder="EMPILHADEIRA, MUNCK PLACA…, GENIE" value="'+esc(e.nome||'')+'" autocomplete="off">','OUTRO / ALUGADO (DIGITAR)')
-    +cell('c-orig','Próprio / alugado','<select class="q-orig"><option value="PRÓPRIO"'+(orig==='PRÓPRIO'?' selected':'')+'>PRÓPRIO</option><option value="ALUGADO"'+(alug?' selected':'')+'>ALUGADO</option><option value="CLIENTE"'+(orig==='CLIENTE'?' selected':'')+'>DO CLIENTE</option></select>')
-    +cell('c-forn','Fornecedor','<input class="q-forn" type="text" placeholder="DE QUEM ALUGA" value="'+esc(e.fornecedor||'')+'" autocomplete="off">')
-    +cell('c-de','De',''+dateInput('q-de',e.de||'')+'')
-    +cell('c-ate','Até',''+dateInput('q-ate',e.ate||'')+'')
-    +cell('c-st','Cotação','<select class="q-st">'+opt(COT,e.status||'')+'</select>')
-    +'<button type="button" class="icon-btn" data-act="del-equip" title="Tirar equipamento" aria-label="Tirar equipamento">×</button></div>';
-}
 function ambSummary(a){
   const it=(a.itens||[]).filter(x=>x.desc||x.de||x.equipeId).length, fb=(a.fab||[]).length, fbAb=(a.fab||[]).filter(f=>isOpen(f.status)).length;
   const alu=(a.prov||[]).filter(p=>p.tipo!=='COMPRAR').length, com=(a.prov||[]).filter(p=>p.tipo==='COMPRAR').length, eq=(a.equip||[]).length, eqA=(a.equip||[]).filter(e=>e.origem==='ALUGADO').length;
@@ -3178,55 +3329,14 @@ function blockTitle(key,def,label,cnt,hint,add){
   const f=isFolded(key,def);
   return {cls:f?' folded':'',html:'<div class="ptitle" data-act="fold" role="button" tabindex="0" aria-expanded="'+(f?'false':'true')+'"><span class="fi" aria-hidden="true"></span><span class="pt">'+label+'</span><span class="pc">'+esc(cnt)+'</span><small>'+hint+'</small><span class="tadd">'+add+'</span></div>'};
 }
-/* ---------- carregadores e mão de obra de apoio (quem vem de fora ajudar) ---------- */
-const MO_TIPOS=['CARREGADOR','MARCENEIRO','OUTRO'];
 const moPessoas=list=>(list||[]).reduce((n,m)=>n+(num(m.qtd)||0),0);
-function moRowHTML(m){
-  const tipo=MO_TIPOS.indexOf(m.tipo)>=0?m.tipo:'CARREGADOR';
-  return '<div class="morow'+(tipo==='OUTRO'?' outro':'')+'" data-moid="'+esc(m.id)+'">'
-    +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
-    +cell('c-tipo','Tipo','<select class="mo-tipo">'+MO_TIPOS.map(x=>'<option value="'+x+'"'+(x===tipo?' selected':'')+'>'+x+'</option>').join('')+'</select>')
-    +cell('c-qtd','Pessoas','<input class="mo-qtd" type="number" min="1" step="1" inputmode="numeric" placeholder="QTD" value="'+esc(m.qtd==null?'':m.qtd)+'">')
-    +cell('c-fun',tipo==='OUTRO'?'Função / o que vai fazer':'O que vai fazer','<input class="mo-fun" type="text" placeholder="'+(tipo==='CARREGADOR'?'EX: DESCARREGAR A CARRETA DO GALPÃO':tipo==='MARCENEIRO'?'EX: BALCÃO DO LOUNGE':'EX: ELETRICISTA, PINTOR, LIMPEZA')+'" value="'+esc(m.funcao||'')+'" autocomplete="off">')
-    +cell('c-de','De',dateInput('mo-de',m.de||''))
-    +cell('c-ate','Até',dateInput('mo-ate',m.ate||''))
-    +cell('c-hor','Horário','<input class="mo-hor" type="text" placeholder="EX: 6H ÀS 14H" value="'+esc(m.horario||'')+'" autocomplete="off">')
-    +cell('c-forn','Quem fornece','<input class="mo-forn" type="text" placeholder="EMPRESA / PESSOA / TELEFONE" value="'+esc(m.fornecedor||'')+'" autocomplete="off">')
-    +cell('c-st','Cotação','<select class="mo-st">'+opt(COT,m.status||'')+'</select>')
-    +'<button type="button" class="icon-btn" data-act="del-mo" title="Tirar" aria-label="Tirar">×</button></div>';
-}
-/* ---------- as abas do que está ligado aos ambientes (cada uma mostra os ambientes com só aquele tipo) ---------- */
-const AMB_MODES=['amb','loc','eqp','fab','mo'];
-const ambMode=()=>AMB_MODES.indexOf(M.evTab)>=0?M.evTab:'amb';
-const BLK={
-  loc:{list:'prov',cls:'provs loc',nome:'locação ou compra',
-    add:()=>'<button type="button" class="chip alu" data-act="add-prov" data-tipo="ALUGAR">+ Alugar</button><button type="button" class="chip com" data-act="add-prov" data-tipo="COMPRAR">+ Comprar</button>',
-    cnt:a=>{ const L=a.prov||[], alu=L.filter(p=>p.tipo!=='COMPRAR').length, com=L.length-alu, ab=L.filter(p=>isOpen(p.status)).length; return L.length?[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+(ab?' · '+ab+' em aberto':' · tudo fechado'):'nada'; },
-    head:'<div class="prow phead"><span class="dcol"></span><span>Tipo</span><span>O quê</span><span>Fornecedor</span><span>Entrega / retirada</span><span>Retirada no fornecedor</span><span>Chega na montagem</span><span>Devolve</span><span>Cotação</span><span></span></div>',
-    row:p=>provRowHTML(p)},
-  eqp:{list:'equip',cls:'provs eqps',nome:'equipamento',
-    add:()=>'<button type="button" class="chip eqp" data-act="add-equip" data-nome="EMPILHADEIRA">+ Empilhadeira</button><button type="button" class="chip eqp" data-act="add-equip" data-nome="MUNCK">+ Munck</button><button type="button" class="chip other" data-act="add-equip" data-nome="">+ Outro equipamento</button>',
-    cnt:a=>{ const L=a.equip||[], al=L.filter(e=>e.origem==='ALUGADO').length; return L.length?plural(L.length,'equipamento','equipamentos')+(al?' · '+al+' alugado'+(al===1?'':'s'):''):'nenhum'; },
-    head:'<div class="qrow qhead"><span class="dcol"></span><span>Equipamento</span><span>Próprio / alugado</span><span>Fornecedor</span><span>De</span><span>Até</span><span>Cotação (se alugado)</span><span></span></div>',
-    row:e=>equipRowHTML(e)},
-  fab:{list:'fab',cls:'provs fabs',nome:'fabricação',
-    add:()=>'<button type="button" class="chip fab" data-act="add-fab">+ Fabricação</button>',
-    cnt:a=>{ const L=a.fab||[], ab=L.filter(f=>isOpen(f.status)).length; return L.length?plural(L.length,'peça','peças')+(ab?' · '+ab+' em aberto':' · tudo pronto'):'nada'; },
-    head:'',row:f=>fabRowHTML(f)},
-  mo:{list:'mo',cls:'provs mo',nome:'contratação de carregador',
-    add:()=>'<button type="button" class="chip mo" data-act="add-mo" data-tipo="CARREGADOR">+ Carregador</button><button type="button" class="chip mo" data-act="add-mo" data-tipo="MARCENEIRO">+ Marceneiro</button><button type="button" class="chip other" data-act="add-mo" data-tipo="OUTRO">+ Outra mão de obra</button>',
-    cnt:a=>{ const L=a.mo||[], mp=moPessoas(L), ab=L.filter(m=>isOpen(m.status)).length; return L.length?(mp?plural(mp,'pessoa','pessoas'):plural(L.length,'contratação','contratações'))+(ab?' · '+ab+' em aberto':' · tudo fechado'):'ninguém'; },
-    head:'<div class="morow mohead"><span class="dcol"></span><span>Tipo</span><span>Pessoas</span><span>O que vai fazer</span><span>De</span><span>Até</span><span>Horário</span><span>Quem fornece</span><span>Cotação</span><span></span></div>',
-    row:m=>moRowHTML(m)}
-};
-/* aba Ambientes: o que está ligado a cada ambiente (clica e vai pra aba) */
-function ambLinksHTML(a){
-  const L=[['loc','LOCAÇÃO E COMPRA',a.prov,p=>isOpen(p.status)],['eqp','EQUIPAMENTOS',a.equip,q=>q.origem==='ALUGADO'&&isOpen(q.status)],['fab','FABRICAÇÃO',a.fab,f=>isOpen(f.status)],['mo','CARREGADORES',a.mo,m=>isOpen(m.status)]];
-  return '<div class="mlinks"><span class="lbl">Ligado a este ambiente</span>'+L.map(([k,l,arr,op])=>{ const n=(arr||[]).length, ab=(arr||[]).filter(op).length, t=n?BLK[k].cnt(a).split(' · ')[0]:'';
-    return '<button type="button" class="mlink'+(n?'':' vazio')+(ab?' ab':'')+'" data-go="'+k+'" title="Abrir a aba '+esc(l.toLowerCase())+' neste ambiente">'+l+(n?'<b>'+esc(t)+'</b>':'<i>+ pôr</i>')+(ab?'<em>'+ab+' em aberto</em>':'')+'</button>'; }).join('')+'</div>';
+/* aba Ambientes: o que está ligado a cada ambiente (clica e vai pra aba do tipo, já filtrada nesse ambiente) */
+function ambLinksHTML(a,lbl){
+  const L=[['loc','LOCAÇÃO E COMPRA','prov'],['eqp','EQUIPAMENTOS','equip'],['fab','FABRICAÇÃO','fab'],['mo','CARREGADORES','mo']];
+  return '<div class="mlinks"><span class="lbl">'+(lbl||'Ligado a este ambiente')+'</span>'+L.map(([k,l,list])=>{ const arr=a[list]||[], n=arr.length, ab=arr.filter(x=>supAberto(k,x)).length, t=n?supContaCurta(k,arr):'';
+    return '<button type="button" class="mlink'+(n?'':' vazio')+(ab?' ab':'')+'" data-go="'+k+'" data-amb="'+esc(a.id)+'" title="Abrir '+esc(l.toLowerCase())+' só '+(isGeral(a)?'do evento todo':'deste ambiente')+'">'+l+(n?'<b>'+esc(t)+'</b>':'<i>+ pôr</i>')+(ab?'<em>'+ab+' em aberto</em>':'')+'</button>'; }).join('')+'</div>';
 }
 function ambInnerHTML(a,idx,ev){
-  const mode=ambMode(); if(mode!=='amb') return ambModeHTML(a,idx,ev,mode);
   const prods=ev.produtores||[]; const K='a:'+a.id;
   let h='<div class="mhead"><span class="drag amb" title="Arrastar pra reordenar" aria-hidden="true">⠇</span><button type="button" class="fold" data-act="fold-amb" title="Recolher / abrir o ambiente" aria-label="Recolher / abrir o ambiente"><span class="fi" aria-hidden="true"></span></button><span class="mnum">#'+idx+'</span><span class="mlabel">Ambiente</span><input class="m-nome" type="text" placeholder="NOME DO AMBIENTE (EX: QG, GALPÃO 50X130, ÁREA EXTERNA, LOUNGE)" value="'+esc(a.nome||'')+'" autocomplete="off">';
   h+='<label class="amb-sel">Produtor <select class="a-prod"><option value="">'+(prods.length?'—':'— cadastre em cima')+'</option>'+prods.map(p=>'<option value="'+esc(p.id)+'"'+(p.id===a.produtorId?' selected':'')+'>'+esc(p.nome||'(SEM NOME)')+((p.tipo||'PRÓPRIO')==='TERCEIRIZADO'?' (TERC.)':'')+(prodGeral(ev)===p&&prods.length>1?' · GERAL':'')+'</option>').join('')+'</select></label>';
@@ -3242,20 +3352,13 @@ function ambInnerHTML(a,idx,ev){
   h+='<div class="mobs"><label>Obs</label><input class="m-obs" type="text" placeholder="OBSERVAÇÕES DO AMBIENTE (O QUE LEVAR, DETALHES)" value="'+esc(a.obs||'')+'" autocomplete="off"></div>';
   return h;
 }
-/* nas abas de locação, equipamentos, fabricação e carregadores: o ambiente vira um grupo com só aquele tipo */
-function ambModeHTML(a,idx,ev,mode){
-  const b=BLK[mode], L=a[b.list]||[], pn=prodName(ev,a.produtorId);
-  return '<div class="mhead mh-mode"><span class="mnum">#'+idx+'</span><span class="mname">'+esc(a.nome||'(AMBIENTE SEM NOME)')+'</span>'+(pn?'<span class="mprod">PRODUTOR '+esc(pn)+'</span>':'')+'<span class="mcnt'+(L.length?'':' none')+'">'+esc(b.cnt(a))+'</span><span class="spacer"></span>'+(readOnly?'':'<span class="tadd">'+b.add()+'</span>')+'<span class="saveind"></span></div>'
-    +'<div class="'+b.cls+' inmode">'+(L.length?b.head:'')+L.map(b.row).join('')+'</div>';
-}
-function applyAmbFolds(){ const m=ambMode(); $$('#mats .mat').forEach(el=>{ const f=m==='amb'&&isFolded('a:'+el.dataset.mid,false); el.classList.toggle('folded',f); const b=$('.fold',el); if(b) b.setAttribute('aria-expanded',f?'false':'true'); }); }
-function foldAllAmbs(f){ ambsOf(currentId).forEach(a=>setFold('a:'+a.id,f)); applyAmbFolds(); }
-function revOf(a,ev){ return JSON.stringify([ambMode(),a.nome,a.produtorId,a.itens,a.fab,a.prov,a.equip,a.mo,a.obs,(ev.equipes||[]).map(t=>[t.id,t.regId,entryName(t),teamIsTercEntry(t)]),(ev.produtores||[]).map(p=>[p.id,p.regId,p.tipo,p.papel]),recsOf('EQUIPAMENTO').map(r=>[r.id,r.nome]),recsSorted('EQUIPE').map(r=>[r.id,r.nome,r.propria]),ev.dias]); }
+function applyAmbFolds(){ $$('#mats .mat').forEach(el=>{ const f=isFolded('a:'+el.dataset.mid,false); el.classList.toggle('folded',f); const b=$('.fold',el); if(b) b.setAttribute('aria-expanded',f?'false':'true'); }); }
+function foldAllAmbs(f){ ambsReais(currentId).forEach(a=>setFold('a:'+a.id,f)); applyAmbFolds(); }
+function revOf(a,ev){ return JSON.stringify([a.nome,a.produtorId,a.itens,a.fab,a.prov,a.equip,a.mo,a.obs,(ev.equipes||[]).map(t=>[t.id,t.regId,entryName(t),teamIsTercEntry(t)]),(ev.produtores||[]).map(p=>[p.id,p.regId,p.tipo,p.papel]),recsOf('EQUIPAMENTO').map(r=>[r.id,r.nome]),recsSorted('EQUIPE').map(r=>[r.id,r.nome,r.propria]),ev.dias]); }
 /* desenha o cartão / grupo do ambiente no modo da aba */
 function paintAmb(el,a,idx,ev,rev){
-  const mode=ambMode(); el.innerHTML=ambInnerHTML(a,idx,ev); el.dataset.rev=rev||'';
-  el.classList.toggle('m-modo',mode!=='amb'); el.classList.toggle('m-vazio',mode!=='amb'&&!(a[(BLK[mode]||{}).list]||[]).length);
-  el.classList.toggle('folded',mode==='amb'&&isFolded('a:'+a.id,false));
+  el.innerHTML=ambInnerHTML(a,idx,ev); el.dataset.rev=rev||'';
+  el.classList.toggle('folded',isFolded('a:'+a.id,false));
 }
 /* evento concluído: faixa no topo e botão de reabrir */
 function renderArq(ev){
@@ -3263,17 +3366,13 @@ function renderArq(ev){
   if(ab){ ab.hidden=!ev.concluido; ab.innerHTML=ev.concluido?'<b>EVENTO CONCLUÍDO'+(parseISO(ev.concluido)?' EM '+fmtLong(ev.concluido):'')+'</b><span>Está nos ARQUIVADOS: não aparece no mapa, no radar, nos choques nem nas agendas das equipes.</span>'+(readOnly?'':'<button type="button" class="btn sm" data-arq-reabrir>Reabrir</button>'):''; }
   if(bc){ bc.hidden=readOnly||!!ev.concluido; bc.classList.toggle('hot',acabou); bc.title=acabou?'O evento já terminou: concluir tira ele do mapa e do radar (fica nos ARQUIVADOS)':'Concluir tira o evento do mapa e do radar (fica nos ARQUIVADOS)'; }
 }
-const AMB_EMPTY='Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma coloque os itens com data e equipe. Locação, equipamentos, fabricação e carregadores ficam nas abas deles, ligados ao ambiente.';
-/* resumo do evento no topo das abas de cada tipo */
-function modeHintHTML(ev,mode){
-  const as=ambsOf(ev.id), all=k=>as.reduce((arr,a)=>arr.concat(a[k]||[]),[]);
-  if(mode==='loc'){ const L=all('prov'), alu=L.filter(p=>p.tipo!=='COMPRAR').length, com=L.length-alu, ab=L.filter(p=>isOpen(p.status)).length; return L.length?'<b>'+[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo fechado')+' — o que é de fora e ainda não fechou aparece também no radar.':'Nada pra alugar ou comprar ainda. Use <b>+ Alugar</b> ou <b>+ Comprar</b> no ambiente onde vai ficar.'; }
-  if(mode==='eqp'){ const L=all('equip'), al=L.filter(e=>e.origem==='ALUGADO').length, ab=L.filter(e=>e.origem==='ALUGADO'&&isOpen(e.status)).length; return L.length?'<b>'+plural(L.length,'equipamento','equipamentos')+'</b>'+(al?' · '+al+' alugado'+(al===1?'':'s'):'')+(ab?' · <em>'+ab+' em aberto</em>':'')+' — os nossos aparecem na agenda de cada unidade (Equipamentos e frota), no mapa de dias e na lista de veículos do evento.':'Nenhum equipamento marcado ainda. Escolha a unidade do cadastro (ou digite, se for alugado) no ambiente onde vai trabalhar.'; }
-  if(mode==='fab'){ const L=all('fab'), ab=L.filter(f=>isOpen(f.status)).length; return L.length?'<b>'+plural(L.length,'peça','peças')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo pronto')+' — os prazos (início, pronto, chega) aparecem no radar e no cronograma.':'Nada pra fabricar ainda. Use <b>+ Fabricação</b> no ambiente da peça.'; }
-  const L=all('mo'), mp=moPessoas(L), ab=L.filter(m=>isOpen(m.status)).length;
-  return L.length?'<b>'+(mp?plural(mp,'pessoa','pessoas')+' em ':'')+plural(L.length,'contratação','contratações')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo fechado')+' — aparece no mapa de dias (linha CARREGADORES), no radar e no cronograma da equipe.':'Ninguém de fora ainda. <b>+ Carregador</b> pra quem vem descarregar ou carregar caminhão; marceneiro e outras mãos de obra também entram aqui.';
+const AMB_EMPTY='Nenhum ambiente ainda. Clique em <b>+ Ambiente</b> pra criar as áreas do evento (QG, GALPÃO, ÁREA EXTERNA, LOUNGE…) e dentro de cada uma coloque os itens com data e equipe. O que alugar, comprar e fabricar, os equipamentos e os carregadores ficam nas abas deles — ligados a um ambiente ou ao evento todo.';
+/* aba Ambientes: o EVENTO TODO (o que atende o evento inteiro) aparece em cima, quando tem alguma coisa */
+function renderAmbGeral(ev){
+  const box=$('#ambGeral'); if(!box) return; const g=ambGeral(ev.id);
+  const tem=!!g&&['prov','equip','fab','mo'].some(k=>(g[k]||[]).length);
+  box.hidden=!tem; box.innerHTML=tem?'<div class="ag-t"><b>EVENTO TODO</b><span>o que atende o evento inteiro, sem ser de um ambiente só</span></div>'+ambLinksHTML(g,' '):'';
 }
-function renderMatsHint(ev){ const hint=$('#matsHint'), mode=ambMode(), n=ambsOf(ev.id).length; if(hint){ hint.hidden=mode==='amb'||!n; hint.innerHTML=mode==='amb'||!n?'':modeHintHTML(ev,mode); } }
 function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; } });
@@ -3281,7 +3380,7 @@ function renderDetail(){
   $('#btnOSEv').hidden=$('#btnDelEv').hidden=readOnly;
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
-  const list=ambsOf(ev.id), mode=ambMode();
+  const list=ambsReais(ev.id);
   const existing=new Map($$('.mat',host).map(el=>[el.dataset.mid,el]));
   list.forEach((a,i)=>{
     let el=existing.get(a.id); const r=revOf(a,ev)+'|'+(i+1);
@@ -3293,22 +3392,22 @@ function renderDetail(){
   applyAmbFolds();
   $$('#mats .mat').forEach(wireAmbDrag);
   makeDraggable($('#mats'),'.mat','.drag.amb',order=>reorderAmbs(order));
-  host.dataset.mode=mode;
   $('#matCount').textContent=list.length?list.length+' ambiente'+(list.length===1?'':'s'):'';
-  renderMatsHint(ev);
-  const me=$('#matsEmpty'); me.hidden=!!list.length; if(!list.length) me.innerHTML=mode==='amb'?AMB_EMPTY:'Crie os ambientes primeiro, na aba <b>Ambientes</b>: cada '+BLK[mode].nome+' fica ligada a um ambiente — é assim que sai no cronograma, no radar e no mapa de dias.';
-  $('#btnAddAmb').hidden=mode!=='amb'||readOnly;
-  $('#btnFoldAll').hidden=$('#btnUnfoldAll').hidden=mode!=='amb'||list.length<2;
-  $('#btnPDF').disabled=!list.length&&!(ev.evInicio||ev.evFim||ev.monInicio);
+  renderAmbGeral(ev);
+  const me=$('#matsEmpty'); me.hidden=!!list.length; if(!list.length) me.innerHTML=AMB_EMPTY;
+  $('#btnAddAmb').hidden=readOnly;
+  $('#btnFoldAll').hidden=$('#btnUnfoldAll').hidden=list.length<2;
+  $('#btnPDF').disabled=!ambsOf(ev.id).length&&!(ev.evInicio||ev.evFim||ev.monInicio);
   renderRepPanel(ev);
   renderEvTabs(ev);
+  if(isSupTab(M.evTab)) renderSup(ev);
 }
-/* abas de dentro do evento (com o número de cada uma); locação, equipamentos, fabricação e carregadores mostram os ambientes em outro modo */
-const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['loc','#paneAmb'],['eqp','#paneAmb'],['fab','#paneAmb'],['mo','#paneAmb'],['fretes','#paneFretes'],['docs','#paneDocs']];
+/* abas de dentro do evento (com o número de cada uma); locação, equipamentos, fabricação e carregadores são cadastros (lista + ficha) */
+const EV_TABS=[['escala','#paneEscala'],['amb','#paneAmb'],['loc','#paneSup'],['eqp','#paneSup'],['fab','#paneSup'],['mo','#paneSup'],['fretes','#paneFretes'],['docs','#paneDocs']];
 function renderEvTabs(ev){
   if(!EV_TABS.some(([k])=>k===M.evTab)) M.evTab='escala';
   const teams=escRows(ev).filter(t=>!isProdId(t)).length, ch=hasChoque(ev), sem=semEquipeDays(ev,null).length;
-  const as=ambsOf(ev.id), na=as.length, nf=fretesTot(ev), dp=(M.docsPend||0)+(M.veicPend||0), dn=M.docsN||0;
+  const as=ambsOf(ev.id), na=as.filter(a=>!isGeral(a)).length, nf=fretesTot(ev), dp=(M.docsPend||0)+(M.veicPend||0), dn=M.docsN||0;
   const cnt=(k,op)=>{ let n=0,ab=0; as.forEach(a=>(a[k]||[]).forEach(x=>{ n++; if(op(x)) ab++; })); return {n:n,ab:ab}; };
   const set=(k,txt,cls,tip)=>{ const b=$('#evt-'+k); if(!b) return; $('b',b).textContent=txt; b.classList.remove('warn','bad','ok'); if(cls) b.classList.add(cls); if(tip) b.title=tip; else b.removeAttribute('title'); };
   set('escala',teams?String(teams):'',ch?'bad':sem?'warn':'',ch?'Tem choque: pessoa ou carro em dois lugares no mesmo dia':sem?'Falta equipe em '+plural(sem,'dia','dias'):'');
@@ -3323,13 +3422,13 @@ function renderEvTabs(ev){
   const act=(EV_TABS.find(([k])=>k===M.evTab)||EV_TABS[0])[1];
   EV_TABS.forEach(([k])=>{ const on=M.evTab===k, b=$('#evt-'+k); if(!b) return; b.classList.toggle('on',on); b.setAttribute('aria-selected',on?'true':'false'); b.tabIndex=on?0:-1; });
   Array.from(new Set(EV_TABS.map(x=>x[1]))).forEach(sel=>{ $(sel).hidden=sel!==act; });
-  const pa=$('#paneAmb'); if(pa) pa.setAttribute('aria-labelledby','evt-'+(act==='#paneAmb'?ambMode():'amb'));
+  const ps=$('#paneSup'); if(ps&&isSupTab(M.evTab)) ps.setAttribute('aria-labelledby','evt-'+M.evTab);
   const ab=radarOfEv(ev.id).filter(x=>isOpen(x.status)).length, rl=$('#evRadar');
   rl.hidden=!ab; rl.textContent=ab?ab+' no radar →':''; rl.title=ab?plural(ab,'pendência','pendências')+' com terceiro — abrir o radar só com este evento':'';
 }
 function setEvTab(k,focus){
-  const ev=cur(); if(!ev) return; flushAll(); const prev=M.evTab; M.evTab=k;
-  if(AMB_MODES.indexOf(k)>=0&&k!==prev) renderDetail(); else renderEvTabs(ev);
+  const ev=cur(); if(!ev) return; flushAll(); M.evTab=k;
+  renderEvTabs(ev); if(isSupTab(k)) renderSup(ev);
   if(k==='escala') renderEscala(ev);
   const hd=$('#hdr'), y=hd?hd.offsetTop+hd.offsetHeight-8:0; if(window.scrollY>y) window.scrollTo({top:y});
   const b=$('#evt-'+k); if(b){ if(focus) b.focus(); if(b.scrollIntoView&&b.parentNode&&b.parentNode.scrollWidth>b.parentNode.clientWidth) b.scrollIntoView({block:'nearest',inline:'nearest'}); }
@@ -3340,23 +3439,15 @@ function closeMenuMais(focusBtn){ const m=$('#menuMais'), b=$('#btnMais'); if(!m
 function wireAmbDrag(el){
   if(!el) return; const aid=el.dataset.mid;
   const et=$('.etapas',el); if(et) makeDraggable(et,'.erow.etapa','.drag',order=>reorderAmbArray(aid,'itens',order));
-  const fb=$('.provs.fabs',el); if(fb) makeDraggable(fb,'.fabitem','.drag',order=>reorderAmbArray(aid,'fab',order));
-  const pv=$('.provs.loc',el); if(pv) makeDraggable(pv,'.prow[data-pid]','.drag',order=>reorderAmbArray(aid,'prov',order));
-  const eq=$('.provs.eqps',el); if(eq) makeDraggable(eq,'.qrow[data-qid]','.drag',order=>reorderAmbArray(aid,'equip',order));
-  const mo=$('.provs.mo',el); if(mo) makeDraggable(mo,'.morow[data-moid]','.drag',order=>reorderAmbArray(aid,'mo',order));
 }
 function forceRenderAmb(aid){ const ev=cur(); const el=$('.mat[data-mid="'+aid+'"]'); const a=ambientes.find(x=>x.id===aid); if(!el||!a||!ev) return; const idx=Array.from(el.parentNode.children).indexOf(el)+1; paintAmb(el,a,idx,ev,''); wireAmbDrag(el); }
-/* lê da tela só a parte do ambiente que está desenhada (na aba Ambientes: nome, itens, obs; nas outras: só aquele tipo) — o resto continua como está */
+/* lê da tela só a parte do ambiente que está no cartão (nome, produtor, itens, obs) — locação, equipamentos, fabricação e carregadores ficam como estão (são editados na ficha) */
 function collectAmb(el){
   const base=ambientes.find(x=>x.id===el.dataset.mid); if(!base) return null;
   const v=(s,r)=>{ const i=$(s,r||el); return i?String(i.value).trim():''; }, has=s=>!!$(s,el);
   const o=Object.assign({},base,{atualizadoEm:nowIso()});
   if(has('.m-nome')) o.nome=v('.m-nome'); if(has('.m-obs')) o.obs=v('.m-obs'); if(has('.a-prod')) o.produtorId=v('.a-prod');
   if(has('.etapas')) o.itens=$$('.etapa',el).map(r=>({id:r.dataset.eid,desc:v('.e-desc',r),de:dv($('.e-de',r)),ate:dv($('.e-ate',r)),desDe:dv($('.e-dde',r)),desAte:dv($('.e-date',r)),equipeId:v('.e-eq',r),equipeDesId:v('.e-eqd',r)}));
-  if(has('.provs.fabs')) o.fab=$$('.fabitem[data-fbid]',el).map(r=>{ const quem=v('.fb-quem',r)||'NOSSA'; const terc=quem==='TERCEIRA'; const modo=terc?v('.fb-modo',r):''; return {id:r.dataset.fbid,oque:v('.fb-oque',r),qtd:v('.fb-qtd',r),material:v('.fb-mat',r),quem:quem,fornecedor:v('.fb-forn',r),inicio:dv($('.fb-ini',r)),prontoAte:dv($('.fb-pronto',r)),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.fb-ret',r)):'',chega:dv($('.fb-chega',r)),status:v('.fb-st',r),obs:v('.fb-obs',r)}; });
-  if(has('.provs.loc')) o.prov=$$('.prow[data-pid]',el).map(r=>{ const tipo=v('.p-tipo',r)||'ALUGAR'; const alu=tipo==='ALUGAR'; const modo=v('.p-modo',r); return {id:r.dataset.pid,tipo:tipo,oque:v('.p-oque',r),quem:'TERCEIRA',fornecedor:v('.p-forn',r),modo:modo,retirada:modo==='RETIRAMOS'?dv($('.p-ret',r)):'',data:dv($('.p-data',r)),devolve:alu?dv($('.p-dev',r)):'',status:v('.p-st',r)}; });
-  if(has('.provs.eqps')) o.equip=$$('.qrow[data-qid]',el).map(r=>{ const orig=v('.q-orig',r)||'PRÓPRIO'; const alug=orig==='ALUGADO'; const regId=pickVal(r,'q-pick'); const reg=regOf(regId); return {id:r.dataset.qid,regId:regId,nome:reg?reg.nome:v('.q-nome',r),origem:orig,fornecedor:alug?v('.q-forn',r):'',de:dv($('.q-de',r)),ate:dv($('.q-ate',r)),status:alug?v('.q-st',r):''}; });
-  if(has('.provs.mo')) o.mo=$$('.morow[data-moid]',el).map(r=>{ const q=Math.round(num(v('.mo-qtd',r))); return {id:r.dataset.moid,tipo:v('.mo-tipo',r)||'CARREGADOR',qtd:q>0?q:'',funcao:v('.mo-fun',r),de:dv($('.mo-de',r)),ate:dv($('.mo-ate',r)),horario:v('.mo-hor',r),fornecedor:v('.mo-forn',r),status:v('.mo-st',r)}; });
   return o;
 }
 function setInd(el,txt,ok){ const s=$('.saveind',el); if(s){ s.textContent=txt; s.className='saveind'+(ok?' ok':''); } }
@@ -3374,7 +3465,7 @@ async function saveAmb(aid){
   const el=$('.mat[data-mid="'+aid+'"]'); if(!el) return;
   const a=collectAmb(el); if(!a) return;
   upsertLocal('ambientes',a); setInd(el,'salvando…'); autoEscalaItens(a);
-  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev){ renderEvTabs(ev); renderMatsHint(ev); const md=ambMode(), c=$('.mcnt',el); if(c&&BLK[md]){ const L=a[BLK[md].list]||[]; c.textContent=BLK[md].cnt(a); c.classList.toggle('none',!L.length); } } } }
+  try{ await setDoc('ambientes',a); setInd(el,'salvo',true); setTimeout(()=>{ const s=$('.saveind',el); if(s&&s.textContent==='salvo') setInd(el,''); },1800); if(view==='eventos'&&currentId){ const ev=cur(); if(ev) renderEvTabs(ev); } }
   catch(err){ setInd(el,'não salvou'); handleWriteError(err); }
 }
 function scheduleAmb(aid,ms){ const el=$('.mat[data-mid="'+aid+'"]'); if(el) setInd(el,'editando…'); schedule('amb:'+aid,()=>saveAmb(aid),ms); }
@@ -3439,14 +3530,6 @@ function mutateAmb(el,fn,focusSel){
 }
 function addItem(el,desc){ mutateAmb(el,a=>{ const it={id:newId(),desc:desc||'',de:'',ate:'',desDe:'',desAte:'',equipeId:'',equipeDesId:''}; a.itens.push(it); return it; },it=>'.etapa[data-eid="'+it.id+'"] '+(desc?'.e-de':'.e-desc')); }
 function delItem(el,eid){ mutateAmb(el,a=>{ a.itens=a.itens.filter(x=>x.id!==eid); return null; }); }
-function addProv(el,tipo){ mutateAmb(el,a=>{ const p={id:newId(),tipo:tipo==='COMPRAR'?'COMPRAR':'ALUGAR',oque:'',quem:'TERCEIRA',fornecedor:'',modo:'',retirada:'',data:'',devolve:'',status:'A COTAR'}; a.prov.push(p); return p; },p=>'.prow[data-pid="'+p.id+'"] .p-oque'); }
-function addFab(el){ mutateAmb(el,a=>{ const f={id:newId(),oque:'',qtd:'',material:'',quem:'NOSSA',fornecedor:'',inicio:'',prontoAte:'',modo:'',retirada:'',chega:'',status:'A COTAR',obs:''}; a.fab.push(f); return f; },f=>'.fabitem[data-fbid="'+f.id+'"] .fb-oque'); }
-function delFab(el,id){ mutateAmb(el,a=>{ a.fab=a.fab.filter(x=>x.id!==id); return null; }); }
-function delProv(el,pid){ mutateAmb(el,a=>{ a.prov=a.prov.filter(x=>x.id!==pid); return null; }); }
-function addEquip(el,nome){ const fam=nome?eqParse(nome).fam:''; const same=fam?recsOf('EQUIPAMENTO').filter(r=>eqParse(r.nome).fam===fam):[]; const reg=same.length===1?same[0]:null; mutateAmb(el,a=>{ const e={id:newId(),regId:reg?reg.id:'',nome:reg?reg.nome:(nome||''),origem:'PRÓPRIO',fornecedor:'',de:'',ate:'',status:''}; a.equip.push(e); return e; },e=>'.qrow[data-qid="'+e.id+'"] '+(nome?'.q-orig':(recsOf('EQUIPAMENTO').some(r=>r.nome)?'.q-pick':'.q-nome'))); }
-function delEquip(el,qid){ mutateAmb(el,a=>{ a.equip=a.equip.filter(x=>x.id!==qid); return null; }); }
-function addMo(el,tipo){ mutateAmb(el,a=>{ const m={id:newId(),tipo:MO_TIPOS.indexOf(tipo)>=0?tipo:'CARREGADOR',qtd:'',funcao:'',de:'',ate:'',horario:'',fornecedor:'',status:'A COTAR'}; a.mo=(a.mo||[]).concat([m]); return m; },m=>'.morow[data-moid="'+m.id+'"] .mo-qtd'); }
-function delMo(el,id){ mutateAmb(el,a=>{ a.mo=(a.mo||[]).filter(x=>x.id!==id); return null; }); }
 async function delAmb(aid){
   const a=ambientes.find(x=>x.id===aid); if(!a) return;
   pending.delete('amb:'+aid);
@@ -3706,8 +3789,8 @@ function showPanel(){
   setTimeout(()=>{ if(touch&&M.panel&&M.panel.kind==='cell') return; const f=pn.querySelector('[data-autofocus]')||$('#p-close'); if(f) f.focus({preventScroll:true}); },40);
   refresh();
 }
-function leavePanel(){ M.tdel=null; M.pnOpen=null; M.pnDraft=''; flushPanel(); }
-function flushPanel(){ Array.from(pending.keys()).filter(k=>/^(fz:|tar:|precf:)/.test(k)).forEach(flush); }
+function leavePanel(){ M.tdel=null; M.pnOpen=null; M.pnDraft=''; flushPanel(); if(M.panel&&M.panel.kind==='sup') supSaiu(M.panel); }
+function flushPanel(){ Array.from(pending.keys()).filter(k=>/^(fz:|tar:|precf:|sup:)/.test(k)).forEach(flush); }
 function openCell(id,days){ leavePanel(); M.panel={kind:'cell',id:id,days:days.slice().sort()}; M.confirm=null; buildPanel(); showPanel(); }
 function closePanel(){ leavePanel(); M.panel=null; $('#panel').hidden=true; $('#scrim').hidden=true; document.body.classList.remove('panel-open'); refresh(); }
 function headHTML(chips,titleHTML){ return '<div class="p-head"><div class="p-chips" id="p-chips">'+chips+'</div><button type="button" id="p-close" class="x" aria-label="Fechar">'+ICON_X+'</button>'+titleHTML+'</div>'; }
@@ -3722,6 +3805,7 @@ function buildPanel(){
   if(p.kind==='osimport') return buildOSImportPanel(pn,p);
   if(p.kind==='usuarios') return buildUsuariosPanel(pn,p);
   if(p.kind==='whats') return buildWhatsPanel(pn,p);
+  if(p.kind==='sup') return buildSupPanel(pn,p);
 }
 function syncPanel(){
   const p=M.panel; if(!p||$('#panel').hidden) return;
@@ -3734,6 +3818,7 @@ function syncPanel(){
   else if(p.kind==='osimport') osiParts();
   else if(p.kind==='usuarios') usuariosParts();
   else if(p.kind==='whats') whatsParts();
+  else if(p.kind==='sup') supParts();
 }
 
 /* ---------- painel do dia ---------- */
@@ -4037,14 +4122,14 @@ function eqListHTML(evId){
 const KINDS=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','MÃO DE OBRA','FRETE'];
 const KT={'FABRICAÇÃO':'st-orange','LOCAÇÃO':'st-blue','COMPRA':'st-ok','EQUIPE TERC.':'st-navy','PRODUTOR':'st-navy','EQUIPAMENTO':'st-warn','MÃO DE OBRA':'st-navy','FRETE':'st-grey'};
 /* o que dá pra editar no radar, por tipo (nome do campo na origem) */
-const RADAR_FIELDS={'PRODUTOR':{forn:'contato'},'EQUIPE TERC.':{forn:'contato'},'FRETE':{forn:'caminhao',chega:'ida',sai:'volta'},'FABRICAÇÃO':{forn:'fornecedor',inicio:'inicio',prontoAte:'prontoAte',retirada:'retirada',chega:'chega'},'LOCAÇÃO':{forn:'fornecedor',retirada:'retirada',chega:'data',sai:'devolve'},'COMPRA':{forn:'fornecedor',retirada:'retirada',chega:'data'},'EQUIPAMENTO':{forn:'fornecedor',chega:'de',sai:'ate'},'MÃO DE OBRA':{forn:'fornecedor',chega:'de',sai:'ate'}};
+const RADAR_FIELDS={'PRODUTOR':{forn:'contato'},'EQUIPE TERC.':{forn:'contato'},'FRETE':{forn:'caminhao',chega:'ida',sai:'volta'},'FABRICAÇÃO':{forn:'fornecedor',inicio:'inicio',prontoAte:'prontoAte',retirada:'retirada',empresa:'empresa',chega:'chega'},'LOCAÇÃO':{forn:'fornecedor',retirada:'retirada',empresa:'empresa',chega:'data',sai:'devolve'},'COMPRA':{forn:'fornecedor',retirada:'retirada',empresa:'empresa',chega:'data'},'EQUIPAMENTO':{forn:'fornecedor',chega:'de',sai:'ate'},'MÃO DE OBRA':{forn:'fornecedor',chega:'de',sai:'ate'}};
 const rdRef=it=>' data-col="'+esc(it.ref.col)+'" data-id="'+esc(it.ref.id)+'" data-list="'+esc(it.ref.list)+'" data-item="'+esc(it.ref.itemId)+'"';
 const rdKey=(it,f)=>esc(it.ref.id+'|'+it.ref.list+'|'+it.ref.itemId+'|'+f);
 function rdFld(it,f){ const m=RADAR_FIELDS[it.kind]; return m&&m[f]&&it.src&&!readOnly?m[f]:''; }
 function rdTxt(it,f,ph,shown){ const fl=rdFld(it,f); if(!fl) return esc(shown||'—'); return '<input class="rd-in" data-f="'+f+'" data-rk="'+rdKey(it,f)+'"'+rdRef(it)+' value="'+esc(it.src[fl]||'')+'" placeholder="'+esc(ph)+'" autocomplete="off" aria-label="'+esc(ph)+'">'; }
 function rdDate(it,f,shown){ const fl=rdFld(it,f); if(!fl) return shown?esc(fmtDate(shown)):'<span style="color:var(--faint)">—</span>'; return dateInput('rd-in rd-dt',it.src[fl]||'',' data-f="'+f+'" data-rk="'+rdKey(it,f)+'"'+rdRef(it)+' aria-label="'+esc(f)+'"'); }
 function radarListaHTML(items,evsAll,t,tone){
-  const cols=['Tipo','Descrição','Fornecedor / quem','Fabricação: início → pronto','Entrega ou retirada','Retira no fornecedor','Chega na montagem','Sai / devolve','Status'];
+  const cols=['Tipo','Descrição','Fornecedor / quem','Fabricação: início → pronto','Como chega','Retira / chega na empresa','Chega na montagem','Sai / devolve','Status'];
   let h='<table class="pend edit"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';
   const groups=new Map(); items.forEach(it=>{ if(!groups.has(it.ev.id)) groups.set(it.ev.id,[]); groups.get(it.ev.id).push(it); });
   evsAll.filter(e=>groups.has(e.id)).forEach(e=>{
@@ -4052,13 +4137,13 @@ function radarListaHTML(items,evsAll,t,tone){
     if(radarEv==='TODOS') h+='<tr class="grp" data-id="'+esc(e.id)+'"><td colspan="'+cols.length+'">'+esc(e.nome||'(sem nome)')+'<small>'+list.length+' ite'+(list.length===1?'m':'ns')+' · '+ab+' em aberto'+(e.monInicio||e.evInicio?' · '+fmtDate(e.monInicio||e.evInicio):'')+'</small></td></tr>';
     list.forEach(it=>{
       const late=((it.chega&&it.chega<t)||(it.kind==='FABRICAÇÃO'&&!it.chega&&it.prontoAte&&it.prontoAte<t))&&isOpen(it.status);
-      const r=it.ref, ret=it.modo==='RETIRAMOS';
-      h+='<tr data-id="'+esc(it.ev.id)+'"><td><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span></td>'
+      const r=it.ref, ret=it.modo==='RETIRAMOS', emp=it.modo==='ENTREGA NA EMPRESA', sup=r.col==='ambientes'?' data-samb="'+esc(r.id)+'" data-slist="'+esc(r.list)+'" data-sitem="'+esc(r.itemId)+'"':'';
+      h+='<tr data-id="'+esc(it.ev.id)+'"'+sup+'><td><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span></td>'
         +'<td class="m">'+esc(it.desc)+(it.sub?'<small>'+esc(it.sub)+'</small>':'')+'</td>'
         +'<td class="ed">'+rdTxt(it,'forn',it.kind==='FABRICAÇÃO'&&(it.src&&(it.src.quem||'NOSSA')==='NOSSA')?'QUEM FABRICA':it.kind==='FRETE'?'QUAL CAMINHÃO / DE QUEM':it.kind==='PRODUTOR'||it.kind==='EQUIPE TERC.'?'CONTATO':it.kind==='MÃO DE OBRA'?'QUEM FORNECE':'FORNECEDOR',it.forn)+'</td>'
         +'<td class="date ed">'+(it.kind==='FABRICAÇÃO'?'<span class="rd-2">'+rdDate(it,'inicio',it.inicio)+'<i>→</i>'+rdDate(it,'prontoAte',it.prontoAte)+'</span>':'<span style="color:var(--faint)">—</span>')+'</td>'
-        +'<td>'+esc(it.modo||'—')+'</td>'
-        +'<td class="date ed">'+(ret?rdDate(it,'retirada',it.retirada):'<span style="color:var(--faint)">—</span>')+'</td>'
+        +'<td>'+esc(entregaCurta(it.modo)||it.modo||'—')+'</td>'
+        +'<td class="date ed">'+(ret?'<span class="rd-lb">RETIRA</span>'+rdDate(it,'retirada',it.retirada):emp?'<span class="rd-lb">NA EMPRESA</span>'+rdDate(it,'empresa',it.empresa):'<span style="color:var(--faint)">—</span>')+'</td>'
         +'<td class="date ed'+(late?' late':'')+'">'+rdDate(it,'chega',it.chega)+'</td>'
         +'<td class="date ed">'+(rdFld(it,'sai')?rdDate(it,'sai',it.sai):(it.sai?esc(fmtDate(it.sai)):'<span style="color:var(--faint)">—</span>'))+'</td>'
         +'<td><select class="rd-st t-'+tone(it.status)+'" data-col="'+esc(r.col)+'" data-id="'+esc(r.id)+'" data-list="'+esc(r.list)+'" data-item="'+esc(r.itemId)+'"'+(readOnly?' disabled':'')+'><option value="">SEM STATUS</option>'+it.statusList.map(o=>'<option value="'+esc(o)+'"'+(o===it.status?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select></td></tr>';
@@ -4076,7 +4161,7 @@ function radarQuadroHTML(items,t,evsAll){
   const split=list=>{ const by={}; cols.forEach(([c])=>by[c]=[]); list.forEach(it=>{ const c=rqColOf(it.status); (by[c]||by.cotar).push(it); }); return by; };
   const by=split(items), evIds=Array.from(new Set(items.map(it=>it.ev.id))), lanes=radarEv==='TODOS'&&evIds.length>1;
   const card=it=>{ const late=((it.chega&&it.chega<t)||(it.kind==='FABRICAÇÃO'&&!it.chega&&it.prontoAte&&it.prontoAte<t))&&isOpen(it.status);
-    const dt=it.kind==='FABRICAÇÃO'&&isOpen(it.status)&&it.prontoAte?'PRONTO ATÉ '+fmtDM(it.prontoAte):it.chega?(it.kind==='FRETE'?'VAI ':it.kind==='MÃO DE OBRA'?'DE ':'CHEGA ')+fmtDM(it.chega):it.retirada?'RETIRA '+fmtDM(it.retirada):'';
+    const dt=it.kind==='FABRICAÇÃO'&&isOpen(it.status)&&it.prontoAte?'PRONTO ATÉ '+fmtDM(it.prontoAte):it.chega?(it.kind==='FRETE'?'VAI ':it.kind==='MÃO DE OBRA'?'DE ':'CHEGA ')+fmtDM(it.chega):it.retirada?'RETIRA '+fmtDM(it.retirada):it.empresa?'NA EMPRESA '+fmtDM(it.empresa):'';
     return '<div class="rq-card'+(late?' late':'')+'" data-rk="'+rdKey(it,'card')+'"'+rdRef(it)+' data-ev="'+esc(it.ev.id)+'" tabindex="0">'
       +'<div class="rq-top"><span class="st '+(KT[it.kind]||'st-grey')+'">'+esc(it.kind)+'</span>'+(late?'<span class="rq-late">ATRASADO</span>':'')+'<select class="rd-st rq-st t-'+(it.status?(COT_TONE[it.status]||'grey'):'grey')+'"'+rdRef(it)+' aria-label="Status de '+esc(it.desc)+'"'+(readOnly?' disabled':'')+'><option value="">SEM STATUS</option>'+it.statusList.map(o=>'<option value="'+esc(o)+'"'+(o===it.status?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select></div>'
       +'<b class="rq-desc">'+esc(it.desc)+'</b>'+(radarEv==='TODOS'&&!lanes?'<span class="rq-ev">'+esc(it.ev.nome||'(sem nome)')+'</span>':'')
@@ -4101,7 +4186,7 @@ function renderPend(){
   const byEv=all.filter(it=>radarEv==='TODOS'||it.ev.id===radarEv);
   const byKind=byEv.filter(it=>!radarKind.size||radarKind.has(it.kind));
   const items=byKind.filter(it=>(!radarFilter.size||radarFilter.has(it.status||'SEM STATUS'))&&(!qq||(it.desc+' '+it.sub+' '+it.forn).toUpperCase().indexOf(qq)>=0));
-  const key=it=>it.chega||it.prontoAte||it.retirada||it.sai||'9999';
+  const key=it=>it.chega||it.prontoAte||it.retirada||it.empresa||it.sai||'9999';
   items.sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:String(a.desc).localeCompare(String(b.desc)); });
   const t=iso(today0());
   const tone=st=>st?(COT_TONE[st]||'grey'):'grey';
@@ -4110,7 +4195,7 @@ function renderPend(){
   let h=quadro?radarQuadroHTML(byKind.filter(it=>!qq||(it.desc+' '+it.sub+' '+it.forn).toUpperCase().indexOf(qq)>=0).sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:String(a.desc).localeCompare(String(b.desc)); }),t,evsAll):radarListaHTML(items,evsAll,t,tone);
   host.innerHTML=h; host.hidden=quadro?false:!items.length;
   const em=$('#pendEmpty'); em.hidden=quadro||!!items.length;
-  em.innerHTML=all.length?'Nada com esse filtro.':'Nada no radar ainda. No ambiente, use <b>+ Fabricação</b>, <b>+ Alugar</b> / <b>+ Comprar</b> ou marque equipamento <b>alugado</b>; no evento, marque equipe, produtor ou frete como <b>terceirizado</b>.';
+  em.innerHTML=all.length?'Nada com esse filtro.':'Nada no radar ainda. No evento, use <b>+ Alugar</b> / <b>+ Comprar</b>, <b>+ Fabricação</b>, <b>+ Carregador</b> ou marque equipamento <b>alugado</b>; na escala e nos fretes, marque equipe, produtor ou frete como <b>terceirizado</b>.';
   const kc={}; byEv.forEach(it=>{ kc[it.kind]=(kc[it.kind]||0)+1; });
   $('#radarKinds').innerHTML=KINDS.map(k=>'<button type="button" class="chip'+(radarKind.has(k)?' on':'')+'" data-k="'+esc(k)+'">'+esc(k)+(kc[k]?' · '+kc[k]:'')+'</button>').join('');
   $$('#radarKinds .chip').forEach(b=>b.addEventListener('click',()=>{ const k=b.dataset.k; if(radarKind.has(k)) radarKind.delete(k); else radarKind.add(k); render(); }));
@@ -4555,8 +4640,9 @@ function wire(){
   wirePerfil();
   wireFrotaFicha();
   wireVeicEv();
+  wireSup();
   $('#bkAviso').addEventListener('click',doBackup);
-  document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
+  document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t), inSup=!!(M.panel&&M.panel.kind==='sup'&&$('#panel').contains(t)); normalizeDateInput(t,inDetail?refDate(cur()):inSup?refDate(evById(M.panel.ev)):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
   $('#radarEv').addEventListener('change',ev=>{ radarEv=ev.target.value; render(); });
   $('#btnRadarPDF').addEventListener('click',()=>exportRadarPDF(radarView));
@@ -4577,7 +4663,7 @@ function wire(){
   document.addEventListener('pointerup',rqEnd); document.addEventListener('pointercancel',rqEnd);
   const rqEv=ev=>{ const b=ev.target.closest('[data-rqev]'); if(!b) return false; radarEv=b.dataset.rqev; render(); if(radarEv!=='TODOS'){ const top=$('#viewPend'); if(top&&window.scrollY>top.offsetTop) window.scrollTo({top:Math.max(0,top.offsetTop-8)}); } return true; };
   $('#radarEvChips').addEventListener('click',rqEv);
-  ph.addEventListener('click',ev=>{ if(rqEv(ev)) return; const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab={fretes:'fretes',equipes:'escala',produtores:'escala',prov:'loc',fab:'fab',equip:'eqp',mo:'mo'}[c.dataset.list]||'amb'; render(); });
+  ph.addEventListener('click',ev=>{ if(rqEv(ev)) return; const c=ev.target.closest('.rq-card'); if(!c||ev.target.closest('select,input,button')||Date.now()-rqSup<350) return; openEvent(c.dataset.ev); M.evTab={fretes:'fretes',equipes:'escala',produtores:'escala',prov:'loc',fab:'fab',equip:'eqp',mo:'mo'}[c.dataset.list]||'amb'; render(); supDoRadar(c.dataset.ev,c.dataset.id,c.dataset.list,c.dataset.item); });
   ph.addEventListener('keydown',ev=>{ const c=ev.target.closest&&ev.target.closest('.rq-card'); if(c&&ev.target===c&&ev.key==='Enter'){ ev.preventDefault(); c.click(); } });
   let rq=null; $('#radarQ').addEventListener('input',ev=>{ clearTimeout(rq); rq=setTimeout(()=>{ radarQ=ev.target.value; render(); },160); });
   $('#pendHost').addEventListener('change',ev=>{ const t=ev.target;
@@ -4676,7 +4762,7 @@ function wire(){
   $('#btnDelEvNao').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; });
   $('#btnDelEvSim').addEventListener('click',()=>{ $('#delEvConfirm').hidden=true; delEvent(); });
   let qt=null; $('#q').addEventListener('input',ev=>{ clearTimeout(qt); qt=setTimeout(()=>{ q=ev.target.value; render(); },160); });
-  const openRow=ev=>{ if(ev.target.closest('select,input,button')) return; const tr2=ev.target.closest('tr[data-id]'); if(tr2) openEvent(tr2.dataset.id); };
+  const openRow=ev=>{ if(ev.target.closest('select,input,button')) return; const tr2=ev.target.closest('tr[data-id]'); if(!tr2) return; openEvent(tr2.dataset.id); if(tr2.dataset.slist){ M.evTab={prov:'loc',fab:'fab',equip:'eqp',mo:'mo'}[tr2.dataset.slist]||M.evTab; render(); supDoRadar(tr2.dataset.id,tr2.dataset.samb,tr2.dataset.slist,tr2.dataset.sitem); } };
   $('#listHost').addEventListener('click',ev=>{ const o=ev.target.closest('[data-open-ev]'); if(o) openEvent(o.dataset.openEv); }); $('#pendHost').addEventListener('click',openRow); $('#eqSim').addEventListener('click',openRow);
   wireHeaderBlock('#hdr');
   wireHeaderBlock('#fretes',t=>{ if(t.classList.contains('f-camsel')){ const c=t.closest('.cell'), inp=c?$('.f-cam',c):null; const v=t.value; if(c) c.classList.toggle('outro',v==='__outro'); if(inp){ if(v&&v!=='__outro') inp.value=truckName(v); else if(v==='__outro'){ inp.value=''; setTimeout(()=>inp.focus(),30); } else inp.value=''; }
@@ -4698,30 +4784,18 @@ function wire(){
       upsertLocal('ambientes',a); forceRenderAmb(a.id); flush('amb:'+a.id); saveAmb(a.id); return;
     }
     if(t.classList.contains('e-eq')||t.classList.contains('e-eqd')){ const ev2=cur(); const tm=ev2&&t.value?team(ev2,t.value):null, tc=!!(tm&&teamIsTercEntry(tm)); t.classList.toggle('terc',tc); if(t.classList.contains('e-eq')) t.closest('.erow').classList.toggle('terc',tc); else t.classList.toggle('set',!!t.value); }
-    if(t.classList.contains('p-tipo')||t.classList.contains('p-modo')){ const row=t.closest('.prow'); const com=$('.p-tipo',row).value==='COMPRAR'; row.classList.toggle('alu',!com); row.classList.toggle('com',com); row.classList.toggle('ret',$('.p-modo',row).value==='RETIRAMOS'); }
-    if(t.classList.contains('fb-quem')||t.classList.contains('fb-modo')){ const row=t.closest('.fabitem'); const terc=$('.fb-quem',row).value==='TERCEIRA'; row.classList.toggle('terc',terc); row.classList.toggle('ret',terc&&$('.fb-modo',row).value==='RETIRAMOS'); const fc=$('.c-forn',row); if(fc){ const lb=$('.cl',fc), inp=$('.fb-forn',fc); if(lb) lb.textContent=terc?'Fornecedor':'Quem fabrica (pessoa / setor)'; if(inp) inp.placeholder=terc?'EMPRESA / QUEM FABRICA':'EX: PATRICIA, SETOR DE LONAS'; } }
-    if(t.classList.contains('q-pick')) applyPick(t,'q-nome',null);
-    if(t.classList.contains('q-orig')){ const row=t.closest('.qrow'); const alug=t.value==='ALUGADO'; row.classList.toggle('alug',alug); row.classList.toggle('prop',!alug); const st=$('.q-st',row); if(alug&&st&&!st.value) st.value='A COTAR'; }
     scheduleAmb(card.dataset.mid,150);
   });
   /* saiu da linha de um item que mudou equipe/data: grava e passa pra escala */
   mats.addEventListener('focusout',ev=>{ const row=ev.target.closest('.erow.etapa'); if(!row||row.contains(ev.relatedTarget)||!M.itemTouched||!M.itemTouched.has(row.dataset.eid)) return; const card=row.closest('.mat'); if(card) setTimeout(()=>{ if(pending.has('amb:'+card.dataset.mid)) flush('amb:'+card.dataset.mid); else { const a=ambientes.find(x=>x.id===card.dataset.mid); if(a) autoEscalaItens(a); } },0); });
   mats.addEventListener('focusout',ev=>{ const card=ev.target.closest('.mat'); if(card&&!card.contains(ev.relatedTarget)){ flush('amb:'+card.dataset.mid); setTimeout(()=>{ if(view==='eventos'&&currentId) renderDetail(); },0); } });
   mats.addEventListener('click',ev=>{
-    /* "ligado a este ambiente": vai pra aba do tipo, já no ambiente */
-    const go=ev.target.closest('[data-go]'); if(go){ const mid=(go.closest('.mat')||{}).dataset; setEvTab(go.dataset.go); setTimeout(()=>{ const el=mid&&$('.mat[data-mid="'+mid.mid+'"]'); if(el){ el.scrollIntoView({block:'start'}); window.scrollBy(0,-64); } },30); return; }
+    /* "ligado a este ambiente": vai pra aba do tipo, já filtrada nesse ambiente */
+    const go=ev.target.closest('[data-go]'); if(go){ supIrPara(go.dataset.go,go.dataset.amb); return; }
     const b=ev.target.closest('[data-act]'); if(!b) return; const act=b.dataset.act; const card=b.closest('.mat'); if(!card) return;
     if(/^add-/.test(act)){ const blk=b.closest('[data-fkey]'); if(blk&&blk.classList.contains('folded')) toggleFold(blk,blk.dataset.fkey,false); }
     if(act==='add-etapa') addItem(card,b.dataset.desc||'');
     else if(act==='del-etapa'){ const row=b.closest('.etapa'); if(row) delItem(card,row.dataset.eid); }
-    else if(act==='add-prov') addProv(card,b.dataset.tipo||'ALUGAR');
-    else if(act==='add-fab') addFab(card);
-    else if(act==='del-fab'){ const row=b.closest('.fabitem'); if(row) delFab(card,row.dataset.fbid); }
-    else if(act==='del-prov'){ const row=b.closest('.prow'); if(row) delProv(card,row.dataset.pid); }
-    else if(act==='add-equip') addEquip(card,b.dataset.nome||'');
-    else if(act==='del-equip'){ const row=b.closest('.qrow'); if(row) delEquip(card,row.dataset.qid); }
-    else if(act==='add-mo') addMo(card,b.dataset.tipo||'CARREGADOR');
-    else if(act==='del-mo'){ const row=b.closest('.morow'); if(row) delMo(card,row.dataset.moid); }
     else if(act==='del-amb'){ b.hidden=true; $('[data-role="delconf"]',$('.mhead',card)).hidden=false; }
     else if(act==='del-amb-no'){ $('[data-role="delconf"]',$('.mhead',card)).hidden=true; $('[data-act="del-amb"]',card).hidden=false; }
     else if(act==='del-amb-yes') delAmb(card.dataset.mid);
@@ -5018,7 +5092,7 @@ function osiPlan(){
 }
 /* o que vai pra onde (refeito quando troca o evento) */
 function osiDefaults(){
-  const P=OSI, ev=P.alvo!=='new'?evById(P.alvo):null, ambs=ev?ambsOf(ev.id):[];
+  const P=OSI, ev=P.alvo!=='new'?evById(P.alvo):null, ambs=ev?ambsReais(ev.id):[];
   P.datas=!ev||!(ev.monInicio||ev.evInicio||ev.desInicio);
   P.secs.forEach(s=>{ let ex=ambs.find(a=>lxFold(a.nome)===lxFold(s.titulo)); if(!ex){ let bs=0; ambs.forEach(a=>{ const v=osiSim(s.titulo,a.nome); if(v>bs){ bs=v; ex=v>=0.5?a:ex; } }); } s.dest=ex?ex.id:'new'; });
   const temOS=P.secs.some(s=>s.kind==='amb');
@@ -5053,7 +5127,7 @@ function osiParts(){
     const theirs=[['MONT',o.mont],['EV',o.ev],['DESM',o.desm]].map(([l,d])=>d[0]||d[1]?l+' '+periodoDM(d[0],d[1]):'').filter(Boolean).join(' · ');
     h+='<div class="mp-opts osi-opts"><button type="button" class="pp'+(P.datas?' on':'')+'" data-osio="datas" aria-pressed="'+(P.datas?'true':'false')+'"><span class="pp-box"></span><span class="pp-n">USAR AS DATAS DA O.S. NO EVENTO</span></button></div>'+(ours!==theirs?'<span class="imp-note">datas aqui: '+esc(ours||'SEM DATA')+'</span>':''); }
   h+='</section>';
-  const ambs=ev?ambsOf(ev.id):[];
+  const ambs=ev?ambsReais(ev.id):[];
   const ambOpts=sel=>ambs.map(a=>'<option value="'+esc(a.id)+'"'+(sel===a.id?' selected':'')+'>JUNTAR COM '+esc(clip(a.nome||'(SEM NOME)',34))+'</option>').join('');
   const pv=arr=>'<small class="osi-pv">'+esc(clip(arr.slice(0,2).join(' | '),170))+'</small>';
   if(P.secs.length) h+='<section><div class="sec-h"><h3>DA O.S. — CADA BLOCO VIRA UM AMBIENTE</h3></div><div class="imp-list">'+P.secs.map(s=>{ const n=s.src.itens.length;
@@ -5342,7 +5416,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
   };
 
   /* ---------- 3. dia a dia ---------- */
-  const RLAB={'COMEÇA A FABRICAR':'FAB. INÍCIO','FICA PRONTO':'PRONTO','RETIRAR':'RETIRAR','CHEGA':'CHEGA','CHEGA E SAI':'CHEGA E SAI','DEVOLVER':'DEVOLVER','SAI':'SAI'};
+  const RLAB={'COMEÇA A FABRICAR':'FAB. INÍCIO','FICA PRONTO':'PRONTO','RETIRAR':'RETIRAR','CHEGA NA EMPRESA':'NA EMPRESA','CHEGA':'CHEGA','CHEGA E SAI':'CHEGA E SAI','DEVOLVER':'DEVOLVER','SAI':'SAI'};
   const VO=['COMEÇA A FABRICAR','FICA PRONTO','RETIRAR','CHEGA','CHEGA E SAI','SAI','DEVOLVER'];
   const dayInfo=k=>{
     const d=PD(k), ph=dayPhases(ev,ps,d,k), ts=(al[k]||[]).filter(t=>!EF||t===EF);
@@ -5387,7 +5461,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     x.itens.forEach(i=>add(i.desc+(i.amb?' ('+i.amb+')':'')+(i.t&&!EF?' — '+rShort(i.t):''),'normal',8,C.ink,0,i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA')));
     x.equip.forEach(q=>add(q.nome+(!CLI&&q.origem==='ALUGADO'?' (ALUGADO'+(q.forn?' · '+q.forn:'')+')':q.origem==='CLIENTE'?' (DO CLIENTE)':''),'normal',8,C.ink,0,q.lab));
     x.fretes.forEach(f=>add(f.qtd+'X '+f.cam+(f.oque?' — '+f.oque:'')+(!CLI&&f.terc?' (FRETE DE FORA)':''),'normal',8,C.ink,0,'FRETE '+f.dir));
-    x.mo.forEach(m=>add(moTxt(m,{amb:true,forn:!SIMP,st:m.open})+(!m.qtd?' (QUANTOS?)':''),'normal',8,m.open?C.ink:C.ink,0,m.tipo==='CARREGADOR'?'CARREG.':m.tipo==='MARCENEIRO'?'MARCEN.':'APOIO',m.open?C.warn:C.teal));
+    x.mo.forEach(m=>add(moTxt(m,{amb:true,forn:!SIMP,st:m.open})+(!m.qtd?' (QUANTOS?)':''),'normal',8,m.open?C.ink:C.ink,0,m.tipo==='OUTRO'?'APOIO':'CARREG.',m.open?C.warn:C.teal));
     x.radar.forEach(r=>add(r.desc+(r.forn?' — '+r.forn:'')+(r.status?'  ['+r.status+']':''),'normal',8,C.ink,0,RLAB[r.verb]||r.verb,r.open?C.warn:C.teal));
     while(L.length&&L[L.length-1].gap) L.pop();
     return L;
@@ -5447,9 +5521,10 @@ function renderCrono(JsPDF,ev,O,S,tight){
 
   /* ---------- 4. checklist por ambiente ---------- */
   const ambientesSec=()=>{
-    const ambs=ambsOf(ev.id); if(!ambs.length) return;
-    const blocks=[];
-    ambs.forEach((a,ai)=>{
+    /* o EVENTO TODO (o que atende o evento inteiro) vem primeiro, sem número; os ambientes depois, numerados */
+    const g=ambGeral(ev.id), ambs=(g?[g]:[]).concat(ambsReais(ev.id)); if(!ambs.length) return;
+    const blocks=[]; let num=0;
+    ambs.forEach(a=>{ const ai=isGeral(a)?-1:num++;
       const rows=[]; const pn=prodName(ev,a.produtorId);
       (a.itens||[]).filter(x=>tr(x.desc)).forEach(it=>{ const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null, rid=t&&t.regId, ridD=td&&td.regId; if(EF&&rid!==EF&&ridD!==EF) return;
         const tn=x=>x?entryName(x)+(!CLI&&teamIsTercEntry(x)?' (TERC.)':''):(CLI?'':'SEM EQUIPE');
@@ -5458,14 +5533,14 @@ function renderCrono(JsPDF,ev,O,S,tight){
           :[it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',tn(t)];
         rows.push({lab:'',txt:it.desc,sub:sub.filter(Boolean).join('  ·  ')}); });
       if(!EF&&!CLI){
-        (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(f.oque||'?')+(f.qtd?' · '+f.qtd:''),sub:[f.prontoAte?'PRONTO ATÉ '+fmtDM(f.prontoAte):'',f.chega?'CHEGA '+fmtDM(f.chega):'',nossa?'NOSSA':'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:''),f.status||''].filter(Boolean).join('  ·  ')}); });
-        (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:p.oque||'?',sub:[p.fornecedor||'',p.data?'CHEGA '+fmtDM(p.data):'',!com&&p.devolve?'DEVOLVE '+fmtDM(p.devolve):'',p.status||''].filter(Boolean).join('  ·  ')}); });
+        (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(linhas(f.oque)||'?')+(f.qtd?' · '+f.qtd:''),sub:[nossa?'NOSSA'+(f.fornecedor?' ('+f.fornecedor+')':''):'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:'')].concat(fabQuando(f),[f.status||'',SIMP?'':linhas(f.obs)]).filter(Boolean).join('  ·  ')}); });
+        (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:(linhas(p.oque)||'?')+(tr(p.qtd)?' · '+tr(p.qtd):''),sub:[p.fornecedor||''].concat(provQuando(p),[p.status||'',SIMP?'':linhas(p.obs)]).filter(Boolean).join('  ·  ')}); });
       }
-      if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ rows.push({lab:m.tipo==='CARREGADOR'?'CARREG.':m.tipo==='MARCENEIRO'?'MARCEN.':'APOIO',txt:moNome(m)+(m.tipo!=='OUTRO'&&tr(m.funcao)?' — '+normName(m.funcao):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
+      if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ rows.push({lab:m.tipo==='OUTRO'?'APOIO':'CARREG.',txt:moNome(m)+(linhas(m.oque)?' — '+normName(linhas(m.oque)):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
       if(!EF&&!SIMP) (a.equip||[]).forEach(q=>{ rows.push({lab:'EQUIP.',txt:q.nome||'EQUIPAMENTO',sub:[q.de||q.ate?periodoDM(q.de,q.ate):'',CLI?'':((q.origem||'PRÓPRIO')==='ALUGADO'?'ALUGADO'+(q.fornecedor?' · '+q.fornecedor:''):'')].filter(Boolean).join('  ·  ')}); });
       const obs=tr(a.obs)&&!EF&&!CLI?a.obs:'';
       if(!rows.length&&!obs) return;
-      blocks.push({a:a,i:ai+1,pn:pn,rows:rows,obs:obs});
+      blocks.push({a:a,i:ai+1,geral:ai<0,pn:pn,rows:rows,obs:obs});
     });
     if(!blocks.length) return;
     const W=CW-12;
@@ -5473,7 +5548,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     blocks.forEach(bk=>{ bk.rows.forEach(r=>r._h=measureRow(r)); bk.obsL=bk.obs?wrapT('OBS: '+bk.obs,CW-6,'normal',7.6):[]; bk.h=V(8.5)+bk.rows.reduce((s,r)=>s+r._h,0)+bk.obsL.length*LH(7.6)+V(4); });
     section('CHECKLIST POR AMBIENTE',CLI?'o que vai ser montado em cada ambiente':'marque o que já foi feito · itens com data e equipe, fabricação, locação e equipamento',Math.min(blocks[0].h,V(60)));
     blocks.forEach(bk=>{
-      const head=(cont)=>{ fc(C.navy); doc.rect(ML,y,CW,V(6.6),'F'); const pr=bk.pn?'PRODUTOR: '+bk.pn:''; const pw=pr?Math.min(70,tw(pr,'normal',7.4))+6:0; tc(C.white); T(fitT(bk.i+'. '+(bk.a.nome||'(AMBIENTE SEM NOME)')+(cont?' (CONTINUAÇÃO)':''),CW-5-pw,'bold',9),ML+2.5,y+V(4.5)); if(pr){ tc(C.white); T(fitT(pr,70,'normal',7.4),PW-ML-2.5,y+V(4.5),{align:'right'}); } y+=V(8.5); };
+      const head=(cont)=>{ fc(C.navy); doc.rect(ML,y,CW,V(6.6),'F'); const pr=bk.pn?'PRODUTOR: '+bk.pn:''; const pw=pr?Math.min(70,tw(pr,'normal',7.4))+6:0; tc(C.white); T(fitT((bk.geral?'EVENTO TODO — VALE PRO EVENTO INTEIRO':bk.i+'. '+(bk.a.nome||'(AMBIENTE SEM NOME)'))+(cont?' (CONTINUAÇÃO)':''),CW-5-pw,'bold',9),ML+2.5,y+V(4.5)); if(pr){ tc(C.white); T(fitT(pr,70,'normal',7.4),PW-ML-2.5,y+V(4.5),{align:'right'}); } y+=V(8.5); };
       const row=(r,ri)=>{
         if(!CLI) checkbox(ML+2,y+V(2.9)); else { fc(C.orange); doc.circle(ML+3.4,y+V(1.6),0.7,'F'); }
         let x=ML+7; if(r.lab){ fnt('bold',6.4); tc(C.orange); T(r.lab,x,y+V(2.7),{charSpace:0.2}); x+=17; }
@@ -5492,11 +5567,13 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const items=radarItems().filter(it=>it.ev.id===ev.id); if(!items.length||EF) return;
     const RO=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPAMENTO','MÃO DE OBRA','EQUIPE TERC.','PRODUTOR','FRETE'];
     const groups=RO.map(k=>({k:k,list:items.filter(it=>it.kind===k)})).filter(g=>g.list.length);
-    const keyd=it=>it.chega||it.prontoAte||it.retirada||it.sai||'9999';
+    const keyd=it=>it.chega||it.prontoAte||it.retirada||it.empresa||it.sai||'9999';
     const W=CW-8;
     groups.forEach(g=>{ g.list.sort((a,b)=>keyd(a)<keyd(b)?-1:keyd(a)>keyd(b)?1:0);
-      g.rows=g.list.map(it=>{ const dts=[]; if(it.kind==='FABRICAÇÃO'&&it.prontoAte) dts.push('PRONTO '+fmtDM(it.prontoAte)); if(it.retirada) dts.push('RETIRA '+fmtDM(it.retirada)); if(it.chega) dts.push((it.kind==='FRETE'||it.kind==='EQUIPE TERC.'||it.kind==='PRODUTOR'||it.kind==='EQUIPAMENTO'?'DE ':'CHEGA ')+fmtDM(it.chega)); if(it.sai) dts.push((it.kind==='FRETE'?'VOLTA ':it.kind==='LOCAÇÃO'?'DEVOLVE ':'ATÉ ')+fmtDM(it.sai));
-        const tl=wrapT(it.desc+(it.forn?' — '+it.forn:''),W-50,'bold',8.4), sl=it.sub?wrapT(it.sub,W-50,'normal',7.2):[];
+      g.rows=g.list.map(it=>{ const dts=[]; if(it.kind==='FABRICAÇÃO'&&it.prontoAte) dts.push('PRONTO '+fmtDM(it.prontoAte)); if(it.retirada) dts.push('RETIRA '+fmtDM(it.retirada)); if(it.empresa) dts.push('NA EMPRESA '+fmtDM(it.empresa)); if(it.chega) dts.push((it.kind==='FRETE'||it.kind==='EQUIPE TERC.'||it.kind==='PRODUTOR'||it.kind==='EQUIPAMENTO'?'DE ':'CHEGA ')+fmtDM(it.chega)); if(it.sai) dts.push((it.kind==='FRETE'?'VOLTA ':it.kind==='LOCAÇÃO'?'DEVOLVE ':'ATÉ ')+fmtDM(it.sai));
+        /* as datas ficam à direita: o texto quebra antes de chegar nelas */
+        const dw=dts.length?tw(dts.join(' · '),'bold',7.2):0, TW=Math.min(W-50,CW-36-dw);
+        const tl=wrapT(it.desc+(it.forn?' — '+it.forn:''),TW,'bold',8.4), sl=it.sub?wrapT(it.sub,TW,'normal',7.2):[];
         return {it:it,dts:dts.join(' · '),tl:tl,sl:sl,_h:tl.length*LH(8.4)+sl.length*LH(7.2)+V(2.4)}; });
       g.h=V(7)+g.rows.reduce((s,r)=>s+r._h,0)+V(3); });
     section('RADAR — O QUE PRECISA FICAR PRONTO','fabricação, locação, compra, equipamento alugado, equipe e frete de fora · marque quando estiver resolvido',Math.min(groups[0].h,V(50)));
@@ -5572,11 +5649,11 @@ async function exportRadarPDF(v){
   const ORDER=['FABRICAÇÃO','LOCAÇÃO','COMPRA','EQUIPE TERC.','PRODUTOR','EQUIPAMENTO','MÃO DE OBRA','FRETE'];
   const evGroups=new Map(); items.forEach(it=>{ if(!evGroups.has(it.ev.id)) evGroups.set(it.ev.id,[]); evGroups.get(it.ev.id).push(it); });
   const evOrder=eventos.slice().map(e=>Object.assign({span:evSpan(e)},e)).sort((a,b)=>{ const fa=a.span.first||'9999', fb=b.span.first||'9999'; return fa<fb?-1:fa>fb?1:String(a.nome||'').localeCompare(String(b.nome||'')); }).filter(e=>evGroups.has(e.id));
-  const colsFor=k=>{ const fab=k==='FABRICAÇÃO'; const c=[{h:'O QUÊ',w:fab?66:94},{h:k==='EQUIPE TERC.'||k==='PRODUTOR'?'CONTATO':'FORNECEDOR / QUEM',w:48}]; if(fab) c.push({h:'INÍCIO -> PRONTO',w:28}); c.push({h:'ENTREGA / RETIRADA',w:24},{h:k==='FABRICAÇÃO'||k==='LOCAÇÃO'||k==='COMPRA'?'RETIRA NO FORNEC.':'-',w:22},{h:k==='FRETE'?'VAI':k==='EQUIPE TERC.'||k==='EQUIPAMENTO'||k==='PRODUTOR'?'DE':'CHEGA NA MONTAGEM',w:22},{h:k==='LOCAÇÃO'?'DEVOLVE':k==='FRETE'?'VOLTA':k==='FABRICAÇÃO'||k==='COMPRA'?'-':'ATÉ',w:22},{h:'STATUS',w:CW-(fab?66:94)-48-(fab?28:0)-24-22-22-22}); return c; };
-  const rowFor=(k,it)=>{ const r=[it.desc+(it.sub?'\n'+it.sub:''),it.forn||'-']; if(k==='FABRICAÇÃO') r.push((it.inicio?fmtDate(it.inicio):'...')+' -> '+(it.prontoAte?fmtDate(it.prontoAte):'...')); r.push(it.modo||'-',it.retirada?fmtDate(it.retirada):'-',it.chega?fmtDate(it.chega):'-',it.sai?fmtDate(it.sai):'-',it.status||'SEM STATUS'); return r; };
+  const colsFor=k=>{ const fab=k==='FABRICAÇÃO'; const c=[{h:'O QUÊ',w:fab?66:94},{h:k==='EQUIPE TERC.'||k==='PRODUTOR'?'CONTATO':'FORNECEDOR / QUEM',w:48}]; if(fab) c.push({h:'INÍCIO -> PRONTO',w:28}); c.push({h:'ENTREGA / RETIRADA',w:24},{h:k==='FABRICAÇÃO'||k==='LOCAÇÃO'||k==='COMPRA'?'RETIRA / NA EMPRESA':'-',w:22},{h:k==='FRETE'?'VAI':k==='EQUIPE TERC.'||k==='EQUIPAMENTO'||k==='PRODUTOR'?'DE':'CHEGA NA MONTAGEM',w:22},{h:k==='LOCAÇÃO'?'DEVOLVE':k==='FRETE'?'VOLTA':k==='FABRICAÇÃO'||k==='COMPRA'?'-':'ATÉ',w:22},{h:'STATUS',w:CW-(fab?66:94)-48-(fab?28:0)-24-22-22-22}); return c; };
+  const rowFor=(k,it)=>{ const r=[it.desc+(it.sub?'\n'+it.sub:''),it.forn||'-']; if(k==='FABRICAÇÃO') r.push((it.inicio?fmtDate(it.inicio):'...')+' -> '+(it.prontoAte?fmtDate(it.prontoAte):'...')); r.push(entregaCurta(it.modo)||it.modo||'-',it.retirada?'RETIRA '+fmtDate(it.retirada):it.empresa?'EMPRESA '+fmtDate(it.empresa):'-',it.chega?fmtDate(it.chega):'-',it.sai?fmtDate(it.sai):'-',it.status||'SEM STATUS'); return r; };
   const drawHeader=(cols)=>{ font('bold',6.6); const ls=cols.map(c=>wrap(c.h,c.w-2.5)); const n=Math.max.apply(null,ls.map(l=>l.length||1)); const hh=n*3+3.2; ensure(hh+4); fill(C.navy); doc.rect(M,y-4.2,CW,hh,'F'); let x=M+1.5; tcol(C.white); ls.forEach((l,ci)=>{ l.forEach((s,j)=>T(s,x,y+j*3,{charSpace:0.15})); x+=cols[ci].w; }); y+=hh-1.6; };
   const table=(k,list)=>{
-    const cols=colsFor(k); const key=it=>it.chega||it.prontoAte||it.retirada||it.sai||'9999'; list.sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:0; });
+    const cols=colsFor(k); const key=it=>it.chega||it.prontoAte||it.retirada||it.empresa||it.sai||'9999'; list.sort((a,b)=>{ const ka=key(a), kb=key(b); return ka<kb?-1:ka>kb?1:0; });
     ensure(16); fill(KCOL[k]||C.navy); doc.rect(M,y-3.6,2.2,5.6,'F'); font('bold',10); tcol(C.navy); T(k+'  ·  '+list.length+' ITE'+(list.length===1?'M':'NS')+'  ·  '+list.filter(x=>isOpen(x.status)).length+' EM ABERTO',M+4.5,y,{charSpace:0.3}); y+=6;
     drawHeader(cols);
     list.forEach((it,i)=>{
@@ -6584,6 +6661,384 @@ function wireVeicEv(){
     if(t.closest('[data-act="veic-pdf"]')){ flushAll(); gerarPacoteVeiculos(e); return; }
     const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; }
     const pe=t.closest('[data-pessoa]'); if(pe){ openPessoa(pe.dataset.pessoa); return; } });
+}
+/* ===================================================================
+   SUPRIMENTOS DO EVENTO (v42) — Locação e compra · Equipamentos · Fabricação · Carregadores
+   Cada aba é um cadastro: "+ Alugar" (ou "+ Comprar", "+ Empilhadeira", "+ Fabricação", "+ Carregador"…)
+   cria o registro e abre a ficha no painel do lado pra ir preenchendo. Cada registro fica ligado a um
+   ambiente ou ao EVENTO TODO. Os registros moram nas listas do ambiente (a.prov, a.equip, a.fab, a.mo);
+   o EVENTO TODO é um ambiente especial (id g-<evento>, geral:true) que não aparece na aba Ambientes.
+   Cronograma, radar, mapa de dias e PDFs continuam lendo das listas dos ambientes.
+   Cada mudança grava só o registro mexido, juntando com o que os outros gravaram (12m_merge.js).
+   =================================================================== */
+const SUP_TABS=['loc','eqp','fab','mo'];
+const placaExtra=r=>r&&tr(r.placa)&&!placaNoNome(r)?normName(r.placa):'';
+const SUP_LIST={loc:'prov',eqp:'equip',fab:'fab',mo:'mo'};
+const SUP_TIT={loc:'Locação e compra',eqp:'Equipamentos',fab:'Fabricação',mo:'Carregadores e outra mão de obra'};
+function isSupTab(k){ return SUP_TABS.indexOf(k)>=0; }
+const MO_TIPOS=['CARREGADOR','OUTRO'];
+const ENTREGAS=[['ENTREGA NO LOCAL','NO LOCAL','O fornecedor entrega direto na montagem.'],['ENTREGA NA EMPRESA','NA EMPRESA','O fornecedor entrega na empresa e vai pra montagem no nosso frete.'],['RETIRAMOS','RETIRAMOS','A gente busca no fornecedor.']];
+const DEVOLS=[['ELES BUSCAM','O FORNECEDOR BUSCA'],['DEVOLVEMOS','A GENTE DEVOLVE']];
+const entregaCurta=m=>{ const e=ENTREGAS.find(x=>x[0]===m); return e?e[1]:''; };
+const dmS=s=>s?fmtDM(s):'';
+/* ---------- textos curtos (lista, cronograma, radar) ---------- */
+function provQuando(p){
+  const md=p.modo||'', a=[];
+  if(md==='ENTREGA NO LOCAL') a.push('NO LOCAL'+(p.data?' '+dmS(p.data):''));
+  else if(md==='ENTREGA NA EMPRESA'){ a.push('NA EMPRESA'+(p.empresa?' '+dmS(p.empresa):'')); if(p.data) a.push('MONTAGEM '+dmS(p.data)); }
+  else if(md==='RETIRAMOS'){ a.push('RETIRAMOS'+(p.retirada?' '+dmS(p.retirada):'')); if(p.data) a.push('MONTAGEM '+dmS(p.data)); }
+  else if(p.data) a.push('CHEGA '+dmS(p.data));
+  if(p.tipo!=='COMPRAR'&&p.devolve) a.push('DEVOLVE '+dmS(p.devolve)+(p.devModo==='DEVOLVEMOS'?' (A GENTE LEVA)':p.devModo==='ELES BUSCAM'?' (ELES BUSCAM)':''));
+  return a;
+}
+function fabQuando(f){
+  const terc=(f.quem||'NOSSA')==='TERCEIRA', md=terc?(f.modo||''):'', a=[];
+  if(f.inicio) a.push('COMEÇA '+dmS(f.inicio));
+  if(f.prontoAte) a.push('PRONTO ATÉ '+dmS(f.prontoAte));
+  if(md==='ENTREGA NA EMPRESA') a.push('NA EMPRESA'+(f.empresa?' '+dmS(f.empresa):''));
+  if(md==='RETIRAMOS') a.push('RETIRAMOS'+(f.retirada?' '+dmS(f.retirada):''));
+  if(f.chega) a.push((md==='ENTREGA NO LOCAL'?'NO LOCAL ':'CHEGA ')+dmS(f.chega)); else if(md==='ENTREGA NO LOCAL') a.push('ENTREGA NO LOCAL');
+  return a;
+}
+const moQuando=m=>[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):''].filter(Boolean);
+const eqQuando=q=>[q.de||q.ate?periodoDM(q.de,q.ate):''].filter(Boolean);
+function supAberto(tab,x){ return tab==='eqp'?(x.origem||'PRÓPRIO')==='ALUGADO'&&isOpen(x.status):isOpen(x.status); }
+const supTemStatus=(tab,x)=>tab!=='eqp'||(x.origem||'PRÓPRIO')==='ALUGADO';
+function supStList(tab,x){ return tab==='loc'?(x.tipo==='COMPRAR'?COT_COM:COT):tab==='fab'?COT_FAB:COT; }
+function supContaCurta(tab,arr){
+  if(tab==='loc'){ const alu=arr.filter(p=>p.tipo!=='COMPRAR').length, com=arr.length-alu; return [alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' + '); }
+  if(tab==='eqp') return plural(arr.length,'equipamento','equipamentos');
+  if(tab==='fab') return plural(arr.length,'peça','peças');
+  const mp=moPessoas(arr); return mp?plural(mp,'pessoa','pessoas'):plural(arr.length,'contratação','contratações');
+}
+/* ---------- onde estão (EVENTO TODO primeiro, depois os ambientes na ordem) ---------- */
+function supAmbsOrd(evId){ const g=ambGeral(evId); return (g?[g]:[]).concat(ambsReais(evId)); }
+function supRecs(ev,tab){ const L=SUP_LIST[tab], out=[]; supAmbsOrd(ev.id).forEach(a=>(a[L]||[]).forEach(it=>out.push({a:a,it:it}))); return out; }
+/* filtro da lista (vale pras 4 abas do evento aberto): TODOS, um ambiente ou o EVENTO TODO; e "só em aberto" */
+function supFiltro(ev){
+  if(!M.supF||M.supF.ev!==ev.id) M.supF={ev:ev.id,amb:'TODOS',aberto:false};
+  const f=M.supF; if(f.amb!=='TODOS'&&f.amb!==geralId(ev.id)&&!ambsReais(ev.id).some(a=>a.id===f.amb)) f.amb='TODOS';
+  return f;
+}
+function novoGeral(evId){ return normalizeAmb({id:geralId(evId),eventoId:evId,geral:true,ordem:-1,nome:'EVENTO TODO',produtorId:'',itens:[],fab:[],prov:[],equip:[],mo:[],obs:'',criadoEm:nowIso(),atualizadoEm:nowIso()}); }
+/* muda um ambiente (ou o EVENTO TODO, que nasce aqui se ainda não existe) e grava */
+function patchAmbDoc(aid,fn,evId){
+  if(readOnly){ toast('Sem permissão pra editar aqui.',true); return null; }
+  let a=ambientes.find(x=>x.id===aid);
+  if(!a&&evId&&aid===geralId(evId)) a=novoGeral(evId);
+  if(!a) return null;
+  const o=normalizeAmb(JSON.parse(JSON.stringify(a))); fn(o); o.atualizadoEm=nowIso();
+  upsertLocal('ambientes',o); saveDocNow('ambientes',o.id); refresh(); return o;
+}
+/* ---------- registro novo ---------- */
+function supNovo(tab,kind){
+  const b={id:newId(),criadoEm:nowIso()};
+  if(tab==='loc') return Object.assign(b,{tipo:kind==='COMPRAR'?'COMPRAR':'ALUGAR',oque:'',qtd:'',quem:'TERCEIRA',fornecedor:'',contato:'',modo:'',empresa:'',retirada:'',data:'',devolve:'',devModo:'',status:'A COTAR',cotacao:'',obs:''});
+  if(tab==='fab') return Object.assign(b,{oque:'',qtd:'',material:'',quem:'NOSSA',fornecedor:'',contato:'',inicio:'',prontoAte:'',modo:'',empresa:'',retirada:'',chega:'',status:'A PRODUZIR',cotacao:'',obs:''});
+  if(tab==='mo') return Object.assign(b,{tipo:kind==='OUTRO'?'OUTRO':'CARREGADOR',funcao:'',qtd:'',oque:'',de:'',ate:'',horario:'',fornecedor:'',contato:'',status:'A COTAR',cotacao:'',obs:''});
+  /* equipamento: EMPILHADEIRA / MUNCK com uma unidade só no cadastro já escolhe ela */
+  const reg=supAchaUnidade(kind);
+  return Object.assign(b,{regId:reg?reg.id:'',nome:reg?reg.nome:normName(kind),origem:'PRÓPRIO',fornecedor:'',contato:'',de:'',ate:'',status:'',cotacao:'',obs:''});
+}
+function supAchaUnidade(nome){ if(!tr(nome)) return null; const k=normName(nome), ex=recsOf('EQUIPAMENTO').find(r=>normName(r.nome)===k); if(ex) return ex; const fam=eqParse(nome).fam, same=fam?recsOf('EQUIPAMENTO').filter(r=>eqParse(r.nome).fam===fam):[]; return same.length===1?same[0]:null; }
+const SUP_CONTEUDO={loc:['oque','qtd','fornecedor','contato','empresa','retirada','data','devolve','cotacao','obs'],eqp:['regId','nome','fornecedor','contato','de','ate','cotacao','obs'],fab:['oque','qtd','material','fornecedor','contato','inicio','prontoAte','empresa','retirada','chega','cotacao','obs'],mo:['funcao','qtd','oque','de','ate','horario','fornecedor','contato','cotacao','obs']};
+const supVazio=(tab,it)=>SUP_CONTEUDO[tab].every(k=>!tr(it[k]));
+function addSup(tab,kind){
+  const ev=cur(); if(!ev||readOnly) return; flushAll();
+  const f=supFiltro(ev), aid=f.amb!=='TODOS'?f.amb:geralId(ev.id), it=supNovo(tab,kind), L=SUP_LIST[tab];
+  const o=patchAmbDoc(aid,x=>{ x[L]=(x[L]||[]).concat([it]); },ev.id); if(!o) return;
+  if(f.aberto&&!supAberto(tab,it)) f.aberto=false;
+  openSup(ev.id,o.id,it.id,tab,true);
+}
+/* ---------- a lista (uma linha por cadastro) ---------- */
+function supKind(tab,it){
+  if(tab==='loc') return it.tipo==='COMPRAR'?['COMPRAR','k-com']:['ALUGAR','k-alu'];
+  if(tab==='eqp'){ const o=it.origem||'PRÓPRIO'; return o==='ALUGADO'?['ALUGADO','k-alu']:o==='CLIENTE'?['DO CLIENTE','k-cli']:['NOSSO','k-nos']; }
+  if(tab==='fab') return (it.quem||'NOSSA')==='TERCEIRA'?['TERCEIRA','k-ter']:['NOSSA','k-nos'];
+  return it.tipo==='OUTRO'?['MÃO DE OBRA','k-apo']:['CARREGADOR','k-car'];
+}
+function supTitulo(tab,it){ if(tab==='eqp') return normName(it.nome); if(tab==='mo') return moNome(it); return normName(linha1(it.oque)); }
+const SUP_NOVO={loc:it=>it.tipo==='COMPRAR'?'NOVA COMPRA':'NOVA LOCAÇÃO',eqp:()=>'NOVO EQUIPAMENTO',fab:()=>'NOVA FABRICAÇÃO',mo:it=>it.tipo==='OUTRO'?'OUTRA MÃO DE OBRA':'CARREGADORES'};
+function supLinha(tab,it){
+  const reg=tab==='eqp'?regOf(it.regId):null, o=it.origem||'PRÓPRIO';
+  if(tab==='loc') return {sub:[tr(it.qtd),linhaResto(it.oque)].filter(Boolean).join(' · '),forn:tr(it.fornecedor),fsub:tr(it.contato),when:provQuando(it)};
+  if(tab==='fab'){ const terc=(it.quem||'NOSSA')==='TERCEIRA'; return {sub:[tr(it.qtd),tr(it.material),linhaResto(it.oque)].filter(Boolean).join(' · '),forn:tr(it.fornecedor)||(terc?'':'NOSSA'),fsub:terc?tr(it.contato):'',when:fabQuando(it)}; }
+  if(tab==='mo') return {sub:linhas(it.oque),forn:tr(it.fornecedor),fsub:tr(it.contato),when:moQuando(it)};
+  const cond=reg?condutorDe(reg):'';
+  return {sub:reg?[placaExtra(reg)?'PLACA '+placaExtra(reg):'',tr(reg.modelo)].filter(Boolean).join(' · '):'',forn:o==='ALUGADO'?tr(it.fornecedor):o==='CLIENTE'?'DO CLIENTE':(cond?'OPERADOR '+pShort(cond):''),fsub:o==='ALUGADO'?tr(it.contato):'',when:eqQuando(it)};
+}
+const SUP_COLS={loc:['Tipo','O que é','Fornecedor','Entrega e datas','Onde','Cotação'],eqp:['De quem','Equipamento','Fornecedor / operador','Período','Onde','Cotação'],fab:['Quem faz','O que fabricar','Quem fabrica','Prazos','Onde','Status'],mo:['Tipo','Quem e quantos','Quem fornece','Dias e horário','Onde','Cotação']};
+function supRowHTML(tab,r,selIid){
+  const a=r.a, it=r.it, k=a.id+'|'+it.id, [kl,kc]=supKind(tab,it), L=supLinha(tab,it), tit=supTitulo(tab,it), ab=supAberto(tab,it);
+  const st=supTemStatus(tab,it)?'<select class="s-st t-'+(it.status?(COT_TONE[it.status]||'grey'):'grey')+'" data-sup-st="'+esc(k)+'" aria-label="'+esc((tab==='fab'?'Status de ':'Cotação de ')+(tit||'item novo'))+'"'+(readOnly?' disabled':'')+'><option value="">SEM STATUS</option>'+supStList(tab,it).map(s=>'<option value="'+esc(s)+'"'+(s===it.status?' selected':'')+'>'+esc(s)+'</option>').join('')+'</select>':'<span class="s-st none" aria-hidden="true"></span>';
+  return '<div class="srow '+kc+(ab?' ab':'')+(it.id===selIid?' sel':'')+'" role="listitem">'
+    +'<button type="button" class="s-open" data-sup-open="'+esc(k)+'" aria-label="Abrir a ficha: '+esc(tit||SUP_NOVO[tab](it))+'">'
+    +'<span class="s-k">'+esc(kl)+'</span>'
+    +'<span class="s-m"><b'+(tit?'':' class="vazio"')+'>'+esc(tit||'(sem descrição)')+'</b>'+(L.sub?'<small>'+esc(L.sub)+'</small>':'')+'</span>'
+    +'<span class="s-f">'+(L.forn?esc(L.forn):'<i>—</i>')+(L.fsub?'<small>'+esc(L.fsub)+'</small>':'')+'</span>'
+    +'<span class="s-w">'+(L.when.length?esc(L.when[0])+(L.when.length>1?'<small>'+esc(L.when.slice(1).join(' · '))+'</small>':''):'<i>sem data</i>')+'</span>'
+    +'<span class="s-a'+(isGeral(a)?' geral':'')+'">'+esc(clip(ambTitulo(a),26))+'</span>'
+    +'</button>'+st+'</div>';
+}
+const SUP_ADD={loc:[['ALUGAR','+ Alugar','alu'],['COMPRAR','+ Comprar','com']],eqp:[['EMPILHADEIRA','+ Empilhadeira','nos'],['MUNCK','+ Munck','nos'],['','+ Outro equipamento','nos']],fab:[['','+ Fabricação','ter']],mo:[['CARREGADOR','+ Carregador','car'],['OUTRO','+ Outra mão de obra','apo']]};
+const SUP_VAZIO={
+  loc:'Nada pra alugar ou comprar ainda. <b>+ Alugar</b> ou <b>+ Comprar</b> abre a ficha: o que é, fornecedor, como chega, cotação. Pode ligar a um ambiente ou deixar pro evento todo.',
+  eqp:'Nenhum equipamento ainda. Escolha a unidade da nossa frota ou marque como alugado — os nossos aparecem na agenda de cada unidade, no mapa de dias e na lista de veículos do evento.',
+  fab:'Nada pra fabricar ainda. <b>+ Fabricação</b> abre a ficha: o que é, medidas, quem fabrica, prazos e entrega.',
+  mo:'Ninguém de fora ainda. <b>+ Carregador</b> pra quem vem carregar e descarregar; <b>+ Outra mão de obra</b> pra eletricista, marceneiro, limpeza… Geralmente é pro evento todo.'};
+function supResumo(tab,all){
+  const its=all.map(r=>r.it), n=its.length, ab=its.filter(x=>supAberto(tab,x)).length, fim=ab?' · <em>'+ab+' em aberto</em>':n?' · tudo fechado':'';
+  if(!n) return '';
+  if(tab==='loc'){ const alu=its.filter(p=>p.tipo!=='COMPRAR').length, com=n-alu; return '<b>'+[alu?plural(alu,'locação','locações'):'',com?plural(com,'compra','compras'):''].filter(Boolean).join(' · ')+'</b>'+fim; }
+  if(tab==='eqp'){ const al=its.filter(q=>q.origem==='ALUGADO').length; return '<b>'+plural(n,'equipamento','equipamentos')+'</b>'+(al?' · '+plural(al,'alugado','alugados'):'')+(ab?' · <em>'+ab+' em aberto</em>':''); }
+  if(tab==='fab') return '<b>'+plural(n,'peça','peças')+'</b>'+(ab?' · <em>'+ab+' em aberto</em>':' · tudo pronto ou fechado');
+  const mp=moPessoas(its); return '<b>'+(mp?plural(mp,'pessoa','pessoas')+' em ':'')+plural(n,'contratação','contratações')+'</b>'+fim;
+}
+function renderSup(ev){
+  const box=$('#supBox'), tab=M.evTab; if(!box||!isSupTab(tab)) return;
+  const f=supFiltro(ev), all=supRecs(ev,tab), ro=readOnly, p=M.panel, selIid=p&&p.kind==='sup'&&p.ev===ev.id?p.iid:'';
+  const ambs=ambsReais(ev.id), gid=geralId(ev.id), g=ambGeral(ev.id);
+  const sig=JSON.stringify([tab,f.amb,f.aberto,ro,selIid,all.map(r=>[r.a.id,r.a.nome,r.it]),ambs.map(a=>[a.id,a.nome]),tab==='eqp'?recsOf('EQUIPAMENTO').map(r=>[r.id,r.nome,r.placa,r.modelo,r.condutor]):0]);
+  if(box.dataset.sig===sig) return;
+  const fo=document.activeElement, fsel=fo&&box.contains(fo)?['supSt','supOpen','sfilt','sadd'].map(k=>fo.dataset&&fo.dataset[k]!=null?'[data-'+k.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+'="'+fo.dataset[k]+'"]':'').find(Boolean)||(fo.hasAttribute&&fo.hasAttribute('data-saberto')?'[data-saberto]':''):'';
+  const vis=all.filter(r=>(f.amb==='TODOS'||r.a.id===f.amb)&&(!f.aberto||supAberto(tab,r.it)));
+  const cnt=id=>all.filter(r=>r.a.id===id).length, abN=all.filter(r=>supAberto(tab,r.it)).length;
+  const dest=f.amb==='TODOS'||f.amb===gid?'EVENTO TODO':ambTitulo(ambs.find(a=>a.id===f.amb));
+  const chipF=(id,l,n,title)=>'<button type="button" class="chip'+(f.amb===id?' on':'')+(n?'':' zero')+'" data-sfilt="'+esc(id)+'" aria-pressed="'+(f.amb===id)+'"'+(title?' title="'+esc(title)+'"':'')+'>'+esc(l)+(n?' <b>'+n+'</b>':'')+'</button>';
+  let h='<div class="sup-head"><div class="sup-t"><h2>'+SUP_TIT[tab]+'</h2><p class="sup-sum">'+(supResumo(tab,all)||'Nada cadastrado ainda.')+'</p></div>'
+    +(ro?'':'<div class="sup-add">'+SUP_ADD[tab].map(([k,l,c])=>'<button type="button" class="btn sadd a-'+c+'" data-sadd="'+esc(k)+'">'+l+'</button>').join('')+'<span class="sup-dest">entra em <b>'+esc(dest)+'</b> · dá pra trocar na ficha</span></div>')+'</div>';
+  h+='<div class="sup-filt" role="group" aria-label="Mostrar só">'+chipF('TODOS','Todos',all.length)+chipF(gid,'Evento todo',cnt(gid),'O que atende o evento inteiro')
+    +ambs.map(a=>chipF(a.id,clip(a.nome||'(sem nome)',24),cnt(a.id),a.nome||'')).join('')
+    +'<span class="spacer"></span><button type="button" class="chip ab'+(f.aberto?' on':'')+'" data-saberto aria-pressed="'+f.aberto+'">Só em aberto'+(abN?' <b>'+abN+'</b>':'')+'</button></div>';
+  if(vis.length){
+    h+='<div class="sup-list t-'+tab+'" role="list"><div class="srow shead" aria-hidden="true"><span class="s-open">'+SUP_COLS[tab].slice(0,5).map(c=>'<span>'+c+'</span>').join('')+'</span><span class="s-st">'+SUP_COLS[tab][5]+'</span></div>'
+      +vis.map(r=>supRowHTML(tab,r,selIid)).join('')+'</div>';
+  }else{
+    const onde=f.amb==='TODOS'?'':(f.amb===gid?'no evento todo':'em '+esc(dest));
+    h+='<p class="sup-empty">'+(all.length?(f.aberto?'Nada em aberto '+(onde||'aqui')+' — tudo fechado.':'Nada '+onde+' ainda. O que você cadastrar agora entra '+(f.amb===gid?'no evento todo':'em <b>'+esc(dest)+'</b>')+'.'):SUP_VAZIO[tab])+'</p>';
+  }
+  box.innerHTML=h; box.dataset.sig=sig;
+  if(fsel){ const el=$(fsel,box); if(el) el.focus({preventScroll:true}); }
+}
+function setSupStatus(aid,tab,iid,v){ const L=SUP_LIST[tab]; patchAmbDoc(aid,o=>{ o[L]=(o[L]||[]).map(x=>x.id===iid?Object.assign({},x,{status:v}):x); }); }
+/* da aba Ambientes ("ligado a este ambiente") e do EVENTO TODO: abre a aba do tipo filtrada */
+function supIrPara(tab,aid){ const e=cur(); if(!e) return; const f=supFiltro(e); f.amb=aid||'TODOS'; f.aberto=false; setEvTab(tab); const tb=$('#evTabs'); if(tb){ const y=tb.getBoundingClientRect().top+window.scrollY-8; if(window.scrollY>y) window.scrollTo({top:y}); } }
+/* do radar: abre a ficha do item */
+function supDoRadar(evId,aid,list,iid){ const tab={prov:'loc',fab:'fab',equip:'eqp',mo:'mo'}[list]; if(!tab||!aid||!iid) return; const e=evById(evId); if(e){ const f=supFiltro(e); f.amb='TODOS'; f.aberto=false; } openSup(evId,aid,iid,tab,false); }
+
+/* ===================================================================
+   A FICHA (painel do lado)
+   =================================================================== */
+function openSup(evId,aid,iid,tab,fresh){ leavePanel(); M.panel={kind:'sup',ev:evId,aid:aid,iid:iid,tab:tab,fresh:!!fresh}; M.confirm=null; buildPanel(); showPanel(); }
+/* acha o registro (se outra pessoa trocou o ambiente, acha no ambiente novo) */
+function supFind(p){
+  const L=SUP_LIST[p.tab]; let a=ambientes.find(x=>x.id===p.aid), it=a?(a[L]||[]).find(x=>x.id===p.iid):null;
+  if(!it){ a=ambientes.find(x=>x.eventoId===p.ev&&(x[L]||[]).some(y=>y.id===p.iid))||null; it=a?(a[L]||[]).find(y=>y.id===p.iid):null; if(a) p.aid=a.id; }
+  const ev=evById(p.ev); return it&&ev?{a:a,it:it,ev:ev}:null;
+}
+function patchSup(p,fn){ const r=supFind(p); if(!r) return null; const L=SUP_LIST[p.tab]; return patchAmbDoc(r.a.id,o=>{ o[L]=(o[L]||[]).map(x=>{ if(x.id!==p.iid) return x; const y=Object.assign({},x); fn(y); return y; }); }); }
+/* saiu da ficha de um cadastro novo que ficou em branco: não cadastra */
+function supSaiu(p){ if(!p||!p.fresh||readOnly) return; p.fresh=false; const r=supFind(p); if(!r||!supVazio(p.tab,r.it)) return; const L=SUP_LIST[p.tab]; patchAmbDoc(r.a.id,x=>{ x[L]=(x[L]||[]).filter(y=>y.id!==p.iid); }); toast('Ficou em branco — não foi cadastrado.'); }
+const spF=(id,lab,f,ph,extra,dis)=>'<div class="fld"><label for="'+id+'">'+lab+'</label><input id="'+id+'" data-sf="'+f+'" autocomplete="off" placeholder="'+esc(ph)+'"'+(extra||'')+dis+'></div>';
+const spT=(id,lab,f,ph,rows,dis,extra)=>'<div class="fld"><label for="'+id+'">'+lab+'</label><textarea id="'+id+'" data-sf="'+f+'" rows="'+rows+'" placeholder="'+esc(ph)+'"'+(extra||'')+dis+'></textarea></div>';
+const spD=(id,lab,f,dis,show)=>'<div class="fld"'+(show?' data-show="'+show+'"':'')+'><label for="'+id+'" id="'+id+'-l">'+lab+'</label>'+dateInput('sp-dt','',' id="'+id+'" data-sf="'+f+'"'+dis)+'</div>';
+const spSeg=(id,lab,f,show)=>'<div class="fld"'+(show?' data-show="'+show+'"':'')+'>'+(lab?'<span class="lbl" id="'+id+'-l">'+lab+'</span>':'')+'<div class="seg sp-seg" role="group" '+(lab?'aria-labelledby="'+id+'-l"':'aria-label="'+esc(f)+'"')+' id="'+id+'" data-seg="'+f+'"></div><p class="hint sp-sh" id="'+id+'-h" hidden></p></div>';
+const spSec=(tit,body,show)=>'<section class="sp-sec"'+(show?' data-show="'+show+'"':'')+'>'+(tit?'<h3>'+tit+'</h3>':'')+body+'</section>';
+const SUP_SHOW={
+  alugar:(t,it)=>it.tipo!=='COMPRAR', empresa:(t,it)=>it.modo==='ENTREGA NA EMPRESA', retira:(t,it)=>it.modo==='RETIRAMOS',
+  terc:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA', fabEmp:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA'&&it.modo==='ENTREGA NA EMPRESA', fabRet:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA'&&it.modo==='RETIRAMOS',
+  alug:(t,it)=>(it.origem||'PRÓPRIO')==='ALUGADO', nosso:(t,it)=>(it.origem||'PRÓPRIO')==='PRÓPRIO', outro:(t,it)=>it.tipo==='OUTRO'
+};
+function supSegOpts(tab,it,f){
+  if(f==='tipo') return tab==='loc'?[['ALUGAR','ALUGAR'],['COMPRAR','COMPRAR']]:[['CARREGADOR','CARREGADOR'],['OUTRO','OUTRA MÃO DE OBRA']];
+  if(f==='modo') return ENTREGAS.map(e=>[e[0],e[1]]);
+  if(f==='devModo') return DEVOLS;
+  if(f==='quem') return [['NOSSA','NOSSA'],['TERCEIRA','TERCEIRA']];
+  if(f==='origem') return [['PRÓPRIO','NOSSO'],['ALUGADO','ALUGADO'],['CLIENTE','DO CLIENTE']];
+  if(f==='status') return supStList(tab,it).map(s=>[s,s]);
+  return [];
+}
+function supFormHTML(p,it,dis){
+  const tab=p.tab, af=p.fresh?' data-autofocus':'';
+  const cot=(tit,ph,show)=>spSec(tit,spSeg('sp-st','STATUS','status')+spT('sp-cot',tab==='fab'?'ANOTAÇÃO':'ANOTAÇÃO DA COTAÇÃO','cotacao',ph,2,dis),show);
+  const forn=(lab,ph)=>'<div class="fgrid2">'+spF('sp-forn',lab,'fornecedor',ph,' list="dlForn"',dis)+spF('sp-cont','CONTATO','contato','TELEFONE, PESSOA','',dis)+'</div>';
+  let h='';
+  if(tab==='loc'){
+    h+=spSec('',spSeg('sp-tipo','É PRA','tipo')+spT('sp-oque','O QUE É','oque','Descreva à vontade: o item, medida, modelo, cor, quanto de cada…',3,dis,af)+'<div class="fgrid2">'+spF('sp-qtd','QUANTIDADE','qtd','EX: 20 UN, 2 JOGOS, 150 M²','',dis)+'</div>');
+    h+=spSec('FORNECEDOR',forn('NOME','QUEM ALUGA'));
+    h+=spSec('ENTREGA',spSeg('sp-modo','COMO CHEGA','modo')+'<div class="fgrid2">'+spD('sp-emp','CHEGA NA EMPRESA','empresa',dis,'empresa')+spD('sp-ret','A GENTE RETIRA','retirada',dis,'retira')+spD('sp-data','CHEGA NA MONTAGEM','data',dis)+'</div>');
+    h+=spSec('DEVOLUÇÃO','<div class="fgrid2">'+spD('sp-dev','DEVOLVE','devolve',dis)+'</div>'+spSeg('sp-devm','QUEM LEVA DE VOLTA','devModo'),'alugar');
+    h+=cot('COTAÇÃO','Valor, prazo, condição de pagamento, quem passou, outras opções…');
+  }else if(tab==='eqp'){
+    h+=spSec('',spSeg('sp-orig','DE QUEM É','origem')
+      +'<div class="fld" data-show="nosso"><label for="sp-reg">QUAL UNIDADE DA NOSSA FROTA</label><select id="sp-reg"'+(p.fresh&&!regOf(it.regId)?' data-autofocus':'')+dis+'></select><p class="hint" id="sp-regh"></p></div>'
+      +'<div class="fld" id="sp-nomef"><label for="sp-nome" id="sp-nomel">EQUIPAMENTO</label><input id="sp-nome" data-sf="nome" list="dlEquip" autocomplete="off" placeholder="EX: GENIE Z-45, EMPILHADEIRA 2,5T, PLATAFORMA"'+dis+'></div>'
+      +'<div class="sp-warn" id="sp-eqw" hidden></div>');
+    h+=spSec('PERÍODO','<div class="fgrid2">'+spD('sp-de','DE','de',dis)+spD('sp-ate','ATÉ','ate',dis)+'</div>');
+    h+=spSec('FORNECEDOR',forn('NOME','DE QUEM ALUGA'),'alug');
+    h+=cot('COTAÇÃO','Valor da diária, com operador?, frete, prazo…','alug');
+  }else if(tab==='fab'){
+    h+=spSec('',spT('sp-oque','O QUE FABRICAR','oque','Descreva a peça: o que é, acabamento, cor, referência…',3,dis,af)+'<div class="fgrid2">'+spF('sp-qtd','QUANTIDADE / MEDIDAS','qtd','EX: 2 PEÇAS 8,30 X 4,00 H','',dis)+spF('sp-mat','MATERIAL','material','EX: LONA CRISTAL, FERRO, MADEIRA','',dis)+'</div>');
+    h+=spSec('QUEM FABRICA',spSeg('sp-quem','','quem')+'<div class="fgrid2"><div class="fld"><label for="sp-forn" id="sp-fornl">PESSOA / SETOR</label><input id="sp-forn" data-sf="fornecedor" list="dlForn" autocomplete="off"'+dis+'></div><div class="fld" data-show="terc"><label for="sp-cont">CONTATO</label><input id="sp-cont" data-sf="contato" autocomplete="off" placeholder="TELEFONE, PESSOA"'+dis+'></div></div>');
+    h+=spSec('PRAZOS','<div class="fgrid2">'+spD('sp-ini','COMEÇA A FABRICAR','inicio',dis)+spD('sp-pronto','PRONTO ATÉ','prontoAte',dis)+'</div>');
+    h+=spSec('ENTREGA',spSeg('sp-modo','COMO CHEGA','modo','terc')+'<div class="fgrid2">'+spD('sp-emp','CHEGA NA EMPRESA','empresa',dis,'fabEmp')+spD('sp-ret','A GENTE RETIRA','retirada',dis,'fabRet')+spD('sp-chega','CHEGA NA MONTAGEM','chega',dis)+'</div>');
+    h+=cot('STATUS','Cotação (valor, prazo) ou andamento da produção…');
+  }else{
+    h+=spSec('',spSeg('sp-tipo','TIPO','tipo')+'<div class="fld" data-show="outro"><label for="sp-fun">FUNÇÃO</label><input id="sp-fun" data-sf="funcao" autocomplete="off" placeholder="EX: ELETRICISTA, MARCENEIRO, LIMPEZA, SEGURANÇA"'+dis+'></div>'
+      +'<div class="fgrid2">'+spF('sp-qtd','QUANTAS PESSOAS','qtd','QTD',' type="number" min="1" step="1" inputmode="numeric"'+af,dis)+spF('sp-hor','HORÁRIO','horario','EX: 6H ÀS 14H','',dis)+'</div>'
+      +spT('sp-oque','O QUE VAI FAZER','oque','Ex.: descarregar a carreta do galpão, carregar na desmontagem…',2,dis));
+    h+=spSec('DIAS','<div class="fgrid2">'+spD('sp-de','DE','de',dis)+spD('sp-ate','ATÉ','ate',dis)+'</div>');
+    h+=spSec('QUEM FORNECE',forn('EMPRESA / PESSOA','QUEM MANDA O PESSOAL'));
+    h+=cot('COTAÇÃO','Valor da diária por pessoa, refeição, transporte…');
+  }
+  h+=spSec('ONDE VAI','<div class="fld"><label for="sp-amb">AMBIENTE</label><select id="sp-amb"'+dis+'></select><p class="hint" id="sp-ambh"></p></div>'+spT('sp-obs','OBSERVAÇÕES','obs','Qualquer coisa que a equipe precise saber',3,dis));
+  return h;
+}
+function buildSupPanel(pn,p){
+  const r=supFind(p); if(!r){ closePanel(); return; }
+  const ev=r.ev, ro=readOnly, dis=ro?' disabled':'';
+  pn.innerHTML=headHTML('<span class="pchip" id="sp-chip"></span><span class="pchip" id="sp-stc" hidden></span>','<h2 id="sp-tit"></h2><p class="sp-ev" title="'+esc(ev.local||'')+'">'+esc(ev.nome||'(EVENTO SEM NOME)')+'</p>')
+    +'<div class="p-body sp-body">'+supFormHTML(p,r.it,dis)+'<datalist id="dlForn"></datalist><footer class="p-foot sp-foot" id="sp-foot"></footer></div>';
+  const dl=$('#dlForn'); if(dl) dl.innerHTML=fornecedoresUsados().map(n=>'<option value="'+esc(n)+'"></option>').join('');
+  supFill(true); supParts();
+}
+function fornecedoresUsados(){ const s=new Set(); ambientes.forEach(a=>['prov','fab','equip','mo'].forEach(k=>(a[k]||[]).forEach(x=>{ const f=normName(x.fornecedor); if(f&&f!=='NOSSA') s.add(f); }))); return Array.from(s).sort(); }
+/* põe os valores do registro nos campos (menos no que a pessoa está digitando) */
+function supFill(force){
+  const p=M.panel; const r=p&&p.kind==='sup'?supFind(p):null; if(!r) return; const it=r.it;
+  $$('#panel [data-sf]').forEach(el=>{ if(!force&&document.activeElement===el) return; const f=el.dataset.sf, v=it[f]==null?'':String(it[f]);
+    if(el.classList.contains('dt')){ if(force||el.dataset.iso!==v){ el.dataset.iso=v; el.value=v?fmtLong(v):''; el.classList.remove('bad'); } }
+    else if(el.value!==v) el.value=v; });
+}
+function supRegVal(it,p){ if(regOf(it.regId)) return it.regId; if(p&&p.eqOutro) return '__outro'; const fam=eqParse(it.nome).fam; if(tr(it.nome)&&!recsOf('EQUIPAMENTO').some(r=>eqParse(r.nome).fam===fam)) return '__outro'; return ''; }
+function supRegOpts(it,p){
+  const v=supRegVal(it,p), fams=new Map(); recsOf('EQUIPAMENTO').forEach(r=>{ const f=eqParse(r.nome).fam||'OUTROS'; if(!fams.has(f)) fams.set(f,[]); fams.get(f).push(r); });
+  return '<option value="">— escolha a unidade</option>'+Array.from(fams.entries()).map(([f,rs])=>'<optgroup label="'+esc(f)+'">'+rs.map(r=>'<option value="'+esc(r.id)+'"'+(r.id===v?' selected':'')+'>'+esc(r.nome)+(placaExtra(r)?' · '+esc(placaExtra(r)):'')+'</option>').join('')+'</optgroup>').join('')+'<option value="__outro"'+(v==='__outro'?' selected':'')+'>OUTRO (DIGITAR O NOME)</option>';
+}
+const overlap=(a1,b1,a2,b2)=>{ const x=range(a1,b1), y=range(a2,b2); return !!x&&!!y&&x[0]<=y[1]&&y[0]<=x[1]; };
+function supParts(){
+  const p=M.panel; if(!p||p.kind!=='sup') return; const r=supFind(p);
+  if(!r){ M.panel=null; $('#panel').hidden=true; $('#scrim').hidden=true; document.body.classList.remove('panel-open'); toast('Esse cadastro foi excluído.'); setTimeout(refresh,0); return; }
+  const a=r.a, it=r.it, ev=r.ev, tab=p.tab, ro=readOnly, [kl]=supKind(tab,it);
+  const chip=$('#sp-chip'); if(chip){ chip.textContent=(tab==='loc'?(it.tipo==='COMPRAR'?'COMPRA':'LOCAÇÃO'):tab==='eqp'?'EQUIPAMENTO · '+kl:tab==='fab'?'FABRICAÇÃO · '+kl:kl); chip.className='pchip '+(tab==='fab'||(tab==='eqp'&&it.origem==='ALUGADO')?'o':'blue'); }
+  const sc=$('#sp-stc'); if(sc){ const s=supTemStatus(tab,it)?(it.status||''):''; sc.hidden=!s; sc.textContent=s; sc.className='pchip '+({warn:'o',blue:'blue',ok:'ok',navy:'blue'}[COT_TONE[s]]||''); }
+  const tt=$('#sp-tit'); if(tt) tt.textContent=supTitulo(tab,it)||SUP_NOVO[tab](it);
+  $$('#panel [data-show]').forEach(el=>{ const fn=SUP_SHOW[el.dataset.show]; el.hidden=fn?!fn(tab,it):false; });
+  $$('#panel [data-seg]').forEach(box=>{ const f=box.dataset.seg, opts=supSegOpts(tab,it,f), v=it[f]||''; const fa=document.activeElement, had=fa&&box.contains(fa)?fa.dataset.v:null;
+    box.innerHTML=opts.map(([val,l])=>'<button type="button" data-sseg="'+f+'" data-v="'+esc(val)+'" class="'+(v===val?'on':'')+'" aria-pressed="'+(v===val)+'"'+(ro?' disabled':'')+'>'+esc(l)+'</button>').join(''); box.classList.toggle('wrap',opts.length>3);
+    if(had!=null){ const b=$('[data-v="'+had+'"]',box); if(b) b.focus({preventScroll:true}); } });
+  const mh=$('#sp-modo-h'); if(mh){ const e=ENTREGAS.find(x=>x[0]===it.modo), on=!!e&&(tab!=='fab'||(it.quem||'NOSSA')==='TERCEIRA'); mh.hidden=!on; mh.textContent=on?e[2]:''; }
+  const dl=$('#sp-data-l')||$('#sp-chega-l'); if(dl){ const md=tab==='fab'&&(it.quem||'NOSSA')!=='TERCEIRA'?'':it.modo; dl.textContent=md==='ENTREGA NO LOCAL'?'ENTREGA NO LOCAL — DIA':md==='ENTREGA NA EMPRESA'?'VAI PRA MONTAGEM':'CHEGA NA MONTAGEM'; }
+  if(tab==='loc'){ const fi=$('#sp-forn'); if(fi) fi.placeholder=it.tipo==='COMPRAR'?'ONDE COMPRA':'QUEM ALUGA'; }
+  const fl=$('#sp-fornl'); if(fl){ const terc=(it.quem||'NOSSA')==='TERCEIRA', inp=$('#sp-forn'); fl.textContent=terc?'FORNECEDOR':'PESSOA / SETOR'; if(inp) inp.placeholder=terc?'EMPRESA QUE FABRICA':'EX: PATRICIA, SETOR DE LONAS'; }
+  const sa=$('#sp-amb'); if(sa&&document.activeElement!==sa){ const g=geralId(ev.id); sa.innerHTML='<option value="'+esc(g)+'">EVENTO TODO (GERAL)</option>'+(ambsReais(ev.id).length?'<optgroup label="AMBIENTES">'+ambsReais(ev.id).map(x=>'<option value="'+esc(x.id)+'">'+esc(x.nome||'(SEM NOME)')+'</option>').join('')+'</optgroup>':''); sa.value=a.id; }
+  const ah=$('#sp-ambh'); if(ah) ah.textContent=isGeral(a)?'Atende o evento inteiro (não é de um ambiente só). No cronograma sai no bloco EVENTO TODO.':'Sai no checklist de '+ambTitulo(a)+' no cronograma.';
+  if(tab==='eqp'){
+    const nosso=(it.origem||'PRÓPRIO')==='PRÓPRIO', rv=supRegVal(it,p), reg=regOf(it.regId);
+    const rs=$('#sp-reg'); if(rs&&document.activeElement!==rs){ rs.innerHTML=supRegOpts(it,p); rs.value=rv; }
+    const nf=$('#sp-nomef'); if(nf) nf.hidden=nosso&&rv!=='__outro';
+    const nl=$('#sp-nomel'); if(nl) nl.textContent=nosso?'NOME DO EQUIPAMENTO':it.origem==='CLIENTE'?'EQUIPAMENTO DO CLIENTE':'O QUE VAI ALUGAR';
+    const rh=$('#sp-regh'); if(rh){ if(reg){ const cond=condutorDe(reg), spec=[placaExtra(reg)?'PLACA '+placaExtra(reg):'',tr(reg.modelo),tr(reg.cap)].filter(Boolean).map(normName).join(' · ');
+        rh.innerHTML=esc([cond?'OPERADOR: '+cond:'SEM OPERADOR FIXO',spec].filter(Boolean).join(' · '))+' · <button type="button" class="link" data-open-rec="'+esc(reg.id)+'">abrir a ficha da unidade</button>'; }
+      else{ const fam=eqParse(it.nome).fam, n=fam?recsOf('EQUIPAMENTO').filter(x=>eqParse(x.nome).fam===fam).length:0; rh.textContent=n>1&&rv===''?'Temos '+n+' unidades de '+fam+': escolha qual vai.':recsOf('EQUIPAMENTO').length?'':'Nenhuma unidade cadastrada na frota ainda (aba Frota).'; } }
+    const w=$('#sp-eqw'); if(w){ const ch=reg&&nosso&&(it.de||it.ate)?eqUnitAllocs(reg).filter(x=>x.ev.id!==ev.id&&overlap(x.de,x.ate,it.de,it.ate)):[];
+      w.hidden=!ch.length; w.innerHTML=ch.length?'<b>Essa unidade também está em:</b> '+ch.map(x=>'<button type="button" class="link" data-open-ev="'+esc(x.ev.id)+'">'+esc(x.ev.nome||'(sem nome)')+'</button> ('+esc(periodoDM(x.de,x.ate))+')').join(', ')+'. Troque a unidade ou alugue outra.':''; }
+  }
+  supFill(false);
+  const foot=$('#sp-foot'); if(foot) foot.innerHTML='<div class="sp-acts"><button type="button" class="btn sm" data-sact="copiar">Copiar os dados</button>'+(ro?'':'<button type="button" class="btn sm" data-sact="dup">Duplicar</button>')+'<span class="hint">em texto, pra mandar pro fornecedor ou pra equipe</span></div>'
+    +(ro?'':(M.confirm==='sdel'?'<div class="confirm2"><span>Excluir este cadastro? Sai do cronograma, do radar e do mapa de dias.</span><button type="button" class="btn danger solid sm" data-sact="del-yes">Excluir</button><button type="button" class="btn sm" data-sact="del-no">Cancelar</button></div>':'<div><button type="button" class="btn-ghost danger" data-sact="del">EXCLUIR</button></div>'));
+}
+/* lê os campos da ficha (só o que mudou vai pro banco) */
+function supCollect(p,only){
+  const out={};
+  $$('#panel [data-sf]').forEach(el=>{ const f=el.dataset.sf; if(only&&!only.has(f)) return; let v;
+    if(el.classList.contains('dt')) v=dv(el);
+    else if(el.tagName==='TEXTAREA') v=String(el.value).split('\n').map(l=>l.replace(/\s+/g,' ').trim().toUpperCase()).join('\n').replace(/^\n+|\n+$/g,'').replace(/\n{3,}/g,'\n\n');
+    else v=normName(el.value);
+    if(f==='qtd'&&p.tab==='mo'){ const n=Math.round(num(v)); v=n>0?n:''; }
+    out[f]=v; });
+  return out;
+}
+/* grava só os campos que a pessoa mexeu nesta ficha: se outra pessoa mexeu em outro campo do mesmo cadastro, fica o dela também */
+function saveSup(){
+  const p=M.panel; if(!p||p.kind!=='sup'||readOnly) return; const r=supFind(p); if(!r||!p.dirty||!p.dirty.size) return;
+  const patch=supCollect(p,p.dirty); p.dirty=new Set();
+  const mud=Object.keys(patch).filter(k=>String(patch[k])!==String(r.it[k]==null?'':r.it[k]));
+  if(!mud.length) return;
+  patchSup(p,x=>{ mud.forEach(k=>{ x[k]=patch[k]; }); });
+}
+function supSeg(p,f,v){
+  flush('sup:'+p.iid); const r=supFind(p); if(!r) return; const it=r.it, tab=p.tab;
+  let nv=v; if((f==='modo'||f==='devModo')&&(it[f]||'')===v) nv=''; /* tocar de novo desmarca */
+  if(nv===(it[f]||'')) return;
+  patchSup(p,x=>{ x[f]=nv;
+    if(tab==='loc'&&f==='tipo'){ if(nv==='COMPRAR'&&x.status==='FECHADO') x.status='COMPRADO'; if(nv==='ALUGAR'&&x.status==='COMPRADO') x.status='FECHADO'; }
+    /* fabricação nossa começa "a produzir"; de terceira, "a cotar" */
+    if(tab==='fab'&&f==='quem'){ if(nv==='TERCEIRA'&&x.status==='A PRODUZIR') x.status='A COTAR'; if(nv==='NOSSA'&&x.status==='A COTAR') x.status='A PRODUZIR'; }
+    if(tab==='eqp'&&f==='origem'){ if(nv==='ALUGADO'&&!x.status) x.status='A COTAR'; if(nv!=='ALUGADO') x.status=''; if(nv!=='PRÓPRIO') x.regId=''; else if(!x.regId){ const m=supAchaUnidade(x.nome); if(m){ x.regId=m.id; x.nome=m.nome; } } }
+  });
+  if(tab==='eqp'&&f==='origem') p.eqOutro=false;
+  supParts();
+  if(tab==='mo'&&f==='tipo'&&nv==='OUTRO') setTimeout(()=>{ const x=$('#sp-fun'); if(x&&!x.value) x.focus(); },30);
+  if(tab==='eqp'&&f==='origem'&&nv!=='PRÓPRIO') setTimeout(()=>{ const x=$('#sp-nome'); if(x&&!x.value) x.focus(); },30);
+}
+function supRegPick(p,v){
+  if(v==='__outro'){ p.eqOutro=true; patchSup(p,x=>{ x.regId=''; }); supParts(); setTimeout(()=>{ const n=$('#sp-nome'); if(n) n.focus(); },30); return; }
+  p.eqOutro=false; const reg=v?regOf(v):null; patchSup(p,x=>{ x.regId=reg?reg.id:''; if(reg) x.nome=reg.nome; }); supParts();
+}
+function moveSup(p,toAid){
+  flush('sup:'+p.iid); const r=supFind(p); if(!r||r.a.id===toAid) return;
+  const L=SUP_LIST[p.tab], it=JSON.parse(JSON.stringify(r.it)), fromId=r.a.id;
+  const o=patchAmbDoc(toAid,x=>{ x[L]=(x[L]||[]).filter(y=>y.id!==it.id).concat([it]); },p.ev); if(!o) return;
+  patchAmbDoc(fromId,x=>{ x[L]=(x[L]||[]).filter(y=>y.id!==it.id); });
+  p.aid=o.id; const e=evById(p.ev); if(e){ const f=supFiltro(e); if(f.amb===fromId) f.amb='TODOS'; }
+  toast('Agora em '+ambTitulo(o)+'.'); supParts();
+}
+/* os dados em texto (pra mandar pro fornecedor ou pra equipe) */
+function supTexto(p){
+  const r=supFind(p); if(!r) return ''; const it=r.it, ev=r.ev, a=r.a, tab=p.tab, L=[];
+  const evl='EVENTO: '+normName(ev.nome||'')+(tr(ev.local)?' — '+normName(ev.local):'');
+  if(tab==='loc'){ L.push((it.tipo==='COMPRAR'?'COMPRA':'LOCAÇÃO')+': '+linhasDe(it.oque).map(normName).join(' / ')); if(tr(it.qtd)) L.push('QUANTIDADE: '+normName(it.qtd)); L.push(evl); const q=provQuando(it); if(it.modo) L.push('ENTREGA: '+entregaCurta(it.modo)); if(q.length) L.push(q.join(' · ')); }
+  else if(tab==='fab'){ L.push('FABRICAÇÃO: '+linhasDe(it.oque).map(normName).join(' / ')); if(tr(it.qtd)) L.push('QUANTIDADE / MEDIDAS: '+normName(it.qtd)); if(tr(it.material)) L.push('MATERIAL: '+normName(it.material)); L.push(evl); const q=fabQuando(it); if(q.length) L.push(q.join(' · ')); }
+  else if(tab==='eqp'){ const reg=regOf(it.regId); L.push('EQUIPAMENTO: '+normName(it.nome)+(it.origem==='ALUGADO'?' (ALUGADO)':it.origem==='CLIENTE'?' (DO CLIENTE)':'')); if(reg){ const t=frotaTexto(reg); if(t) L.push(t.toUpperCase()); } L.push(evl); if(it.de||it.ate) L.push('PERÍODO: '+periodoDM(it.de,it.ate)); }
+  else { L.push(moNome(it)+(linhas(it.oque)?' — '+normName(linhas(it.oque)):'')); L.push(evl); const q=moQuando(it); if(q.length) L.push('DIAS: '+q.join(' · ')); }
+  L.push('ONDE: '+ambTitulo(a));
+  if(tr(it.obs)) L.push('OBS: '+linhasDe(it.obs).map(normName).join(' / '));
+  return L.join('\n');
+}
+function supAct(p,act){
+  if(act==='copiar'){ flush('sup:'+p.iid); wCopia(supTexto(p)); return; }
+  if(readOnly) return;
+  if(act==='del'){ M.confirm='sdel'; supParts(); const y=$('#panel [data-sact="del-yes"]'); if(y) y.focus(); return; }
+  if(act==='del-no'){ M.confirm=null; supParts(); return; }
+  if(act==='del-yes'){ const r=supFind(p); M.confirm=null; if(!r) return; const L=SUP_LIST[p.tab]; p.fresh=false; patchAmbDoc(r.a.id,x=>{ x[L]=(x[L]||[]).filter(y=>y.id!==p.iid); }); M.panel=null; closePanel(); toast('Cadastro excluído.'); return; }
+  if(act==='dup'){ flush('sup:'+p.iid); const r=supFind(p); if(!r) return; const L=SUP_LIST[p.tab], cp=Object.assign(JSON.parse(JSON.stringify(r.it)),{id:newId(),criadoEm:nowIso()});
+    patchAmbDoc(r.a.id,x=>{ const arr=(x[L]||[]).slice(), i=arr.findIndex(y=>y.id===p.iid); arr.splice(i+1,0,cp); x[L]=arr; });
+    openSup(p.ev,r.a.id,cp.id,p.tab,false); toast('Duplicado — a ficha aberta agora é a cópia.'); return; }
+}
+/* título da ficha muda enquanto digita */
+function supTitLive(p){ const r=supFind(p); if(!r) return; const tt=$('#sp-tit'); if(!tt) return; const x=Object.assign({},r.it,supCollect(p,new Set(['oque','nome','qtd','funcao']))); tt.textContent=supTitulo(p.tab,x)||SUP_NOVO[p.tab](x); }
+function wireSup(){
+  const box=$('#supBox');
+  box.addEventListener('click',ev=>{ const t=ev.target, e=cur(); if(!e) return;
+    const ad=t.closest('[data-sadd]'); if(ad){ addSup(M.evTab,ad.dataset.sadd); return; }
+    const fl=t.closest('[data-sfilt]'); if(fl){ supFiltro(e).amb=fl.dataset.sfilt; renderSup(e); return; }
+    if(t.closest('[data-saberto]')){ const f=supFiltro(e); f.aberto=!f.aberto; renderSup(e); return; }
+    const op=t.closest('[data-sup-open]'); if(op){ const k=op.dataset.supOpen.split('|'); openSup(e.id,k[0],k[1],M.evTab,false); return; } });
+  box.addEventListener('change',ev=>{ const t=ev.target; if(t.dataset&&t.dataset.supSt){ const k=t.dataset.supSt.split('|'); setSupStatus(k[0],M.evTab,k[1],t.value); } });
+  const ag=$('#ambGeral'); if(ag) ag.addEventListener('click',ev=>{ const go=ev.target.closest('[data-go]'); if(go) supIrPara(go.dataset.go,go.dataset.amb); });
+  const pn=$('#panel');
+  pn.addEventListener('click',ev=>{ const p=M.panel; if(!p||p.kind!=='sup') return; const t=ev.target;
+    const sg=t.closest('[data-sseg]'); if(sg&&!sg.disabled){ supSeg(p,sg.dataset.sseg,sg.dataset.v); return; }
+    const sa=t.closest('[data-sact]'); if(sa){ supAct(p,sa.dataset.sact); return; }
+    const orr=t.closest('[data-open-rec]'); if(orr){ openRec(orr.dataset.openRec); return; } });
+  const sujo=(p,el)=>{ (p.dirty||(p.dirty=new Set())).add(el.dataset.sf); };
+  pn.addEventListener('input',ev=>{ const p=M.panel; if(!p||p.kind!=='sup'||readOnly) return; const el=ev.target; if(!el.dataset||!el.dataset.sf||el.classList.contains('dt')) return; sujo(p,el); schedule('sup:'+p.iid,saveSup,600); if(['oque','nome','qtd','funcao'].indexOf(el.dataset.sf)>=0) supTitLive(p); });
+  pn.addEventListener('change',ev=>{ const p=M.panel; if(!p||p.kind!=='sup'||readOnly) return; const el=ev.target;
+    if(el.id==='sp-amb'){ moveSup(p,el.value); return; }
+    if(el.id==='sp-reg'){ supRegPick(p,el.value); return; }
+    if(el.dataset&&el.dataset.sf){ sujo(p,el); flush('sup:'+p.iid); saveSup(); } });
+  pn.addEventListener('focusout',ev=>{ const p=M.panel; if(!p||p.kind!=='sup') return; if(ev.target.dataset&&ev.target.dataset.sf) flush('sup:'+p.iid); });
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
