@@ -951,6 +951,61 @@ table.lst tr.arq td{color:var(--muted)}
 select.osi-sel,input.osi-nome{width:100%;min-width:0;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 13.5px/1.3 var(--cond);letter-spacing:.03em;padding:8px 9px;text-transform:uppercase}
 .osi-l{display:block;margin:10px 0 4px;font:700 11.5px/1.2 var(--cond);letter-spacing:.08em;color:var(--muted)}
 .osi-opts{margin-top:8px}
+/* ---------- login ---------- */
+.login{position:fixed;inset:0;z-index:58;display:grid;place-items:center;padding:20px 16px;overflow:auto;background:var(--bg)}
+.login[hidden]{display:none}
+body.login-open{overflow:hidden}
+.lg-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--orange);border-radius:6px;box-shadow:var(--shadow);padding:22px 22px 18px;color:var(--ink)}
+.lg-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.lg-brand b{display:block;font:700 22px/1 var(--cond);letter-spacing:.06em;color:var(--navy)}
+.lg-brand small{display:block;font:600 11px/1.3 var(--cond);letter-spacing:.1em;color:var(--muted);margin-top:3px}
+.lg-card h2{margin:0 0 10px;font:700 18px/1.2 var(--cond);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.lg-p{margin:0 0 12px;font-size:14px;line-height:1.45;color:var(--muted)} .lg-p b{color:var(--ink)} .lg-who{color:var(--ink)}
+.lg-f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;min-width:0}
+.lg-f>span{font:700 11px/1.2 var(--cond);letter-spacing:.08em;color:var(--muted)}
+.lg-f input,.lg-f select{width:100%;min-width:0;border:1px solid var(--line-strong);border-radius:4px;background:var(--bg);color:var(--ink);font:500 15px/1.3 var(--body);padding:9px 10px}
+.lg-f input:focus-visible,.lg-f select:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.lg-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:0 10px}
+.lg-go{width:100%;padding:11px 14px;font-size:13.5px;margin-top:2px}
+.lg-msg{min-height:0;margin:0 0 8px;font-size:13.5px;line-height:1.4}
+.lg-msg.bad{color:var(--danger)} .lg-msg.ok{color:var(--ok)}
+.lg-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;margin-top:14px}
+.lg-a{background:none;border:0;padding:4px 0;color:var(--blue);font:600 13.5px/1.3 var(--body);cursor:pointer;text-align:left}
+.lg-a b{font-weight:700}
+.lg-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+@media (max-width:420px){ .lg-2{grid-template-columns:minmax(0,1fr)} }
+/* quem está usando + usuários */
+.btn.eu{display:inline-flex;align-items:center;gap:6px}
+.btn.eu .eu-n{min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--danger);color:#fff;font:700 10.5px/17px var(--cond);text-align:center}
+.btn.bk-aviso{color:var(--warn);border-color:var(--warn);background:var(--warn-soft)}
+.usr-eu{display:flex;flex-direction:column;gap:4px}
+.usr-info{margin:0 0 6px;font-size:13.5px;line-height:1.45;color:var(--ink)} .usr-info small{color:var(--muted)}
+.usr-senha{display:flex;flex-direction:column;gap:2px;padding:10px;border:1px dashed var(--line-strong);border-radius:4px}
+.usr-list{display:flex;flex-direction:column;gap:6px}
+.usr-r{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.usr-r.pend{border-left:3px solid var(--orange)} .usr-r.off{opacity:.75}
+.usr-n{display:flex;flex-direction:column;gap:2px;min-width:0}
+.usr-n b{font:700 14.5px/1.2 var(--cond);letter-spacing:.03em;text-transform:uppercase;overflow-wrap:anywhere}
+.usr-n small{font:600 11.5px/1.35 var(--cond);letter-spacing:.03em;color:var(--muted);overflow-wrap:anywhere}
+.usr-adm{display:inline-block;margin-left:6px;padding:1px 5px;border-radius:2px;background:var(--navy);color:var(--on-accent);font:700 10px/1.4 var(--cond);letter-spacing:.06em;vertical-align:2px}
+.usr-edit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}
+.usr-edit select,.usr-edit input{width:100%;min-width:0;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:600 13px/1.3 var(--cond);letter-spacing:.03em;padding:7px 8px;text-transform:uppercase}
+.usr-acts{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.usr-acts .pp{padding:5px 8px}
+/* mensagem do dia (WhatsApp) */
+.pchip.ok{background:var(--ok-soft);color:var(--ok)}
+.mt-wa{padding:9px 12px}
+.w-dia{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-bottom:10px}
+.w-d{font:700 14px/1.2 var(--cond);letter-spacing:.04em;min-width:9.5em;text-align:center}
+.w-opts{flex-direction:row;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.w-opts .pp{padding:5px 8px}
+.w-aviso{margin:0 0 10px;padding:8px 10px;border-left:3px solid var(--orange);background:var(--orange-soft);font:600 12px/1.4 var(--cond);letter-spacing:.03em;color:var(--orange-ink)}
+textarea.w-txt{width:100%;min-height:120px;resize:vertical;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:500 13px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:10px;white-space:pre-wrap}
+.w-list{display:flex;flex-direction:column;gap:8px}
+.w-r{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:8px 10px}
+.w-r pre{margin:0 0 6px;white-space:pre-wrap;overflow-wrap:anywhere;font:500 12.5px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}
+.w-acts{display:flex;gap:6px}
+a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 /* ---------- pré-visualização do PDF ---------- */
 .pvwrap{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;background:color-mix(in srgb,var(--bg) 55%,#1b2430)}
 .pvwrap[hidden]{display:none}
@@ -990,7 +1045,7 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
     </div>
   </header>
   <div class="banner" id="banner" hidden></div>
-  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm tema" id="btnTema" type="button"></button><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json,.zip,application/zip" hidden><input id="osFile" type="file" accept=".pdf,application/pdf" multiple hidden><input id="docsFile" type="file" accept=".zip,.json,application/zip,application/x-zip-compressed,application/json" multiple hidden></div>
+  <div class="statusline"><span class="dot" id="dot"></span><span id="countTxt">Conectando…</span><span class="savetxt" id="saveTxt"></span><span class="spacer"></span><button class="btn sm bk-aviso" id="bkAviso" type="button" title="Baixar um backup agora" hidden></button><button class="btn sm eu" id="btnEu" type="button" hidden></button><button class="btn sm tema" id="btnTema" type="button"></button><button class="btn sm" id="btnBackup" type="button" title="Baixar um arquivo com todos os dados">↓ Backup</button><button class="btn sm" id="btnRestore" type="button" title="Restaurar de um arquivo de backup">↑ Restaurar</button><input id="restoreFile" type="file" accept="application/json,.json,.zip,application/zip" hidden><input id="osFile" type="file" accept=".pdf,application/pdf" multiple hidden><input id="docsFile" type="file" accept=".zip,.json,application/zip,application/x-zip-compressed,application/json" multiple hidden></div>
   <div class="restorebar" id="restoreBar" hidden></div>
 
   <main>
@@ -1120,7 +1175,9 @@ body.dropping::after{content:"SOLTE AQUI O PDF DA O.S. OU DA PLANTA";position:fi
   </div>
   <div class="pv-body" id="pdfPrevBody"></div>
 </div>
+<div class="login" id="login" hidden><div class="lg-card" id="loginCard" role="dialog" aria-modal="true" aria-label="Entrar no Demandas"></div></div>
 <div class="toast" id="toast" hidden></div>
+<datalist id="dlFuncao"></datalist>
 <datalist id="dlEquipes"></datalist>
 <datalist id="dlEquip"></datalist>
 <script>
@@ -1472,7 +1529,7 @@ function patchRec(id,fn){
   upsertLocal('recursos',normalizeRec(o)); saveDocNow('recursos',id); refresh();
 }
 function onData(col){ if(col) loaded[col]=true; refresh(); setTimeout(runEscalaMigration,0); }
-/* ===== camada de dados: Supabase (tabelas eventos, ambientes, recursos: id, data jsonb, updated_at) ===== */
+/* ===== camada de dados: Supabase (tabelas eventos, ambientes, recursos: id, data jsonb, updated_at) + login ===== */
 let sb=null;
 function sbCfgOk(){ const u=window.__SB_URL||'', k=window.__SB_KEY||''; return !!(window.supabase&&u.indexOf('http')===0&&k&&u.indexOf('__SUPABASE')<0&&k.indexOf('__SUPABASE')<0); }
 function sbMap(col,row){ const o=Object.assign({id:row.id},row.data||{}); return col==='eventos'?normalizeEv(o):col==='ambientes'?normalizeAmb(o):normalizeRec(o); }
@@ -1486,26 +1543,64 @@ function sbSet(col,arr){ if(col==='eventos') eventos=arr; else if(col==='ambient
 /* alguém (ou outra aba) mudou: recarrega a coleção, sem atropelar o que ainda está gravando aqui */
 const sbTimers=new Map();
 function sbReload(col){ clearTimeout(sbTimers.get(col)); sbTimers.set(col,setTimeout(async()=>{ try{ const arr=await sbFetch(col); sbSet(col,mergeIncoming(col,arr)); onData(col); }catch(e){} },300)); }
-/* documentos das pessoas: bucket "documentos" do Storage (arquivo SQL supabase-documentos.sql) */
+/* documentos das pessoas: bucket "documentos" do Storage, FECHADO (supabase-login.sql): abre com link assinado */
 function sbFiles(){ const B='documentos'; return {
-  nome:'supabase', podeEnviar:()=>true,
+  nome:'supabase', privado:true, podeEnviar:()=>true,
   async put(blob,type,pasta){ const ext=type==='image/png'?'.png':type==='image/jpeg'?'.jpg':type==='image/webp'?'.webp':'.pdf'; const path=(String(pasta||'doc').replace(/[^a-z0-9-]/g,'')||'doc')+'/'+newId()+ext;
     const r=await sb.storage.from(B).upload(path,blob,{contentType:type||'application/pdf',upsert:false}); if(r.error) throw r.error; return 's:'+path; },
-  href(ref){ if(!ref||ref.slice(0,2)!=='s:') return ''; const r=sb.storage.from(B).getPublicUrl(ref.slice(2)); return (r&&r.data&&r.data.publicUrl)||''; },
+  href(ref){ return ref&&ref.slice(0,2)==='s:'?'#doc':''; },
+  async url(ref){ const r=await sb.storage.from(B).createSignedUrl(ref.slice(2),3600); if(r.error) throw r.error; return r.data.signedUrl; },
   async bytes(ref){ const r=await sb.storage.from(B).download(ref.slice(2)); if(r.error) throw r.error; return await r.data.arrayBuffer(); },
   async del(ref){ const r=await sb.storage.from(B).remove([ref.slice(2)]); if(r.error) throw r.error; } }; }
+/* login: Supabase Auth (e-mail e senha) + tabela perfis (área, função, administrador, liberado) */
+function sbErro(e){ const m=String((e&&e.message)||e||'');
+  if(/invalid login credentials/i.test(m)) return 'E-mail ou senha errados.';
+  if(/already registered|already been registered|user already exists/i.test(m)) return 'Esse e-mail já tem acesso. Use ENTRAR (ou "Esqueci a senha").';
+  if(/at least 6|password should be/i.test(m)) return 'A senha precisa ter pelo menos 6 caracteres.';
+  if(/email not confirmed/i.test(m)) return 'Falta confirmar o e-mail: abra o link que chegou na sua caixa de entrada.';
+  if(/rate limit|security purposes|too many/i.test(m)) return 'Muitas tentativas seguidas. Espere uns minutos e tente de novo.';
+  if(/signups? not allowed|signup is disabled/i.test(m)) return 'A criação de acesso está desligada no Supabase.';
+  if(/invalid email|unable to validate email/i.test(m)) return 'Esse e-mail não parece certo.';
+  if(/same password|different from the old/i.test(m)) return 'A senha nova precisa ser diferente da atual.';
+  if(/fetch|network/i.test(m)) return 'Sem internet ou o Supabase não respondeu. Tente de novo.';
+  return m||'Não deu certo.'; }
+const sbVolta=()=>location.origin+location.pathname;
+function sbAuth(){ return {
+  async entrar(email,senha){ const r=await sb.auth.signInWithPassword({email:email,password:senha}); return r.error?{erro:sbErro(r.error)}:{}; },
+  async criar(email,senha,meta){ const r=await sb.auth.signUp({email:email,password:senha,options:{data:meta,emailRedirectTo:sbVolta()}}); if(r.error) return {erro:sbErro(r.error)}; return {sessao:!!(r.data&&r.data.session)}; },
+  async esqueci(email){ const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:sbVolta()}); return r.error?{erro:sbErro(r.error)}:{}; },
+  async novaSenha(senha){ const r=await sb.auth.updateUser({password:senha}); return r.error?{erro:sbErro(r.error)}:{}; },
+  async sair(){ try{ await sb.auth.signOut(); }catch(e){} },
+  async perfis(){ const r=await sb.from('perfis').select('*').order('criado_em'); if(r.error) throw new Error(sbErro(r.error)); return r.data||[]; },
+  async salvarPerfil(id,campos){ const r=await sb.from('perfis').update(campos).eq('id',id); if(r.error) throw new Error(/administrador/i.test(String(r.error.message||''))?'Precisa ficar pelo menos um administrador com acesso.':sbErro(r.error)); }
+}; }
+async function sbPerfil(user){
+  const r=await sb.from('perfis').select('*').eq('id',user.id).maybeSingle();
+  if(r.error){ const m=String(r.error.message||''); if(/perfis|does not exist|schema cache|relation/i.test(m)) return {erro:'Falta rodar o SQL do login no Supabase (arquivo supabase-login.sql).'}; return {erro:sbErro(r.error)}; }
+  if(!r.data) return {erro:'Seu acesso foi criado, mas ainda não tem perfil. Peça pro administrador rodar de novo o SQL do login.'};
+  return r.data;
+}
 async function connect(){
   if(sbCfgOk()){
     try{
-      sb=window.supabase.createClient(window.__SB_URL,window.__SB_KEY,{auth:{persistSession:false}});
-      FILES=sbFiles();
+      const recup=/type=recovery/.test(location.hash);
+      sb=window.supabase.createClient(window.__SB_URL,window.__SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'plenart-demandas-auth'}});
+      FILES=sbFiles(); AUTH=sbAuth();
+      sb.auth.onAuthStateChange(ev=>{ if(ev==='PASSWORD_RECOVERY') loginTela('nova'); else if(ev==='SIGNED_OUT'&&ME) location.reload(); });
+      const g=await sb.auth.getSession(), ses=g&&g.data&&g.data.session;
+      if(!ses){ storage='login'; setStatus(); loginTela('entrar'); return; }
+      if(recup){ storage='login'; setStatus(); loginTela('nova'); return; }
+      const pf=await sbPerfil(ses.user);
+      if(pf.erro){ storage='login'; setStatus(); loginTela('erro',pf.erro); return; }
+      if(!pf.ativo||pf.bloqueado){ storage='login'; setStatus(); loginTela('aguardando',pf); return; }
+      ME=pf; loginFecha(); renderEu();
       const got=await Promise.all([sbFetch('eventos'),sbFetch('ambientes'),sbFetch('recursos')]);
       storage='db'; eventos=got[0]; ambientes=got[1]; recursos=got[2];
       loaded={eventos:true,ambientes:true,recursos:true};
-      onData(); setStatus();
+      onData(); setStatus(); if(ME.admin) atualizaPendentes();
       ['eventos','ambientes','recursos'].forEach(col=>{ try{ sb.channel('rt-'+col).on('postgres_changes',{event:'*',schema:'public',table:col},()=>sbReload(col)).subscribe(); }catch(e){} });
       return;
-    }catch(e){ storage='error'; setStatus(); setBanner('Não consegui conectar ao Supabase ('+((e&&e.message)||'erro')+'). Por enquanto salvando só neste navegador — recarregue a página mais tarde.'); }
+    }catch(e){ storage='error'; setStatus(); setBanner('Não consegui conectar ao Supabase ('+((e&&e.message)||'erro')+'). Recarregue a página mais tarde.'); return; }
   }
   storage='local';
   eventos=(lsGet(LS_EV)||lsGet(LS_EV_OLD)||[]).map(normalizeEv); ambientes=(lsGet(LS_AMB)||[]).map(normalizeAmb); recursos=(lsGet(LS_REC)||[]).map(normalizeRec); legados=lsGet(LS_MAT_OLD)||[];
@@ -1543,6 +1638,7 @@ async function doBackup(){
   const data=backupData(); const json=JSON.stringify(data,null,2);
   const d=new Date(); const stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'_'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');
   const ok=await saveFile('DEMANDAS_BACKUP_'+stamp+'.json',json,'application/json');
+  if(ok){ try{ localStorage.setItem('plenart.ui.backupEm',new Date().toISOString()); }catch(e){} if(typeof renderBkAviso==='function') renderBkAviso(); }
   toast(ok?'Backup salvo ('+data.eventos.length+' eventos)':'Não consegui gerar o backup.',!ok);
 }
 async function restoreData(obj,merge){
@@ -2175,11 +2271,15 @@ let toastT=null;
 function toast(msg,err){ const t=$('#toast'); t.textContent=msg; t.className='toast'+(err?' err':''); t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{ t.hidden=true; },err?4600:2600); }
 function setStatus(){
   const dot=$('#dot'); dot.className='dot '+(storage==='db'?'db':storage==='local'?'local':storage==='error'?'error':'');
-  const src=storage==='db'?'banco compartilhado':storage==='local'?'só neste navegador':storage==='error'?'sem conexão':'conectando…';
+  const src=storage==='db'?'banco compartilhado':storage==='local'?'só neste navegador':storage==='error'?'sem conexão':storage==='login'?'entre com o seu acesso':'conectando…';
   const nArq=eventos.filter(e=>e.concluido).length, nAt=eventos.length-nArq;
-  $('#countTxt').textContent=(storage==='connecting'?'':nAt+' evento'+(nAt===1?'':'s')+(nArq?' (+'+nArq+' arquivado'+(nArq===1?'':'s')+')':'')+' · '+ambientes.length+' ambiente'+(ambientes.length===1?'':'s')+' · ')+src;
-  renderSaveState();
+  $('#countTxt').textContent=(storage==='connecting'||storage==='login'?'':nAt+' evento'+(nAt===1?'':'s')+(nArq?' (+'+nArq+' arquivado'+(nArq===1?'':'s')+')':'')+' · '+ambientes.length+' ambiente'+(ambientes.length===1?'':'s')+' · ')+src;
+  renderSaveState(); renderBkAviso();
 }
+/* lembrete de backup (neste computador): aparece depois de 7 dias sem baixar; no site, só pro administrador */
+const BK_KEY='plenart.ui.backupEm';
+function diasSemBackup(){ let t=null; try{ t=localStorage.getItem(BK_KEY); }catch(e){} const d=t?new Date(t):null; return d&&!isNaN(d)?Math.floor((Date.now()-d.getTime())/864e5):-1; }
+function renderBkAviso(){ const b=$('#bkAviso'); if(!b) return; const n=diasSemBackup(), pode=(storage==='db'||storage==='local')&&!readOnly&&(!AUTH||(ME&&ME.admin)), mostra=pode&&(n<0||n>=7); b.hidden=!mostra; if(mostra) b.textContent=n<0?'SEM BACKUP NESTE COMPUTADOR':'SEM BACKUP HÁ '+n+' DIAS'; }
 function chip(v,map,cls){ if(!v) return ''; return '<span class="st st-'+((map||COT_TONE)[v]||'grey')+(cls?' '+cls:'')+'">'+esc(v)+'</span>'; }
 function setView(v){
   if(VIEWS.indexOf(v)<0) v='mapa';
@@ -2818,6 +2918,7 @@ function renderMap(){
       +'<label class="mt-f'+(M.f.ph?' on':'')+'" for="mfPh">ETAPA <select id="mfPh">'+PHF.map(([v,l])=>'<option value="'+v+'"'+(M.f.ph===v?' selected':'')+'>'+l+'</option>').join('')+'</select></label>'
       +(anyF?'<button type="button" class="link" id="mfClear">LIMPAR</button>':'')
       +'<div class="zoom" role="group" aria-label="Zoom"><span class="zl">ZOOM <b>'+ZL[lv].nome+'</b></span><button type="button" class="zb" data-zoom="-1" aria-label="Afastar">−</button><button type="button" class="zb" data-zoom="1" aria-label="Aproximar">+</button><button type="button" class="zb zt" data-zoom="0"'+(custom?'':' disabled')+'>AJUSTAR</button></div>'
+      +'<button type="button" class="btn-ghost mt-pdf mt-wa" id="mapWhats" title="Texto da escala de um dia, por equipe, pra colar no WhatsApp">MENSAGEM DO DIA</button>'
       +'<button type="button" class="btn-primary mt-pdf" id="mapPrint">PDF DO MAPA</button>'
     +'</div>'
     +'<div class="m-row m-help"><div class="m-legend"><span><span class="lg ph-mont"></span>MONTAGEM</span><span><span class="lg ph-ev"></span>EVENTO</span><span><span class="lg ph-man"></span>MANUTENÇÃO</span><span><span class="lg ph-desm"></span>DESMONTAGEM</span><span><span class="lg m-need"></span>FALTA EQUIPE</span><span><span class="lgp">NOME 2/5</span>PARTE DA EQUIPE</span><span><span class="lgt">NOME</span>TERCEIRIZADA</span><span><span class="lgr">NOME</span>PRODUTOR</span><span><span class="lgc">NOME</span>CHOQUE</span></div>'
@@ -2913,6 +3014,8 @@ function buildPanel(){
   if(p.kind==='pessoa') return buildPessoaPanel(pn,p);
   if(p.kind==='docimport') return buildDocsImportPanel(pn,p);
   if(p.kind==='osimport') return buildOSImportPanel(pn,p);
+  if(p.kind==='usuarios') return buildUsuariosPanel(pn,p);
+  if(p.kind==='whats') return buildWhatsPanel(pn,p);
 }
 function syncPanel(){
   const p=M.panel; if(!p||$('#panel').hidden) return;
@@ -2923,6 +3026,8 @@ function syncPanel(){
   else if(p.kind==='pessoa') pessoaParts();
   else if(p.kind==='docimport') docsImportParts();
   else if(p.kind==='osimport') osiParts();
+  else if(p.kind==='usuarios') usuariosParts();
+  else if(p.kind==='whats') whatsParts();
 }
 
 /* ---------- painel do dia ---------- */
@@ -3135,6 +3240,7 @@ function wireMap(){
     if(e.target.closest('#mfClear')||e.target.closest('#mfClear2')){ M.f={team:'',ev:'',ph:''}; M.pend=''; saveM(); refresh(); return; }
     if(e.target.closest('#mDatesClr')){ M.de=''; M.ate=''; M.win='m0'; saveM(); refresh(); return; }
     if(e.target.closest('#mapPrint')){ openMapPrint(); return; }
+    if(e.target.closest('#mapWhats')){ openWhats(); return; }
   });
   box.addEventListener('change',e=>{
     const el=e.target;
@@ -3665,6 +3771,9 @@ function wire(){
   wireDocs();
   wireOSImport();
   wirePDFPreview();
+  wireLogin();
+  wireWhats();
+  $('#bkAviso').addEventListener('click',doBackup);
   document.addEventListener('change',ev=>{ const t=ev.target; if(!(t&&t.classList&&t.classList.contains('dt'))) return; const inDetail=$('#viewDetalhe').contains(t); normalizeDateInput(t,inDetail?refDate(cur()):iso(today0())); },true);
   document.addEventListener('keydown',ev=>{ const t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('dt')){ ev.preventDefault(); t.blur(); } });
   $('#radarEv').addEventListener('change',ev=>{ radarEv=ev.target.value; render(); });
@@ -3821,7 +3930,7 @@ function docCellHTML(nome,t,ref,aviso,req){
   if(!d) return req?'<td class="dc bad"><span title="'+esc(DOC_NOME[t]+': falta')+'">FALTA</span></td>':'<td class="dc none"><span title="'+esc(DOC_NOME[t]+': falta')+'">—</span></td>';
   const v=docValidade(d), alt=d.tipo!==t?DOC_NOME[d.tipo]+' ':'', lbl=alt+(docTemValidade(d.tipo)?(v?fmtDMY(v):'SEM DATA'):(alt?'':'OK')), href=arqHref(d.arq);
   const tip=DOC_NOME[t]+(alt?' (vale a '+DOC_NOME[d.tipo]+')':'')+(v?' · válido até '+fmtLong(v)+(d.est?' (calculado: '+DOC_PRAZO[d.tipo]+' meses depois do certificado)':''):'')+(d.titulo?' · '+d.titulo:'');
-  const inner=href?'<a href="'+esc(href)+'" target="_blank" rel="noopener" title="'+esc(tip+' — abrir')+'">'+lbl+'</a>':'<span title="'+esc(tip)+'">'+lbl+'</span>';
+  const inner=href?'<a href="'+esc(href)+'" data-arq="'+esc(d.arq)+'" target="_blank" rel="noopener" title="'+esc(tip+' — abrir')+'">'+lbl+'</a>':'<span title="'+esc(tip)+'">'+lbl+'</span>';
   return '<td class="dc '+DOC_CLS[s]+'">'+inner+'</td>';
 }
 function docsSecHTML(){
@@ -3876,7 +3985,7 @@ function pessoaParts(force){
       const conf=M.confirm==='ddel:'+d.id;
       return '<div class="drow st-'+s+'" data-did="'+esc(d.id)+'"><div class="dr-top"><select data-dk="tipo" aria-label="Tipo do documento"'+dis+'>'+DOC_TIPOS.map(x=>'<option value="'+x+'"'+(x===d.tipo?' selected':'')+'>'+DOC_NOME[x]+'</option>').join('')+'</select>'
         +'<span class="dst">'+(comVal?DOC_ST_TXT[s]:'GUARDADO')+'</span><span class="spacer"></span>'
-        +(href?'<a class="btn sm" href="'+esc(href)+'" target="_blank" rel="noopener">Abrir</a>':'<span class="hint">sem arquivo nesta tela</span>')
+        +(href?'<a class="btn sm" href="'+esc(href)+'" data-arq="'+esc(d.arq)+'" target="_blank" rel="noopener">Abrir</a>':'<span class="hint">sem arquivo nesta tela</span>')
         +(ro?'':(conf?'<span class="confirm2"><span>Apagar o documento e o arquivo?</span><button type="button" class="btn danger solid sm" data-ddel-yes="'+esc(d.id)+'">Apagar</button><button type="button" class="btn sm" data-ddel-no>Não</button></span>':'<button type="button" class="btn sm danger" data-ddel="'+esc(d.id)+'">Excluir</button>'))+'</div>'
         +'<label>'+(d.tipo==='ASO'?'DATA DO EXAME':d.tipo==='CNH'?'EMISSÃO':'DATA DO CERTIFICADO')+'<input type="date" data-dk="data" value="'+esc(d.data||'')+'"'+dis+'></label>'
         +(comVal?'<label>VÁLIDO ATÉ<input type="date" data-dk="validade" value="'+esc(d.est?'':(d.validade||''))+'"'+dis+'>'+(d.est&&v?'<small>calculado: '+fmtLong(v)+'</small>':(!v?'<small>coloque a data</small>':''))+'</label>':'')
@@ -3950,7 +4059,7 @@ function equipeNome(n){ const k=fold(n); let hit=''; teamsOrdered().forEach(t=>m
 function buildDocsImportPanel(pn){ pn.innerHTML=headHTML('<span class="pchip o">DOCUMENTOS</span>','<h2>Importar a pasta de documentos</h2>')+'<div class="p-body" id="dimpBody"></div>'; docsImportParts(); }
 function docsImportParts(){
   const b=$('#dimpBody'); if(!b||!DIMP) return; const P=DIMP;
-  const onde=files().nome==='artifact'?'Os arquivos ficam guardados neste artifact: quem consegue abrir o artifact consegue abrir os documentos. No menu Compartilhar dá pra deixar só pra sua organização.':files().nome==='supabase'?'Os arquivos ficam guardados no Supabase. Enquanto o site não tiver login, quem tiver o link do site consegue abrir.':'Neste modo os arquivos ficam só nesta aba (não vão pro banco).';
+  const onde=files().nome==='artifact'?'Os arquivos ficam guardados neste artifact: quem consegue abrir o artifact consegue abrir os documentos. No menu Compartilhar dá pra deixar só pra sua organização.':files().nome==='supabase'?'Os arquivos ficam guardados no Supabase, num espaço fechado: só quem entra no site com acesso liberado consegue abrir.':'Neste modo os arquivos ficam só nesta aba (não vão pro banco).';
   const rows=P.people.map(p=>{ const t=equipeDe(p.nome), novos=p.files.filter(f=>!f.dup).length;
     return '<div class="imp-r"><div class="imp-n"><b>'+esc(p.nome)+'</b><small>'+esc(p.empresa)+' · '+(t?'EQUIPE '+esc(recNome(t)):'SEM EQUIPE')+' · '+plural(p.files.length,'arquivo','arquivos')+'</small></div><span class="imp-c">'+(novos?(novos===p.files.length?'':novos+' novos'):'já importado')+'</span></div>'; }).join('');
   const busy=P.busy, pct=P.todo?Math.round(P.done/P.todo*100):100;
@@ -3982,7 +4091,11 @@ async function runDocsImport(){
 function docAvisoPessoa(ev,nome,t){ if(!docsEmUso()||!isPropria(t)) return ''; const p=pendencias(nome,docsExigidos(ev),evFimDate(ev),0); return p.length?'<span class="pp-d">DOC: '+esc(pendTxt(p))+'</span>':''; }
 
 /* ---------- eventos ---------- */
+/* arquivo em espaço fechado (Supabase): o link é assinado na hora do clique (a aba abre já, o endereço chega depois) */
+function wireArqLinks(){ document.addEventListener('click',async e=>{ const a=e.target.closest&&e.target.closest('a[data-arq]'); if(!a) return; const F=files(); if(!F.url) return; e.preventDefault();
+  const w=window.open('about:blank','_blank'); try{ const u=await F.url(a.dataset.arq); if(w&&!w.closed) w.location.href=u; else window.open(u,'_blank'); }catch(err){ if(w) try{ w.close(); }catch(x){} toast('Não consegui abrir o arquivo ('+String((err&&err.message)||err)+').',true); } }); }
 function wireDocs(){
+  wireArqLinks();
   /* o campo de arquivo fica fora da tela que redesenha (senão a escolha se perde se alguém mudar algo enquanto a janela está aberta) */
   const inp=$('#docsFile'); if(inp) inp.addEventListener('change',()=>{ const fl=Array.from(inp.files||[]); try{ inp.value=''; }catch(e){} openDocsImport(fl); });
   const det=$('#viewDetalhe');
@@ -4974,6 +5087,198 @@ function wirePDFPreview(){
   $('#pdfPrevFechar').addEventListener('click',fecharPDF);
   /* Esc fecha só a prévia (o painel de trás continua aberto) */
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&PV){ e.preventDefault(); e.stopImmediatePropagation(); fecharPDF(); } },true);
+}
+/* ===================================================================
+   LOGIN E USUÁRIOS (só no site — Supabase Auth; no artifact quem controla é o Compartilhar do Claude)
+   perfil: nome, área, função, administrador, liberado / bloqueado. Quem libera é o administrador.
+   =================================================================== */
+let AUTH=null, ME=null, PERFIS=[];
+const LG={modo:''};
+const AREAS={OPERACIONAL:['PRODUÇÃO','LOGÍSTICA','MONTAGEM','GALPÃO / ESTOQUE','FABRICAÇÃO','MANUTENÇÃO'],COMERCIAL:['SUPRIMENTOS','GESTÃO DE CONTAS','PROJETOS','CONTRATOS'],ADMINISTRATIVO:['FINANCEIRO','FISCAL','RH'],DIRETORIA:[]};
+const ICON_EU='<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4.2 4.4-6.3 8-6.3s6.8 2.1 8 6.3"/></svg>';
+const funcoes=()=>Array.from(new Set(Object.keys(AREAS).reduce((a,k)=>a.concat(AREAS[k]),[])));
+const nomeCurto=p=>{ const n=tr(p&&p.nome)||String((p&&p.email)||'').split('@')[0]; return n.split(' ')[0].toUpperCase(); };
+
+/* ---------- tela de entrar / criar acesso / senha ---------- */
+function loginTela(modo,extra){
+  const box=$('#login'), c=$('#loginCard'); if(!box||!c) return;
+  LG.modo=modo; box.hidden=false; document.body.classList.add('login-open');
+  const fld=(lbl,html)=>'<label class="lg-f"><span>'+lbl+'</span>'+html+'</label>';
+  const msg='<p class="lg-msg" id="lgMsg" role="status" aria-live="polite"></p>';
+  let h='<div class="lg-brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><b>DEMANDAS</b><small>GRUPO TENDAS PLENART</small></div></div>';
+  if(modo==='entrar') h+='<h2>Entrar</h2><form id="lgForm" data-lg="entrar" novalidate>'+fld('E-MAIL','<input name="email" type="email" inputmode="email" autocomplete="username" required>')+fld('SENHA','<input name="senha" type="password" autocomplete="current-password" required>')+msg+'<button class="btn primary lg-go" type="submit">Entrar</button></form>'
+    +'<div class="lg-links"><button type="button" class="lg-a" data-lgm="criar">Primeira vez? <b>Criar meu acesso</b></button><button type="button" class="lg-a" data-lgm="esqueci">Esqueci a senha</button></div>';
+  else if(modo==='criar') h+='<h2>Criar meu acesso</h2><p class="lg-p">Depois de criar, o administrador libera o seu acesso.</p><form id="lgForm" data-lg="criar" novalidate>'
+    +fld('NOME','<input name="nome" type="text" autocomplete="name" required>')+fld('E-MAIL','<input name="email" type="email" inputmode="email" autocomplete="username" required>')+fld('SENHA (MÍNIMO 6)','<input name="senha" type="password" autocomplete="new-password" minlength="6" required>')
+    +'<div class="lg-2">'+fld('ÁREA','<select name="area" required><option value="">— escolha</option>'+Object.keys(AREAS).map(a=>'<option value="'+a+'">'+a+'</option>').join('')+'</select>')+fld('FUNÇÃO','<input name="subarea" type="text" list="dlFuncao" placeholder="EX: SUPRIMENTOS">')+'</div>'
+    +msg+'<button class="btn primary lg-go" type="submit">Criar acesso</button></form><div class="lg-links"><button type="button" class="lg-a" data-lgm="entrar">Já tenho acesso — <b>entrar</b></button></div>';
+  else if(modo==='esqueci') h+='<h2>Esqueci a senha</h2><p class="lg-p">Coloque o seu e-mail. Chega um link pra criar uma senha nova.</p><form id="lgForm" data-lg="esqueci" novalidate>'+fld('E-MAIL','<input name="email" type="email" inputmode="email" autocomplete="username" required>')+msg+'<button class="btn primary lg-go" type="submit">Mandar o link</button></form><div class="lg-links"><button type="button" class="lg-a" data-lgm="entrar">Voltar pra <b>entrar</b></button></div>';
+  else if(modo==='nova') h+='<h2>Senha nova</h2><form id="lgForm" data-lg="nova" novalidate>'+fld('SENHA NOVA (MÍNIMO 6)','<input name="senha" type="password" autocomplete="new-password" minlength="6" required>')+fld('REPITA A SENHA','<input name="senha2" type="password" autocomplete="new-password" required>')+msg+'<button class="btn primary lg-go" type="submit">Salvar a senha</button></form>';
+  else if(modo==='aguardando'){ const p=extra||{};
+    h+='<h2>'+(p.bloqueado?'Acesso bloqueado':'Esperando liberação')+'</h2><p class="lg-p">'+(p.bloqueado?'O administrador tirou o seu acesso. Fale com ele se precisar.':'Olá'+(p.nome?', '+esc(nomeCurto(p)):'')+'! Seu acesso foi criado. Agora o administrador precisa liberar.')+'</p>'
+      +'<p class="lg-p lg-who">'+esc(p.email||'')+(p.area?'<br><b>'+esc(p.area)+(p.subarea?' · '+esc(p.subarea):'')+'</b>':'')+'</p>'
+      +'<div class="lg-acts"><button type="button" class="btn primary" data-lgm="recarregar">Já liberou? Entrar</button><button type="button" class="btn" data-lgm="sair">Sair</button></div>'; }
+  else if(modo==='erro') h+='<h2>Não deu pra abrir</h2><p class="lg-p">'+esc(extra||'')+'</p><div class="lg-acts"><button type="button" class="btn primary" data-lgm="recarregar">Tentar de novo</button><button type="button" class="btn" data-lgm="sair">Sair</button></div>';
+  c.innerHTML=h;
+  setTimeout(()=>{ const f=c.querySelector('input,select'); if(f) f.focus(); },40);
+}
+function loginFecha(){ const box=$('#login'); if(box) box.hidden=true; document.body.classList.remove('login-open'); }
+async function loginEnvia(form){
+  if(!AUTH) return;
+  const tipo=form.dataset.lg, v=n=>{ const el=form.elements[n]; return el?String(el.value).trim():''; };
+  const msg=(t,ok)=>{ const m=$('#lgMsg'); if(m){ m.textContent=t||''; m.className='lg-msg'+(t?(ok?' ok':' bad'):''); } };
+  const email=v('email').toLowerCase(), btn=form.querySelector('.lg-go');
+  if(tipo!=='nova'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg('Coloque um e-mail válido.'); return; }
+  if(tipo==='entrar'&&!form.elements.senha.value){ msg('Coloque a senha.'); return; }
+  if(tipo==='criar'){ if(!v('nome')){ msg('Coloque o seu nome.'); return; } if(form.elements.senha.value.length<6){ msg('A senha precisa ter pelo menos 6 caracteres.'); return; } if(!v('area')){ msg('Escolha a área.'); return; } }
+  if(tipo==='nova'){ if(form.elements.senha.value.length<6){ msg('A senha precisa ter pelo menos 6 caracteres.'); return; } if(form.elements.senha.value!==form.elements.senha2.value){ msg('As duas senhas não estão iguais.'); return; } }
+  const old=btn.textContent; btn.disabled=true; btn.textContent='Aguarde…'; msg('');
+  let r;
+  try{
+    if(tipo==='entrar') r=await AUTH.entrar(email,form.elements.senha.value);
+    else if(tipo==='criar') r=await AUTH.criar(email,form.elements.senha.value,{nome:normName(v('nome')),area:v('area'),subarea:normName(v('subarea'))});
+    else if(tipo==='esqueci') r=await AUTH.esqueci(email);
+    else r=await AUTH.novaSenha(form.elements.senha.value);
+  }catch(e){ r={erro:String((e&&e.message)||e)}; }
+  btn.disabled=false; btn.textContent=old;
+  if(r&&r.erro){ msg(r.erro); return; }
+  if(tipo==='entrar'){ location.reload(); return; }
+  if(tipo==='criar'){ if(r.sessao){ location.reload(); return; } form.reset(); msg('Acesso criado! Chegou um e-mail pra confirmar: abra o link e depois entre aqui.',true); return; }
+  if(tipo==='esqueci'){ msg('Se esse e-mail tiver acesso, chega um link em instantes (olhe também no spam).',true); return; }
+  msg('Senha trocada!',true); setTimeout(()=>location.replace(location.origin+location.pathname),900);
+}
+
+/* ---------- quem está usando (linha de status) ---------- */
+const pendentes=()=>PERFIS.filter(p=>!p.ativo&&!p.bloqueado);
+function renderEu(){
+  const b=$('#btnEu'); if(!b) return; if(!ME){ b.hidden=true; return; }
+  const n=ME.admin?pendentes().length:0;
+  b.hidden=false; b.innerHTML=ICON_EU+'<span>'+esc(nomeCurto(ME))+(ME.admin?' · ADM':'')+'</span>'+(n?'<b class="eu-n" title="'+n+' esperando liberação">'+n+'</b>':'');
+  b.title=ME.admin?'Usuários e o seu acesso'+(n?' — '+n+' esperando liberação':''):'O seu acesso';
+}
+async function atualizaPendentes(){
+  if(!AUTH||!ME) return;
+  try{ PERFIS=await AUTH.perfis(); const eu=PERFIS.find(p=>p.id===ME.id); if(eu) ME=eu; }catch(e){}
+  renderEu(); if(M.panel&&M.panel.kind==='usuarios') usuariosParts(); setStatus();
+}
+function openUsuarios(){ if(!ME) return; leavePanel(); M.panel={kind:'usuarios'}; M.usrSenha=false; buildPanel(); showPanel(); if(ME.admin) atualizaPendentes(); }
+function buildUsuariosPanel(pn){ pn.innerHTML=headHTML('<span class="pchip blue">ACESSO</span>','<h2>'+(ME&&ME.admin?'Usuários':'Meu acesso')+'</h2>')+'<div class="p-body" id="usrBody"></div>'; usuariosParts(); }
+function usuariosParts(){
+  const b=$('#usrBody'); if(!b||!ME) return;
+  const a=document.activeElement; if(a&&b.contains(a)&&/^(INPUT|SELECT)$/.test(a.tagName)) return;
+  const areaSel=p=>'<select data-uf="area" data-uid="'+esc(p.id)+'" aria-label="Área de '+esc(nomeCurto(p))+'"><option value="">— ÁREA</option>'+Object.keys(AREAS).concat(p.area&&!AREAS[p.area]?[p.area]:[]).map(x=>'<option value="'+esc(x)+'"'+(x===p.area?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select>';
+  const quem=p=>'<b>'+esc(tr(p.nome)||p.email)+(p.admin?' <span class="usr-adm">ADM</span>':'')+'</b><small>'+esc(p.email)+(p.area?' · '+esc(p.area)+(p.subarea?' / '+esc(p.subarea):''):'')+'</small>';
+  let h='<section><div class="sec-h"><h3>MEU ACESSO</h3></div><div class="usr-eu">'
+    +'<label class="lg-f"><span>NOME</span><input data-uf="nome" data-uid="'+esc(ME.id)+'" value="'+esc(ME.nome||'')+'" autocomplete="off"></label>'
+    +'<p class="usr-info">'+esc(ME.email)+'<br>'+(ME.area?esc(ME.area)+(ME.subarea?' · '+esc(ME.subarea):''):'SEM ÁREA')+(ME.admin?' · <b>ADMINISTRADOR</b>':'')+(ME.admin?'':'<br><small>Área e função quem muda é o administrador.</small>')+'</p>'
+    +(M.usrSenha?'<div class="usr-senha"><label class="lg-f"><span>SENHA NOVA (MÍNIMO 6)</span><input type="password" id="usrS1" autocomplete="new-password"></label><label class="lg-f"><span>REPITA</span><input type="password" id="usrS2" autocomplete="new-password"></label><div class="lg-acts"><button type="button" class="btn primary sm" data-ua="senha-ok">Salvar senha</button><button type="button" class="btn sm" data-ua="senha">Cancelar</button></div></div>'
+      :'<div class="lg-acts"><button type="button" class="btn sm" data-ua="senha">Trocar a senha</button><button type="button" class="btn sm danger" data-ua="sair">Sair</button></div>')
+    +'</div></section>';
+  if(ME.admin){
+    const pend=pendentes(), ativos=PERFIS.filter(p=>p.ativo&&!p.bloqueado), bloq=PERFIS.filter(p=>p.bloqueado);
+    h+='<section><div class="sec-h"><h3>ESPERANDO LIBERAÇÃO'+(pend.length?' ('+pend.length+')':'')+'</h3></div>'+(pend.length?'<div class="usr-list">'+pend.map(p=>'<div class="usr-r pend"><div class="usr-n">'+quem(p)+'</div><div class="usr-acts"><button type="button" class="btn sm okb solid" data-ua="liberar" data-uid="'+esc(p.id)+'">Liberar</button><button type="button" class="btn sm danger" data-ua="bloquear" data-uid="'+esc(p.id)+'">Recusar</button></div></div>').join('')+'</div>':'<p class="hint">Ninguém esperando. Quem criar o acesso no site aparece aqui pra você liberar.</p>')+'</section>';
+    h+='<section><div class="sec-h"><h3>COM ACESSO ('+ativos.length+')</h3></div><div class="usr-list">'+ativos.map(p=>'<div class="usr-r"><div class="usr-n">'+quem(p)+'</div><div class="usr-edit">'+areaSel(p)+'<input data-uf="subarea" data-uid="'+esc(p.id)+'" list="dlFuncao" value="'+esc(p.subarea||'')+'" placeholder="FUNÇÃO" aria-label="Função de '+esc(nomeCurto(p))+'"></div><div class="usr-acts"><button type="button" class="pp'+(p.admin?' on':'')+'" data-ua="admin" data-uid="'+esc(p.id)+'" aria-pressed="'+(p.admin?'true':'false')+'"><span class="pp-box"></span><span class="pp-n">ADMINISTRADOR</span></button>'+(p.id===ME.id?'':'<button type="button" class="btn sm danger" data-ua="bloquear" data-uid="'+esc(p.id)+'">Tirar acesso</button>')+'</div></div>').join('')+'</div>'
+      +'<p class="hint">Administrador libera e bloqueia acessos, muda área e função e marca outros administradores. Mais pra frente dá pra usar a área pra escolher o que cada um vê.</p></section>';
+    if(bloq.length) h+='<section><div class="sec-h"><h3>SEM ACESSO ('+bloq.length+')</h3></div><div class="usr-list">'+bloq.map(p=>'<div class="usr-r off"><div class="usr-n">'+quem(p)+'</div><div class="usr-acts"><button type="button" class="btn sm" data-ua="liberar" data-uid="'+esc(p.id)+'">Liberar de novo</button></div></div>').join('')+'</div></section>';
+  }
+  b.innerHTML=h;
+}
+async function salvaPerfil(id,campos,ok){
+  try{ await AUTH.salvarPerfil(id,campos); if(ok) toast(ok); }catch(e){ toast(String((e&&e.message)||e),true); }
+  await atualizaPendentes();
+}
+function wireLogin(){
+  const box=$('#login'); if(!box) return;
+  box.addEventListener('submit',e=>{ const f=e.target.closest('#lgForm'); if(!f) return; e.preventDefault(); loginEnvia(f); });
+  box.addEventListener('click',e=>{ const b=e.target.closest('[data-lgm]'); if(!b) return; const m=b.dataset.lgm;
+    if(m==='recarregar') location.reload(); else if(m==='sair'){ if(AUTH) AUTH.sair().then(()=>location.reload()); } else loginTela(m); });
+  const dl=$('#dlFuncao'); if(dl) dl.innerHTML=funcoes().map(f=>'<option value="'+esc(f)+'">').join('');
+  const eu=$('#btnEu'); if(eu) eu.addEventListener('click',openUsuarios);
+  const pn=$('#panel');
+  pn.addEventListener('click',e=>{ if(!M.panel||M.panel.kind!=='usuarios'||!AUTH) return; const b=e.target.closest('[data-ua]'); if(!b) return; const act=b.dataset.ua, id=b.dataset.uid, p=PERFIS.find(x=>x.id===id);
+    if(act==='liberar') salvaPerfil(id,{ativo:true,bloqueado:false},(p?nomeCurto(p):'Acesso')+' liberado.');
+    else if(act==='bloquear') salvaPerfil(id,{ativo:false,bloqueado:true},(p?nomeCurto(p):'Acesso')+' sem acesso.');
+    else if(act==='admin'&&p) salvaPerfil(id,{admin:!p.admin},nomeCurto(p)+(p.admin?' não é mais administrador.':' agora é administrador.'));
+    else if(act==='senha'){ M.usrSenha=!M.usrSenha; usuariosParts(); if(M.usrSenha){ const i=$('#usrS1'); if(i) i.focus(); } }
+    else if(act==='senha-ok'){ const s1=$('#usrS1').value, s2=$('#usrS2').value; if(s1.length<6){ toast('A senha precisa ter pelo menos 6 caracteres.',true); return; } if(s1!==s2){ toast('As duas senhas não estão iguais.',true); return; } AUTH.novaSenha(s1).then(r=>{ if(r&&r.erro) toast(r.erro,true); else { M.usrSenha=false; usuariosParts(); toast('Senha trocada.'); } }); }
+    else if(act==='sair') AUTH.sair().then(()=>location.reload()); });
+  pn.addEventListener('change',e=>{ if(!M.panel||M.panel.kind!=='usuarios'||!AUTH) return; const t=e.target, f=t.dataset.uf, id=t.dataset.uid; if(!f||!id) return;
+    const val=f==='area'?t.value:normName(t.value); t.blur(); salvaPerfil(id,{[f]:val}); });
+  pn.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.uf){ e.preventDefault(); e.target.blur(); } });
+  setInterval(()=>{ if(ME&&ME.admin&&!document.hidden) atualizaPendentes(); },120000);
+}
+/* ===================================================================
+   MENSAGEM DO DIA (WHATSAPP) — a escala de um dia em texto pronto pra colar
+   por equipe: evento e etapa, quem vai (quando vai só parte), local, o que fazer, produtor e carro
+   =================================================================== */
+const DIAS_LONG=['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+const WOPT_KEY='plenart.ui.whats';
+function wOpt(){ let o=null; try{ o=JSON.parse(localStorage.getItem(WOPT_KEY)||'null'); }catch(e){} return Object.assign({local:true,fazer:true,prod:true,carro:true},o||{}); }
+function wOptSave(o){ try{ localStorage.setItem(WOPT_KEY,JSON.stringify(o)); }catch(e){} }
+function openWhats(){ leavePanel(); M.panel={kind:'whats',dia:iso(addDays(today0(),1))}; buildPanel(); showPanel(); }
+/* o que cada equipe faz no dia k */
+function escalaDoDia(k){
+  const d=PD(k), por=new Map(), prodEv=new Map(), semEq=[];
+  evsAtivos().forEach(ev=>{
+    const al=alOf(ev)[k]||[], ps=evPS(ev), ph=dayPhases(ev,ps,d,k);
+    if(!noProd(al).length&&ph.some(p=>p==='mont'||p==='desm'||p==='man')) semEq.push({ev:ev,ph:ph});
+    al.forEach(t=>{
+      if(isProdId(t)){ if(!prodEv.has(ev.id)) prodEv.set(ev.id,[]); prodEv.get(ev.id).push(recNome(t)); return; }
+      if(!por.has(t)) por.set(t,[]);
+      por.get(t).push({ev:ev,ph:ph,g:going(ev,k,t),fazer:fazerEf(ev,k,t),car:carWith(ev,k,t)});
+    });
+  });
+  const ord=new Map(teamsOrdered().map((r,i)=>[r.id,i]));
+  const equipes=Array.from(por.keys()).sort((a,b)=>(ord.has(a)?ord.get(a):999)-(ord.has(b)?ord.get(b):999)||recNome(a).localeCompare(recNome(b)));
+  return {d:d,k:k,equipes:equipes.map(t=>({t:t,itens:por.get(t)})),prodEv:prodEv,semEq:semEq};
+}
+const wCab=k=>{ const d=PD(k); return '*ESCALA — '+DIAS_LONG[d.getDay()]+' '+fmtDM(k)+'*'; };
+function wBloco(E,x,o){
+  const t=x.t, r=regOf(t), mem=membersOf(t), L=[];
+  const nm=recNome(t)+(r&&r.propria===false?' (TERCEIRIZADA)':'');
+  /* uma linha só pro nome; quando a equipe toda vai num lugar só, fala "equipe completa" */
+  const um=x.itens.length===1, g0=x.itens[0].g;
+  L.push('*'+nm+'*'+(um&&g0&&mem.length?(g0.length===mem.length?' — equipe completa ('+mem.length+')':' — vão '+g0.length+' de '+mem.length):''));
+  x.itens.forEach(it=>{
+    const etapa=it.ph.length?phLabel(it.ph):'';
+    const quem=it.g&&mem.length&&!(um&&it.g.length===mem.length)?': '+(it.g.map(pShort).join(', ')||'NINGUÉM'):'';
+    L.push('• '+tr(it.ev.nome||'EVENTO').toUpperCase()+(etapa?' ('+etapa+')':'')+quem);
+    if(o.local&&tr(it.ev.local)) L.push('  Local: '+tr(it.ev.local));
+    if(o.fazer&&tr(it.fazer)) L.push('  Fazer: '+tr(it.fazer).toUpperCase());
+    if(o.prod){ const ps=E.prodEv.get(it.ev.id); if(ps&&ps.length) L.push('  Produtor: '+ps.join(', ')); }
+  });
+  if(o.carro&&r&&r.veiculoId){ const comCarro=x.itens.filter(it=>it.car); if(comCarro.length){ const mot=normName(r.motorista); L.push('Carro: '+vehName(r.veiculoId)+(mot?' — motorista '+pShort(mot):'')+(x.itens.length>1?' (vai pro '+tr(comCarro[0].ev.nome).toUpperCase()+')':'')); } }
+  return L.join('\n');
+}
+function wTexto(E,o,so){ const bl=E.equipes.filter(x=>!so||x.t===so).map(x=>wBloco(E,x,o)); return wCab(E.k)+'\n\n'+(bl.length?bl.join('\n\n'):'Ninguém escalado nesse dia.'); }
+function buildWhatsPanel(pn){ pn.innerHTML=headHTML('<span class="pchip ok">WHATSAPP</span>','<h2>Mensagem do dia</h2>')+'<div class="p-body" id="wBody"></div>'; whatsParts(); }
+function whatsParts(){
+  const b=$('#wBody'), p=M.panel; if(!b||!p||p.kind!=='whats') return;
+  const a=document.activeElement; if(a&&b.contains(a)&&a.tagName==='TEXTAREA') return;
+  const o=wOpt(), E=escalaDoDia(p.dia), hoje=iso(today0()), amanha=iso(addDays(today0(),1));
+  const txt=wTexto(E,o);
+  let h='<div class="w-dia"><button type="button" class="chip'+(p.dia===hoje?' on':'')+'" data-wd="'+hoje+'">HOJE</button><button type="button" class="chip'+(p.dia===amanha?' on':'')+'" data-wd="'+amanha+'">AMANHÃ</button>'
+    +'<button type="button" class="zb" data-wn="-1" aria-label="Dia anterior">◀</button><b class="w-d">'+DIAS_LONG[E.d.getDay()]+' '+fmtLong(p.dia)+'</b><button type="button" class="zb" data-wn="1" aria-label="Próximo dia">▶</button></div>'
+    +'<div class="mp-opts w-opts">'+[['local','ENDEREÇO DO EVENTO'],['fazer','O QUE VAI FAZER'],['prod','PRODUTOR'],['carro','CARRO']].map(([k,l])=>'<button type="button" class="pp'+(o[k]?' on':'')+'" data-wo="'+k+'" aria-pressed="'+(o[k]?'true':'false')+'"><span class="pp-box"></span><span class="pp-n">'+l+'</span></button>').join('')+'</div>';
+  if(E.semEq.length) h+='<p class="w-aviso">SEM EQUIPE NESSE DIA: '+E.semEq.map(s=>esc(tr(s.ev.nome).toUpperCase())+' ('+esc(phLabel(s.ph))+')').join(' · ')+'</p>';
+  h+='<section><div class="sec-h"><h3>TODAS AS EQUIPES</h3></div><textarea class="w-txt" id="wTxt" readonly rows="'+Math.min(18,Math.max(5,txt.split('\n').length+1))+'" aria-label="Mensagem do dia">'+esc(txt)+'</textarea>'
+    +'<div class="lg-acts"><button type="button" class="btn primary" data-wcp="">Copiar tudo</button><a class="btn" href="https://wa.me/?text='+encodeURIComponent(txt)+'" target="_blank" rel="noopener">Abrir no WhatsApp</a></div></section>';
+  if(E.equipes.length>1) h+='<section><div class="sec-h"><h3>UMA POR EQUIPE</h3></div><p class="hint">Pra mandar pro responsável de cada equipe.</p><div class="w-list">'+E.equipes.map(x=>{ const t1=wTexto(E,o,x.t);
+      return '<div class="w-r"><pre>'+esc(wBloco(E,x,o))+'</pre><div class="w-acts"><button type="button" class="btn sm" data-wcp="'+esc(x.t)+'">Copiar</button><a class="btn sm" href="https://wa.me/?text='+encodeURIComponent(t1)+'" target="_blank" rel="noopener">WhatsApp</a></div></div>'; }).join('')+'</div></section>';
+  b.innerHTML=h;
+}
+async function wCopia(txt){
+  let ok=false; try{ if(navigator.clipboard&&window.isSecureContext){ await navigator.clipboard.writeText(txt); ok=true; } }catch(e){}
+  if(!ok){ const ta=document.createElement('textarea'); ta.value=txt; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;left:-9999px;top:0'; document.body.appendChild(ta); ta.select(); try{ ok=document.execCommand('copy'); }catch(e){} ta.remove(); }
+  toast(ok?'Copiado — é só colar no WhatsApp.':'Não consegui copiar sozinho: selecione o texto e copie.',!ok);
+}
+function wireWhats(){
+  const pn=$('#panel');
+  pn.addEventListener('click',e=>{ const p=M.panel; if(!p||p.kind!=='whats') return; const t=e.target;
+    const dd=t.closest('[data-wd]'); if(dd){ p.dia=dd.dataset.wd; whatsParts(); return; }
+    const dn=t.closest('[data-wn]'); if(dn){ p.dia=iso(addDays(PD(p.dia),+dn.dataset.wn)); whatsParts(); return; }
+    const wo=t.closest('[data-wo]'); if(wo){ const o=wOpt(); o[wo.dataset.wo]=!o[wo.dataset.wo]; wOptSave(o); whatsParts(); return; }
+    const cp=t.closest('[data-wcp]'); if(cp){ wCopia(wTexto(escalaDoDia(p.dia),wOpt(),cp.dataset.wcp||'')); return; } });
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
