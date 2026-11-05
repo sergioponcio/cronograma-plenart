@@ -1616,6 +1616,35 @@ div.thead{cursor:default}
 .iwarn.fora{border-left-color:var(--danger);background:var(--danger-soft)}
 @media (max-width:760px){ .semop-d input{width:100%} .ptitle .pc{white-space:normal} }
 </style>
+<style>
+/* ===================== v45: dia sem operação marcado no mapa de dias, com o motivo ===================== */
+/* painel do dia */
+.c-op{margin:0 0 16px}
+.c-op[hidden]{display:none}
+.c-op-go{display:inline-flex;align-items:center;gap:8px}
+.c-op-ic{flex:0 0 auto;width:15px;height:15px;border:1px solid var(--line-strong);border-radius:2px;background:repeating-linear-gradient(135deg,transparent 0 3px,rgba(110,122,142,.5) 3px 4.5px),var(--surface)}
+.c-op-lib{margin:0 0 8px;font:600 12px/1.35 var(--cond);letter-spacing:.03em;color:var(--muted)}
+.c-op-box{display:flex;flex-direction:column;gap:8px;padding:0 12px 12px;border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:3px;background:var(--surface)}
+.c-op-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0 -12px 2px;padding:9px 12px 8px;background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(110,122,142,.16) 6px 8px),var(--grey-soft)}
+.c-op-h b{font:700 15px/1.1 var(--cond);letter-spacing:.08em;color:var(--ink)}
+.c-op-h span{font:600 11.5px/1.2 var(--cond);letter-spacing:.06em;color:var(--muted)}
+.c-op-box .lbl{margin:2px 0 -2px}
+.c-op-mot{display:flex;flex-wrap:wrap;gap:6px}
+.c-op-mot .chip{padding:6px 10px;font-size:11.5px}
+.c-op-obs{width:100%;text-transform:uppercase}
+.c-op-obs::placeholder{text-transform:none}
+.c-op-prev{margin:0;padding:7px 9px;border-radius:2px;background:var(--grey-soft);font:700 12.5px/1.35 var(--cond);letter-spacing:.03em;color:var(--ink)}
+.c-op-prev span{display:block;margin-bottom:2px;font:600 10px/1.2 var(--cond);letter-spacing:.09em;color:var(--muted)}
+.c-op-w{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:7px 9px;border-left:3px solid var(--warn);background:var(--warn-soft);font:600 12px/1.35 var(--cond);letter-spacing:.02em;color:var(--ink)}
+.c-op-acts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:2px}
+.c-op-acts .pp{padding:6px 9px}
+/* quadrinho do mapa e legenda */
+.m-so{display:block;margin-bottom:2px;font:700 9.5px/1.1 var(--cond);letter-spacing:.05em;color:var(--muted);overflow:hidden}
+.m-c.nw .m-so{font-size:8.5px;letter-spacing:0}
+.m-so small{display:block;margin-top:1px;font:600 9.5px/1.15 var(--cond);letter-spacing:.02em}
+.lg.semop{background:repeating-linear-gradient(135deg,transparent 0 3px,rgba(110,122,142,.45) 3px 4.5px),var(--surface)}
+.semop .hint b{color:var(--ink)}
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -2763,12 +2792,18 @@ function removeRecEverywhere(rid){ evUsesRec(rid).forEach(ev=>removeRecFromEvent
    - período do evento: do início da 1ª montagem ao fim da última desmontagem (com as janelas).
      Dia marcado na escala fora disso é engano (ex.: data digitada errada num item, 21/10 no lugar de 21/11):
      não entra no cronograma nem nas contas, e o evento avisa com o botão TIRAR.
-   - dias sem operação: ev.semOp = {sem:[0..6] (0 = domingo), datas:['AAAA-MM-DD']}. Sem o campo, vale o que
-     a observação disser ("NÃO PODE NOS DOMINGOS"). Escalar pela etapa inteira pula esses dias; item com período
-     (pintura de 13 a 24/11) não aparece neles; "falta equipe" não conta.
+   - dias sem operação: ev.semOp = {sem:[0..6] (0 = domingo), datas:['AAAA-MM-DD'], lib:['AAAA-MM-DD'], mot:{…}}
+       sem   = todo domingo (sábado…) do evento        datas = dia marcado no mapa de dias (ou digitado no cabeçalho)
+       lib   = domingo da regra que vai ter operação    mot   = motivo: {'w0':{m,obs}} pra regra, {'AAAA-MM-DD':{m,obs}} pro dia
+       m = 'local' (restrição do local) | 'nossa' (programação da Plenart) | 'feriado'; obs = texto livre (sai no cronograma)
+     Sem o campo, vale o que a observação disser ("NÃO PODE NOS DOMINGOS"). Escalar pela etapa inteira e REPETIR pulam
+     esses dias; item com período (montagem de 10 a 20) não aparece neles; "falta equipe" não conta.
    =================================================================== */
 const SEMOP_CACHE=new WeakMap();
 const DIA_NOME=['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+const SEMOP_MOT=[['local','RESTRIÇÃO DO LOCAL'],['nossa','PROGRAMAÇÃO DA PLENART'],['feriado','FERIADO']];
+const SEMOP_LBL={local:'RESTRIÇÃO DO LOCAL',nossa:'PROGRAMAÇÃO DA PLENART',feriado:'FERIADO'};
+const ISO_RE=/^\d{4}-\d{2}-\d{2}$/;
 /* "NÃO PODE NOS DOMINGOS", "DOMINGO NÃO TEM MONTAGEM", "SEM OPERAÇÃO NO FIM DE SEMANA" */
 function semOpDaObs(obs){
   const t=String(obs||'').toUpperCase(), out=new Set(), NEG='(?:N[ÃA]O|SEM\\s+(?:OPERA|MONTA|TRABALH|SERVI))';
@@ -2777,15 +2812,77 @@ function semOpDaObs(obs){
   return Array.from(out).sort();
 }
 function semOp(ev){
-  if(!ev) return {sem:new Set(),datas:new Set(),inf:false};
+  if(!ev) return {sem:new Set(),datas:new Set(),lib:new Set(),mot:{},inf:false};
   let c=SEMOP_CACHE.get(ev); if(c) return c;
-  const s=isObj(ev.semOp)?ev.semOp:null, sem=s?(Array.isArray(s.sem)?s.sem:[]):semOpDaObs(ev.obs), datas=s&&Array.isArray(s.datas)?s.datas:[];
-  c={sem:new Set(sem.map(Number).filter(n=>n>=0&&n<=6)),datas:new Set(datas.filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(String(x)))),inf:!s&&sem.length>0};
+  const s=isObj(ev.semOp)?ev.semOp:null, sem=s?(Array.isArray(s.sem)?s.sem:[]):semOpDaObs(ev.obs);
+  const ds=a=>new Set((Array.isArray(a)?a:[]).filter(x=>ISO_RE.test(String(x))));
+  const mot={}; if(s&&isObj(s.mot)) Object.keys(s.mot).forEach(k=>{ const v=s.mot[k]; if(!isObj(v)) return; const m=SEMOP_LBL[v.m]?v.m:'', obs=normName(v.obs); if(m||obs) mot[k]={m:m,obs:obs}; });
+  c={sem:new Set(sem.map(Number).filter(n=>n>=0&&n<=6)),datas:ds(s&&s.datas),lib:ds(s&&s.lib),mot:mot,inf:!s&&sem.length>0};
+  c.datas.forEach(k=>c.lib.delete(k));
   SEMOP_CACHE.set(ev,c); return c;
 }
-function semOpDia(ev,k){ const s=semOp(ev); if(!s.sem.size&&!s.datas.size) return false; if(s.datas.has(k)) return true; const d=PD(k); return !!d&&s.sem.has(d.getDay()); }
-function semOpMotivo(ev,k){ const s=semOp(ev); if(s.datas.has(k)){ const d=PD(k); return d&&s.sem.has(d.getDay())?DIA_NOME[d.getDay()]:'FERIADO / FOLGA'; } const d=PD(k); return d&&s.sem.has(d.getDay())?DIA_NOME[d.getDay()]:''; }
+const dowOf=k=>{ const d=PD(k); return d?d.getDay():-1; };
+/* de onde vem o "sem operação" do dia: 'data' (marcado nesse dia) · 'sem' (todo domingo do evento) · '' (tem operação) */
+function semOpFonte(ev,k){ const s=semOp(ev); if(s.datas.has(k)) return 'data'; if(!s.sem.size||s.lib.has(k)) return ''; return s.sem.has(dowOf(k))?'sem':''; }
+function semOpDia(ev,k){ return !!semOpFonte(ev,k); }
+/* motivo do dia: o do próprio dia; senão, o da regra (todo domingo) */
+function semOpMotKey(ev,k){ const s=semOp(ev), f=semOpFonte(ev,k); if(!f) return ''; if(f==='data'&&(s.mot[k]||!s.sem.has(dowOf(k)))) return k; return 'w'+dowOf(k); }
+function semOpMot(ev,k){ const key=semOpMotKey(ev,k); return key?(semOp(ev).mot[key]||null):null; }
+const motTxt=m=>m?[SEMOP_LBL[m.m]||'',m.obs||''].filter(Boolean).join(': '):'';
+/* "RESTRIÇÃO DO LOCAL: SHOPPING NÃO LIBERA" (vazio quando não tem motivo) */
+function semOpRazao(ev,k){ return motTxt(semOpMot(ev,k)); }
+/* o que sai no cronograma: "SEM OPERAÇÃO — RESTRIÇÃO DO LOCAL: SHOPPING NÃO LIBERA" */
+function semOpLinha(ev,k){ const r=semOpRazao(ev,k); return 'SEM OPERAÇÃO'+(r?' — '+r:''); }
+function semOpMotivo(ev,k){ return semOpRazao(ev,k)||(semOpFonte(ev,k)==='sem'?DIA_NOME[dowOf(k)]:''); }
+const listaE=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' E '+a[a.length-1];
 function semOpTxt(ev){ const s=semOp(ev), dias=Array.from(s.sem).sort((a,b)=>(a||7)-(b||7)).map(n=>DIA_NOME[n]+'S'); const ds=Array.from(s.datas).sort().map(k=>fmtDM(k)); return [dias.join(' E '),ds.length?ds.join(', '):''].filter(Boolean).join(' · '); }
+/* resumo com os motivos (capa do cronograma, cabeçalho do evento):
+   "DOMINGOS, MENOS 15/11 (RESTRIÇÃO DO LOCAL) · 18/11 E 19/11 (PROGRAMAÇÃO DA PLENART: CHEGADA DO PALCO)" */
+function semOpResumo(ev,soPeriodo){
+  const s=semOp(ev), p=soPeriodo?evPeriodo(ev):null, out=[];
+  const dentro=k=>!soPeriodo||naData(ev,k);
+  /* dia da semana que nem aparece no período do evento não entra */
+  let dows=null; if(p&&p.a>'0000-01-01'&&p.b<'9999-12-31'){ dows=new Set(); let n=0; eachDay(PD(p.a),PD(p.b),k=>{ if(n++<400) dows.add(dowOf(k)); }); }
+  const gw=new Map(); Array.from(s.sem).filter(n=>!dows||dows.has(n)).sort((a,b)=>(a||7)-(b||7)).forEach(n=>{ const r=motTxt(s.mot['w'+n]); if(!gw.has(r)) gw.set(r,[]); gw.get(r).push(n); });
+  gw.forEach((ns,r)=>{ const lib=Array.from(s.lib).filter(k=>dentro(k)&&ns.indexOf(dowOf(k))>=0).sort(); out.push(listaE(ns.map(n=>DIA_NOME[n]+'S'))+(lib.length?', MENOS '+listaE(lib.map(fmtDM)):'')+(r?' ('+r+')':'')); });
+  const gd=new Map(); Array.from(s.datas).filter(dentro).sort().forEach(k=>{ if(s.sem.has(dowOf(k))&&!s.mot[k]) return; const r=semOpRazao(ev,k); if(!gd.has(r)) gd.set(r,[]); gd.get(r).push(k); });
+  gd.forEach((ks,r)=>out.push(listaE(ks.map(fmtDM))+(r?' ('+r+')':'')));
+  return out.join(' · ');
+}
+/* dias sem operação dentro de um período (item de 10 a 20 → ['…18']) */
+function semOpNoPeriodo(ev,a,b){ if(!variosDias(a,b)) return []; const x=a<b?a:b, y=a<b?b:a, out=[]; let n=0; eachDay(PD(x),PD(y),k=>{ if(n++<200&&naData(ev,k)&&semOpDia(ev,k)) out.push(k); }); return out; }
+/* "(18/11 SEM OPERAÇÃO)" · "(15/11 E 22/11 SEM OPERAÇÃO)" · "(5 DIAS SEM OPERAÇÃO)" */
+function semOpNota(ks){ if(!ks.length) return ''; return '('+(ks.length>4?ks.length+' DIAS':listaE(ks.map(fmtDM)))+' SEM OPERAÇÃO)'; }
+/* tira da lista os dias sem operação (escalar pela etapa inteira, repetir) */
+const comOperacao=(ev,ks)=>ks.filter(k=>!semOpDia(ev,k));
+const puladosTxt=(ks0,ks)=>{ const pul=ks0.filter(k=>ks.indexOf(k)<0); return pul.length?' (sem os dias sem operação: '+shortDays(pul)+')':''; };
+
+/* ---------- mudar os dias sem operação (sempre por aqui: limpa o que ficou sem sentido) ---------- */
+function semOpSet(evId,fn){
+  const e=evById(evId); if(!e||readOnly) return;
+  const s=semOp(e), cur={sem:Array.from(s.sem),datas:Array.from(s.datas),lib:Array.from(s.lib),mot:JSON.parse(JSON.stringify(s.mot))};
+  fn(cur,e);
+  const uq=a=>Array.from(new Set(a)).sort();
+  cur.sem=uq(cur.sem.map(Number)).map(Number).sort(); cur.datas=uq(cur.datas.filter(k=>ISO_RE.test(k)));
+  /* liberado só faz sentido num dia da regra; dia marcado não fica liberado */
+  cur.lib=uq(cur.lib.filter(k=>ISO_RE.test(k)&&cur.datas.indexOf(k)<0&&cur.sem.indexOf(dowOf(k))>=0));
+  Object.keys(cur.mot).forEach(k=>{ const v=cur.mot[k]; const ok=v&&(SEMOP_LBL[v.m]||tr(v.obs))&&(/^w[0-6]$/.test(k)?cur.sem.indexOf(+k.slice(1))>=0:cur.datas.indexOf(k)>=0); if(!ok) delete cur.mot[k]; else cur.mot[k]={m:SEMOP_LBL[v.m]?v.m:'',obs:normName(v.obs)}; });
+  patchEv(evId,o=>{ o.semOp=cur; });
+}
+/* marcar sem operação nesses dias (no dia da regra que estava liberado, volta a valer a regra) */
+function semOpMarcar(evId,keys){ semOpSet(evId,c=>{ keys.forEach(k=>{ if(c.sem.indexOf(dowOf(k))>=0&&c.lib.indexOf(k)>=0) c.lib=c.lib.filter(x=>x!==k); else if(c.sem.indexOf(dowOf(k))<0&&c.datas.indexOf(k)<0) c.datas.push(k); }); }); }
+/* vai ter operação nesses dias (dia marcado sai; dia da regra fica liberado) */
+function semOpTirar(evId,keys){ semOpSet(evId,c=>{ keys.forEach(k=>{ c.datas=c.datas.filter(x=>x!==k); delete c.mot[k]; if(c.sem.indexOf(dowOf(k))>=0&&c.lib.indexOf(k)<0) c.lib.push(k); }); }); }
+/* todo domingo (o dia da semana) do evento: liga ou desliga. Ligando, o motivo do dia vira o da regra.
+   Desligando a partir de um dia (painel do mapa), esse dia continua sem operação, com o motivo — os outros domingos voltam a ter operação */
+function semOpSemana(evId,n,on,deDia){ semOpSet(evId,c=>{
+  if(on){ if(c.sem.indexOf(n)<0) c.sem.push(n); c.lib=c.lib.filter(k=>dowOf(k)!==n);
+    c.datas.filter(k=>dowOf(k)===n).forEach(k=>{ if(c.mot[k]&&!c.mot['w'+n]) c.mot['w'+n]=c.mot[k]; delete c.mot[k]; }); c.datas=c.datas.filter(k=>dowOf(k)!==n); }
+  else { c.sem=c.sem.filter(x=>x!==n); c.lib=c.lib.filter(k=>dowOf(k)!==n);
+    if(deDia){ if(c.datas.indexOf(deDia)<0) c.datas.push(deDia); if(c.mot['w'+n]&&!c.mot[deDia]) c.mot[deDia]=c.mot['w'+n]; } delete c.mot['w'+n]; }
+}); }
+/* motivo / observação dos dias (o dia da regra muda o motivo da regra: vale pra todos os domingos) */
+function semOpMotivoSet(evId,keys,patch){ semOpSet(evId,(c,e)=>{ keys.forEach(k=>{ const key=semOpMotKey(e,k); if(!key) return; c.mot[key]=Object.assign({m:'',obs:''},c.mot[key]||{},patch); }); }); }
 /* período do evento (todas as janelas de montagem, evento e desmontagem) */
 function evPeriodo(ev){ const ps=evPS(ev); let a=null,b=null; ['mont','ev','desm'].forEach(k=>(ps[k]||[]).forEach(sp=>{ if(!a||sp.a<a) a=sp.a; if(!b||sp.b>b) b=sp.b; })); if(!a) return null;
   /* só limita o lado que tem data: sem montagem, não tem "antes"; sem desmontagem, não tem "depois" */
@@ -2815,13 +2912,74 @@ function renderSemOp(ev){
   const box=$('#semOpBox'); if(!box) return; const s=semOp(ev), ro=readOnly;
   $$('[data-semop]',box).forEach(b=>{ const on=s.sem.has(+b.dataset.semop); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.disabled=ro; });
   const inp=$('#semOpDatas'); if(inp&&document.activeElement!==inp){ inp.value=Array.from(s.datas).sort().map(k=>fmtDM(k)).join(', '); inp.disabled=ro; }
-  const h=$('#semOpHint'); if(h){ h.textContent=s.inf?'Marcado pela observação do evento. Clique pra confirmar ou mudar.':''; h.hidden=!s.inf; }
+  const h=$('#semOpHint'); if(h){ const r=semOpResumo(ev,false);
+    h.innerHTML=s.inf?'Marcado pela observação do evento. Clique pra confirmar ou mudar.':(r?'<b>No cronograma:</b> '+esc(r)+'<br>':'')+(ro?'':'Motivo de cada dia: clique no dia no <b>Mapa de dias</b> ou na grade da Escala.');
+    h.hidden=!h.innerHTML; }
 }
-function toggleSemOp(evId,n){ const e=evById(evId); if(!e||readOnly) return; const s=semOp(e), sem=new Set(s.sem); if(sem.has(n)) sem.delete(n); else sem.add(n);
-  patchEv(evId,o=>{ o.semOp={sem:Array.from(sem).sort(),datas:Array.from(s.datas).sort()}; }); }
-function setSemOpDatas(evId,txt){ const e=evById(evId); if(!e||readOnly) return; const s=semOp(e), ds=datasDoTexto(txt,refDate(e));
+function toggleSemOp(evId,n){ const e=evById(evId); if(!e||readOnly) return; semOpSemana(evId,n,!semOp(e).sem.has(n)); }
+function setSemOpDatas(evId,txt){ const e=evById(evId); if(!e||readOnly) return; const ds=datasDoTexto(txt,refDate(e));
   if(String(txt||'').trim()&&!ds.length){ toast('Não entendi as datas: use DD/MM separado por vírgula (ex: 20/11, 25/12).',true); return; }
-  patchEv(evId,o=>{ o.semOp={sem:Array.from(s.sem).sort(),datas:ds}; }); }
+  /* o motivo de quem continua fica; o de quem saiu vai junto */
+  semOpSet(evId,c=>{ c.datas=ds; }); }
+
+/* ---------- painel do dia (mapa de dias e grade da escala): marcar dia sem operação, com o motivo ---------- */
+const diaTodo=n=>(n===0||n===6?'TODO ':'TODA ')+DIA_NOME[n];
+function opSecHTML(ev,days,ro){
+  const n=days.length, so=days.filter(k=>semOpDia(ev,k)), allSo=so.length===n, s=semOp(ev);
+  if(days.every(k=>!naData(ev,k))) return '';
+  if(!so.length){
+    if(ro) return '';
+    const lib=n===1&&s.lib.has(days[0]);
+    return (lib?'<p class="c-op-lib">'+esc(diaTodo(dowOf(days[0])))+' É SEM OPERAÇÃO NESTE EVENTO — ESSE DIA FOI LIBERADO (VAI TER OPERAÇÃO).</p>':'')
+      +'<button type="button" class="btn-sm c-op-go" data-so="1"><span class="c-op-ic" aria-hidden="true"></span>'+(lib?'MARCAR SEM OPERAÇÃO DE NOVO':n>1?'MARCAR ESSES DIAS COMO SEM OPERAÇÃO':'MARCAR COMO DIA SEM OPERAÇÃO')+'</button>';
+  }
+  const ms=so.map(k=>semOpMot(ev,k)||{m:'',obs:''}), m0=ms[0], mSame=ms.every(x=>x.m===m0.m), oSame=ms.every(x=>x.obs===m0.obs);
+  const k1=so[0], fonte=semOpFonte(ev,k1), dw=dowOf(k1);
+  const escopo=n===1?(fonte==='sem'?diaTodo(dw)+' DESTE EVENTO':'NESSE DIA'):(allSo?'NESSES '+n+' DIAS':so.length+' DE '+n+' DIAS');
+  const al=alOf(ev), gente=[]; so.forEach(k=>(al[k]||[]).forEach(t=>{ if(gente.indexOf(t)<0) gente.push(t); }));
+  const prev=so.length===1||(mSame&&oSame)?semOpLinha(ev,k1):'CADA DIA COM O SEU MOTIVO';
+  if(ro) return '<div class="c-op-box"><div class="c-op-h"><b>SEM OPERAÇÃO</b><span>'+esc(escopo)+'</span></div><p class="c-op-prev"><span>NO CRONOGRAMA</span>'+esc(prev)+'</p></div>';
+  return '<div class="c-op-box">'
+    +'<div class="c-op-h"><b>SEM OPERAÇÃO</b><span>'+esc(escopo)+'</span></div>'
+    +'<span class="lbl" id="c-som-l">MOTIVO</span><div class="c-op-mot" role="group" aria-labelledby="c-som-l">'+SEMOP_MOT.map(([v,l])=>{ const on=mSame&&m0.m===v; return '<button type="button" class="chip'+(on?' on':'')+'" data-som="'+v+'" aria-pressed="'+on+'">'+l+'</button>'; }).join('')+'</div>'
+    +'<label class="lbl" for="c-soobs">OBSERVAÇÃO (SAI NO CRONOGRAMA)</label><input id="c-soobs" class="c-op-obs" autocomplete="off" value="'+esc(oSame?m0.obs:'')+'" placeholder="'+esc(oSame?'EX: O LOCAL NÃO LIBERA A ENTRADA NESSE DIA':'CADA DIA ESTÁ COM UMA — O QUE ESCREVER VALE PRA TODOS')+'">'
+    +'<p class="c-op-prev"><span>NO CRONOGRAMA</span>'+esc(prev)+'</p>'
+    +(gente.length?'<div class="c-op-w"><span>'+esc(listaE(gente.map(recNome)))+(gente.length>1?' ESTÃO ESCALADOS':' ESTÁ ESCALADO')+(so.length>1?' EM DIA SEM OPERAÇÃO.':' NESSE DIA.')+'</span><button type="button" class="btn-sm danger" data-soclr>TIRAR '+(so.length>1?'DESSES DIAS':'DESSE DIA')+'</button></div>':'')
+    +'<div class="c-op-acts">'
+      +(n===1?'<button type="button" class="pp'+(fonte==='sem'?' on':'')+'" data-sow="'+dw+'" aria-pressed="'+(fonte==='sem')+'"><span class="pp-box" aria-hidden="true"></span><span class="pp-n">'+esc(diaTodo(dw))+' DESTE EVENTO</span></button>':'')
+      +(!allSo?'<button type="button" class="btn-sm" data-so="1">MARCAR OS OUTROS DIAS TAMBÉM</button>':'')
+      +'<button type="button" class="btn-sm" data-so="0">'+(n>1?'VAI TER OPERAÇÃO NESSES DIAS':'VAI TER OPERAÇÃO NESSE DIA')+'</button>'
+    +'</div></div>';
+}
+/* clique dentro da seção (devolve true se era dela) */
+function opPanelClick(t,p){
+  if(!t.closest('#c-op')) return false;
+  flush('soobs:'+p.id); /* a observação que estava sendo digitada grava antes */
+  const a=t.closest('[data-so]'); if(a){ const ev=evById(p.id); if(!ev) return true;
+    if(a.dataset.so==='1'){ const ks=p.days.filter(k=>!semOpDia(ev,k)&&naData(ev,k)); if(!ks.length) return true; semOpMarcar(p.id,ks); const e2=evById(p.id), al=alOf(e2), gente=new Set(); ks.forEach(k=>(al[k]||[]).forEach(x=>gente.add(x)));
+      toast((ks.length>1?ks.length+' dias marcados':'Marcado')+' sem operação. Escolha o motivo — sai no cronograma.'+(gente.size?' Tem gente escalada: '+listaE(Array.from(gente).map(recNome))+'.':''));
+      setTimeout(()=>{ const c=$('#c-op .c-op-mot .chip'); if(c&&!(window.matchMedia&&!matchMedia('(hover: hover)').matches)) c.focus({preventScroll:true}); },60); }
+    else { const ks=p.days.filter(k=>semOpDia(ev,k)); if(!ks.length) return true; semOpTirar(p.id,ks); toast(ks.length>1?'Esses dias voltam a ter operação.':'Esse dia volta a ter operação.'); }
+    return true; }
+  const m=t.closest('[data-som]'); if(m){ const ev=evById(p.id); if(!ev) return true; const so=p.days.filter(k=>semOpDia(ev,k)), v=m.dataset.som, on=so.length&&so.every(k=>{ const x=semOpMot(ev,k); return x&&x.m===v; });
+    const ev2=evById(p.id); semOpMotivoSet(p.id,so.filter(k=>semOpDia(ev2,k)),{m:on?'':v}); return true; }
+  const w=t.closest('[data-sow]'); if(w){ const ev=evById(p.id); if(!ev) return true; const n=+w.dataset.sow, liga=!semOp(ev).sem.has(n), masc=n===0||n===6;
+    semOpSemana(p.id,n,liga,liga?null:p.days[0]); toast(liga?diaTodo(n)+' do evento fica sem operação (o motivo vale pra '+(masc?'todos':'todas')+').':'Só esse dia fica sem operação; '+(masc?'os outros ':'as outras ')+DIA_NOME[n]+'S voltam a ter operação.'); return true; }
+  if(t.closest('[data-soclr]')){ const ev=evById(p.id); if(!ev) return true; const ks=p.days.filter(k=>semOpDia(ev,k)); limparDias(p.id,ks); toast('Escala tirada '+(ks.length>1?'desses dias.':'desse dia.')); return true; }
+  return false;
+}
+/* observação: grava enquanto digita (com uma pausa), ao sair do campo e ao clicar em outra coisa da seção */
+function flushOpObs(){ const inp=$('#c-soobs'), p=M.panel; if(!inp||!p||p.kind!=='cell'||readOnly) return; const ev=evById(p.id); if(!ev) return; const so=p.days.filter(k=>semOpDia(ev,k)); if(!so.length) return;
+  const v=normName(inp.value), ms=so.map(k=>(semOpMot(ev,k)||{}).obs||''), same=ms.every(x=>x===ms[0]);
+  if(!v&&!same) return; /* campo vazio com observações diferentes: não apaga as dos dias */
+  if(ms.every(x=>x===v)) return;
+  semOpMotivoSet(p.id,so,{obs:v}); }
+/* o "NO CRONOGRAMA" muda na hora, enquanto digita */
+function opPrevLive(){ const inp=$('#c-soobs'), pv=$('#c-op .c-op-prev'); if(!inp||!pv) return; const on=$('#c-op .c-op-mot .chip.on'), m=on?on.dataset.som:'';
+  const r=[SEMOP_LBL[m]||'',normName(inp.value)].filter(Boolean).join(': '); pv.innerHTML='<span>NO CRONOGRAMA</span>'+esc('SEM OPERAÇÃO'+(r?' — '+r:'')); }
+function opObsInput(p,ev){ opPrevLive(); schedule('soobs:'+p.id,flushOpObs,ev&&ev.type==='change'?350:800); }
+/* tira todo mundo desses dias (escala, quem vai, o que vai fazer) */
+function limparDias(evId,keys){ const ev=evById(evId); if(!ev) return; const al=allocsOf(ev),ch={},par={},fz={}; keys.forEach(k=>{ if((al[k]||[]).length) ch[k]=[]; if(parcialOf(ev)[k]!=null) par[k]=null; if(isObj(ev.fazer)&&ev.fazer[k]!=null) fz[k]=null; }); if(Object.keys(ch).length||Object.keys(par).length||Object.keys(fz).length) writeDays(evId,ch,null,par,{fazer:fz}); }
 /* aviso na escala do evento: dia marcado fora das datas e gente escalada em dia sem operação, com o botão TIRAR */
 function renderEscAviso(ev){
   const host=$('#evMapa'); if(!host||!host.parentNode) return;
@@ -3448,8 +3606,8 @@ function evGridHTML(ev,cols,cw){
   const today=today0(), ps=evPS(ev), al=alOf(ev), rows=escRows(ev), lv=zLevel(cw);
   const colW=c=>c.gap?Math.max(56,Math.min(110,cw)):cw;
   const nameW=170, width=nameW+cols.reduce((s,c)=>s+colW(c),0);
-  const head=cols.map(c=>{ if(c.gap) return '<th class="g-gap'+(c.ph?'':' nada')+'" scope="col"><span>…</span><b>'+fd(c.a,false)+' A '+fd(c.b,false)+'</b><small>'+c.n+' DIAS'+(c.ph?' DE EVENTO':'')+'</small></th>'; const d=c.d, ph=dayPhases(ev,ps,d,c.k); const so=semOpDia(ev,c.k), fo=!naData(ev,c.k); return '<th class="m-day g-day'+(d.getDay()===0||d.getDay()===6?' we':'')+(+d===+today?' today':'')+(so?' semop':'')+(fo?' fora':'')+wcls(cw)+'" scope="col"'+(fo?' title="Fora das datas do evento"':so?' title="Dia sem operação"':'')+'><span>'+DIAS3[d.getDay()]+'</span><b>'+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'</b><i class="g-ph">'+ph.map(p=>'<em class="ph-'+p+'"></em>').join('')+'</i>'+(fo?'<small class="g-fo">FORA DAS DATAS</small>':so?'<small class="g-so">SEM OPERAÇÃO</small>':'')+'</th>'; }).join('');
-  const phRow='<tr class="g-etapa" data-id="'+esc(ev.id)+'"><th class="m-name" scope="row"><span class="m-open"><span class="m-t">ETAPA</span></span></th>'+cols.map(c=>{ if(c.gap) return '<td class="g-gapc'+(c.ph?' ph-ev':'')+'"></td>'; const ph=dayPhases(ev,ps,c.d,c.k), so=semOpDia(ev,c.k), need=!so&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(al[c.k]).length&&c.d>=today; return '<td class="m-c g-c'+ph.map(p=>' ph-'+p).join('')+(so?' semop':'')+(need?' m-need':'')+(c.d<today?' past':'')+'" data-d="'+c.k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(need?' · FALTA EQUIPE':''))+'">'+(need&&cw>=44?'<span class="g-need">FALTA</span>':'')+'</td>'; }).join('')+'</tr>';
+  const head=cols.map(c=>{ if(c.gap) return '<th class="g-gap'+(c.ph?'':' nada')+'" scope="col"><span>…</span><b>'+fd(c.a,false)+' A '+fd(c.b,false)+'</b><small>'+c.n+' DIAS'+(c.ph?' DE EVENTO':'')+'</small></th>'; const d=c.d, ph=dayPhases(ev,ps,d,c.k); const so=semOpDia(ev,c.k), fo=!naData(ev,c.k); return '<th class="m-day g-day'+(d.getDay()===0||d.getDay()===6?' we':'')+(+d===+today?' today':'')+(so?' semop':'')+(fo?' fora':'')+wcls(cw)+'" scope="col"'+(fo?' title="Fora das datas do evento"':so?' title="'+esc(semOpLinha(ev,c.k))+'"':'')+'><span>'+DIAS3[d.getDay()]+'</span><b>'+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'</b><i class="g-ph">'+ph.map(p=>'<em class="ph-'+p+'"></em>').join('')+'</i>'+(fo?'<small class="g-fo">FORA DAS DATAS</small>':so?'<small class="g-so">SEM OPERAÇÃO</small>':'')+'</th>'; }).join('');
+  const phRow='<tr class="g-etapa" data-id="'+esc(ev.id)+'"><th class="m-name" scope="row"><span class="m-open"><span class="m-t">ETAPA</span></span></th>'+cols.map(c=>{ if(c.gap) return '<td class="g-gapc'+(c.ph?' ph-ev':'')+'"></td>'; const ph=dayPhases(ev,ps,c.d,c.k), so=semOpDia(ev,c.k), need=!so&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(al[c.k]).length&&c.d>=today; return '<td class="m-c g-c'+ph.map(p=>' ph-'+p).join('')+(so?' semop':'')+(need?' m-need':'')+(c.d<today?' past':'')+'" data-d="'+c.k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(so?' · '+semOpLinha(ev,c.k):'')+(need?' · FALTA EQUIPE':''))+'">'+(need&&cw>=44?'<span class="g-need">FALTA</span>':'')+'</td>'; }).join('')+'</tr>';
   const body=rows.map(t=>{
     const r=regOf(t), prod=r.tipo==='PRODUTOR', mem=membersOf(t);
     const cells=cols.map(c=>{ if(c.gap) return '<td class="g-gapc"></td>'; const k=c.k, on=(al[k]||[]).indexOf(t)>=0; if(!on) return '<td class="m-c g-c off'+(semOpDia(ev,k)?' semop':'')+(c.d<today?' past':'')+'" data-d="'+k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+recNome(t)+' não está')+'"></td>';
@@ -3894,6 +4052,7 @@ function cellHTML(ev,d,k,cw,ps,al,o){
   if(+d===+today) cls.push('today');
   if(o.selSet&&o.selId===ev.id&&o.selSet.has(k)) cls.push('m-sel');
   const so=!off&&semOpDia(ev,k); if(so) cls.push('semop');
+  const soRz=so?semOpRazao(ev,k):'', soTag=so?'<span class="m-so" title="'+esc(semOpLinha(ev,k))+'">'+(lv>=1?'SEM OPERAÇÃO':'SEM OP.')+(lv>=3&&soRz?'<small>'+esc(clip(soRz,60))+'</small>':'')+'</span>':'';
   if(!off&&!so&&!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts).length&&d>=today) cls.push('m-need');
   const wc=wcls(cw).trim(); if(wc) cls.push.apply(cls,wc.split(' '));
   const vis=off?[]:(ft?ts.filter(t=>t===ft):ts);
@@ -3912,8 +4071,8 @@ function cellHTML(ev,d,k,cw,ps,al,o){
     return '<span class="m-chip'+(cf.length||vc.length?' ch':'')+(part?' part':'')+fc+(isPropria(t)?'':' ter')+'" title="'+esc(tip)+'">'+esc(sh?rShort(t):recNome(t))+(part?' <i class="frac">'+g.length+'/'+mem.length+'</i>':'')+'</span>'+sub;
   }).join('')+vis.filter(isProdId).map(t=>{ const cf=conflictsOf(ev,k,t); return '<span class="m-chip prod'+(cf.length?' ch':'')+'" title="'+esc('PRODUTOR: '+recNome(t)+(cf.length?' · CHOQUE: está em outro evento nesse dia':''))+'">'+esc(sh?rShort(t):recNome(t))+'</span>'; }).join('');
   const ex=(!off&&lv>=4)?extrasHTML(ev,k,lv):'';
-  const lab=fd(d)+' '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(ts.length?': '+ts.map(t=>{ const g=going(ev,k,t); return (isProdId(t)?'produtor ':'')+recNome(t)+(g&&g.length<membersOf(t).length?' (só '+g.map(pShort).join(', ')+')':''); }).join(', '):': sem equipe');
-  return {html:'<td class="'+cls.join(' ')+'" data-d="'+k+'" tabindex="0" aria-label="'+esc(lab)+'">'+chips+ex+'</td>',fzHid:fzHid};
+  const lab=fd(d)+' '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(so?' · '+semOpLinha(ev,k).toLowerCase():'')+(ts.length?': '+ts.map(t=>{ const g=going(ev,k,t); return (isProdId(t)?'produtor ':'')+recNome(t)+(g&&g.length<membersOf(t).length?' (só '+g.map(pShort).join(', ')+')':''); }).join(', '):': sem equipe');
+  return {html:'<td class="'+cls.join(' ')+'" data-d="'+k+'" tabindex="0" aria-label="'+esc(lab)+'">'+soTag+chips+ex+'</td>',fzHid:fzHid};
 }
 /* linhas de totais por dia (todos os eventos): gente, caminhão, equipamento, choque */
 function footRows(days,o){
@@ -3975,7 +4134,7 @@ function renderMap(){
   const counts={}; ['equipe','choque','terc'].forEach(p=>{ counts[p]=all.filter(ev=>pendOf(ev,w)[p]).length; });
   const wins=mapWins(), lv=zLevel(base), anyF=!!(ft||M.f.ev||M.f.ph||M.pend), custom=!!(M.zoom||M.cw.size||M.nameW);
   const evOpt='<option value="">TODOS OS EVENTOS</option>'+all.map(c=>'<option value="'+esc(c.id)+'"'+(M.f.ev===c.id?' selected':'')+'>'+esc(clip(c.nome,46))+'</option>').join('')+(M.f.ev&&!all.some(c=>c.id===M.f.ev)?'<option value="'+esc(M.f.ev)+'" selected>'+esc(clip((evById(M.f.ev)||{}).nome||'EVENTO',38))+' (FORA DO PERÍODO)</option>':'');
-  const datas=!!M.datas;
+  const datas=!!M.datas, temSo=rows.some(ev=>days.some(d=>semOpDia(ev,iso(d))));
   box.innerHTML='<div class="m-bar">'
     /* 1ª linha: período e as saídas (mensagem do dia, PDF) */
     +'<div class="m-row"><div class="m-chips m-per" role="group" aria-label="Período">'+wins.map(x=>'<button type="button" class="wk'+(w.id===x.id?' on':'')+'" data-win="'+x.id+'" aria-pressed="'+(w.id===x.id)+'">'+x.nome+'</button>').join('')
@@ -3994,10 +4153,10 @@ function renderMap(){
       +'<div class="zoom" role="group" aria-label="Zoom"><button type="button" class="zb" data-zoom="-1" aria-label="Afastar" title="Afastar">−</button><span class="zl" title="O quanto aparece em cada dia (Ctrl + rolar também aproxima)">'+ZL[lv].nome+'</span><button type="button" class="zb" data-zoom="1" aria-label="Aproximar" title="Aproximar">+</button>'+(custom?'<button type="button" class="zb zt" data-zoom="0" title="Voltar ao tamanho que cabe na tela">AJUSTAR</button>':'')+'</div>'
     +'</div>'
     /* 3ª linha: cores das etapas + como ler (o resto da legenda e as dicas só quando pede) */
-    +'<div class="m-row m-legrow"><div class="m-legend m-leg4" aria-label="Cores das etapas"><span><span class="lg ph-mont"></span>MONTAGEM</span><span><span class="lg ph-ev"></span>EVENTO</span><span><span class="lg ph-man"></span>MANUTENÇÃO</span><span><span class="lg ph-desm"></span>DESMONTAGEM</span>'
+    +'<div class="m-row m-legrow"><div class="m-legend m-leg4" aria-label="Cores das etapas"><span><span class="lg ph-mont"></span>MONTAGEM</span><span><span class="lg ph-ev"></span>EVENTO</span><span><span class="lg ph-man"></span>MANUTENÇÃO</span><span><span class="lg ph-desm"></span>DESMONTAGEM</span>'+(temSo?'<span><span class="lg semop"></span>SEM OPERAÇÃO</span>':'')
       +(M.help?'<span><span class="lg m-need"></span>FALTA EQUIPE</span><span><span class="lgp">NOME 2/5</span>PARTE DA EQUIPE</span><span><span class="lgt">NOME</span>TERCEIRIZADA</span><span><span class="lgr">NOME</span>PRODUTOR</span><span><span class="lgc">NOME</span>CHOQUE</span>':'')+'</div>'
       +'<button type="button" class="link m-howb" id="mapHelp" aria-expanded="'+(M.help?'true':'false')+'" aria-controls="mapHelpBox">'+(M.help?'MENOS':'COMO LER O MAPA')+'</button></div>'
-    +(M.help?'<p class="m-hint" id="mapHelpBox">Clique num dia (ou arraste por vários) pra escalar. <b>Ctrl + rolar</b> (ou pinça) aproxima e mostra mais: siglas → equipes → o que faz → quem vai → o dia completo. Clique na data pra aproximar naquele dia; arraste a borda do cabeçalho pra alargar um dia.'+(t.fzHid?' Triângulo laranja = tem o que vai fazer anotado.':'')+'</p>':'')
+    +(M.help?'<p class="m-hint" id="mapHelpBox">Clique num dia (ou arraste por vários) pra escalar ou marcar <b>dia sem operação</b>, com o motivo. <b>Ctrl + rolar</b> (ou pinça) aproxima e mostra mais: siglas → equipes → o que faz → quem vai → o dia completo. Clique na data pra aproximar naquele dia; arraste a borda do cabeçalho pra alargar um dia.'+(t.fzHid?' Triângulo laranja = tem o que vai fazer anotado.':'')+'</p>':'')
     +'</div>'
     +(rows.length?'<div class="mapwrap" id="mapwrap">'+t.html+'</div>':(anyF?'<div class="state"><h2>NADA COM ESSES FILTROS</h2><p>Troque a equipe, o evento, a etapa ou a pendência, ou <button type="button" class="link" id="mfClear2">LIMPE OS FILTROS</button>.</p></div>':'<div class="state"><h2>NENHUM EVENTO NESSE PERÍODO</h2><p>Troque o período lá em cima. Evento aparece aqui quando tem montagem, desmontagem, abertura ou gente escalada dentro do período.</p></div>'));
   const nw=$('#mapwrap');
@@ -4077,7 +4236,7 @@ function showPanel(){
 }
 function leavePanel(){ const ae=document.activeElement, pn=$('#panel'); if(ae&&pn&&ae!==pn&&pn.contains(ae)&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) ae.blur();
   M.tdel=null; M.pnOpen=null; M.pnDraft=''; flushPanel(); if(M.panel&&M.panel.kind==='sup') supSaiu(M.panel); }
-function flushPanel(){ Array.from(pending.keys()).filter(k=>/^(fz:|tar:|precf:|sup:)/.test(k)).forEach(flush); }
+function flushPanel(){ Array.from(pending.keys()).filter(k=>/^(fz:|tar:|precf:|sup:|soobs:)/.test(k)).forEach(flush); }
 function openCell(id,days){ leavePanel(); M.panel={kind:'cell',id:id,days:days.slice().sort()}; M.confirm=null; buildPanel(); showPanel(); }
 function closePanel(){ leavePanel(); M.panel=null; $('#panel').hidden=true; $('#scrim').hidden=true; document.body.classList.remove('panel-open'); refresh(); }
 function headHTML(chips,titleHTML){ return '<div class="p-head"><div class="p-chips" id="p-chips">'+chips+'</div><button type="button" id="p-close" class="x" aria-label="Fechar">'+ICON_X+'</button>'+titleHTML+'</div>'; }
@@ -4116,6 +4275,7 @@ function buildCellPanel(pn,p){
   pn.innerHTML=headHTML('','<h2>'+title+'</h2>')+'<div class="p-body">'
     +'<button type="button" class="evlink" data-open-ev="'+esc(ev.id)+'">'+esc(ev.nome||'(SEM NOME)')+'</button>'
     +(p.days.length===1?'<div class="daynav"><button type="button" class="btn-ghost" data-daynav="-1">◀ DIA ANTERIOR</button><button type="button" class="btn-ghost" data-daynav="1">PRÓXIMO DIA ▶</button></div>':'')
+    +'<section class="c-op" id="c-op" aria-label="Operação nesse dia"></section>'
     +'<section><div class="sec-h"><h3 id="c-ph-t"></h3></div><div class="tlist" id="c-present"></div></section>'
     +(ro?'':'<section class="fld"><label for="c-add">COLOCAR EQUIPE OU PESSOA</label><div class="addrow"><input id="c-add" data-autofocus autocomplete="off" placeholder="Nome da equipe ou da pessoa"><button type="button" class="btn-primary" id="c-addbtn">COLOCAR</button></div><div class="sugg" id="c-sugg"></div></section>')
     +'<section><div class="sec-h"><h3>PRODUTOR</h3></div><div class="tlist" id="c-prodlist"></div>'+(ro?'':'<div class="addrow" style="margin-top:8px"><label class="sr" for="c-prod">Colocar produtor</label><input id="c-prod" autocomplete="off" placeholder="Nome do produtor"><button type="button" class="btn-primary" id="c-prodbtn">COLOCAR</button></div><div class="sugg" id="c-psugg" style="margin-top:8px"></div>')+'</section>'
@@ -4129,6 +4289,8 @@ function cellParts(ev){
   const ph=new Set(); p.days.forEach(k=>dayPhases(ev,ps,PD(k),k).forEach(x=>ph.add(x)));
   const chips=$('#p-chips'); if(chips) chips.innerHTML=(ph.size?['mont','ev','man','desm'].filter(x=>ph.has(x)).map(x=>'<span class="pchip p-'+x+'">'+PHN[x]+'</span>').join(''):'<span class="pchip">FORA DAS DATAS DO EVENTO</span>')+(hasChoque(ev)?'<span class="pchip bad">CHOQUE</span>':'');
   const t1=$('#c-ph-t'); if(t1) t1.textContent=n>1?'EQUIPES NESSES DIAS':'EQUIPES NESSE DIA';
+  /* dia sem operação (não redesenha enquanto digita a observação; devolve o foco pro mesmo botão) */
+  const op=$('#c-op'); if(op){ const fa2=document.activeElement; if(!(fa2&&fa2.id==='c-soobs')){ const h=opSecHTML(ev,p.days,ro), fk=fa2&&op.contains(fa2)?['so','som','sow'].map(a=>fa2.dataset&&fa2.dataset[a]!=null?'[data-'+a+'="'+css(fa2.dataset[a])+'"]':'').filter(Boolean)[0]:''; if(op.innerHTML!==h){ op.innerHTML=h; if(fk){ const b=op.querySelector(fk)||op.querySelector('button'); if(b) b.focus({preventScroll:true}); } } op.hidden=!h; } }
   const cnt=new Map(),pcnt=new Map(); p.days.forEach(k=>(al[k]||[]).forEach(t=>{ const m=isProdId(t)?pcnt:cnt; m.set(t,(m.get(t)||0)+1); }));
   const pl=$('#c-prodlist'); if(pl) pl.innerHTML=pcnt.size?Array.from(pcnt.entries()).map(([t,m])=>prodHTML(ev,t,m,p.days,ro)).join(''):'<p class="hint">Nenhum produtor '+(n>1?'nesses dias':'nesse dia')+'.</p>';
   const pbox=$('#c-present'),fa=document.activeElement,typing=!!(fa&&pbox&&pbox.contains(fa)&&(fa.dataset.fz||fa.dataset.pnomes)),fsel=fa&&pbox&&pbox.contains(fa)&&fa.dataset.pp?'[data-pp="'+css(fa.dataset.pp)+'"][data-pn="'+css(fa.dataset.pn)+'"]':null;
@@ -4275,14 +4437,16 @@ function repeatDays(evId,days,k){
   const ev=evById(evId); if(!ev) return; const al=allocsOf(ev),src=new Map(); days.forEach(d=>(al[d]||[]).forEach(x=>{ if(!src.has(x)) src.set(x,going(ev,d,x)); }));
   const ch={},par={},mk=[],sfz=new Map(),fz={};
   days.forEach(d=>(al[d]||[]).forEach(x=>{ if(!sfz.has(x)&&fazerOf(ev,d,x)) sfz.set(x,fazerOf(ev,d,x)); }));
-  phaseDays(ev,k).forEach(d=>{ const arr=(al[d]||[]).slice(); let mod=false;
+  const ks0=phaseDays(ev,k), ksOp=ks0.filter(d=>!semOpDia(ev,d)||days.indexOf(d)>=0);
+  ksOp.forEach(d=>{ const arr=(al[d]||[]).slice(); let mod=false;
     sfz.forEach((v,x)=>{ if(!fazerOf(ev,d,x)) (fz[d]||(fz[d]={}))[x]=v; });
     src.forEach((g,x)=>{ const had=arr.indexOf(x)>=0; if(!had){ arr.push(x); mod=true; if(!isProdId(x)) mk.push(d); }
       const mem=membersOf(x); if(!mem.length) return; const want=g&&g.length<mem.length?g:null,cur=had?going(ev,d,x):null;
       if(!cur||cur.join('|')!==(want||mem).join('|')) (par[d]||(par[d]={}))[x]=want; });
     if(mod) ch[d]=arr; });
   const nd=new Set(Object.keys(ch).concat(Object.keys(par),Object.keys(fz))).size;
-  if(nd){ writeDays(evId,ch,autoMan(ev,mk),par,{fazer:fz}); toast('Repetido em '+nd+(nd>1?' dias.':' dia.')); } else toast('Esses dias já estavam assim.');
+  const pul=puladosTxt(ks0,ksOp);
+  if(nd){ writeDays(evId,ch,autoMan(ev,mk),par,{fazer:fz}); toast('Repetido em '+nd+(nd>1?' dias':' dia')+pul+'.'); } else toast('Esses dias já estavam assim'+pul+'.');
 }
 
 /* ---------- PDF do mapa: escolhas ---------- */
@@ -4360,6 +4524,7 @@ function wirePanel(){
       return;
     }
     if(p.kind!=='cell') return;
+    if(opPanelClick(t,p)) return;
     const nav=t.closest('[data-daynav]');
     if(nav){ flushPanel(); const d=addDays(PD(p.days[0]),+nav.dataset.daynav); M.panel={kind:'cell',id:p.id,days:[iso(d)]}; buildPanel(); showPanel(); return; }
     const pp=t.closest('[data-pp]'); if(pp){ if(!pp.disabled) togglePerson(p.id,pp.dataset.pp,pp.dataset.pn,p.days); return; }
@@ -4373,7 +4538,7 @@ function wirePanel(){
     const cp=t.closest('[data-cprod]'); if(cp){ addTeamDays(p.id,cp.dataset.cprod,p.days); const i=$('#c-prod'); if(i) i.value=''; syncPanel(); return; }
     if(t.closest('[data-pnew]')){ prodAddByName(true); return; }
     if(t.closest('#c-prodbtn')){ prodAddByName(false); return; }
-    const pph=t.closest('[data-pph]'); if(pph){ const ev=evById(p.id); if(ev){ addTeamDays(p.id,pph.dataset.pph,phaseDays(ev,pph.dataset.k)); toast(recNome(pph.dataset.pph)+' colocado em todos os dias '+({mont:'da montagem',ev:'do evento',desm:'da desmontagem'}[pph.dataset.k])+'.'); } return; }
+    const pph=t.closest('[data-pph]'); if(pph){ const ev=evById(p.id); if(ev){ const ks0=phaseDays(ev,pph.dataset.k), ks=comOperacao(ev,ks0); addTeamDays(p.id,pph.dataset.pph,ks); toast(recNome(pph.dataset.pph)+' colocado em todos os dias '+({mont:'da montagem',ev:'do evento',desm:'da desmontagem'}[pph.dataset.k])+puladosTxt(ks0,ks)+'.'); } return; }
     if(t.closest('#c-addbtn')){ cellAddByName(false); return; }
     const rm=t.closest('[data-crm]'); if(rm){ removeTeamDays(p.id,rm.dataset.crm,p.days); return; }
     const rep=t.closest('[data-rep]'); if(rep){ flushPanel(); repeatDays(p.id,p.days,rep.dataset.rep); return; }
@@ -4383,13 +4548,15 @@ function wirePanel(){
   panel.addEventListener('input',e=>{
     const el=e.target,p=M.panel; if(!p||readOnly) return;
     if(p.kind!=='cell') return;
+    if(el.id==='c-soobs'){ opObsInput(p,e); return; }
     if(el.id==='c-add'){ const ev=evById(p.id); if(ev) renderSugg(ev); return; }
     if(el.id==='c-prod'){ const ev=evById(p.id); if(ev) renderPSugg(ev); return; }
     if(el.dataset.pnomes){ M.pnDraft=el.value; return; }
     if(el.dataset.fz){ const ev=evById(p.id); if(!ev) return; const al=allocsOf(ev),t=el.dataset.fz,keys=p.days.filter(k=>(al[k]||[]).indexOf(t)>=0),v=el.value; schedule('fz:'+p.id+':'+t,()=>setFazerDays(p.id,t,keys,v),700); }
   });
   panel.addEventListener('focusout',e=>{ const el=e.target,p=M.panel; if(!p) return; if(el.dataset&&el.dataset.fz) flush('fz:'+p.id+':'+el.dataset.fz); });
-  panel.addEventListener('keydown',e=>{ if(e.key!=='Enter') return; if(e.target.id==='c-add'){ e.preventDefault(); cellAddByName(false); } if(e.target.id==='c-prod'){ e.preventDefault(); prodAddByName(false); } });
+  panel.addEventListener('change',e=>{ const p=M.panel; if(p&&p.kind==='cell'&&!readOnly&&e.target.id==='c-soobs') opObsInput(p,e); });
+  panel.addEventListener('keydown',e=>{ if(e.key!=='Enter') return; if(e.target.id==='c-soobs'&&M.panel){ e.preventDefault(); flush('soobs:'+M.panel.id); e.target.blur(); return; } if(e.target.id==='c-add'){ e.preventDefault(); cellAddByName(false); } if(e.target.id==='c-prod'){ e.preventDefault(); prodAddByName(false); } });
 }
 /* equipamentos por evento (radar): o que cada evento usa, em qual ambiente, próprio ou alugado */
 function eqListHTML(evId){
@@ -5031,10 +5198,10 @@ function wire(){
     else if(act==='rm-team-yes'){ M.confirm=null; removeRecFromEvent(e.id,b.dataset.rid,false); toast('Equipe tirada do evento.'); }
     else if(act==='jw-add'){ const k=b.dataset.k; mutateHeader(o=>{ if(!isObj(o.janelas)) o.janelas={mont:[],ev:[],desm:[]}; if(!Array.isArray(o.janelas[k])) o.janelas[k]=[]; const x={id:newId(),a:'',b:''}; o.janelas[k].push(x); return x; },x=>'.jw-row[data-jid="'+x.id+'"] .jw-a'); }
     else if(act==='jw-del'){ const k=b.dataset.k, i=+b.dataset.i, rw=b.closest('.jw-row'), jid=rw?rw.dataset.jid:''; mutateHeader(o=>{ if(isObj(o.janelas)&&Array.isArray(o.janelas[k])){ if(jid) o.janelas[k]=o.janelas[k].filter(x=>x.id!==jid); else o.janelas[k].splice(i,1); } return null; }); }
-    else if(act==='ph-add'&&b.dataset.w!=null){ const k=b.dataset.k, rid=b.dataset.rid, ks=windowDays(e,k,+b.dataset.w); addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocado em '+shortDays(ks)+'.'); }
-    else if(act==='ph-add'){ const k=b.dataset.k, rid=b.dataset.rid; addTeamDays(e.id,rid,phaseDays(e,k)); toast(recNome(rid)+' colocado em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+'.'); }
+    else if(act==='ph-add'&&b.dataset.w!=null){ const k=b.dataset.k, rid=b.dataset.rid, ks0=windowDays(e,k,+b.dataset.w), ks=comOperacao(e,ks0); if(!ks.length){ toast('Essa janela só tem dias sem operação.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocado em '+shortDays(ks)+puladosTxt(ks0,ks)+'.'); }
+    else if(act==='ph-add'){ const k=b.dataset.k, rid=b.dataset.rid, ks0=phaseDays(e,k), ks=comOperacao(e,ks0); if(!ks.length){ toast('Essa etapa só tem dias sem operação.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocado em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+puladosTxt(ks0,ks)+'.'); }
     else if(act==='prod-new'){ const nome=normName(($('#prodNewNome')||{}).value); if(!nome){ toast('Coloque o nome do produtor.'); return; } if(findRecByName('EQUIPE',nome)){ toast('Já existe uma equipe com esse nome.',true); return; } const ex=findRecByName('PRODUTOR',nome); const id=ex?ex.id:newRecLocal('PRODUTOR',nome,{propria:!($('#prodNewTerc')||{}).checked}); if(id) patchEv(e.id,o=>ensureEvTeam(o,id)); }
-    else if(act==='esc-add'){ const sel=$('#escPick'); let rid=sel?sel.value:''; if(rid==='__new'){ const nome=normName(($('#escNewNome')||{}).value); if(!nome){ toast('Coloque o nome da terceirizada.'); return; } const ex=findRecByName('EQUIPE',nome); rid=ex?ex.id:newRecLocal('EQUIPE',nome,{propria:false}); } if(!rid){ toast('Escolha a equipe primeiro.'); return; } const k=b.dataset.k; if(k){ const ks0=b.dataset.w!=null?windowDays(e,k,+b.dataset.w):phaseDays(e,k), ks=ks0.filter(x=>!semOpDia(e,x)); if(!ks.length){ toast(ks0.length?'Essa etapa só tem dias sem operação.':'Essa etapa não tem dias marcados.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocada em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+(ks.length<ks0.length?' (sem os dias sem operação: '+semOpTxt(e)+')':'')+'.'); } else { patchEv(e.id,o=>ensureEvTeam(o,rid)); toast(recNome(rid)+' incluída no evento. Agora escolha os dias na grade.'); } }
+    else if(act==='esc-add'){ const sel=$('#escPick'); let rid=sel?sel.value:''; if(rid==='__new'){ const nome=normName(($('#escNewNome')||{}).value); if(!nome){ toast('Coloque o nome da terceirizada.'); return; } const ex=findRecByName('EQUIPE',nome); rid=ex?ex.id:newRecLocal('EQUIPE',nome,{propria:false}); } if(!rid){ toast('Escolha a equipe primeiro.'); return; } const k=b.dataset.k; if(k){ const ks0=b.dataset.w!=null?windowDays(e,k,+b.dataset.w):phaseDays(e,k), ks=ks0.filter(x=>!semOpDia(e,x)); if(!ks.length){ toast(ks0.length?'Essa etapa só tem dias sem operação.':'Essa etapa não tem dias marcados.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocada em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+puladosTxt(ks0,ks)+'.'); } else { patchEv(e.id,o=>ensureEvTeam(o,rid)); toast(recNome(rid)+' incluída no evento. Agora escolha os dias na grade.'); } }
     else if(act==='rm-dias'&&!readOnly){ const days=String(b.dataset.days||'').split(',').filter(Boolean); removeTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' saiu da escala em '+shortDays(days)+'.'); }
     else if(act==='it-escala'){ const days=String(b.dataset.days||'').split(',').filter(Boolean); addTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' colocada na escala ('+plural(days.length,'dia','dias')+').'); }
     else if(act==='prod-papel'&&!readOnly){ const pid=b.dataset.pid, v=b.dataset.v; flushAll(); patchEv(e.id,o=>{ o.produtores.forEach(x=>{ if(x.id===pid) x.papel=v==='GERAL'?'GERAL':'APOIO'; else if(v==='GERAL'&&x.papel==='GERAL') x.papel='APOIO'; }); }); }
@@ -5691,9 +5858,12 @@ function renderCrono(JsPDF,ev,O,S,tight){
         if(xt){ fnt('bold',6.8); tc(C.orange); T(xt,PW-ML-2,y+V(4.4),{align:'right'}); }
         y+=h; });
     }
-    const so=semOp(ev), sot=semOpTxt(ev), obsOn=!!tr(ev.obs)&&!SIMP&&!CLI;
+    const so=semOp(ev), sot=semOpResumo(ev,true), obsOn=!!tr(ev.obs)&&!SIMP&&!CLI;
     if(obsOn){ const ol=wrapT('OBS: '+ev.obs,CW-4,'normal',8); y+=V(3); ol.forEach(l=>{ ensure(LH(8)); fnt('normal',8); tc(C.ink); T(l,ML,y+V(3)); y+=LH(8); }); }
-    if(sot&&(!obsOn||!so.inf)){ y+=V(obsOn?1:3); ensure(LH(8)); fnt('bold',8); tc(C.warn); T('SEM OPERAÇÃO: '+sot,ML,y+V(3)); y+=LH(8); }
+    if(sot&&(!obsOn||!so.inf)){ y+=V(obsOn?1:3);
+      /* cabe numa linha: vai numa linha; senão, um motivo por linha */
+      const one='SEM OPERAÇÃO: '+sot, ls=tw(one,'bold',8)<=CW-4?[one]:['SEM OPERAÇÃO:'].concat(...sot.split(' · ').map(x=>wrapT('·  '+x,CW-8,'bold',8).map((l,j)=>(j?'   ':'')+l)));
+      ls.forEach((l,i)=>{ ensure(LH(8)); fnt('bold',8); tc(C.warn); T(l,ML+(i&&ls.length>1?3:0),y+V(3)); y+=LH(8); }); }
     /* entregas: quando cada estrutura fica pronta (o último dia de montagem dos itens dela) */
     if(!EF&&on('ambiente')){
       const ents=ambsReais(ev.id).map(a=>({n:a.nome||'(SEM NOME)',i:inicioAmb(ev,a),z:entregaAmb(ev,a)})).filter(x=>x.z).sort((p,q)=>p.z<q.z?-1:p.z>q.z?1:String(p.n).localeCompare(String(q.n)));
@@ -5811,7 +5981,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const add=(txt,st,sz,col,ind,lab,labCol)=>{ const key=lab?lab+'|'+(labCol||C.muted).join(',')+'|'+(ind||0):''; const show=lab&&key!==lastKey?lab:''; lastKey=key; const W0=w-(ind||0)-(lab?LABW:0), l0=wrapT(txt,W0,st,sz); const ls=l0.length>1?[l0[0]].concat(wrapT(l0.slice(1).join(' '),W0-2.5,st,sz)):l0;
       ls.forEach((l,i)=>L.push({t:l,st:st,sz:sz,col:col,ind:(ind||0)+(i>0?2.5:0),lab:i===0?show:'',lw:lab?LABW:0,lc:labCol||C.muted})); };
     const gap=v=>{ L.push({gap:V(v)}); lastKey=''; };
-    if(b.so&&!CLI) add(semOpMotivo(ev,b.k)+' — DIA SEM OPERAÇÃO NESSE EVENTO (CONFERIR A ESCALA)','bold',7.4,C.warn,0);
+    if(b.so&&!CLI){ const gente=b.teams.length>0||!!b.prodLine; add('DIA '+semOpLinha(ev,b.k)+(gente?(EF?'  ·  CONFIRMAR COM A PRODUÇÃO':'  ·  TEM GENTE ESCALADA, CONFERIR A ESCALA'):''),'bold',7.4,gente?C.warn:C.muted,0); }
     if(CLI){
       /* cliente: estrutura por estrutura, sem equipe */
       const byA=new Map(); b.outros.forEach(i=>{ const a=i.amb||'EVENTO TODO'; if(!byA.has(a)) byA.set(a,[]); byA.get(a).push(i); });
@@ -5846,14 +6016,16 @@ function renderCrono(JsPDF,ev,O,S,tight){
   const lineH=l=>l.gap?l.gap+(l.rule?V(1):0):LH(l.sz);
   /* dia sem nada: uma faixa fina (dia sem operação, montagem sem operação, desmontagem ainda sem planejamento, evento) */
   const bandOf=(i,desmVazia)=>{
-    if(!i.ok||EF) return '';
+    if(!i.ok) return '';
     const fase=i.ph.map(p=>PHN[p]).join(' + ');
+    if(EF) return i.so&&efPer&&i.k>=efPer[0]&&i.k<=efPer[1]?(fase?fase+'  ·  ':'')+semOpLinha(ev,i.k):'';
     if(i.ph.indexOf('desm')>=0&&desmVazia) return CLI?fase:fase+'  ·  AINDA SEM PLANEJAMENTO';
-    if(i.so) return fase?fase+'  ·  SEM OPERAÇÃO ('+semOpMotivo(ev,i.k)+')':'';
+    if(i.so) return fase?fase+'  ·  '+semOpLinha(ev,i.k):'';
     if(i.ph.indexOf('mont')>=0||i.ph.indexOf('desm')>=0||i.ph.indexOf('man')>=0) return CLI?'':fase+(i.temItem?'  ·  TEM ITEM MARCADO E NENHUMA EQUIPE NOSSA':'  ·  SEM OPERAÇÃO');
     if(i.ph.indexOf('ev')>=0) return fase;
     return '';
   };
+  const efPer=EF?(()=>{ const ds=rDaysOk(ev,EF); return ds.length?[ds[0],ds[ds.length-1]]:null; })():null;
   const foraLbl=k=>!per0?'SEM ETAPA':k<per0.a?'ANTES DA MONTAGEM':k>per0.b?'DEPOIS DA DESMONTAGEM':'ENTRE AS ETAPAS';
   const diaADia=()=>{
     const cols=evCols(ev,true); if(!cols.length) return;
@@ -5861,7 +6033,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     { const sp=evSpan(ev), f0=PD(sp.first), l0=PD(sp.last); if(a&&f0&&f0<a&&(a-f0)/864e5<=45) a=f0; if(b&&l0&&l0>b&&(l0-b)/864e5<=45) b=l0; }
     const infos=[]; eachDay(a,b,k=>infos.push(dayInfo(k)));
     const dd=infos.filter(i=>i.ph.indexOf('desm')>=0), desmVazia=dd.length>0&&dd.every(i=>i.empty);
-    infos.forEach(i=>{ if(i.empty){ i.band=bandOf(i,desmVazia); i.sig='Q|'+i.band; i.soBand=i.so&&/SEM OPERAÇÃO \(/.test(i.band); } });
+    infos.forEach(i=>{ if(i.empty){ i.band=bandOf(i,desmVazia); i.sig='Q|'+i.band; i.soBand=i.so&&i.band.indexOf('SEM OPERAÇÃO')>=0; } });
     /* junta dias iguais seguidos; dia vazio vira só uma faixa */
     const groups=[]; infos.forEach(i=>{ const g=groups[groups.length-1]; if(g&&g.sig===i.sig&&+addDays(g.b,1)===+i.d){ g.b=i.d; g.n++; } else groups.push({a:i.d,b:i.d,n:1,sig:i.sig,info:i}); });
     const XW=40, RX=ML+XW, RW=CW-XW-2;
@@ -5872,7 +6044,8 @@ function renderCrono(JsPDF,ev,O,S,tight){
     section('DIA A DIA',CLI?'o que é montado em cada dia, estrutura por estrutura · e quando cada uma fica pronta':EF?'só '+recNome(EF)+' · o que a equipe faz em cada dia':'cada equipe com as tarefas dela'+(SIMP?'':' · depois o que está sem equipe, as entregas e a logística'),Math.min(first.h,V(45))+V(2));
     draws.forEach(dw=>{
       const g=dw.g,i=g.info;
-      if(dw.quiet){ ensure(V(7.6)); fc(i.soBand?[236,239,244]:(PHC[i.ph[0]]||C.soft)); doc.roundedRect(ML,y,CW,V(5.6),1,1,'F'); fnt('bold',7.6); tc(i.soBand?C.muted:C.ink); T(fitT((g.n>1?fd(g.a)+' A '+fd(g.b)+'  ·  '+g.n+' DIAS':fd(g.a))+'  ·  '+i.band,CW-6,'bold',7.6),ML+3,y+V(3.9)); y+=V(7.6); return; }
+      if(dw.quiet){ const bl=wrapT((g.n>1?fd(g.a)+' A '+fd(g.b)+'  ·  '+g.n+' DIAS':fd(g.a))+'  ·  '+i.band,CW-6,'bold',7.6).slice(0,3), bh=V(5.6)+(bl.length-1)*LH(7.6);
+        ensure(bh+V(2)); fc(i.soBand?[236,239,244]:(PHC[i.ph[0]]||C.soft)); doc.roundedRect(ML,y,CW,bh,1,1,'F'); fnt('bold',7.6); tc(i.soBand?C.muted:C.ink); bl.forEach((l,j)=>T(l,ML+3,y+V(3.9)+j*LH(7.6))); y+=bh+V(2); return; }
       let L=dw.L;
       const drawMarker=(yy,h,cont)=>{
         const mw=XW-4, cx=ML+mw/2;
@@ -5919,15 +6092,16 @@ function renderCrono(JsPDF,ev,O,S,tight){
       const rows=[]; const pn=prodName(ev,a.produtorId);
       (a.itens||[]).filter(x=>tr(x.desc)).forEach(it=>{ const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null, rid=t&&t.regId, ridD=td&&td.regId; if(EF&&rid!==EF&&ridD!==EF) return;
         const tn=x=>CLI?'':(x?entryName(x)+(teamIsTercEntry(x)?' (TERC.)':''):'SEM EQUIPE'), MV=etapaType(it.desc)==='out'?'SERVIÇO':'MONTA';
+        const per=(a,b)=>{ const nt=semOpNota(semOpNoPeriodo(ev,a,b)); return periodoDM(a,b)+(nt?' '+nt:''); };
         /* equipe diferente na desmontagem: cada etapa com a sua equipe */
-        const sub=td&&td!==t?[(it.de||it.ate?MV+' '+periodoDM(it.de,it.ate):MV)+(tn(t)?': '+tn(t):''),(it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'DESMONTA')+(tn(td)?': '+tn(td):'')]
-          :[it.de||it.ate?MV+' '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',tn(t)];
+        const sub=td&&td!==t?[(it.de||it.ate?MV+' '+per(it.de,it.ate):MV)+(tn(t)?': '+tn(t):''),(it.desDe||it.desAte?'DESMONTA '+per(it.desDe,it.desAte):'DESMONTA')+(tn(td)?': '+tn(td):'')]
+          :[it.de||it.ate?MV+' '+per(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+per(it.desDe,it.desAte):'',tn(t)];
         rows.push({lab:'',txt:CLI?descCliente(it.desc):it.desc,sub:sub.filter(Boolean).join('  ·  ')}); });
       if(!EF&&!CLI){
         (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(linhas(f.oque)||'?')+(f.qtd?' · '+f.qtd:''),sub:[nossa?'NOSSA'+(f.fornecedor?' ('+f.fornecedor+')':''):'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:'')].concat(fabQuando(f),[f.status||'',SIMP?'':linhas(f.obs)]).filter(Boolean).join('  ·  ')}); });
         (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:(linhas(p.oque)||'?')+(tr(p.qtd)?' · '+tr(p.qtd):''),sub:[p.fornecedor||''].concat(provQuando(p),[p.status||'',SIMP?'':linhas(p.obs)]).filter(Boolean).join('  ·  ')}); });
       }
-      if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ rows.push({lab:m.tipo==='OUTRO'?'APOIO':'CARREG.',txt:moNome(m)+(linhas(m.oque)?' — '+normName(linhas(m.oque)):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
+      if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ const nt=semOpNota(semOpNoPeriodo(ev,m.de,m.ate)); rows.push({lab:m.tipo==='OUTRO'?'APOIO':'CARREG.',txt:moNome(m)+(linhas(m.oque)?' — '+normName(linhas(m.oque)):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate)+(nt?' '+nt:''):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
       if(!EF&&!SIMP&&!CLI) (a.equip||[]).forEach(q=>{ rows.push({lab:'EQUIP.',txt:q.nome||'EQUIPAMENTO',sub:[q.de||q.ate?periodoDM(q.de,q.ate):'',CLI?'':((q.origem||'PRÓPRIO')==='ALUGADO'?'ALUGADO'+(q.fornecedor?' · '+q.fornecedor:''):'')].filter(Boolean).join('  ·  ')}); });
       const obs=tr(a.obs)&&!EF&&!CLI?a.obs:'';
       if(!rows.length&&!obs) return;
@@ -6113,10 +6287,11 @@ async function gerarPDFMapa(){
     const CW=(PW-2*Mg-NW)/per;
     const doc=new JsPDF({unit:'mm',format:A3?'a3':'a4',orientation:'landscape',compress:true});
     const BLUE=[23,67,127],ORANGE=[232,116,26],INK=[20,34,58],MUTED=[86,103,127],RED=[178,56,38],OINK=[162,77,11],LINE=[198,208,222],WHITE=[255,255,255];
-    const PHC={mont:[211,226,250],ev:[251,223,196],man:[220,201,247],desm:[207,237,225]};
+    const PHC={mont:[211,226,250],ev:[251,223,196],man:[220,201,247],desm:[207,237,225],so:[232,235,240]};
+    const temSo=rows.some(ev=>days.some(d=>semOpDia(ev,iso(d))));
     const fade=c=>c.map(v=>Math.round(v+(255-v)*0.5));
     const MM=v=>v*0.3528;
-    const STY={team:{f:'bold',z:7.6,c:INK},ter:{f:'bold',z:7.6,c:OINK},bad:{f:'bold',z:7.6,c:RED},quem:{f:'normal',z:6.6,c:MUTED,ind:0.8},fz:{f:'normal',z:6.8,c:[44,56,78],ind:0.8},prod:{f:'bold',z:7.2,c:BLUE},need:{f:'bold',z:6.8,c:OINK},ex:{f:'normal',z:6.3,c:MUTED}};
+    const STY={team:{f:'bold',z:7.6,c:INK},ter:{f:'bold',z:7.6,c:OINK},bad:{f:'bold',z:7.6,c:RED},quem:{f:'normal',z:6.6,c:MUTED,ind:0.8},fz:{f:'normal',z:6.8,c:[44,56,78],ind:0.8},prod:{f:'bold',z:7.2,c:BLUE},need:{f:'bold',z:6.8,c:OINK},ex:{f:'normal',z:6.3,c:MUTED},so:{f:'bold',z:6.6,c:MUTED}};
     const filt=[ft?'EQUIPE: '+recNome(ft):'',M.f.ev?'EVENTO: '+((evById(M.f.ev)||{}).nome||''):'',M.f.ph?(PHF.find(x=>x[0]===M.f.ph)||PHF[0])[1]:''].filter(Boolean).join('   ·   ');
     let y=0;
     const header=()=>{
@@ -6124,7 +6299,7 @@ async function gerarPDFMapa(){
       doc.setTextColor(...WHITE); doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('MAPA DE DIAS',Mg,8);
       doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.text(pdfS('PERÍODO: '+w.nome),PW-Mg,5.6,{align:'right'});
       doc.setFontSize(7.5); doc.text(pdfS('GERADO EM '+fdt(now)),PW-Mg,9.6,{align:'right'});
-      const ly=17.4, leg=[['mont','MONTAGEM'],['ev','EVENTO'],['man','MANUTENÇÃO'],['desm','DESMONTAGEM']];
+      const ly=17.4, leg=[['mont','MONTAGEM'],['ev','EVENTO'],['man','MANUTENÇÃO'],['desm','DESMONTAGEM']].concat(temSo?[['so','SEM OPERAÇÃO']]:[]);
       doc.setFontSize(7.2); doc.setFont('helvetica','normal');
       const items=leg.map(([k,l])=>({k:k,l:pdfS(l)}));
       const extra=[{t:'FALTA EQUIPE',c:OINK,dash:true},{t:'VERMELHO = CHOQUE',c:RED},{t:'LARANJA = TERCEIRIZADA',c:OINK},{t:'PROD. = PRODUTOR',c:BLUE}].filter(x=>!(x.dash&&ft));
@@ -6150,16 +6325,17 @@ async function gerarPDFMapa(){
     const cellItems=(ev,d,k,ps,al)=>{
       const ph=dayPhases(ev,ps,d,k);
       if(!phOk(ph)) return {ph:[],items:[],need:false};
-      const ts0=al[k]||[],ts=ft?ts0.filter(t=>t===ft):ts0,items=[];
+      const ts0=al[k]||[],ts=ft?ts0.filter(t=>t===ft):ts0,items=[], so=semOpDia(ev,k);
+      if(so) items.push({t:semOpLinha(ev,k),s:'so'});
       noProd(ts).forEach(t=>{ const g=going(ev,k,t),mem=membersOf(t),part=!!g&&g.length<mem.length, ch=teamConf(ev,k,t)||vehConf(ev,k,t).length;
         items.push({t:recNome(t)+(part?' ('+g.length+'/'+mem.length+')':''),s:ch?'bad':(isPropria(t)?'team':'ter')});
         if(part&&mp.quem) items.push({t:g.map(pShort).join(', ')||'NINGUÉM',s:'quem'});
         const fz=mp.fazer?fazerEf(ev,k,t):''; if(fz) items.push({t:fz,s:'fz'}); });
       ts.filter(isProdId).forEach(t=>items.push({t:'PROD. '+recNome(t),s:teamConf(ev,k,t)?'bad':'prod'}));
-      const need=!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts0).length&&d>=today;
+      const need=!so&&!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts0).length&&d>=today;
       if(need) items.push({t:'FALTA EQUIPE',s:'need'});
       if(mp.extras){ const x=dayExtras(ev,k); x.itens.forEach(i=>items.push({t:(i.tipo==='desm'?'DESMONTA ':'MONTA ')+i.desc,s:'ex'})); x.equip.forEach(q=>items.push({t:'EQUIP. '+q.nome+(q.origem==='ALUGADO'?' (ALUG.)':''),s:'ex'})); x.fretes.forEach(f=>items.push({t:'FRETE '+f.dir+' '+f.qtd+'X '+f.cam,s:'ex'})); x.radar.forEach(r=>items.push({t:r.verb+' '+r.desc,s:'ex'})); (x.mo||[]).forEach(m=>items.push({t:moNome(m),s:'ex'})); }
-      return {ph:ph,items:items,need:need};
+      return {ph:ph,items:items,need:need,so:so};
     };
     const wrapI=items=>items.map(it=>{ const st=STY[it.s],fs=st.z*F; doc.setFont('helvetica',st.f); doc.setFontSize(fs); const lines=doc.splitTextToSize(pdfS(it.t),CW-2.6-(st.ind||0)); return {lines:lines,st:st,fs:fs,h:lines.length*MM(fs)*1.2}; });
     const measure=(ev,chunk)=>{
@@ -6182,7 +6358,7 @@ async function gerarPDFMapa(){
       doc.setTextColor(...BLUE); doc.setFont('helvetica','normal'); doc.setFontSize(6.6*F); r.sl.forEach(l=>{ ty+=MM(6.6*F)*0.85; doc.text(l,Mg+1.5,ty); ty+=MM(6.6*F)*0.35; });
       r.cells.forEach((ci,i)=>{
         const x=Mg+NW+i*CW,past=ci.d<today;
-        fillCell(x,y,CW,r.rh,ci.ph.map(p=>past?fade(PHC[p]):PHC[p]));
+        fillCell(x,y,CW,r.rh,ci.so?[PHC.so]:ci.ph.map(p=>past?fade(PHC[p]):PHC[p]));
         if(ci.need){ doc.setLineDashPattern([0.8,0.6],0); doc.setDrawColor(...ORANGE); doc.setLineWidth(0.35); doc.rect(x+0.7,y+0.7,CW-1.4,r.rh-1.4,'S'); doc.setLineDashPattern([],0); }
         let cy=y+(ci.need?1.8:1.2); const px=ci.need?1.9:1.3;
         let corte=-1; ci.w.forEach((it,ii)=>{ if(corte>=0) return; if(r.clip&&ii>0&&cy+it.h>y+r.rh-3.4){ corte=ii; return; } doc.setFont('helvetica',it.st.f); doc.setFontSize(it.fs); doc.setTextColor(...it.st.c); it.lines.forEach(l=>{ cy+=MM(it.fs)*0.85; doc.text(l,x+px+(it.st.ind||0),cy); cy+=MM(it.fs)*0.35; }); cy+=0.5; });
@@ -6196,7 +6372,7 @@ async function gerarPDFMapa(){
     const chunks=[]; for(let i=0;i<days.length;i+=per) chunks.push(days.slice(i,i+per));
     let first=true;
     chunks.forEach(chunk=>{
-      const rs=rows.map(ev=>measure(ev,chunk)).filter(r=>r.cells.some(ci=>ft?ci.items.length:(ci.ph.length||ci.items.length)));
+      const rs=rows.map(ev=>measure(ev,chunk)).filter(r=>r.cells.some(ci=>ft?ci.items.some(it=>it.s!=='so'):(ci.ph.length||ci.items.length)));
       if(!rs.length) return;
       if(!first) doc.addPage(); first=false;
       header(); thead(chunk);
