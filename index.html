@@ -1587,6 +1587,35 @@ div.thead{cursor:default}
 }
 @media (min-width:1000px) and (max-width:1290px){ body.panel-open .hdr{grid-template-columns:minmax(0,1fr)} body.panel-open .hdr .fld.wide2{grid-column:auto} }
 </style>
+<style>
+/* ===================== v44: dias sem operação e datas fora do evento ===================== */
+.hdr .fld.semop{grid-column:1/-1}
+.semop .lbl{display:block;margin-bottom:4px}
+.semop-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.semop-row .chip.on{background:var(--navy);border-color:var(--navy);color:var(--on-accent)}
+.semop-d{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0;font:600 11px/1.2 var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.semop-d input{width:190px;max-width:100%}
+.semop .hint{margin:0;font-size:12px;color:var(--muted)}
+/* aviso na escala do evento */
+#escAviso{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}
+#escAviso[hidden]{display:none}
+.esc-av{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:8px 10px;border:1px solid var(--line);border-left:3px solid var(--warn);background:var(--warn-soft);font:600 12.5px/1.35 var(--cond);letter-spacing:.02em;color:var(--ink)}
+.esc-av.fora{border-left-color:var(--danger);background:var(--danger-soft)}
+.esc-av b{font:700 12px/1.2 var(--cond);letter-spacing:.07em;text-transform:uppercase}
+.esc-av.fora b{color:var(--danger)}
+.esc-av span{display:inline-flex;align-items:center;gap:6px}
+.esc-av small{flex-basis:100%;font-weight:500;color:var(--muted)}
+/* dia sem operação na grade do evento e no mapa */
+.m-c.semop,.g-day.semop{background-image:repeating-linear-gradient(135deg,transparent 0 6px,rgba(110,122,142,.17) 6px 8px)}
+.g-day small.g-so,.g-day small.g-fo{display:block;margin-top:1px;font:700 8.5px/1 var(--cond);letter-spacing:.04em;color:var(--muted)}
+.g-day.fora{background:var(--danger-soft)}
+.g-day.fora small.g-fo{color:var(--danger)}
+/* intervalo sem etapa na grade do evento: cinza (não é EVENTO) */
+.g-gap.nada{background:var(--grey-soft)!important}
+/* item com data fora do período do evento */
+.iwarn.fora{border-left-color:var(--danger);background:var(--danger-soft)}
+@media (max-width:760px){ .semop-d input{width:100%} .ptitle .pc{white-space:normal} }
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -1675,6 +1704,7 @@ div.thead{cursor:default}
         <div class="phg ph-desm" role="group" aria-labelledby="phg-desm"><span class="phg-t" id="phg-desm">Desmontagem</span><div class="fld"><label class="sr" for="h_desInicio">Desmontagem — início</label><input id="h_desInicio" data-k="desInicio" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div><span class="phg-a" aria-hidden="true">até</span><div class="fld"><label class="sr" for="h_desFim">Desmontagem — fim</label><input id="h_desFim" data-k="desFim" class="dt" type="text" inputmode="numeric" placeholder="DD/MM" autocomplete="off"></div><div class="jw-rows" id="jw-desm"></div></div>
         <div class="fld wide2"><label for="h_local">Local / cidade</label><input id="h_local" data-k="local" type="text" placeholder="LOCAL / CIDADE - UF" autocomplete="off"></div>
         <div class="fld"><label for="h_obs">Observações</label><input id="h_obs" data-k="obs" type="text" placeholder="HORÁRIO, PERNOITE, CONTATO…" autocomplete="off"></div>
+        <div class="fld semop" id="semOpBox"><span class="lbl" id="semOpL">Dias sem operação</span><div class="semop-row" role="group" aria-labelledby="semOpL"><button type="button" class="chip" data-semop="6" aria-pressed="false">SÁBADO</button><button type="button" class="chip" data-semop="0" aria-pressed="false">DOMINGO</button><label class="semop-d" for="semOpDatas">Outras datas (feriado, folga)<input id="semOpDatas" type="text" placeholder="EX: 20/11, 25/12" autocomplete="off"></label><p class="hint" id="semOpHint" hidden></p></div></div>
       </div>
 
       <div class="evtabs" id="evTabs" role="tablist" aria-label="Partes do evento">
@@ -1979,7 +2009,7 @@ function evSpan(ev){
   if(isObj(ev.janelas)) ['mont','ev','desm'].forEach(k=>(Array.isArray(ev.janelas[k])?ev.janelas[k]:[]).forEach(x=>{ if(x&&(x.a||x.b)) push(x.a||x.b,x.b||x.a); }));
   ambsOf(ev.id).forEach(a=>{ (a.itens||[]).forEach(it=>{ if(it.de||it.ate) push(it.de||it.ate, it.ate||it.de); if(it.desDe||it.desAte) push(it.desDe||it.desAte, it.desAte||it.desDe); }); (a.prov||[]).forEach(p=>{ const md=p.modo||''; [p.data,p.tipo==='COMPRAR'?'':p.devolve,md==='RETIRAMOS'?p.retirada:'',md==='ENTREGA NA EMPRESA'?p.empresa:''].forEach(d=>{ if(d) push(d); }); }); (a.fab||[]).forEach(f=>{ const md=(f.quem||'NOSSA')==='NOSSA'?'':(f.modo||''); [f.inicio,f.prontoAte,f.chega,md==='RETIRAMOS'?f.retirada:'',md==='ENTREGA NA EMPRESA'?f.empresa:''].forEach(d=>{ if(d) push(d); }); }); (a.equip||[]).forEach(e=>{ if(e.de||e.ate) push(e.de||e.ate,e.ate||e.de); }); (a.mo||[]).forEach(m=>{ if(m.de||m.ate) push(m.de||m.ate,m.ate||m.de); }); });
   (ev.fretes||[]).forEach(f=>{ if(f.ida) push(f.ida); if(f.volta) push(f.volta); });
-  const dd=isObj(ev.dias)?ev.dias:{}; Object.keys(dd).forEach(k=>{ if(Array.isArray(dd[k])&&dd[k].length) push(k); });
+  const dd=isObj(ev.dias)?ev.dias:{}; Object.keys(dd).forEach(k=>{ if(Array.isArray(dd[k])&&dd[k].length&&naData(ev,k)) push(k); });
   return {first:min,last:max};
 }
 function evStats(ev){
@@ -1994,8 +2024,8 @@ function radarItems(){
   const items=[];
   evsAtivos().forEach(e=>{
     /* produtor e equipe terceirizados: o período vem da escala (mapa de dias); sem escala, dos itens */
-    (e.produtores||[]).forEach(p=>{ if(!prodIsTerc(p)) return; const ds=rDays(e,p.regId); const ambs=prodAmbs(e,p.id); const nome=p.regId&&regOf(p.regId)?regOf(p.regId).nome:p.nome; items.push({kind:'PRODUTOR',ev:e,desc:nome||'PRODUTOR',sub:[ambs.length?'RESPONDE POR: '+ambs.join(', '):'',ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':''].filter(Boolean).join(' · '),forn:p.contato||'',modo:'',retirada:'',chega:ds[0]||e.monInicio||e.evInicio||'',sai:ds[ds.length-1]||e.desFim||e.evFim||'',status:p.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'produtores',itemId:p.id}}); });
-    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDays(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ const mo=it.equipeId===t.id, de=(it.equipeDesId||it.equipeId)===t.id; if(mo||de){ if(!ds.length) [mo?[it.de,it.ate]:null,de?[it.desDe,it.desAte]:null].filter(Boolean).forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); where.push((a.nome||'?')+': '+(it.desc||'ITEM')+(mo&&!de?' (MONTA)':de&&!mo?' (DESMONTA)':'')); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(' · ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
+    (e.produtores||[]).forEach(p=>{ if(!prodIsTerc(p)) return; const ds=rDaysOk(e,p.regId); const ambs=prodAmbs(e,p.id); const nome=p.regId&&regOf(p.regId)?regOf(p.regId).nome:p.nome; items.push({kind:'PRODUTOR',ev:e,desc:nome||'PRODUTOR',sub:[ambs.length?'RESPONDE POR: '+ambs.join(', '):'',ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':''].filter(Boolean).join(' · '),forn:p.contato||'',modo:'',retirada:'',chega:ds[0]||e.monInicio||e.evInicio||'',sai:ds[ds.length-1]||e.desFim||e.evFim||'',status:p.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'produtores',itemId:p.id}}); });
+    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDaysOk(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ const mo=it.equipeId===t.id, de=(it.equipeDesId||it.equipeId)===t.id; if(mo||de){ if(!ds.length) [mo?[it.de,it.ate]:null,de?[it.desDe,it.desAte]:null].filter(Boolean).forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); const an=a.nome||'?'; if(where.indexOf(an)<0) where.push(an); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(', ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
     (e.fretes||[]).forEach(f=>{ if(f.origem==='TERCEIRO') items.push({kind:'FRETE',ev:e,desc:(num(f.qtd)||1)+'× '+(f.caminhao||'CAMINHÃO'),sub:freteOque(e,f),forn:'',modo:'',retirada:'',chega:f.ida||'',sai:f.volta||'',status:f.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'fretes',itemId:f.id}}); });
   });
   ambientes.forEach(a=>{
@@ -2584,7 +2614,7 @@ function conflictsOf(ev,k,t){ return tokens(ev,k,t).map(tok=>({tok,cids:((IX&&IX
 function vehConf(ev,k,t){ const r=regOf(t); if(!r||!r.veiculoId||!IX||!carWith(ev,k,t)) return []; return (IX.vday.get(r.veiculoId+'|'+k)||[]).filter(x=>x!==ev.id); }
 const teamConf=(ev,k,t)=>conflictsOf(ev,k,t).length>0;
 function addConf(map,ev,k,t){ conflictsOf(ev,k,t).forEach(x=>x.cids.forEach(cid=>{ if(!map.has(cid)) map.set(cid,{days:new Set(),who:new Set()}); const e=map.get(cid); e.days.add(k); e.who.add(tokLabel(x.tok)); })); vehConf(ev,k,t).forEach(cid=>{ if(!map.has(cid)) map.set(cid,{days:new Set(),who:new Set()}); const e=map.get(cid); e.days.add(k); e.who.add('O CARRO '+vehName(regOf(t).veiculoId)); }); }
-function hasChoque(ev){ const al=alOf(ev), hoje=iso(today0()); return Object.keys(al).some(k=>k>=hoje&&al[k].some(t=>teamConf(ev,k,t)||vehConf(ev,k,t).length)); }
+function hasChoque(ev){ const al=alOf(ev), hoje=iso(today0()); return Object.keys(al).some(k=>k>=hoje&&naData(ev,k)&&al[k].some(t=>teamConf(ev,k,t)||vehConf(ev,k,t).length)); }
 function evById(id){ return eventos.find(e=>e.id===id)||null; }
 function choqueTxt(ch){ return Array.from(ch.entries()).map(([cid,e])=>{ const c=evById(cid),who=Array.from(e.who); return (who.length>1?who.slice(0,-1).join(', ')+' e '+who[who.length-1]:who[0])+' também em '+(c?(c.nome||'(SEM NOME)'):'outro evento')+' ('+shortDays(Array.from(e.days))+')'; }).join('; '); }
 function busyTok(tok,keys,cid){ const m=new Map(); keys.forEach(k=>((IX&&IX.pday.get(tok+'|'+k))||[]).forEach(x=>{ if(x===cid) return; if(!m.has(x)) m.set(x,[]); m.get(x).push(k); })); return m; }
@@ -2627,8 +2657,8 @@ function vehAgenda(vid,w){
 }
 function quemTxt(x){ return x.going?(x.partial?'VÃO '+x.going.length+' DE '+x.total+': '+(x.going.map(pShort).join(', ')||'NINGUÉM'):'EQUIPE COMPLETA ('+x.total+')'):''; }
 /* montagem / manutenção / desmontagem sem ninguém, daqui pra frente, dentro do período */
-function semEquipeDays(ev,w){ const al=alOf(ev),today=today0(),out=[]; ['mont','desm','man'].forEach(k=>phaseDays(ev,k).forEach(key=>{ const d=PD(key); if(d>=today&&dayInWin(d,w)&&!noProd(al[key]).length&&out.indexOf(key)<0) out.push(key); })); return out.sort(); }
-function opsSemEquipe(w){ const out=[],today=today0(); evsAtivos().forEach(ev=>{ const al=alOf(ev); ['mont','desm','man'].forEach(k=>{ const miss=phaseDays(ev,k).filter(key=>{ const d=PD(key); return d>=today&&dayInWin(d,w)&&!noProd(al[key]).length; }); groupRanges(miss).forEach(r=>out.push({ev,k,a:r.a,b:r.b})); }); }); return out.sort((x,y)=>x.a-y.a); }
+function semEquipeDays(ev,w){ const al=alOf(ev),today=today0(),out=[]; ['mont','desm','man'].forEach(k=>phaseDays(ev,k).forEach(key=>{ const d=PD(key); if(d>=today&&!semOpDia(ev,key)&&dayInWin(d,w)&&!noProd(al[key]).length&&out.indexOf(key)<0) out.push(key); })); return out.sort(); }
+function opsSemEquipe(w){ const out=[],today=today0(); evsAtivos().forEach(ev=>{ const al=alOf(ev); ['mont','desm','man'].forEach(k=>{ const miss=phaseDays(ev,k).filter(key=>{ const d=PD(key); return d>=today&&!semOpDia(ev,key)&&dayInWin(d,w)&&!noProd(al[key]).length; }); groupRanges(miss).forEach(r=>out.push({ev,k,a:r.a,b:r.b})); }); }); return out.sort((x,y)=>x.a-y.a); }
 function prodsOf(ev){ const al=alOf(ev),out=[]; Object.keys(al).sort().forEach(k=>al[k].forEach(t=>{ if(isProdId(t)&&out.indexOf(t)<0) out.push(t); })); return out; }
 function teamsOfEv(ev){ const al=alOf(ev),out=[]; Object.keys(al).sort().forEach(k=>al[k].forEach(t=>{ if(!isProdId(t)&&out.indexOf(t)<0) out.push(t); })); return out; }
 function teamsInPhase(ev,k){
@@ -2651,8 +2681,9 @@ function moTxt(m,o){ o=o||{}; const oq=linhas(m.oque); return moNome(m)+(oq?' �
 function dayExtras(ev,k){
   const out={itens:[],equip:[],fretes:[],radar:[],mo:[]};
   ambsOf(ev.id).forEach(a=>{
-    (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t:itemTeamRidDes(ev,it)}); });
-    (a.mo||[]).forEach(m=>{ if(inSpan(k,m.de,m.ate)) out.mo.push({tipo:m.tipo||'CARREGADOR',funcao:m.funcao||'',oque:m.oque||'',qtd:m.qtd,horario:m.horario||'',forn:m.fornecedor||'',status:m.status||'',open:isOpen(m.status),amb:a.nome||''}); });
+    const so=semOpDia(ev,k);
+    (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const t=itemTeamRid(ev,it); if(inSpan(k,it.de,it.ate)&&!(so&&variosDias(it.de,it.ate))) out.itens.push({tipo:'mont',desc:it.desc,amb:a.nome||'',t,svc:etapaType(it.desc)==='out'}); if(inSpan(k,it.desDe,it.desAte)&&!(so&&variosDias(it.desDe,it.desAte))) out.itens.push({tipo:'desm',desc:it.desc,amb:a.nome||'',t:itemTeamRidDes(ev,it)}); });
+    (a.mo||[]).forEach(m=>{ if(inSpan(k,m.de,m.ate)&&!(so&&variosDias(m.de,m.ate))) out.mo.push({tipo:m.tipo||'CARREGADOR',funcao:m.funcao||'',oque:m.oque||'',qtd:m.qtd,horario:m.horario||'',forn:m.fornecedor||'',status:m.status||'',open:isOpen(m.status),amb:a.nome||''}); });
     (a.equip||[]).forEach(q=>{ if(inSpan(k,q.de,q.ate)){ const x=q.de||q.ate,y=q.ate||q.de; out.equip.push({nome:q.nome||'EQUIPAMENTO',origem:q.origem||'PRÓPRIO',amb:a.nome||'',forn:q.fornecedor||'',status:q.status||'',a:x,b:y<x?x:y}); } });
   });
   (ev.fretes||[]).forEach(f=>{ const base={qtd:num(f.qtd)||1,cam:f.caminhao||'CAMINHÃO',oque:freteOque(ev,f),terc:f.origem==='TERCEIRO',status:f.status||''}; if(f.ida===k) out.fretes.push(Object.assign({dir:'VAI'},base)); if(f.volta===k) out.fretes.push(Object.assign({dir:'VOLTA'},base)); });
@@ -2727,6 +2758,87 @@ function removeRecFromEvent(evId,rid,keepEntry){
 }
 /* excluiu do cadastro: sai de todos os eventos */
 function removeRecEverywhere(rid){ evUsesRec(rid).forEach(ev=>removeRecFromEvent(ev.id,rid,false)); recursos.filter(r=>r.tipo==='EQUIPE'&&r.veiculoId===rid).forEach(r=>patchRec(r.id,o=>{ o.veiculoId=''; })); }
+/* ===================================================================
+   DATAS QUE VALEM PRO EVENTO · DIAS SEM OPERAÇÃO · ENTREGA DE CADA ESTRUTURA
+   - período do evento: do início da 1ª montagem ao fim da última desmontagem (com as janelas).
+     Dia marcado na escala fora disso é engano (ex.: data digitada errada num item, 21/10 no lugar de 21/11):
+     não entra no cronograma nem nas contas, e o evento avisa com o botão TIRAR.
+   - dias sem operação: ev.semOp = {sem:[0..6] (0 = domingo), datas:['AAAA-MM-DD']}. Sem o campo, vale o que
+     a observação disser ("NÃO PODE NOS DOMINGOS"). Escalar pela etapa inteira pula esses dias; item com período
+     (pintura de 13 a 24/11) não aparece neles; "falta equipe" não conta.
+   =================================================================== */
+const SEMOP_CACHE=new WeakMap();
+const DIA_NOME=['DOMINGO','SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+/* "NÃO PODE NOS DOMINGOS", "DOMINGO NÃO TEM MONTAGEM", "SEM OPERAÇÃO NO FIM DE SEMANA" */
+function semOpDaObs(obs){
+  const t=String(obs||'').toUpperCase(), out=new Set(), NEG='(?:N[ÃA]O|SEM\\s+(?:OPERA|MONTA|TRABALH|SERVI))';
+  const tem=w=>new RegExp(NEG+'[^.;,\\n]{0,40}\\b'+w).test(t)||new RegExp('\\b'+w+'S?\\b[^.;,\\n]{0,25}\\bN[ÃA]O\\b').test(t);
+  if(tem('DOMINGO')) out.add(0); if(tem('S[ÁA]BADO')) out.add(6); if(tem('FI(?:M|NS) DE SEMANA')){ out.add(0); out.add(6); }
+  return Array.from(out).sort();
+}
+function semOp(ev){
+  if(!ev) return {sem:new Set(),datas:new Set(),inf:false};
+  let c=SEMOP_CACHE.get(ev); if(c) return c;
+  const s=isObj(ev.semOp)?ev.semOp:null, sem=s?(Array.isArray(s.sem)?s.sem:[]):semOpDaObs(ev.obs), datas=s&&Array.isArray(s.datas)?s.datas:[];
+  c={sem:new Set(sem.map(Number).filter(n=>n>=0&&n<=6)),datas:new Set(datas.filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(String(x)))),inf:!s&&sem.length>0};
+  SEMOP_CACHE.set(ev,c); return c;
+}
+function semOpDia(ev,k){ const s=semOp(ev); if(!s.sem.size&&!s.datas.size) return false; if(s.datas.has(k)) return true; const d=PD(k); return !!d&&s.sem.has(d.getDay()); }
+function semOpMotivo(ev,k){ const s=semOp(ev); if(s.datas.has(k)){ const d=PD(k); return d&&s.sem.has(d.getDay())?DIA_NOME[d.getDay()]:'FERIADO / FOLGA'; } const d=PD(k); return d&&s.sem.has(d.getDay())?DIA_NOME[d.getDay()]:''; }
+function semOpTxt(ev){ const s=semOp(ev), dias=Array.from(s.sem).sort((a,b)=>(a||7)-(b||7)).map(n=>DIA_NOME[n]+'S'); const ds=Array.from(s.datas).sort().map(k=>fmtDM(k)); return [dias.join(' E '),ds.length?ds.join(', '):''].filter(Boolean).join(' · '); }
+/* período do evento (todas as janelas de montagem, evento e desmontagem) */
+function evPeriodo(ev){ const ps=evPS(ev); let a=null,b=null; ['mont','ev','desm'].forEach(k=>(ps[k]||[]).forEach(sp=>{ if(!a||sp.a<a) a=sp.a; if(!b||sp.b>b) b=sp.b; })); if(!a) return null;
+  /* só limita o lado que tem data: sem montagem, não tem "antes"; sem desmontagem, não tem "depois" */
+  const temA=!!(ps.mont||[]).length, temB=!!(ps.desm||[]).length; if(!temA&&!temB) return null;
+  const ka=iso(a), kb=iso(b); return {a:temA?ka:'0000-01-01',b:temB?kb:'9999-12-31',txt:temA&&temB?periodoDM(ka,kb):temA?'a partir de '+fmtDM(ka):'até '+fmtDM(kb)}; }
+/* dia que vale pra escala do evento: dentro do período (ou dia de manutenção). Evento sem data: tudo vale */
+function naData(ev,k){ const p=evPeriodo(ev); return !p||(k>=p.a&&k<=p.b)||isMan(ev,k); }
+function rDaysOk(ev,rid){ return rDays(ev,rid).filter(k=>naData(ev,k)); }
+/* o que está marcado na escala fora das datas do evento (pra avisar e tirar) */
+function escalaForaDasDatas(ev){ const p=evPeriodo(ev); if(!p) return []; const d=isObj(ev.dias)?ev.dias:{}, m=new Map(); Object.keys(d).sort().forEach(k=>{ if((k<p.a||k>p.b)&&!isMan(ev,k)&&Array.isArray(d[k])) d[k].forEach(t=>{ if(!t) return; if(!m.has(t)) m.set(t,[]); m.get(t).push(k); }); }); return Array.from(m.entries()).map(([t,ks])=>({t:t,ks:ks})); }
+/* gente escalada em dia sem operação (domingo, feriado…) */
+function escalaEmSemOp(ev){ const d=isObj(ev.dias)?ev.dias:{}, m=new Map(); Object.keys(d).sort().forEach(k=>{ if(!naData(ev,k)||!semOpDia(ev,k)||!Array.isArray(d[k])) return; d[k].forEach(t=>{ if(!t) return; if(!m.has(t)) m.set(t,[]); m.get(t).push(k); }); }); return Array.from(m.entries()).map(([t,ks])=>({t:t,ks:ks})); }
+/* item com período de vários dias (pintura de 13 a 24/11) não acontece no dia sem operação; item marcado só naquele dia, sim */
+const variosDias=(a,b)=>!!(a&&b&&a!==b);
+/* entrega de cada estrutura: o último dia de montagem dos itens do ambiente (dentro das datas do evento) */
+function entregaAmb(ev,a){ if(!a||isGeral(a)) return ''; let z=''; (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const d=it.ate||it.de; if(d&&naData(ev,d)&&(!z||d>z)) z=d; }); return z; }
+function inicioAmb(ev,a){ if(!a) return ''; let z=''; (a.itens||[]).forEach(it=>{ if(!tr(it.desc)) return; const d=it.de||it.ate; if(d&&naData(ev,d)&&(!z||d<z)) z=d; }); return z; }
+function entregasPorDia(ev){ const m=new Map(); ambsReais(ev.id).forEach(a=>{ const z=entregaAmb(ev,a); if(z){ if(!m.has(z)) m.set(z,[]); m.get(z).push(a); } }); return m; }
+/* pro cliente: acabamento sem detalhar o que é */
+function descCliente(desc){ const d=tr(desc); return /^ACABAMENTO/i.test(d)?'ACABAMENTO':d; }
+/* lista de datas digitadas ("20/11, 25/12") */
+function datasDoTexto(txt,refIso){ const out=[]; String(txt||'').split(/[,;\s]+/).map(tr).filter(Boolean).forEach(p=>{ const r=parseDateText(p,refIso); if(r&&out.indexOf(r)<0) out.push(r); }); return out.sort(); }
+
+/* ---------- na tela do evento ---------- */
+/* linha "DIAS SEM OPERAÇÃO" no cabeçalho do evento */
+function renderSemOp(ev){
+  const box=$('#semOpBox'); if(!box) return; const s=semOp(ev), ro=readOnly;
+  $$('[data-semop]',box).forEach(b=>{ const on=s.sem.has(+b.dataset.semop); b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.disabled=ro; });
+  const inp=$('#semOpDatas'); if(inp&&document.activeElement!==inp){ inp.value=Array.from(s.datas).sort().map(k=>fmtDM(k)).join(', '); inp.disabled=ro; }
+  const h=$('#semOpHint'); if(h){ h.textContent=s.inf?'Marcado pela observação do evento. Clique pra confirmar ou mudar.':''; h.hidden=!s.inf; }
+}
+function toggleSemOp(evId,n){ const e=evById(evId); if(!e||readOnly) return; const s=semOp(e), sem=new Set(s.sem); if(sem.has(n)) sem.delete(n); else sem.add(n);
+  patchEv(evId,o=>{ o.semOp={sem:Array.from(sem).sort(),datas:Array.from(s.datas).sort()}; }); }
+function setSemOpDatas(evId,txt){ const e=evById(evId); if(!e||readOnly) return; const s=semOp(e), ds=datasDoTexto(txt,refDate(e));
+  if(String(txt||'').trim()&&!ds.length){ toast('Não entendi as datas: use DD/MM separado por vírgula (ex: 20/11, 25/12).',true); return; }
+  patchEv(evId,o=>{ o.semOp={sem:Array.from(s.sem).sort(),datas:ds}; }); }
+/* aviso na escala do evento: dia marcado fora das datas e gente escalada em dia sem operação, com o botão TIRAR */
+function renderEscAviso(ev){
+  const host=$('#evMapa'); if(!host||!host.parentNode) return;
+  let wb=$('#escAviso'); if(!wb){ wb=document.createElement('div'); wb.id='escAviso'; host.parentNode.insertBefore(wb,host); }
+  const fora=escalaForaDasDatas(ev), dom=escalaEmSemOp(ev), p=evPeriodo(ev);
+  const linha=x=>'<span>'+esc(recNome(x.t))+' em '+esc(shortDays(x.ks))+(readOnly?'':' <button type="button" class="btn sm" data-act="rm-dias" data-rid="'+esc(x.t)+'" data-days="'+esc(x.ks.join(','))+'">Tirar</button>')+'</span>';
+  wb.innerHTML=(fora.length?'<div class="esc-av fora"><b>Marcado fora das datas do evento'+(p?' ('+esc(p.txt)+')':'')+'</b>'+fora.map(linha).join('')+'<small>Isso não entra no cronograma. Se era pra valer, aumente a montagem ou a desmontagem (ou ponha uma janela) lá em cima.</small></div>':'')
+    +(dom.length?'<div class="esc-av semop"><b>Escalado em dia sem operação ('+esc(semOpTxt(ev))+')</b>'+dom.map(linha).join('')+'</div>':'');
+  wb.hidden=!(fora.length||dom.length);
+}
+/* item com data fora do período do evento (digitou 21/10 no lugar de 21/11?) */
+function itemForaHTML(ev,it){ const p=evPeriodo(ev); if(!p) return ''; const ds=[it.de,it.ate,it.desDe,it.desAte].filter(x=>x&&(x<p.a||x>p.b)); if(!ds.length) return '';
+  return '<div class="iwarn fora"><span>Data fora do período do evento ('+esc(p.txt)+'): '+esc(ds.map(fmtDM).join(', '))+'. Confere a data?</span></div>'; }
+function wireSemOp(){ const box=$('#semOpBox'); if(!box) return;
+  box.addEventListener('click',ev=>{ const b=ev.target.closest('[data-semop]'); if(!b||b.disabled) return; const e=cur(); if(e) toggleSemOp(e.id,+b.dataset.semop); });
+  const inp=$('#semOpDatas'); if(inp){ inp.addEventListener('change',()=>{ const e=cur(); if(e) setSemOpDatas(e.id,inp.value); }); inp.addEventListener('keydown',ev=>{ if(ev.key==='Enter'){ ev.preventDefault(); inp.blur(); } }); }
+}
 /* ===================================================================
    DOCUMENTAÇÃO DAS PESSOAS (ASO, NRs, ficha EPI, RG, CNH, eSocial)
    cadastro: recursos tipo PESSOA { nome, empresa, docs:[ {id, tipo, titulo, data, validade, est, nota, arq, tam, ct, criadoEm} ] }
@@ -3314,10 +3426,10 @@ function renderProds(ev){
 }
 /* --- escala do evento: grade equipe x dia + resumo de cada equipe --- */
 /* dias do evento; trecho longo só de evento, sem ninguém escalado, vira uma coluna "…" */
-function evCols(ev){
+function evCols(ev,soValidos){
   const ps=evPS(ev); let a=null,b=null; const upd=(x,y)=>{ if(!a||x<a) a=x; if(!b||y>b) b=y; };
   ['mont','ev','desm'].forEach(k=>ps[k].forEach(sp=>upd(sp.a,sp.b)));
-  Object.keys(alOf(ev)).forEach(k=>{ const d=PD(k); if(d) upd(d,d); }); Object.keys(manOf(ev)).forEach(k=>{ const d=PD(k); if(d) upd(d,d); });
+  Object.keys(alOf(ev)).forEach(k=>{ if(soValidos&&!naData(ev,k)) return; const d=PD(k); if(d) upd(d,d); }); Object.keys(manOf(ev)).forEach(k=>{ const d=PD(k); if(d) upd(d,d); });
   if(!a) return [];
   if((b-a)/864e5>200) b=addDays(a,200);
   const al=alOf(ev),cols=[]; let gap=null;
@@ -3336,11 +3448,11 @@ function evGridHTML(ev,cols,cw){
   const today=today0(), ps=evPS(ev), al=alOf(ev), rows=escRows(ev), lv=zLevel(cw);
   const colW=c=>c.gap?Math.max(56,Math.min(110,cw)):cw;
   const nameW=170, width=nameW+cols.reduce((s,c)=>s+colW(c),0);
-  const head=cols.map(c=>{ if(c.gap) return '<th class="g-gap" scope="col"><span>…</span><b>'+fd(c.a,false)+' A '+fd(c.b,false)+'</b><small>'+c.n+' DIAS'+(c.ph?' DE EVENTO':'')+'</small></th>'; const d=c.d, ph=dayPhases(ev,ps,d,c.k); return '<th class="m-day g-day'+(d.getDay()===0||d.getDay()===6?' we':'')+(+d===+today?' today':'')+wcls(cw)+'" scope="col"><span>'+DIAS3[d.getDay()]+'</span><b>'+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'</b><i class="g-ph">'+ph.map(p=>'<em class="ph-'+p+'"></em>').join('')+'</i></th>'; }).join('');
-  const phRow='<tr class="g-etapa" data-id="'+esc(ev.id)+'"><th class="m-name" scope="row"><span class="m-open"><span class="m-t">ETAPA</span></span></th>'+cols.map(c=>{ if(c.gap) return '<td class="g-gapc ph-ev"></td>'; const ph=dayPhases(ev,ps,c.d,c.k), need=(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(al[c.k]).length&&c.d>=today; return '<td class="m-c g-c'+ph.map(p=>' ph-'+p).join('')+(need?' m-need':'')+(c.d<today?' past':'')+'" data-d="'+c.k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(need?' · FALTA EQUIPE':''))+'">'+(need&&cw>=44?'<span class="g-need">FALTA</span>':'')+'</td>'; }).join('')+'</tr>';
+  const head=cols.map(c=>{ if(c.gap) return '<th class="g-gap'+(c.ph?'':' nada')+'" scope="col"><span>…</span><b>'+fd(c.a,false)+' A '+fd(c.b,false)+'</b><small>'+c.n+' DIAS'+(c.ph?' DE EVENTO':'')+'</small></th>'; const d=c.d, ph=dayPhases(ev,ps,d,c.k); const so=semOpDia(ev,c.k), fo=!naData(ev,c.k); return '<th class="m-day g-day'+(d.getDay()===0||d.getDay()===6?' we':'')+(+d===+today?' today':'')+(so?' semop':'')+(fo?' fora':'')+wcls(cw)+'" scope="col"'+(fo?' title="Fora das datas do evento"':so?' title="Dia sem operação"':'')+'><span>'+DIAS3[d.getDay()]+'</span><b>'+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+'</b><i class="g-ph">'+ph.map(p=>'<em class="ph-'+p+'"></em>').join('')+'</i>'+(fo?'<small class="g-fo">FORA DAS DATAS</small>':so?'<small class="g-so">SEM OPERAÇÃO</small>':'')+'</th>'; }).join('');
+  const phRow='<tr class="g-etapa" data-id="'+esc(ev.id)+'"><th class="m-name" scope="row"><span class="m-open"><span class="m-t">ETAPA</span></span></th>'+cols.map(c=>{ if(c.gap) return '<td class="g-gapc'+(c.ph?' ph-ev':'')+'"></td>'; const ph=dayPhases(ev,ps,c.d,c.k), so=semOpDia(ev,c.k), need=!so&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(al[c.k]).length&&c.d>=today; return '<td class="m-c g-c'+ph.map(p=>' ph-'+p).join('')+(so?' semop':'')+(need?' m-need':'')+(c.d<today?' past':'')+'" data-d="'+c.k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+(ph.length?ph.map(p=>PHN[p]).join(' e '):'sem etapa')+(need?' · FALTA EQUIPE':''))+'">'+(need&&cw>=44?'<span class="g-need">FALTA</span>':'')+'</td>'; }).join('')+'</tr>';
   const body=rows.map(t=>{
     const r=regOf(t), prod=r.tipo==='PRODUTOR', mem=membersOf(t);
-    const cells=cols.map(c=>{ if(c.gap) return '<td class="g-gapc"></td>'; const k=c.k, on=(al[k]||[]).indexOf(t)>=0; if(!on) return '<td class="m-c g-c off'+(c.d<today?' past':'')+'" data-d="'+k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+recNome(t)+' não está')+'"></td>';
+    const cells=cols.map(c=>{ if(c.gap) return '<td class="g-gapc"></td>'; const k=c.k, on=(al[k]||[]).indexOf(t)>=0; if(!on) return '<td class="m-c g-c off'+(semOpDia(ev,k)?' semop':'')+(c.d<today?' past':'')+'" data-d="'+k+'" tabindex="0" title="'+esc(fd(c.d)+' · '+recNome(t)+' não está')+'"></td>';
       const g=going(ev,k,t), part=!!g&&g.length<mem.length, cf=conflictsOf(ev,k,t).length||vehConf(ev,k,t).length, fz=fazerEf(ev,k,t), ph=dayPhases(ev,ps,c.d,k);
       let inner=lv>=1?(part?g.length+'/'+mem.length:(g?String(g.length):'✓')):'';
       if(lv>=3&&g) inner=quemCurto(ev,k,t); else if(lv>=2&&fz) inner+=' <small>'+esc(clip(fz,24))+'</small>';
@@ -3374,7 +3486,8 @@ function teamCardHTML(ev,rid){
 function renderEscala(ev){
   const box=$('#escala'); if(editingIn(box)) return;
   const teams=escRows(ev).filter(t=>!isProdId(t)), ch=hasChoque(ev), sem=semEquipeDays(ev,null).length, ter=teams.filter(t=>!isPropria(t)).length;
-  $('#escCnt').textContent=teams.length?plural(teams.length,'equipe','equipes')+(ter?' · '+ter+' terc.':'')+(ch?' · CHOQUE':'')+(sem?' · falta equipe em '+plural(sem,'dia','dias'):''):(sem?'ninguém escalado · falta equipe em '+plural(sem,'dia','dias'):'ninguém escalado');
+  renderEscAviso(ev); const nFora=escalaForaDasDatas(ev).reduce((n,x)=>n+x.ks.length,0);
+  $('#escCnt').textContent=(nFora?plural(nFora,'dia','dias')+' fora das datas · ':'')+(teams.length?plural(teams.length,'equipe','equipes')+(ter?' · '+ter+' terc.':'')+(ch?' · CHOQUE':'')+(sem?' · falta equipe em '+plural(sem,'dia','dias'):''):(sem?'ninguém escalado · falta equipe em '+plural(sem,'dia','dias'):'ninguém escalado'));
   box.classList.remove('folded');
   const cols=evCols(ev), host=$('#evMapa');
   if(!cols.length) host.innerHTML='<p class="hint" style="padding:6px 2px">Coloque as datas de montagem, evento e desmontagem lá em cima pra montar a grade de dias.</p>';
@@ -3461,8 +3574,8 @@ function itemRowHTML(it,ev){
   const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null; const terc=t?teamIsTercEntry(t):false, tercD=td?teamIsTercEntry(td):false;
   /* cada equipe do item precisa estar na escala nos dias dela (montagem e desmontagem) */
   const need=new Map();
-  [[t,it.de,it.ate],[td||t,it.desDe,it.desAte]].forEach(([x,a,b])=>{ const rid=x&&x.regId; if(!rid) return; const rg=range(a,b); if(!rg||(rg[1]-rg[0])/864e5>120) return; const have=new Set(rDays(ev,rid)); eachDay(rg[0],rg[1],k=>{ if(have.has(k)) return; if(!need.has(rid)) need.set(rid,{t:x,ks:[]}); const n=need.get(rid); if(n.ks.indexOf(k)<0) n.ks.push(k); }); });
-  const warn=Array.from(need.entries()).map(([rid,n])=>{ const ks=n.ks.sort(); return '<div class="iwarn"><span>'+esc(entryName(n.t))+' não está na escala em '+esc(shortDays(ks))+'</span>'+(readOnly?'':'<button type="button" class="btn sm" data-act="it-escala" data-rid="'+esc(rid)+'" data-days="'+esc(ks.join(','))+'">Colocar na escala</button>')+'</div>'; }).join('');
+  [[t,it.de,it.ate],[td||t,it.desDe,it.desAte]].forEach(([x,a,b])=>{ const rid=x&&x.regId; if(!rid) return; const rg=range(a,b); if(!rg||(rg[1]-rg[0])/864e5>120) return; const have=new Set(rDays(ev,rid)); eachDay(rg[0],rg[1],k=>{ if(have.has(k)||!naData(ev,k)||semOpDia(ev,k)) return; if(!need.has(rid)) need.set(rid,{t:x,ks:[]}); const n=need.get(rid); if(n.ks.indexOf(k)<0) n.ks.push(k); }); });
+  const warn=Array.from(need.entries()).map(([rid,n])=>{ const ks=n.ks.sort(); return '<div class="iwarn"><span>'+esc(entryName(n.t))+' não está na escala em '+esc(shortDays(ks))+'</span>'+(readOnly?'':'<button type="button" class="btn sm" data-act="it-escala" data-rid="'+esc(rid)+'" data-days="'+esc(ks.join(','))+'">Colocar na escala</button>')+'</div>'; }).join('')+itemForaHTML(ev,it);
   return '<div class="erow etapa'+(terc?' terc':'')+'" data-eid="'+esc(it.id)+'">'
     +'<span class="drag" title="Arrastar pra reordenar" aria-hidden="true">⠇</span>'
     +cell('c-desc','Item / etapa','<input class="e-desc" type="text" placeholder="EX: TENDA 15X10, MONTAGEM ESTRUTURA, ELÉTRICA…" value="'+esc(it.desc||'')+'"'+(String(it.desc||'').length>48?' title="'+esc(it.desc)+'"':'')+' autocomplete="off">')
@@ -3533,7 +3646,7 @@ function renderAmbGeral(ev){
 function renderDetail(){
   const ev=cur(); if(!ev){ currentId=null; render(); return; }
   HFIELDS.forEach(k=>{ const el=$('#h_'+k); if(el&&document.activeElement!==el){ if(el.classList.contains('dt')){ el.dataset.iso=ev[k]||''; el.value=ev[k]?fmtLong(ev[k]):''; el.classList.remove('bad'); } else el.value=ev[k]==null?'':ev[k]; el._rd=hRead(el); } });
-  renderJanelas(ev); renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderVeicEv(ev); renderFretes(ev); renderArq(ev);
+  renderJanelas(ev); renderSemOp(ev); renderProds(ev); renderEscala(ev); renderDocsEv(ev); renderVeicEv(ev); renderFretes(ev); renderArq(ev);
   $('#btnOSEv').hidden=$('#btnDelEv').hidden=readOnly;
   const host=$('#mats'); const active=document.activeElement;
   const focused=active&&active.closest?active.closest('.mat'):null;
@@ -3616,11 +3729,13 @@ function setInd(el,txt,ok){ const s=$('.saveind',el); if(s){ s.textContent=txt; 
 /* ligação cronograma → escala: item que ganhou equipe ou data põe a equipe na escala desses dias (mexe lá, mexe cá) */
 function autoEscalaItens(a){
   const T=M.itemTouched; if(!T||!T.size||readOnly) return; const ev=evById(a.eventoId); if(!ev) return;
-  const add=new Map(), itens=new Map();
+  const add=new Map(), itens=new Map(), fora=new Set();
   const foco=document.activeElement, rowFoco=foco&&foco.closest?foco.closest('.erow.etapa'):null;
   (a.itens||[]).forEach(it=>{ if(!T.has(it.id)) return; if(rowFoco&&rowFoco.dataset.eid===it.id) return; /* ainda mexendo nessa linha: espera sair dela */
     T.delete(it.id); const tm=team(ev,it.equipeId), td=itemDesTeam(ev,it);
-    [[tm,it.de,it.ate],[td,it.desDe,it.desAte]].forEach(([t,a0,b0])=>{ const rid=t&&t.regId; if(!rid||!regOf(rid)) return; if(a0&&b0&&b0<a0) return; const rg=range(a0,b0); if(!rg||(rg[1]-rg[0])/864e5>45) return; const have=new Set(rDays(ev,rid)); eachDay(rg[0],rg[1],k=>{ if(have.has(k)) return; if(!add.has(rid)){ add.set(rid,new Set()); itens.set(rid,it.desc||''); } add.get(rid).add(k); }); }); });
+    [[tm,it.de,it.ate],[td,it.desDe,it.desAte]].forEach(([t,a0,b0])=>{ const rid=t&&t.regId; if(!rid||!regOf(rid)) return; if(a0&&b0&&b0<a0) return; const rg=range(a0,b0); if(!rg||(rg[1]-rg[0])/864e5>45) return; const ks=[]; let fo=false; eachDay(rg[0],rg[1],k=>{ if(naData(ev,k)) ks.push(k); else { fo=true; fora.add(k); } }); if(fo) return; /* data fora do período: provável engano — não mexe na escala */
+      const have=new Set(rDays(ev,rid)); ks.forEach(k=>{ if(have.has(k)||semOpDia(ev,k)) return; if(!add.has(rid)){ add.set(rid,new Set()); itens.set(rid,it.desc||''); } add.get(rid).add(k); }); }); });
+  if(fora.size){ const p=evPeriodo(ev); toast('Data do item fora do período do evento'+(p?' ('+p.txt+')':'')+' — confere a data. A escala não foi mexida.',true); }
   add.forEach((ks,rid)=>{ const days=Array.from(ks).sort(); addTeamDays(ev.id,rid,days); toast(recNome(rid)+' entrou na escala em '+shortDays(days)+(itens.get(rid)?' (item '+clip(itens.get(rid),28)+')':'')+'.'); });
 }
 async function saveAmb(aid){
@@ -3778,7 +3893,8 @@ function cellHTML(ev,d,k,cw,ps,al,o){
   if(d<today) cls.push('past');
   if(+d===+today) cls.push('today');
   if(o.selSet&&o.selId===ev.id&&o.selSet.has(k)) cls.push('m-sel');
-  if(!off&&!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts).length&&d>=today) cls.push('m-need');
+  const so=!off&&semOpDia(ev,k); if(so) cls.push('semop');
+  if(!off&&!so&&!ft&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!noProd(ts).length&&d>=today) cls.push('m-need');
   const wc=wcls(cw).trim(); if(wc) cls.push.apply(cls,wc.split(' '));
   const vis=off?[]:(ft?ts.filter(t=>t===ft):ts);
   let fzHid=false;
@@ -4918,7 +5034,8 @@ function wire(){
     else if(act==='ph-add'&&b.dataset.w!=null){ const k=b.dataset.k, rid=b.dataset.rid, ks=windowDays(e,k,+b.dataset.w); addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocado em '+shortDays(ks)+'.'); }
     else if(act==='ph-add'){ const k=b.dataset.k, rid=b.dataset.rid; addTeamDays(e.id,rid,phaseDays(e,k)); toast(recNome(rid)+' colocado em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+'.'); }
     else if(act==='prod-new'){ const nome=normName(($('#prodNewNome')||{}).value); if(!nome){ toast('Coloque o nome do produtor.'); return; } if(findRecByName('EQUIPE',nome)){ toast('Já existe uma equipe com esse nome.',true); return; } const ex=findRecByName('PRODUTOR',nome); const id=ex?ex.id:newRecLocal('PRODUTOR',nome,{propria:!($('#prodNewTerc')||{}).checked}); if(id) patchEv(e.id,o=>ensureEvTeam(o,id)); }
-    else if(act==='esc-add'){ const sel=$('#escPick'); let rid=sel?sel.value:''; if(rid==='__new'){ const nome=normName(($('#escNewNome')||{}).value); if(!nome){ toast('Coloque o nome da terceirizada.'); return; } const ex=findRecByName('EQUIPE',nome); rid=ex?ex.id:newRecLocal('EQUIPE',nome,{propria:false}); } if(!rid){ toast('Escolha a equipe primeiro.'); return; } const k=b.dataset.k; if(k){ const ks=b.dataset.w!=null?windowDays(e,k,+b.dataset.w):phaseDays(e,k); if(!ks.length){ toast('Essa etapa não tem dias marcados.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocada em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+'.'); } else { patchEv(e.id,o=>ensureEvTeam(o,rid)); toast(recNome(rid)+' incluída no evento. Agora escolha os dias na grade.'); } }
+    else if(act==='esc-add'){ const sel=$('#escPick'); let rid=sel?sel.value:''; if(rid==='__new'){ const nome=normName(($('#escNewNome')||{}).value); if(!nome){ toast('Coloque o nome da terceirizada.'); return; } const ex=findRecByName('EQUIPE',nome); rid=ex?ex.id:newRecLocal('EQUIPE',nome,{propria:false}); } if(!rid){ toast('Escolha a equipe primeiro.'); return; } const k=b.dataset.k; if(k){ const ks0=b.dataset.w!=null?windowDays(e,k,+b.dataset.w):phaseDays(e,k), ks=ks0.filter(x=>!semOpDia(e,x)); if(!ks.length){ toast(ks0.length?'Essa etapa só tem dias sem operação.':'Essa etapa não tem dias marcados.'); return; } addTeamDays(e.id,rid,ks); toast(recNome(rid)+' colocada em todos os dias '+({mont:'da montagem',ev:'do evento',man:'da manutenção',desm:'da desmontagem'}[k])+(ks.length<ks0.length?' (sem os dias sem operação: '+semOpTxt(e)+')':'')+'.'); } else { patchEv(e.id,o=>ensureEvTeam(o,rid)); toast(recNome(rid)+' incluída no evento. Agora escolha os dias na grade.'); } }
+    else if(act==='rm-dias'&&!readOnly){ const days=String(b.dataset.days||'').split(',').filter(Boolean); removeTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' saiu da escala em '+shortDays(days)+'.'); }
     else if(act==='it-escala'){ const days=String(b.dataset.days||'').split(',').filter(Boolean); addTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' colocada na escala ('+plural(days.length,'dia','dias')+').'); }
     else if(act==='prod-papel'&&!readOnly){ const pid=b.dataset.pid, v=b.dataset.v; flushAll(); patchEv(e.id,o=>{ o.produtores.forEach(x=>{ if(x.id===pid) x.papel=v==='GERAL'?'GERAL':'APOIO'; else if(v==='GERAL'&&x.papel==='GERAL') x.papel='APOIO'; }); }); }
   });
@@ -4982,7 +5099,7 @@ function wire(){
     else if(act==='del-amb-yes') delAmb(card.dataset.mid);
     else if(act==='it-escala'){ const e=cur(); if(!e) return; const days=String(b.dataset.days||'').split(',').filter(Boolean); flush('amb:'+card.dataset.mid); addTeamDays(e.id,b.dataset.rid,days); toast(recNome(b.dataset.rid)+' colocada na escala ('+plural(days.length,'dia','dias')+').'); }
   });
-  wireMap(); wirePanel(); wireRecursos(); if(typeof wireImport==='function') wireImport();
+  wireMap(); wirePanel(); wireRecursos(); wireSemOp(); if(typeof wireImport==='function') wireImport();
   document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') flushAll(); });
   window.addEventListener('pagehide',flushAll);
 }
@@ -5419,8 +5536,8 @@ async function docEntraNoPacote(PL,body,bytes,ct){
 }
 function docErro(e){ const m=String(e&&e.message||''), n=String(e&&e.name||''); return m==='formato'?'FORMATO':/password/i.test(n+' '+m)?'COM SENHA':'NÃO ABRIU'; }
 function pdfSafe(s){
-  return String(s==null?'':s).normalize('NFC').replace(/[–—]/g,'-').replace(/[‘’]/g,"'").replace(/[“”]/g,'"')
-    .replace(/→/g,'->').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/…/g,'...').replace(/²/g,'2').replace(/³/g,'3').toUpperCase().replace(/\u039C/g,'\u00B5').replace(/[^\x00-\xFF]/g,'?');
+  return String(s==null?'':s).normalize('NFC').replace(/[\u2010-\u2015\u2212]/g,'-').replace(/[\u2000-\u200A\u202F\u205F\u3000]/g,' ').replace(/[\u200B-\u200D\u2060\uFEFF]/g,'').replace(/≈/g,'~').replace(/[•●▪]/g,'·').replace(/[✓✔]/g,'OK').replace(/[‘’]/g,"'").replace(/[“”]/g,'"')
+    .replace(/→/g,'->').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/…/g,'...').replace(/²/g,'2').replace(/³/g,'3').toUpperCase().replace(/\u039C/g,'\u00B5').replace(/[^\x00-\xFF]/g,'');
 }
 function slug(s){ return String(s||'EVENTO').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'').toUpperCase().slice(0,40)||'EVENTO'; }
 function provLabel(p){
@@ -5540,27 +5657,31 @@ function renderCrono(JsPDF,ev,O,S,tight){
     fnt('bold',19); tc(C.white); nl.forEach((l,i)=>T(l,ML,nameY+i*7.6));
     if(loc){ fnt('normal',9); tc([214,226,242]); T(loc,ML,locY); }
     y=bandH+7;
-    /* três datas */
+    /* três datas (montagem e desmontagem dizem também quantos dias têm operação, quando o evento tem dia sem operação) */
     const bw=(CW-8)/3, boxes=[['MONTAGEM','mont'],['EVENTO','ev'],['DESMONTAGEM','desm']];
     boxes.forEach((b,i)=>{ const x=ML+i*(bw+4); fc(PHC[b[1]]); doc.roundedRect(x,y,bw,19,1.5,1.5,'F'); fc(PHD[b[1]]); doc.rect(x,y,1.6,19,'F');
       const js=janelasTodas(ev,b[1]), txt=js.length?fmtJanelas(ev,b[1]):'—';
       fnt('bold',7.5); tc(PHD[b[1]]); T(b[0]+(js.length>1?' · '+js.length+' JANELAS':''),x+5,y+5.5,{charSpace:0.5});
       const sz=tw(txt,'bold',13)<=bw-8?13:tw(txt,'bold',10)<=bw-8?10:8.5; fnt('bold',sz); tc(C.ink); T(fitT(txt,bw-8,'bold',sz),x+5,y+12.5);
-      const n=diasJanelas(ev,b[1]); fnt('normal',7.5); tc(C.muted); T(n?n+(n===1?' DIA':' DIAS'):'SEM DATA',x+5,y+16.8); });
+      const n=diasJanelas(ev,b[1]), nOp=b[1]==='ev'?n:phaseDays(ev,b[1]).filter(k=>!semOpDia(ev,k)).length;
+      fnt('normal',7.5); tc(C.muted); T(fitT(n?n+(n===1?' DIA':' DIAS')+(nOp<n?'  ·  '+nOp+' COM OPERAÇÃO':''):'SEM DATA',bw-8,'normal',7.5),x+5,y+16.8); });
     y+=25;
-    /* quem é quem */
-    const prods=prodsOrdered(ev).filter(p=>!EF||p.regId===EF), pg=prodGeral(ev);
-    const teams=escRows(ev).filter(t=>!isProdId(t)&&(!EF||t===EF));
+    /* quem é quem: o cliente não vê as equipes; a equipe vê a produção (com o telefone) e não vê cotação */
+    const pg=prodGeral(ev), efProd=!!EF&&isProdId(EF);
+    const prods=EF?(efProd?prodsOrdered(ev).filter(p=>p.regId===EF):(pg?[pg]:prodsOrdered(ev))):prodsOrdered(ev);
+    const teams=CLI?[]:escRows(ev).filter(t=>!isProdId(t)&&(!EF||t===EF));
     const rows=[];
-    prods.forEach(p=>{ const r=regOf(p.regId), ambs=prodAmbs(ev,p.id), ds=rDays(ev,p.regId);
-      rows.push({k:pg?(pg.id===p.id?'PROD. GERAL':'PROD. APOIO'):'PRODUÇÃO',n:(r?r.nome:p.nome)||'PRODUTOR',d:[tr(p.resp)?'RESPONSÁVEL POR: '+p.resp:'',ambs.length?'AMBIENTES: '+ambs.join(', '):'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),x:CLI?'':[prodIsTerc(p)?'TERCEIRIZADO':'',tr(p.contato)].filter(Boolean).join(' · ')}); });
-    teams.forEach(t=>{ const r=regOf(t), mem=membersOf(t), ds=rDays(ev,t), te=(ev.equipes||[]).find(x=>x.regId===t);
-      rows.push({k:'EQUIPE',n:r.nome,d:[tr(r.lider)?'RESPONSÁVEL: '+normName(r.lider):'',!CLI&&tr(r.motorista)?'MOTORISTA: '+normName(r.motorista):'',mem.length?mem.length+' PESSOAS':'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
-        x:CLI?'':[r.propria===false?'TERCEIRIZADA':'',r.veiculoId?'CARRO '+vehName(r.veiculoId):'',r.propria===false&&te&&tr(te.status)?te.status:''].filter(Boolean).join(' · ')}); });
+    prods.forEach(p=>{ const r=regOf(p.regId), ambs=prodAmbs(ev,p.id), ds=rDaysOk(ev,p.regId), tel=tr(p.contato)||tr(r&&r.contato);
+      rows.push({k:pg?(pg.id===p.id?'PROD. GERAL':'PROD. APOIO'):'PRODUÇÃO',n:(r?r.nome:p.nome)||'PRODUTOR',
+        d:EF&&!efProd?(ambs.length?'AMBIENTES: '+ambs.join(', '):''):[tr(p.resp)?'RESPONSÁVEL POR: '+p.resp:'',ambs.length?'AMBIENTES: '+ambs.join(', '):'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
+        x:CLI?'':[!EF&&prodIsTerc(p)?'TERCEIRIZADO':'',tel].filter(Boolean).join(' · ')}); });
+    teams.forEach(t=>{ const r=regOf(t), mem=membersOf(t), ds=rDaysOk(ev,t), te=(ev.equipes||[]).find(x=>x.regId===t);
+      rows.push({k:'EQUIPE',n:r.nome,d:[tr(r.lider)?'RESPONSÁVEL: '+normName(r.lider):'',tr(r.motorista)?'MOTORISTA: '+normName(r.motorista):'',mem.length?mem.length+' PESSOAS':'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
+        x:[r.propria===false?'TERCEIRIZADA':'',r.veiculoId?'CARRO '+vehName(r.veiculoId):'',!EF&&!SIMP&&r.propria===false&&te&&tr(te.status)?te.status:''].filter(Boolean).join(' · ')}); });
     if(rows.length){
       fnt('bold',8.5); tc(C.navy); T('QUEM É QUEM',ML,y+3.5,{charSpace:0.5}); y+=6;
       rows.forEach((r,i)=>{
-        const xt=r.x?fitT(r.x,46,'bold',6.8):'', xw=xt?tw(xt,'bold',6.8)+5:2;
+        const xt=r.x?fitT(r.x,52,'bold',6.8):'', xw=xt?tw(xt,'bold',6.8)+5:2;
         const dl=r.d?wrapT(r.d,CW-71-xw,'normal',7.8):[]; const h=Math.max(V(7.2),V(3.6)+Math.max(1,dl.length)*LH(7.8)+V(1.6));
         ensure(h);
         if(i%2===0){ fc(C.soft); doc.rect(ML,y,CW,h,'F'); }
@@ -5570,28 +5691,51 @@ function renderCrono(JsPDF,ev,O,S,tight){
         if(xt){ fnt('bold',6.8); tc(C.orange); T(xt,PW-ML-2,y+V(4.4),{align:'right'}); }
         y+=h; });
     }
-    if(tr(ev.obs)&&!SIMP&&!CLI){ const ol=wrapT('OBS: '+ev.obs,CW-4,'normal',8); y+=V(3); ol.forEach(l=>{ ensure(LH(8)); fnt('normal',8); tc(C.ink); T(l,ML,y+V(3)); y+=LH(8); }); }
+    const so=semOp(ev), sot=semOpTxt(ev), obsOn=!!tr(ev.obs)&&!SIMP&&!CLI;
+    if(obsOn){ const ol=wrapT('OBS: '+ev.obs,CW-4,'normal',8); y+=V(3); ol.forEach(l=>{ ensure(LH(8)); fnt('normal',8); tc(C.ink); T(l,ML,y+V(3)); y+=LH(8); }); }
+    if(sot&&(!obsOn||!so.inf)){ y+=V(obsOn?1:3); ensure(LH(8)); fnt('bold',8); tc(C.warn); T('SEM OPERAÇÃO: '+sot,ML,y+V(3)); y+=LH(8); }
+    /* entregas: quando cada estrutura fica pronta (o último dia de montagem dos itens dela) */
+    if(!EF&&on('ambiente')){
+      const ents=ambsReais(ev.id).map(a=>({n:a.nome||'(SEM NOME)',i:inicioAmb(ev,a),z:entregaAmb(ev,a)})).filter(x=>x.z).sort((p,q)=>p.z<q.z?-1:p.z>q.z?1:String(p.n).localeCompare(String(q.n)));
+      if(ents.length){
+        const rh=V(6.4); y+=V(4); ensure(V(7)+Math.min(3,ents.length)*rh);
+        fnt('bold',8.5); tc(C.navy); T('ENTREGAS',ML,y+3.5,{charSpace:0.5}); fnt('normal',7.4); tc(C.muted); T('quando cada estrutura fica pronta (o último dia de montagem dela)',ML+tw('ENTREGAS','bold',8.5)+8,y+3.5); y+=6;
+        const c2=ML+CW-74;
+        ents.forEach((x,i)=>{ ensure(rh); if(i%2===0){ fc(C.soft); doc.rect(ML,y,CW,rh,'F'); }
+          tc(C.ink); T(fitT(x.n,c2-ML-6,'bold',8.8),ML+2,y+V(4.3));
+          fnt('normal',7.4); tc(C.muted); T(x.i&&x.i!==x.z?'MONTAGEM '+periodoDM(x.i,x.z):'MONTAGEM '+fmtDM(x.z),c2,y+V(4.3));
+          fnt('bold',8.6); tc(C.teal); T('ENTREGA '+fmtDM(x.z),PW-ML-2,y+V(4.3),{align:'right'}); y+=rh; });
+      }
+    }
     y+=V(2);
   };
 
   /* ---------- 2. escala visual (equipe x dia) ---------- */
   const escalaVisual=()=>{
-    const rows=escRows(ev).filter(t=>!EF||t===EF), cols0=evCols(ev);
+    if(CLI) return; /* o cliente vê por estrutura, não por equipe */
+    const rows=escRows(ev).filter(t=>!EF||t===EF);
+    /* só os dias dentro das datas do evento; na versão da equipe, só o período dela */
+    let cols0=evCols(ev,true);
+    if(EF){ const ds=rDaysOk(ev,EF); if(ds.length){ const f=ds[0], l=ds[ds.length-1]; cols0=cols0.filter(c=>c.gap?(iso(c.b)>=f&&iso(c.a)<=l):(c.k>=f&&c.k<=l)); } }
     if(!rows.length||!cols0.length) return;
+    const GAP=[236,239,244], SOC=[241,243,247];
     const NW=42, nCh=Math.ceil(cols0.length/16), size=Math.ceil(cols0.length/nCh), chunks=[];
     for(let i=0;i<cols0.length;i+=size) chunks.push(cols0.slice(i,i+size));
     const colW=Math.min(15,(CW-NW)/size), gw=NW+colW*size, rowH=V(7.4), headH=V(10.5);
+    let temSo=false;
     chunks.forEach((cols,ci)=>{
       const h=Math.min(headH+rows.length*rowH+V(2)+(ci===chunks.length-1?V(7):0),BOT-TOP-16);
-      if(ci===0) section('ESCALA',CLI?'quem trabalha em cada dia':'quem trabalha em cada dia · número = quantas pessoas vão · fração = só parte da equipe',h); else { y+=V(2); ensure(h); }
+      if(ci===0) section('ESCALA','quem trabalha em cada dia · número = quantas pessoas vão · fração = só parte da equipe',h); else { y+=V(2); ensure(h); }
       const headRow=()=>{
         fnt('bold',7); tc(C.muted); T('EQUIPE',ML+1.5,y+V(6.6));
         cols.forEach((c,i)=>{ const x=ML+NW+i*colW, cx=x+colW/2;
-          if(c.gap){ fc(C.ev); doc.rect(x+0.3,y,colW-0.6,headH,'F'); fnt('bold',5.8); tc(C.ink); T(fd(c.a,false),cx,y+V(3.6),{align:'center'}); T('A '+fd(c.b,false),cx,y+V(6.4),{align:'center'}); fnt('normal',5.2); tc(C.muted); T(c.n+' DIAS',cx,y+V(9),{align:'center'}); return; }
-          const d=c.d, ph=dayPhases(ev,ps,d,c.k);
+          if(c.gap){ fc(GAP); doc.rect(x+0.3,y,colW-0.6,headH,'F'); fnt('bold',5.8); tc(C.muted); T(fd(c.a,false),cx,y+V(3.6),{align:'center'}); T('A '+fd(c.b,false),cx,y+V(6.4),{align:'center'}); fnt('normal',5.2); tc(C.muted); T(c.n+' DIAS',cx,y+V(9),{align:'center'}); return; }
+          const d=c.d, ph=dayPhases(ev,ps,d,c.k), so=semOpDia(ev,c.k);
+          if(so){ temSo=true; fc(SOC); doc.rect(x+0.3,y,colW-0.6,headH,'F'); }
           fnt('bold',5.8); tc(C.muted); T(DIAS3[d.getDay()],cx,y+V(3.6),{align:'center'});
-          fnt('bold',7.4); tc(C.ink); T(pad2(d.getDate())+'/'+pad2(d.getMonth()+1),cx,y+V(7.2),{align:'center'});
-          ph.forEach((p,j)=>{ fc(PHD[p]); doc.rect(x+0.6+j*(colW-1.2)/ph.length,y+headH-V(1.6),(colW-1.2)/ph.length,V(1.2),'F'); });
+          fnt('bold',7.4); tc(so?C.muted:C.ink); T(pad2(d.getDate())+'/'+pad2(d.getMonth()+1),cx,y+V(7.2),{align:'center'});
+          if(so){ fnt('bold',4.6); tc(C.muted); T('SEM OP.',cx,y+headH-V(0.6),{align:'center'}); }
+          else ph.forEach((p,j)=>{ fc(PHD[p]); doc.rect(x+0.6+j*(colW-1.2)/ph.length,y+headH-V(1.6),(colW-1.2)/ph.length,V(1.2),'F'); });
         });
         y+=headH;
       };
@@ -5601,103 +5745,146 @@ function renderCrono(JsPDF,ev,O,S,tight){
         const r=regOf(t), prod=r.tipo==='PRODUTOR', mem=membersOf(t);
         if(ri%2===1){ fc(C.soft); doc.rect(ML,y,gw,rowH,'F'); }
         tc(prod?C.navy:C.ink); T(fitT(r.nome,NW-3,'bold',7.6),ML+1.5,y+V(3.6));
-        fnt('normal',5.6); tc(C.muted); T(prod?'PRODUÇÃO':(r.propria===false?(CLI?'':'TERCEIRIZADA'):(mem.length?mem.length+' PESSOAS':'')),ML+1.5,y+V(6.3));
-        cols.forEach((c,i)=>{ const x=ML+NW+i*colW; if(c.gap){ fc([253,243,233]); doc.rect(x+0.3,y,colW-0.6,rowH,'F'); return; } const k=c.k; if((al[k]||[]).indexOf(t)<0) return;
-          const ph=dayPhases(ev,ps,c.d,k), g=going(ev,k,t), part=!!g&&g.length<mem.length, cf=!CLI&&(teamConf(ev,k,t)||vehConf(ev,k,t).length>0);
-          fc(cf?[248,215,209]:(ph.length?PHC[ph[0]]:[226,232,240])); doc.roundedRect(x+0.7,y+V(1),colW-1.4,rowH-V(2),0.8,0.8,'F');
+        fnt('normal',5.6); tc(C.muted); T(prod?'PRODUÇÃO':(r.propria===false?'TERCEIRIZADA':(mem.length?mem.length+' PESSOAS':'')),ML+1.5,y+V(6.3));
+        cols.forEach((c,i)=>{ const x=ML+NW+i*colW; if(c.gap){ fc([246,248,251]); doc.rect(x+0.3,y,colW-0.6,rowH,'F'); return; } const k=c.k, so=semOpDia(ev,k);
+          if((al[k]||[]).indexOf(t)<0){ if(so){ fc(SOC); doc.rect(x+0.3,y,colW-0.6,rowH,'F'); } return; }
+          const ph=dayPhases(ev,ps,c.d,k), g=going(ev,k,t), part=!!g&&g.length<mem.length, cf=false;
+          fc(cf?[248,215,209]:so?[250,228,205]:(ph.length?PHC[ph[0]]:[226,232,240])); doc.roundedRect(x+0.7,y+V(1),colW-1.4,rowH-V(2),0.8,0.8,'F');
           const txt=prod?'P':(g?(part?g.length+'/'+mem.length:String(g.length)):'X');
-          fnt('bold',6.8); tc(cf?C.bad:(part?C.blue:C.ink)); T(txt,x+colW/2,y+rowH/2+V(1.2),{align:'center'});
+          fnt('bold',6.8); tc(cf?C.bad:(so?C.warn:(part?C.blue:C.ink))); T(txt,x+colW/2,y+rowH/2+V(1.2),{align:'center'});
         });
         dc(C.line); doc.setLineWidth(0.15); doc.line(ML,y+rowH,ML+gw,y+rowH);
         y+=rowH;
       });
     });
     y+=V(2.5); ensure(V(6));
-    let x=ML; [['mont','MONTAGEM'],['ev','EVENTO'],['man','MANUTENÇÃO'],['desm','DESMONTAGEM']].forEach(([k,l])=>{ fc(PHC[k]); doc.rect(x,y+V(0.6),4,V(2.6),'F'); fnt('normal',6.6); tc(C.muted); T(l,x+5,y+V(2.8)); x+=tw(l,'normal',6.6)+10; });
-    if(!CLI){ fc([248,215,209]); doc.rect(x,y+V(0.6),4,V(2.6),'F'); fnt('normal',6.6); tc(C.muted); T('CHOQUE (A MESMA PESSOA OU CARRO EM OUTRO EVENTO)',x+5,y+V(2.8)); }
+    const leg=[[PHC.mont,'MONTAGEM'],[PHC.ev,'EVENTO'],[PHC.man,'MANUTENÇÃO'],[PHC.desm,'DESMONTAGEM']].concat(temSo?[[SOC,'SEM OPERAÇÃO']]:[],[[[250,228,205],'ESCALADO EM DIA SEM OPERAÇÃO']].filter(()=>temSo));
+    let x=ML; leg.forEach(([c,l])=>{ const w=tw(l,'normal',6.6)+10; if(x+w>PW-ML){ x=ML; y+=V(4.2); ensure(V(5)); } fc(c); doc.rect(x,y+V(0.6),4,V(2.6),'F'); fnt('normal',6.6); tc(C.muted); T(l,x+5,y+V(2.8)); x+=w; });
     y+=V(6);
   };
 
   /* ---------- 3. dia a dia ---------- */
   const RLAB={'COMEÇA A FABRICAR':'FAB. INÍCIO','FICA PRONTO':'PRONTO','RETIRAR':'RETIRAR','CHEGA NA EMPRESA':'NA EMPRESA','CHEGA':'CHEGA','CHEGA E SAI':'CHEGA E SAI','DEVOLVER':'DEVOLVER','SAI':'SAI'};
   const VO=['COMEÇA A FABRICAR','FICA PRONTO','RETIRAR','CHEGA','CHEGA E SAI','SAI','DEVOLVER'];
+  const per0=evPeriodo(ev), entMap=entregasPorDia(ev);
+  /* a produção do dia só aparece quando não é a de sempre (o produtor geral) */
+  const prodBase=(()=>{ const pg=prodGeral(ev); if(pg&&pg.regId) return pg.regId; const cnt=new Map(); Object.keys(al).forEach(k=>{ if(!naData(ev,k)) return; (al[k]||[]).filter(isProdId).forEach(t=>cnt.set(t,(cnt.get(t)||0)+1)); }); let best='',n=0; cnt.forEach((v,t)=>{ if(v>n){ n=v; best=t; } }); return best; })();
+  /* linhas iguais viram uma só ("2× MUNCK") */
+  const juntar=(arr,keyf)=>{ const out=[]; arr.forEach(o=>{ const kk=keyf(o), f=out.find(z=>z._k===kk); if(f) f.n++; else out.push(Object.assign({},o,{_k:kk,n:1})); }); return out; };
+  const nX=o=>o.n>1?o.n+'× ':'';
+  /* choque não sai no cronograma (pedido de 05/11): o aviso fica só no sistema */
   const dayInfo=k=>{
-    const d=PD(k), ph=dayPhases(ev,ps,d,k), ts=(al[k]||[]).filter(t=>!EF||t===EF);
-    const teams=noProd(ts).map(t=>{ const g=going(ev,k,t), mem=membersOf(t), mot=motoristaOf(t); return {t:t,nome:recNome(t),terc:!CLI&&!isPropria(t),g:g,mem:mem,part:!!g&&g.length<mem.length,fz:fazerEf(ev,k,t),ch:!CLI&&(teamConf(ev,k,t)||vehConf(ev,k,t).length>0),semMot:CLI?'':semMotorista(ev,k,t)}; });
-    const prods=ts.filter(isProdId).map(t=>recNome(t));
+    const d=PD(k), ph=dayPhases(ev,ps,d,k), so=semOpDia(ev,k), ok=naData(ev,k);
+    /* dia fora das datas do evento: a escala desse dia não vale (engano) */
+    const ts=ok?(al[k]||[]).filter(t=>!EF||t===EF):[];
+    const teams=CLI?[]:noProd(ts).map(t=>{ const g=going(ev,k,t), mem=membersOf(t); return {t:t,nome:recNome(t),terc:!isPropria(t),g:g,mem:mem,part:!!g&&g.length<mem.length,fz:fazerEf(ev,k,t),chTxt:'',semMot:semMotorista(ev,k,t),its:[]}; });
+    const prods=CLI?[]:ts.filter(isProdId);
+    const prodLine=prods.length&&!(prods.length===1&&prods[0]===prodBase)?prods.map(recNome).join(', '):'';
     let x={itens:[],equip:[],fretes:[],radar:[],mo:[]}; const xmo=CLI||EF?[]:(dayExtras(ev,k).mo||[]);
     if(!SIMP){
       x=dayExtras(ev,k);
       /* equipamento aparece no dia que chega e no dia que sai (alugado já vem pelo radar) */
-      x.equip=x.equip.filter(q=>CLI||q.origem!=='ALUGADO').map(q=>Object.assign({lab:q.a===q.b?'CHEGA E SAI':k===q.a?'CHEGA':k===q.b?'SAI':''},q)).filter(q=>q.lab);
+      x.equip=juntar(x.equip.filter(q=>q.origem!=='ALUGADO').map(q=>Object.assign({lab:q.a===q.b?'CHEGA E SAI':k===q.a?'CHEGA':k===q.b?'SAI':''},q)).filter(q=>q.lab),q=>[q.lab,q.nome,q.origem].join('|'));
       /* o que chega e sai no mesmo dia vira uma linha só; entregas em ordem (fabricação, chega, sai) */
-      const rr=[]; x.radar.forEach(r=>{ const tw=rr.find(o=>o.desc===r.desc&&o.forn===r.forn&&o.kind===r.kind&&((o.verb==='CHEGA'&&r.verb==='SAI')||(o.verb==='SAI'&&r.verb==='CHEGA'))); if(tw) tw.verb='CHEGA E SAI'; else rr.push(Object.assign({},r)); });
-      x.radar=rr.sort((a,b)=>(VO.indexOf(a.verb)-VO.indexOf(b.verb))||((b.open?1:0)-(a.open?1:0)));
-      if(CLI) x.radar=[];
+      const rr=[]; x.radar.forEach(r=>{ const tw2=rr.find(o=>o.desc===r.desc&&o.forn===r.forn&&o.kind===r.kind&&((o.verb==='CHEGA'&&r.verb==='SAI')||(o.verb==='SAI'&&r.verb==='CHEGA'))); if(tw2) tw2.verb='CHEGA E SAI'; else rr.push(Object.assign({},r)); });
+      x.radar=juntar(rr,r=>[r.verb,r.kind,r.desc,r.forn,r.status].join('|')).sort((a,b)=>(VO.indexOf(a.verb)-VO.indexOf(b.verb))||((b.open?1:0)-(a.open?1:0)));
+      if(CLI){ x.radar=[]; x.equip=[]; x.fretes=[]; }
       if(EF) x={itens:x.itens.filter(i=>i.t===EF),equip:[],fretes:[],radar:[]};
     }
     x.mo=xmo; /* carregadores: no detalhado e no simplificado (pra equipe), fora do cliente */
-    const need=!EF&&!CLI&&(ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0)&&!teams.length;
-    const sig=JSON.stringify([ph,teams.map(m=>[m.t,m.g,m.fz,m.ch,m.semMot]),prods,x.itens.map(i=>[i.tipo,i.desc,i.amb,i.t]),x.equip.map(q=>[q.lab,q.nome,q.origem,q.forn]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque,f.terc]),x.radar.map(r=>[r.verb,r.desc,r.forn,r.status,r.open]),x.mo.map(m=>[m.tipo,m.qtd,m.funcao,m.oque,m.horario,m.amb,m.forn,m.status,m.open]),need]);
-    const empty=!teams.length&&!prods.length&&!x.itens.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!x.mo.length&&!need;
-    return {k:k,d:d,ph:ph,teams:teams,prods:prods,x:x,need:need,sig:sig,empty:empty};
+    /* cada equipe com as tarefas dela; o resto (sem equipe, ou com equipe que não está na escala nesse dia) vem depois */
+    const byT=new Map(teams.map(m=>[m.t,m])), outros=[]; x.itens.forEach(i=>{ const m=i.t&&byT.get(i.t); if(m) m.its.push(i); else outros.push(i); });
+    const ent=(entMap.get(k)||[]).filter(a=>!EF||(a.itens||[]).some(it=>itemTeamRid(ev,it)===EF)).map(a=>a.nome||'(SEM NOME)');
+    const work=ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0;
+    const need=!EF&&!CLI&&work&&!so&&!teams.length&&outros.length>0;
+    const empty=!teams.length&&!prodLine&&!outros.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!x.mo.length&&!ent.length;
+    const sig=JSON.stringify([ph,so,teams.map(m=>[m.t,m.g,m.fz,m.chTxt,m.semMot,m.its.map(i=>[i.tipo,i.desc,i.amb,i.svc])]),prodLine,outros.map(i=>[i.tipo,i.desc,i.amb,i.t,i.svc]),x.equip.map(q=>[q.lab,q.nome,q.origem,q.n]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque,f.terc]),x.radar.map(r=>[r.verb,r.desc,r.forn,r.status,r.open,r.n]),x.mo.map(m=>[m.tipo,m.qtd,m.funcao,m.oque,m.horario,m.amb,m.forn,m.status,m.open]),ent,need]);
+    const temItem=SIMP?(ok&&!so&&work&&dayExtras(ev,k).itens.length>0):outros.length>0;
+    return {k:k,d:d,ph:ph,so:so,ok:ok,teams:teams,prodLine:prodLine,outros:outros,x:x,ent:ent,need:need,sig:sig,empty:empty,temItem:temItem};
   };
   const LABW=19;
+  const itLab=i=>i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA');
   const blockLines=(b,w)=>{
     /* linhas do bloco do dia */
     const L=[]; let lastKey='';
     /* rótulo repetido (MONTA, MONTA, MONTA…) aparece só na primeira linha da sequência */
-    const add=(txt,st,sz,col,ind,lab,labCol)=>{ const key=lab?lab+'|'+(labCol||C.muted).join(','):''; const show=lab&&key!==lastKey?lab:''; lastKey=key; const W0=w-(ind||0)-(lab?LABW:0), l0=wrapT(txt,W0,st,sz); const ls=l0.length>1?[l0[0]].concat(wrapT(l0.slice(1).join(' '),W0-2.5,st,sz)):l0;
+    const add=(txt,st,sz,col,ind,lab,labCol)=>{ const key=lab?lab+'|'+(labCol||C.muted).join(',')+'|'+(ind||0):''; const show=lab&&key!==lastKey?lab:''; lastKey=key; const W0=w-(ind||0)-(lab?LABW:0), l0=wrapT(txt,W0,st,sz); const ls=l0.length>1?[l0[0]].concat(wrapT(l0.slice(1).join(' '),W0-2.5,st,sz)):l0;
       ls.forEach((l,i)=>L.push({t:l,st:st,sz:sz,col:col,ind:(ind||0)+(i>0?2.5:0),lab:i===0?show:'',lw:lab?LABW:0,lc:labCol||C.muted})); };
+    const gap=v=>{ L.push({gap:V(v)}); lastKey=''; };
+    if(b.so&&!CLI) add(semOpMotivo(ev,b.k)+' — DIA SEM OPERAÇÃO NESSE EVENTO (CONFERIR A ESCALA)','bold',7.4,C.warn,0);
+    if(CLI){
+      /* cliente: estrutura por estrutura, sem equipe */
+      const byA=new Map(); b.outros.forEach(i=>{ const a=i.amb||'EVENTO TODO'; if(!byA.has(a)) byA.set(a,[]); byA.get(a).push(i); });
+      let n=0; byA.forEach((arr,a)=>{ if(n++) gap(1.2); add(a,'bold',9.2,C.ink,0); arr.forEach(i=>add(descCliente(i.desc),'normal',8,C.ink,3,itLab(i))); });
+      if(b.ent.length){ if(byA.size) gap(1.2); b.ent.forEach(a=>add(a,'bold',8.2,C.teal,0,'ENTREGA',C.teal)); }
+      while(L.length&&L[L.length-1].gap) L.pop();
+      return L;
+    }
     b.teams.forEach(m=>{
-      add(m.nome+(CLI?'':(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':''))+(m.terc?'  ·  TERCEIRIZADA':'')),'bold',9.6,m.ch?C.bad:C.ink,0);
-      if(!CLI&&m.g&&m.part) add('VÃO: '+(m.g.map(pShort).join(', ')||'NINGUÉM'),'normal',7.8,C.blue,3);
-      if(m.fz) add(m.fz,'normal',8.6,C.ink,3);
-      if(m.ch) add('CHOQUE: TEM GENTE (OU O CARRO) DESSA EQUIPE EM OUTRO EVENTO NESSE DIA','bold',7.2,C.bad,3);
+      add(m.nome+(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':''))+(m.terc?'  ·  TERCEIRIZADA':''),'bold',9.6,m.chTxt?C.bad:C.ink,0);
+      if(m.chTxt) add('CHOQUE: '+m.chTxt,'bold',7.2,C.bad,3);
+      if(m.g&&m.part) add('VÃO: '+(m.g.map(pShort).join(', ')||'NINGUÉM'),'normal',7.8,C.blue,3);
       if(m.semMot) add(pShort(m.semMot)+' (MOTORISTA) NÃO VAI NESSE DIA','bold',7.2,C.warn,3);
-      L.push({gap:V(1.4)});
+      if(m.fz) add(m.fz,'normal',8.6,C.ink,3);
+      m.its.forEach(i=>add(i.desc+(i.amb?' ('+i.amb+')':''),'normal',8,C.ink,3,itLab(i)));
+      if(!m.fz&&!m.its.length&&!SIMP) add(EF?'SEM TAREFA MARCADA NESSE DIA — CONFIRMAR COM A PRODUÇÃO':'ESCALADA, MAS SEM TAREFA MARCADA NESSE DIA','normal',7.6,C.muted,3);
+      gap(1.4);
     });
-    if(b.prods.length) add('PRODUÇÃO: '+b.prods.join(', '),'bold',8.2,C.navy,0);
-    if(b.need) add('SEM EQUIPE ESCALADA','bold',8.6,C.warn,0);
-    const x=b.x; const hasX=x.itens.length||x.equip.length||x.fretes.length||x.radar.length||x.mo.length;
-    if(hasX&&(b.teams.length||b.prods.length||b.need)) L.push({gap:V(1.2),rule:true});
-    x.itens.forEach(i=>add(i.desc+(i.amb?' ('+i.amb+')':'')+(i.t&&!EF?' — '+rShort(i.t):''),'normal',8,C.ink,0,i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA')));
-    x.equip.forEach(q=>add(q.nome+(!CLI&&q.origem==='ALUGADO'?' (ALUGADO'+(q.forn?' · '+q.forn:'')+')':q.origem==='CLIENTE'?' (DO CLIENTE)':''),'normal',8,C.ink,0,q.lab));
-    x.fretes.forEach(f=>add(f.qtd+'X '+f.cam+(f.oque?' — '+f.oque:'')+(!CLI&&f.terc?' (FRETE DE FORA)':''),'normal',8,C.ink,0,'FRETE '+f.dir));
-    x.mo.forEach(m=>add(moTxt(m,{amb:true,forn:!SIMP,st:m.open})+(!m.qtd?' (QUANTOS?)':''),'normal',8,m.open?C.ink:C.ink,0,m.tipo==='OUTRO'?'APOIO':'CARREG.',m.open?C.warn:C.teal));
-    x.radar.forEach(r=>add(r.desc+(r.forn?' — '+r.forn:'')+(r.status?'  ['+r.status+']':''),'normal',8,C.ink,0,RLAB[r.verb]||r.verb,r.open?C.warn:C.teal));
+    if(b.prodLine) add('PRODUÇÃO: '+b.prodLine,'bold',8.2,C.navy,0);
+    if(b.need) add('SEM EQUIPE NOSSA ESCALADA NESSE DIA','bold',7.8,C.warn,0);
+    const x=b.x; const hasX=b.outros.length||x.equip.length||x.fretes.length||x.radar.length||x.mo.length||b.ent.length;
+    if(hasX&&(b.teams.length||b.prodLine||b.need)){ L.push({gap:V(1.2),rule:true}); lastKey=''; }
+    b.outros.forEach(i=>add(i.desc+(i.amb?' ('+i.amb+')':'')+(i.t&&!EF?' — '+rShort(i.t)+' (NÃO ESTÁ NA ESCALA NESSE DIA)':''),'normal',8,C.ink,0,itLab(i)));
+    b.ent.forEach(a=>add(a,'bold',8,C.teal,0,'ENTREGA',C.teal));
+    x.equip.forEach(q=>add(nX(q)+q.nome+(q.origem==='CLIENTE'?' (DO CLIENTE)':''),'normal',8,C.ink,0,q.lab));
+    x.fretes.forEach(f=>add(f.qtd+'X '+f.cam+(f.oque?' — '+f.oque:'')+(f.terc?' (FRETE DE FORA)':''),'normal',8,C.ink,0,'FRETE '+f.dir));
+    x.mo.forEach(m=>add(moTxt(m,{amb:true,forn:!SIMP,st:m.open})+(!m.qtd?' (QUANTOS?)':''),'normal',8,C.ink,0,m.tipo==='OUTRO'?'APOIO':'CARREG.',m.open?C.warn:C.teal));
+    x.radar.forEach(r=>add(nX(r)+r.desc+(r.forn?' — '+r.forn:'')+(r.status?'  ['+r.status+']':''),'normal',8,C.ink,0,RLAB[r.verb]||r.verb,r.open?C.warn:C.teal));
     while(L.length&&L[L.length-1].gap) L.pop();
     return L;
   };
   const lineH=l=>l.gap?l.gap+(l.rule?V(1):0):LH(l.sz);
+  /* dia sem nada: uma faixa fina (dia sem operação, montagem sem operação, desmontagem ainda sem planejamento, evento) */
+  const bandOf=(i,desmVazia)=>{
+    if(!i.ok||EF) return '';
+    const fase=i.ph.map(p=>PHN[p]).join(' + ');
+    if(i.ph.indexOf('desm')>=0&&desmVazia) return CLI?fase:fase+'  ·  AINDA SEM PLANEJAMENTO';
+    if(i.so) return fase?fase+'  ·  SEM OPERAÇÃO ('+semOpMotivo(ev,i.k)+')':'';
+    if(i.ph.indexOf('mont')>=0||i.ph.indexOf('desm')>=0||i.ph.indexOf('man')>=0) return CLI?'':fase+(i.temItem?'  ·  TEM ITEM MARCADO E NENHUMA EQUIPE NOSSA':'  ·  SEM OPERAÇÃO');
+    if(i.ph.indexOf('ev')>=0) return fase;
+    return '';
+  };
+  const foraLbl=k=>!per0?'SEM ETAPA':k<per0.a?'ANTES DA MONTAGEM':k>per0.b?'DEPOIS DA DESMONTAGEM':'ENTRE AS ETAPAS';
   const diaADia=()=>{
-    const cols=evCols(ev); if(!cols.length) return;
+    const cols=evCols(ev,true); if(!cols.length) return;
     let a=null,b=null; cols.forEach(c=>{ const s=c.gap?c.a:c.d, e=c.gap?c.b:c.d; if(!a||s<a) a=s; if(!b||e>b) b=e; });
     { const sp=evSpan(ev), f0=PD(sp.first), l0=PD(sp.last); if(a&&f0&&f0<a&&(a-f0)/864e5<=45) a=f0; if(b&&l0&&l0>b&&(l0-b)/864e5<=45) b=l0; }
     const infos=[]; eachDay(a,b,k=>infos.push(dayInfo(k)));
+    const dd=infos.filter(i=>i.ph.indexOf('desm')>=0), desmVazia=dd.length>0&&dd.every(i=>i.empty);
+    infos.forEach(i=>{ if(i.empty){ i.band=bandOf(i,desmVazia); i.sig='Q|'+i.band; i.soBand=i.so&&/SEM OPERAÇÃO \(/.test(i.band); } });
     /* junta dias iguais seguidos; dia vazio vira só uma faixa */
     const groups=[]; infos.forEach(i=>{ const g=groups[groups.length-1]; if(g&&g.sig===i.sig&&+addDays(g.b,1)===+i.d){ g.b=i.d; g.n++; } else groups.push({a:i.d,b:i.d,n:1,sig:i.sig,info:i}); });
     const XW=40, RX=ML+XW, RW=CW-XW-2;
-    const markH=(g,cont)=>V((g.n>1?20.5:17.5)+Math.max(0,g.info.ph.length-1)*3.4+3.8+(cont?3.4:0));
+    const markH=(g,cont)=>V((g.n>1?20.5:17.5)+Math.max(0,Math.max(1,g.info.ph.length)-1)*3.4+3.8+(cont?3.4:0));
     const draws=[];
-    groups.forEach(g=>{ if(g.info.empty){ if(g.info.ph.length&&!EF) draws.push({quiet:true,g:g}); return; } const L=blockLines(g.info,RW); const hb=L.reduce((s,l)=>s+lineH(l),0); draws.push({g:g,L:L,h:Math.max(markH(g,false),hb+V(7))}); });
+    groups.forEach(g=>{ if(g.info.empty){ if(g.info.band) draws.push({quiet:true,g:g}); return; } const L=blockLines(g.info,RW); const hb=L.reduce((s,l)=>s+lineH(l),0); draws.push({g:g,L:L,h:Math.max(markH(g,false),hb+V(7))}); });
     const first=draws.find(d=>!d.quiet); if(!first) return;
-    section('DIA A DIA',EF?'só '+recNome(EF)+' · o que a equipe faz em cada dia':'o que acontece em cada dia, equipe por equipe'+(SIMP?'':' · o que monta, equipamento, frete e entregas'),Math.min(first.h,V(45))+V(2));
+    section('DIA A DIA',CLI?'o que é montado em cada dia, estrutura por estrutura · e quando cada uma fica pronta':EF?'só '+recNome(EF)+' · o que a equipe faz em cada dia':'cada equipe com as tarefas dela'+(SIMP?'':' · depois o que está sem equipe, as entregas e a logística'),Math.min(first.h,V(45))+V(2));
     draws.forEach(dw=>{
       const g=dw.g,i=g.info;
-      if(dw.quiet){ ensure(V(7.6)); fc(PHC[i.ph[0]]||C.soft); doc.roundedRect(ML,y,CW,V(5.6),1,1,'F'); fnt('bold',7.6); tc(C.ink); T((g.n>1?fd(g.a)+' A '+fd(g.b)+'  ·  '+g.n+' DIAS':fd(g.a))+'  ·  '+i.ph.map(p=>PHN[p]).join(' + ')+(CLI?'':'  ·  NADA MARCADO'),ML+3,y+V(3.9)); y+=V(7.6); return; }
+      if(dw.quiet){ ensure(V(7.6)); fc(i.soBand?[236,239,244]:(PHC[i.ph[0]]||C.soft)); doc.roundedRect(ML,y,CW,V(5.6),1,1,'F'); fnt('bold',7.6); tc(i.soBand?C.muted:C.ink); T(fitT((g.n>1?fd(g.a)+' A '+fd(g.b)+'  ·  '+g.n+' DIAS':fd(g.a))+'  ·  '+i.band,CW-6,'bold',7.6),ML+3,y+V(3.9)); y+=V(7.6); return; }
       let L=dw.L;
       const drawMarker=(yy,h,cont)=>{
         const mw=XW-4, cx=ML+mw/2;
-        fc(C.navy); doc.roundedRect(ML,yy,mw,V(g.n>1?17:13.5),1.4,1.4,'F');
+        fc(i.so?[96,108,124]:C.navy); doc.roundedRect(ML,yy,mw,V(g.n>1?17:13.5),1.4,1.4,'F');
         fnt('bold',7); tc([190,206,230]); T(g.n>1?DIAS3[g.a.getDay()]+' A '+DIAS3[g.b.getDay()]:DIAS3[g.a.getDay()],cx,yy+V(4.3),{align:'center'});
         fnt('bold',g.n>1?10:13); tc(C.white); T(g.n>1?pad2(g.a.getDate())+'/'+pad2(g.a.getMonth()+1)+' A '+pad2(g.b.getDate())+'/'+pad2(g.b.getMonth()+1):pad2(g.a.getDate())+'/'+pad2(g.a.getMonth()+1),cx,yy+V(g.n>1?9.6:10.6),{align:'center'});
         if(g.n>1){ fnt('normal',6.6); tc([190,206,230]); T(g.n+' DIAS',cx,yy+V(14),{align:'center'}); }
         let py=yy+V(g.n>1?20.5:17.5);
         if(i.ph.length) i.ph.forEach(p=>{ fnt('bold',6.6); tc(PHD[p]); T(PHN[p],cx,py,{align:'center'}); py+=V(3.4); });
-        else { fnt('bold',6); tc(C.muted); T('FORA DAS DATAS',cx,py,{align:'center'}); py+=V(3.4); }
+        else { fnt('bold',6); tc(C.muted); T(foraLbl(i.k),cx,py,{align:'center'}); py+=V(3.4); }
         if(cont){ fnt('normal',6); tc(C.muted); T('(CONTINUAÇÃO)',cx,py+V(0.2),{align:'center'}); }
-        dc(C.orange); doc.setLineWidth(0.8); doc.line(RX-2.2,yy,RX-2.2,yy+h-V(3));
+        dc(i.so?C.faint:C.orange); doc.setLineWidth(0.8); doc.line(RX-2.2,yy,RX-2.2,yy+h-V(3));
       };
       const drawLines=(lines,yy)=>{ let ly=yy+V(4); lines.forEach(l=>{ if(l.gap){ if(l.rule){ dc(C.line); doc.setLineWidth(0.2); doc.line(RX+1,ly-V(1.6)+l.gap/2,PW-ML,ly-V(1.6)+l.gap/2); } ly+=lineH(l); return; } if(l.lab){ fnt('bold',6.2); tc(l.lc); T(l.lab,RX+1+l.ind,ly-V(0.2),{charSpace:0.15}); } fnt(l.st,l.sz); tc(l.col); T(l.t,RX+1+l.ind+l.lw,ly); ly+=lineH(l); }); };
       /* cabe inteiro? senão: bloco pequeno vai pra próxima página; bloco grande com bastante espaço sobrando quebra entre equipes */
@@ -5731,28 +5918,28 @@ function renderCrono(JsPDF,ev,O,S,tight){
     ambs.forEach(a=>{ const ai=isGeral(a)?-1:num++;
       const rows=[]; const pn=prodName(ev,a.produtorId);
       (a.itens||[]).filter(x=>tr(x.desc)).forEach(it=>{ const t=team(ev,it.equipeId), td=it.equipeDesId?team(ev,it.equipeDesId):null, rid=t&&t.regId, ridD=td&&td.regId; if(EF&&rid!==EF&&ridD!==EF) return;
-        const tn=x=>x?entryName(x)+(!CLI&&teamIsTercEntry(x)?' (TERC.)':''):(CLI?'':'SEM EQUIPE');
+        const tn=x=>CLI?'':(x?entryName(x)+(teamIsTercEntry(x)?' (TERC.)':''):'SEM EQUIPE'), MV=etapaType(it.desc)==='out'?'SERVIÇO':'MONTA';
         /* equipe diferente na desmontagem: cada etapa com a sua equipe */
-        const sub=td&&td!==t?[(it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'MONTA')+(tn(t)?': '+tn(t):''),(it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'DESMONTA')+': '+tn(td)]
-          :[it.de||it.ate?'MONTA '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',tn(t)];
-        rows.push({lab:'',txt:it.desc,sub:sub.filter(Boolean).join('  ·  ')}); });
+        const sub=td&&td!==t?[(it.de||it.ate?MV+' '+periodoDM(it.de,it.ate):MV)+(tn(t)?': '+tn(t):''),(it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'DESMONTA')+(tn(td)?': '+tn(td):'')]
+          :[it.de||it.ate?MV+' '+periodoDM(it.de,it.ate):'',it.desDe||it.desAte?'DESMONTA '+periodoDM(it.desDe,it.desAte):'',tn(t)];
+        rows.push({lab:'',txt:CLI?descCliente(it.desc):it.desc,sub:sub.filter(Boolean).join('  ·  ')}); });
       if(!EF&&!CLI){
         (a.fab||[]).forEach(f=>{ const nossa=(f.quem||'NOSSA')==='NOSSA'; rows.push({lab:'FABRICAR',txt:(linhas(f.oque)||'?')+(f.qtd?' · '+f.qtd:''),sub:[nossa?'NOSSA'+(f.fornecedor?' ('+f.fornecedor+')':''):'TERCEIRA'+(f.fornecedor?' · '+f.fornecedor:'')].concat(fabQuando(f),[f.status||'',SIMP?'':linhas(f.obs)]).filter(Boolean).join('  ·  ')}); });
         (a.prov||[]).forEach(p=>{ const com=p.tipo==='COMPRAR'; rows.push({lab:com?'COMPRAR':'ALUGAR',txt:(linhas(p.oque)||'?')+(tr(p.qtd)?' · '+tr(p.qtd):''),sub:[p.fornecedor||''].concat(provQuando(p),[p.status||'',SIMP?'':linhas(p.obs)]).filter(Boolean).join('  ·  ')}); });
       }
       if(!EF&&!CLI) (a.mo||[]).forEach(m=>{ rows.push({lab:m.tipo==='OUTRO'?'APOIO':'CARREG.',txt:moNome(m)+(linhas(m.oque)?' — '+normName(linhas(m.oque)):''),sub:[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):'',SIMP?'':(tr(m.fornecedor)?normName(m.fornecedor):''),SIMP?'':(m.status||'')].filter(Boolean).join('  ·  ')}); });
-      if(!EF&&!SIMP) (a.equip||[]).forEach(q=>{ rows.push({lab:'EQUIP.',txt:q.nome||'EQUIPAMENTO',sub:[q.de||q.ate?periodoDM(q.de,q.ate):'',CLI?'':((q.origem||'PRÓPRIO')==='ALUGADO'?'ALUGADO'+(q.fornecedor?' · '+q.fornecedor:''):'')].filter(Boolean).join('  ·  ')}); });
+      if(!EF&&!SIMP&&!CLI) (a.equip||[]).forEach(q=>{ rows.push({lab:'EQUIP.',txt:q.nome||'EQUIPAMENTO',sub:[q.de||q.ate?periodoDM(q.de,q.ate):'',CLI?'':((q.origem||'PRÓPRIO')==='ALUGADO'?'ALUGADO'+(q.fornecedor?' · '+q.fornecedor:''):'')].filter(Boolean).join('  ·  ')}); });
       const obs=tr(a.obs)&&!EF&&!CLI?a.obs:'';
       if(!rows.length&&!obs) return;
-      blocks.push({a:a,i:ai+1,geral:ai<0,pn:pn,rows:rows,obs:obs});
+      blocks.push({a:a,i:ai+1,geral:ai<0,pn:pn,ent:ai<0?'':entregaAmb(ev,a),rows:rows,obs:obs});
     });
     if(!blocks.length) return;
     const W=CW-12;
     const measureRow=r=>{ const tl=wrapT(r.txt,W-(r.lab?17:0),'bold',8.6), sl=r.sub?wrapT(r.sub,W-(r.lab?17:0),'normal',7.4):[]; r._tl=tl; r._sl=sl; return tl.length*LH(8.6)+sl.length*LH(7.4)+V(2.2); };
     blocks.forEach(bk=>{ bk.rows.forEach(r=>r._h=measureRow(r)); bk.obsL=bk.obs?wrapT('OBS: '+bk.obs,CW-6,'normal',7.6):[]; bk.h=V(8.5)+bk.rows.reduce((s,r)=>s+r._h,0)+bk.obsL.length*LH(7.6)+V(4); });
-    section('CHECKLIST POR AMBIENTE',CLI?'o que vai ser montado em cada ambiente':'marque o que já foi feito · itens com data e equipe, fabricação, locação e equipamento',Math.min(blocks[0].h,V(60)));
+    section(CLI?'O QUE VAI SER MONTADO':'CHECKLIST POR AMBIENTE',CLI?'cada estrutura, com as datas e a entrega':'marque o que já foi feito · itens com data e equipe, fabricação, locação e equipamento',Math.min(blocks[0].h,V(60)));
     blocks.forEach(bk=>{
-      const head=(cont)=>{ fc(C.navy); doc.rect(ML,y,CW,V(6.6),'F'); const pr=bk.pn?'PRODUTOR: '+bk.pn:''; const pw=pr?Math.min(70,tw(pr,'normal',7.4))+6:0; tc(C.white); T(fitT((bk.geral?'EVENTO TODO — VALE PRO EVENTO INTEIRO':bk.i+'. '+(bk.a.nome||'(AMBIENTE SEM NOME)'))+(cont?' (CONTINUAÇÃO)':''),CW-5-pw,'bold',9),ML+2.5,y+V(4.5)); if(pr){ tc(C.white); T(fitT(pr,70,'normal',7.4),PW-ML-2.5,y+V(4.5),{align:'right'}); } y+=V(8.5); };
+      const head=(cont)=>{ fc(C.navy); doc.rect(ML,y,CW,V(6.6),'F'); const pr=[bk.pn?'PRODUTOR: '+bk.pn:'',bk.ent?'ENTREGA '+fmtDM(bk.ent):''].filter(Boolean).join('  ·  '); const pw=pr?Math.min(96,tw(pr,'normal',7.4))+6:0; tc(C.white); T(fitT((bk.geral?'EVENTO TODO — VALE PRO EVENTO INTEIRO':bk.i+'. '+(bk.a.nome||'(AMBIENTE SEM NOME)'))+(cont?' (CONTINUAÇÃO)':''),CW-5-pw,'bold',9),ML+2.5,y+V(4.5)); if(pr){ tc(C.white); T(fitT(pr,96,'normal',7.4),PW-ML-2.5,y+V(4.5),{align:'right'}); } y+=V(8.5); };
       const row=(r,ri)=>{
         if(!CLI) checkbox(ML+2,y+V(2.9)); else { fc(C.orange); doc.circle(ML+3.4,y+V(1.6),0.7,'F'); }
         let x=ML+7; if(r.lab){ fnt('bold',6.4); tc(C.orange); T(r.lab,x,y+V(2.7),{charSpace:0.2}); x+=17; }
@@ -5775,24 +5962,25 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const W=CW-8;
     groups.forEach(g=>{ g.list.sort((a,b)=>keyd(a)<keyd(b)?-1:keyd(a)>keyd(b)?1:0);
       g.rows=g.list.map(it=>{ const dts=[]; if(it.kind==='FABRICAÇÃO'&&it.prontoAte) dts.push('PRONTO '+fmtDM(it.prontoAte)); if(it.retirada) dts.push('RETIRA '+fmtDM(it.retirada)); if(it.empresa) dts.push('NA EMPRESA '+fmtDM(it.empresa)); if(it.chega) dts.push((it.kind==='FRETE'||it.kind==='EQUIPE TERC.'||it.kind==='PRODUTOR'||it.kind==='EQUIPAMENTO'?'DE ':'CHEGA ')+fmtDM(it.chega)); if(it.sai) dts.push((it.kind==='FRETE'?'VOLTA ':it.kind==='LOCAÇÃO'?'DEVOLVE ':'ATÉ ')+fmtDM(it.sai));
+        const d0=it.chega||it.prontoAte||it.retirada||it.empresa, lt=isOpen(it.status)&&!!d0&&d0<iso(today0()); if(lt) dts.push('ATRASADO');
         /* as datas ficam à direita: o texto quebra antes de chegar nelas */
         const dw=dts.length?tw(dts.join(' · '),'bold',7.2):0, TW=Math.min(W-50,CW-36-dw);
         const tl=wrapT(it.desc+(it.forn?' — '+it.forn:''),TW,'bold',8.4), sl=it.sub?wrapT(it.sub,TW,'normal',7.2):[];
-        return {it:it,dts:dts.join(' · '),tl:tl,sl:sl,_h:tl.length*LH(8.4)+sl.length*LH(7.2)+V(2.4)}; });
+        return {it:it,lt:lt,dts:dts.join(' · '),tl:tl,sl:sl,_h:tl.length*LH(8.4)+sl.length*LH(7.2)+V(2.4)}; });
       g.h=V(7)+g.rows.reduce((s,r)=>s+r._h,0)+V(3); });
     section('RADAR — O QUE PRECISA FICAR PRONTO','fabricação, locação, compra, equipamento alugado, equipe e frete de fora · marque quando estiver resolvido',Math.min(groups[0].h,V(50)));
     const KC={'FABRICAÇÃO':C.orange,'LOCAÇÃO':C.blue,'COMPRA':C.teal,'EQUIPAMENTO':C.warn,'MÃO DE OBRA':C.navy,'EQUIPE TERC.':C.navy,'PRODUTOR':C.navy,'FRETE':C.muted};
     groups.forEach(g=>{
       const ab=g.list.filter(x=>isOpen(x.status)).length;
       const head=(cont)=>{ fc(KC[g.k]); doc.rect(ML,y+V(0.4),2.2,V(4.6),'F'); fnt('bold',9); tc(C.navy); T(g.k+'  ·  '+g.list.length+(g.list.length===1?' ITEM':' ITENS')+(ab?'  ·  '+ab+' EM ABERTO':'  ·  TUDO RESOLVIDO')+(cont?'  (CONTINUAÇÃO)':''),ML+4.5,y+V(4),{charSpace:0.3}); y+=V(7); };
-      listBlock(V(7),g.rows,head,r=>{ checkbox(ML+2,y+V(2.9)); fnt('bold',8.4); tc(isOpen(r.it.status)?C.ink:C.muted); r.tl.forEach((l,j)=>T(l,ML+7,y+V(2.9)+j*LH(8.4))); fnt('normal',7.2); tc(C.muted); r.sl.forEach((l,j)=>T(l,ML+7,y+V(2.9)+r.tl.length*LH(8.4)+j*LH(7.2))); fnt('bold',7.2); tc(C.blue); T(r.dts,PW-ML-25,y+V(2.9),{align:'right'}); const st=r.it.status||'SEM STATUS'; tc(isOpen(r.it.status)?C.warn:C.teal); T(fitT(st,21,'bold',6.6),PW-ML,y+V(2.9),{align:'right'}); y+=r._h; },V(3));
+      listBlock(V(7),g.rows,head,r=>{ checkbox(ML+2,y+V(2.9)); fnt('bold',8.4); tc(isOpen(r.it.status)?C.ink:C.muted); r.tl.forEach((l,j)=>T(l,ML+7,y+V(2.9)+j*LH(8.4))); fnt('normal',7.2); tc(C.muted); r.sl.forEach((l,j)=>T(l,ML+7,y+V(2.9)+r.tl.length*LH(8.4)+j*LH(7.2))); fnt('bold',7.2); tc(r.lt?C.bad:C.blue); T(r.dts,PW-ML-25,y+V(2.9),{align:'right'}); const st=r.it.status||'SEM STATUS'; tc(isOpen(r.it.status)?C.warn:C.teal); T(fitT(st,21,'bold',6.6),PW-ML,y+V(2.9),{align:'right'}); y+=r._h; },V(3));
       y+=V(3);
     });
   };
 
   /* ---------- 6. fretes ---------- */
   const fretesSec=()=>{
-    const fs=(ev.fretes||[]).slice().sort((a,b)=>((a.ida||a.volta||'9999')<(b.ida||b.volta||'9999'))?-1:1); if(!fs.length||EF) return;
+    const fs=(ev.fretes||[]).slice().sort((a,b)=>((a.ida||a.volta||'9999')<(b.ida||b.volta||'9999'))?-1:1); if(!fs.length||EF||CLI) return;
     const cols=CLI?[['VAI',22],['VOLTA',22],['QTD',12],['CAMINHÃO',42],['O QUE VAI',CW-98]]:[['VAI',20],['VOLTA',20],['QTD',11],['CAMINHÃO',36],['ORIGEM',26],['O QUE VAI',CW-113]];
     const rows=fs.map(f=>{ const v=CLI?[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',freteOque(ev,f)||'-']:[f.ida?fmtDM(f.ida):'-',f.volta?fmtDM(f.volta):'-',String(num(f.qtd)||1),f.caminhao||'-',f.origem==='TERCEIRO'?'DE FORA'+(f.status?' · '+f.status:''):f.origem==='AGREGADO'?'AGREGADO':'PRÓPRIO',freteOque(ev,f)||'-']; const w=v.map((s,i)=>wrapT(s,cols[i][1]-2,'normal',8)); return {w:w,_h:Math.max.apply(null,w.map(x=>x.length))*LH(8)+V(2.4)}; });
     const tot=fs.reduce((n,f)=>n+(num(f.qtd)||1),0);
@@ -6351,8 +6539,8 @@ function openWhats(){ leavePanel(); M.panel={kind:'whats',dia:iso(addDays(today0
 function escalaDoDia(k){
   const d=PD(k), por=new Map(), prodEv=new Map(), semEq=[];
   evsAtivos().forEach(ev=>{
-    const al=alOf(ev)[k]||[], ps=evPS(ev), ph=dayPhases(ev,ps,d,k);
-    if(!noProd(al).length&&ph.some(p=>p==='mont'||p==='desm'||p==='man')) semEq.push({ev:ev,ph:ph});
+    const al=naData(ev,k)?(alOf(ev)[k]||[]):[], ps=evPS(ev), ph=dayPhases(ev,ps,d,k);
+    if(!noProd(al).length&&!semOpDia(ev,k)&&ph.some(p=>p==='mont'||p==='desm'||p==='man')) semEq.push({ev:ev,ph:ph});
     al.forEach(t=>{
       if(isProdId(t)){ if(!prodEv.has(ev.id)) prodEv.set(ev.id,[]); const geral=prodIsGeralRid(ev,t)&&(ev.produtores||[]).length>1; prodEv.get(ev.id)[geral?'unshift':'push'](recNome(t)+(geral?' (geral)':'')); return; }
       if(!por.has(t)) por.set(t,[]);
