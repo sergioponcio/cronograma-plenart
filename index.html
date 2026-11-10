@@ -5958,13 +5958,18 @@ function renderCrono(JsPDF,ev,O,S,tight){
     y=bandH+7;
     /* três datas (montagem e desmontagem dizem também quantos dias têm operação, quando o evento tem dia sem operação) */
     const bw=(CW-8)/3, boxes=[['MONTAGEM','mont'],['EVENTO','ev'],['DESMONTAGEM','desm']];
-    boxes.forEach((b,i)=>{ const x=ML+i*(bw+4); fc(PHC[b[1]]); doc.roundedRect(x,y,bw,19,1.5,1.5,'F'); fc(PHD[b[1]]); doc.rect(x,y,1.6,19,'F');
-      const js=janelasTodas(ev,b[1]), txt=js.length?fmtJanelas(ev,b[1]):'—';
+    /* janela curta: "28 A 30/11" (mesmo mês), "30/11 A 02/12", "04/12" */
+    const jCurta=j=>{ const a=j.a||j.b, z=j.b||j.a; if(!a) return ''; if(a===z) return fmtDM(a); return a.slice(0,7)===z.slice(0,7)?a.slice(8,10)+' A '+fmtDM(z):fmtDM(a)+' A '+fmtDM(z); };
+    const linhasDe=(js,w)=>{ if(!js.length) return {sz:13,ls:['—']}; const um=js.length>1?js.map(jCurta).join(' · '):fmtJanelas(ev,js.k);
+      for(const s of [13,10,8.5]) if(tw(um,'bold',s)<=w) return {sz:s,ls:[um]};
+      const ls=[]; let cur=''; js.map(jCurta).forEach(p=>{ const t2=cur?cur+' · '+p:p; if(cur&&tw(t2,'bold',8.5)>w){ ls.push(cur+' ·'); cur=p; } else cur=t2; }); if(cur) ls.push(cur); return {sz:8.5,ls:ls.slice(0,3)}; };
+    const bxs=boxes.map(b=>{ const js=janelasTodas(ev,b[1]); js.k=b[1]; return {b:b,js:js,L:linhasDe(js,bw-8)}; }), nl2=Math.max.apply(null,bxs.map(o=>o.L.ls.length)), bh=nl2>1?19+(nl2-1)*3.6:19;
+    bxs.forEach((o,i)=>{ const b=o.b, js=o.js, x=ML+i*(bw+4); fc(PHC[b[1]]); doc.roundedRect(x,y,bw,bh,1.5,1.5,'F'); fc(PHD[b[1]]); doc.rect(x,y,1.6,bh,'F');
       fnt('bold',7.5); tc(PHD[b[1]]); T(b[0]+(js.length>1?' · '+js.length+' JANELAS':''),x+5,y+5.5,{charSpace:0.5});
-      const sz=tw(txt,'bold',13)<=bw-8?13:tw(txt,'bold',10)<=bw-8?10:8.5; fnt('bold',sz); tc(C.ink); T(fitT(txt,bw-8,'bold',sz),x+5,y+12.5);
+      fnt('bold',o.L.sz); tc(C.ink); o.L.ls.forEach((l,j)=>T(fitT(l,bw-8,'bold',o.L.sz),x+5,y+(o.L.ls.length>1?11.2:12.5)+j*3.6));
       const n=diasJanelas(ev,b[1]), nOp=b[1]==='ev'?n:phaseDays(ev,b[1]).filter(k=>!semOpDia(ev,k)).length;
-      fnt('normal',7.5); tc(C.muted); T(fitT(n?n+(n===1?' DIA':' DIAS')+(nOp<n?'  ·  '+nOp+' COM OPERAÇÃO':''):'SEM DATA',bw-8,'normal',7.5),x+5,y+16.8); });
-    y+=25;
+      fnt('normal',7.5); tc(C.muted); T(fitT(n?n+(n===1?' DIA':' DIAS')+(nOp<n?'  ·  '+nOp+' COM OPERAÇÃO':''):'SEM DATA',bw-8,'normal',7.5),x+5,y+bh-2.2); });
+    y+=bh+6;
     /* quem é quem: o cliente não vê as equipes; a equipe vê a produção (com o telefone) e não vê cotação */
     const pg=prodGeral(ev), efProd=!!EF&&isProdId(EF);
     const prods=EF?(efProd?prodsOrdered(ev).filter(p=>p.regId===EF):(pg?[pg]:prodsOrdered(ev))):prodsOrdered(ev);
@@ -6095,15 +6100,21 @@ function renderCrono(JsPDF,ev,O,S,tight){
     }
     x.mo=xmo; /* carregadores: no detalhado e no simplificado (pra equipe), fora do cliente */
     /* cada equipe com as tarefas dela; o resto (sem equipe, ou com equipe que não está na escala nesse dia) vem depois */
-    /* item com mais de uma equipe: aparece no bloco de cada uma, com "JUNTO COM …" */
-    const byT=new Map(teams.map(m=>[m.t,m])), outros=[]; x.itens.forEach(i=>{ const ts=i.ts||[], ms=ts.map(r=>byT.get(r)).filter(Boolean); if(ms.length) ms.forEach(m=>m.its.push(Object.assign({},i,{com:ts.filter(r=>r!==m.t)}))); else outros.push(i); });
+    /* item com mais de uma equipe escalada no dia: sai uma vez só, no bloco "JARDEL + GEOVANESSON" (na ordem que foi marcada).
+       Se uma delas não está na escala nesse dia, o item fica com a que está (e avisa quem falta) */
+    const escalados=new Set(ok?noProd(al[k]||[]):[]), byT=new Map(teams.map(m=>[m.t,m])), outros=[], grupos=[];
+    x.itens.forEach(i=>{ const ts=i.ts||[], on=ts.filter(r=>escalados.has(r)), falta=ts.filter(r=>!escalados.has(r));
+      if(CLI||!on.length||(EF&&on.indexOf(EF)<0)){ outros.push(i); return; }
+      const i2=falta.length?Object.assign({},i,{falta:falta}):i;
+      if(on.length===1){ const m=byT.get(on[0]); if(m) m.its.push(i2); else outros.push(i); return; }
+      const key=on.slice().sort().join('+'); let g=grupos.find(z=>z.key===key); if(!g){ g={key:key,ts:on,its:[]}; grupos.push(g); } g.its.push(i2); });
     const ent=(entMap.get(k)||[]).filter(a=>!EF||(a.itens||[]).some(it=>itemTeamRids(ev,it).indexOf(EF)>=0)).map(a=>a.nome||'(SEM NOME)');
     const work=ph.indexOf('mont')>=0||ph.indexOf('desm')>=0||ph.indexOf('man')>=0;
     const need=!EF&&!CLI&&work&&!so&&!teams.length&&outros.length>0;
-    const empty=!teams.length&&!prodLine&&!outros.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!x.mo.length&&!ent.length;
-    const sig=JSON.stringify([ph,so,teams.map(m=>[m.t,m.g,m.fz,m.chTxt,m.semMot,m.its.map(i=>[i.tipo,i.desc,i.amb,i.svc,i.com])]),prodLine,outros.map(i=>[i.tipo,i.desc,i.amb,i.ts,i.svc]),x.equip.map(q=>[q.lab,q.nome,q.origem,q.n]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque,f.terc]),x.radar.map(r=>[r.verb,r.desc,r.forn,r.status,r.open,r.n]),x.mo.map(m=>[m.tipo,m.qtd,m.funcao,m.oque,m.horario,m.amb,m.forn,m.status,m.open]),ent,need]);
+    const empty=!teams.length&&!grupos.length&&!prodLine&&!outros.length&&!x.equip.length&&!x.fretes.length&&!x.radar.length&&!x.mo.length&&!ent.length;
+    const sig=JSON.stringify([ph,so,teams.map(m=>[m.t,m.g,m.fz,m.chTxt,m.semMot,m.its.map(i=>[i.tipo,i.desc,i.amb,i.svc,i.falta])]),grupos.map(g=>[g.ts,g.its.map(i=>[i.tipo,i.desc,i.amb,i.svc,i.falta])]),prodLine,outros.map(i=>[i.tipo,i.desc,i.amb,i.ts,i.svc]),x.equip.map(q=>[q.lab,q.nome,q.origem,q.n]),x.fretes.map(f=>[f.dir,f.qtd,f.cam,f.oque,f.terc]),x.radar.map(r=>[r.verb,r.desc,r.forn,r.status,r.open,r.n]),x.mo.map(m=>[m.tipo,m.qtd,m.funcao,m.oque,m.horario,m.amb,m.forn,m.status,m.open]),ent,need]);
     const temItem=SIMP?(ok&&!so&&work&&dayExtras(ev,k).itens.length>0):outros.length>0;
-    return {k:k,d:d,ph:ph,so:so,ok:ok,teams:teams,prodLine:prodLine,outros:outros,x:x,ent:ent,need:need,sig:sig,empty:empty,temItem:temItem};
+    return {k:k,d:d,ph:ph,so:so,ok:ok,teams:teams,grupos:grupos,prodLine:prodLine,outros:outros,x:x,ent:ent,need:need,sig:sig,empty:empty,temItem:temItem};
   };
   const LABW=19;
   const itLab=i=>i.tipo==='desm'?'DESMONTA':(i.svc?'SERVIÇO':'MONTA');
@@ -6123,16 +6134,31 @@ function renderCrono(JsPDF,ev,O,S,tight){
       while(L.length&&L[L.length-1].gap) L.pop();
       return L;
     }
+    const head=m=>m.nome+(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':''))+(m.terc?'  ·  TERCEIRIZADA':'');
+    const info=(m,pre)=>{ if(m.chTxt) add((pre?m.nome+': ':'')+'CHOQUE: '+m.chTxt,'bold',7.2,C.bad,3);
+      if(m.g&&m.part) add((pre?m.nome+' · '+m.g.length+' DE '+m.mem.length+' · ':'')+'VÃO: '+(m.g.map(pShort).join(', ')||'NINGUÉM'),'normal',7.8,C.blue,3);
+      if(m.semMot) add((pre?m.nome+': ':'')+pShort(m.semMot)+' (MOTORISTA) NÃO VAI NESSE DIA','bold',7.2,C.warn,3); };
+    const itemLine=i=>{ add(i.desc+(i.amb?' ('+i.amb+')':''),'normal',8,C.ink,3,itLab(i));
+      if(i.falta&&i.falta.length&&!EF) add(listaE(i.falta.map(recNome))+(i.falta.length>1?' NÃO ESTÃO':' NÃO ESTÁ')+' NA ESCALA NESSE DIA','bold',7,C.warn,3+LABW); };
+    const grupos=b.grupos||[], feitos=new Set(), semTarefa=[], emGrupo=t=>grupos.some(g=>g.ts.indexOf(t)>=0);
+    /* bloco das equipes que fazem junto: "JARDEL + GEOVANESSON" e os itens uma vez só */
+    const grupoBloco=g=>{ feitos.add(g.key);
+      add(g.ts.map(t=>{ const m=b.teams.find(z=>z.t===t); return recNome(t)+((m?m.terc:!isPropria(t))?' (TERC.)':''); }).join(' + '),'bold',9.6,C.ink,0);
+      g.ts.map(t=>b.teams.find(z=>z.t===t)).filter(Boolean).forEach(m=>info(m,true));
+      g.its.forEach(itemLine); gap(1.4); };
     b.teams.forEach(m=>{
-      add(m.nome+(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':''))+(m.terc?'  ·  TERCEIRIZADA':''),'bold',9.6,m.chTxt?C.bad:C.ink,0);
-      if(m.chTxt) add('CHOQUE: '+m.chTxt,'bold',7.2,C.bad,3);
-      if(m.g&&m.part) add('VÃO: '+(m.g.map(pShort).join(', ')||'NINGUÉM'),'normal',7.8,C.blue,3);
-      if(m.semMot) add(pShort(m.semMot)+' (MOTORISTA) NÃO VAI NESSE DIA','bold',7.2,C.warn,3);
+      grupos.forEach(g=>{ if(!feitos.has(g.key)&&g.ts.indexOf(m.t)>=0) grupoBloco(g); });
+      if(!m.fz&&!m.its.length){ if(!emGrupo(m.t)) semTarefa.push(m); return; } /* só faz o que é junto: o bloco dela não repete */
+      add(head(m),'bold',9.6,m.chTxt?C.bad:C.ink,0); info(m,false);
       if(m.fz) add(m.fz,'normal',8.6,C.ink,3);
-      m.its.forEach(i=>{ add(i.desc+(i.amb?' ('+i.amb+')':''),'normal',8,C.ink,3,itLab(i)); if(i.com&&i.com.length) add('JUNTO COM '+i.com.map(recNome).join(' + '),'bold',7.2,C.blue,3+LABW); });
-      if(!m.fz&&!m.its.length&&!SIMP) add(EF?'SEM TAREFA MARCADA NESSE DIA — CONFIRMAR COM A PRODUÇÃO':'ESCALADA, MAS SEM TAREFA MARCADA NESSE DIA','normal',7.6,C.muted,3);
+      m.its.forEach(itemLine);
       gap(1.4);
     });
+    grupos.forEach(g=>{ if(!feitos.has(g.key)) grupoBloco(g); });
+    /* escaladas sem tarefa: juntas, com o aviso uma vez só */
+    if(semTarefa.length){ semTarefa.forEach(m=>{ add(head(m),'bold',9.6,m.chTxt?C.bad:C.ink,0); info(m,false); });
+      if(!SIMP) add(EF?'SEM TAREFA MARCADA NESSE DIA — CONFIRMAR COM A PRODUÇÃO':semTarefa.length>1?'ESCALADAS, MAS SEM TAREFA MARCADA NESSE DIA':'ESCALADA, MAS SEM TAREFA MARCADA NESSE DIA','normal',7.6,C.muted,3);
+      gap(1.4); }
     if(b.prodLine) add('PRODUÇÃO: '+b.prodLine,'bold',8.2,C.navy,0);
     if(b.need) add('SEM EQUIPE NOSSA ESCALADA NESSE DIA','bold',7.8,C.warn,0);
     const x=b.x; const hasX=b.outros.length||x.equip.length||x.fretes.length||x.radar.length||x.mo.length||b.ent.length;
