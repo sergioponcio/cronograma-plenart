@@ -1672,6 +1672,12 @@ div.thead{cursor:default}
 .ms-vazio{margin:8px 12px;font-size:12.5px;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){ .ms-btn .ms-car{transition:transform .12s} }
 </style>
+<style>
+/* ===================== v48: quantas pessoas a terceirizada leva ===================== */
+.ec-terc .ec-qt{width:70px;text-align:center}
+.pnv.pnq{color:var(--ink)}
+.pnv.pnq span{font-weight:700}
+</style>
 
 <div class="wrap">
   <header class="top">
@@ -2081,7 +2087,7 @@ function radarItems(){
   evsAtivos().forEach(e=>{
     /* produtor e equipe terceirizados: o período vem da escala (mapa de dias); sem escala, dos itens */
     (e.produtores||[]).forEach(p=>{ if(!prodIsTerc(p)) return; const ds=rDaysOk(e,p.regId); const ambs=prodAmbs(e,p.id); const nome=p.regId&&regOf(p.regId)?regOf(p.regId).nome:p.nome; items.push({kind:'PRODUTOR',ev:e,desc:nome||'PRODUTOR',sub:[ambs.length?'RESPONDE POR: '+ambs.join(', '):'',ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':''].filter(Boolean).join(' · '),forn:p.contato||'',modo:'',retirada:'',chega:ds[0]||e.monInicio||e.evInicio||'',sai:ds[ds.length-1]||e.desFim||e.evFim||'',status:p.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'produtores',itemId:p.id}}); });
-    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDaysOk(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ const mo=itemEqIds(it).indexOf(t.id)>=0, de=itemEqDesIds(it).indexOf(t.id)>=0; if(mo||de){ if(!ds.length) [mo?[it.de,it.ate]:null,de?[it.desDe,it.desAte]:null].filter(Boolean).forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); const an=a.nome||'?'; if(where.indexOf(an)<0) where.push(an); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(', ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
+    (e.equipes||[]).forEach(t=>{ if(!teamIsTercEntry(t)) return; const ds=rDaysOk(e,t.regId); let first=ds[0]||'',last=ds[ds.length-1]||'',where=[]; ambsOf(e.id).forEach(a=>(a.itens||[]).forEach(it=>{ const mo=itemEqIds(it).indexOf(t.id)>=0, de=itemEqDesIds(it).indexOf(t.id)>=0; if(mo||de){ if(!ds.length) [mo?[it.de,it.ate]:null,de?[it.desDe,it.desAte]:null].filter(Boolean).forEach(pr=>{ const s0=pr[0]||pr[1],z=pr[1]||pr[0]; if(s0&&(!first||s0<first)) first=s0; if(z&&(!last||z>last)) last=z; }); const an=a.nome||'?'; if(where.indexOf(an)<0) where.push(an); } })); const nome=t.regId&&regOf(t.regId)?regOf(t.regId).nome:t.nome; items.push({kind:'EQUIPE TERC.',ev:e,desc:nome||'EQUIPE',sub:[qtdEq(e,t.regId)?qtdEq(e,t.regId)+' PESSOAS':'',ds.length?ds.length+' DIA'+(ds.length===1?'':'S')+' NA ESCALA':'',where.join(', ')].filter(Boolean).join(' · '),forn:t.contato||'',modo:'',retirada:'',chega:first||e.monInicio||'',sai:last||'',status:t.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'equipes',itemId:t.id}}); });
     (e.fretes||[]).forEach(f=>{ if(f.origem==='TERCEIRO') items.push({kind:'FRETE',ev:e,desc:(num(f.qtd)||1)+'× '+(f.caminhao||'CAMINHÃO'),sub:freteOque(e,f),forn:'',modo:'',retirada:'',chega:f.ida||'',sai:f.volta||'',status:f.status||'',statusList:COT,ref:{col:'eventos',id:e.id,list:'fretes',itemId:f.id}}); });
   });
   ambientes.forEach(a=>{
@@ -2555,6 +2561,10 @@ const isProdId=id=>{ const r=regOf(id); return !!r&&r.tipo==='PRODUTOR'; };
 const isPropria=id=>recTipo(regOf(id))==='nossa';
 const noProd=arr=>(arr||[]).filter(t=>!isProdId(t));
 function recNome(id){ const r=regOf(id); return r?(tr(r.nome)||'SEM NOME'):'APAGADO DO CADASTRO'; }
+/* quantas pessoas a terceirizada leva nesse evento (campo PESSOAS do cartão dela na escala) */
+function qtdEq(ev,rid){ const e=((ev&&ev.equipes)||[]).find(t=>t.regId===rid); if(!e||!teamIsTercEntry(e)) return 0; const n=Math.round(num(e.pessoas)); return n>0?n:0; }
+/* pra soma de pessoas do dia: o número do evento; senão o do cadastro (equipe sem os nomes) */
+function pessoasEq(ev,rid){ const q=qtdEq(ev,rid); if(q) return q; const r=regOf(rid), m=r?Math.round(num(r.pessoas)):0; return m>0?m:0; }
 function membersOf(rid){
   if(IX&&IX.memc.has(rid)) return IX.memc.get(rid);
   const r=regOf(rid),seen=new Set(),out=[];
@@ -3663,7 +3673,7 @@ function evGridHTML(ev,cols,cw){
   return '<table class="map grid" style="width:'+width+'px"><colgroup><col style="width:'+nameW+'px">'+cols.map(c=>'<col style="width:'+colW(c)+'px">').join('')+'</colgroup><thead><tr><th class="m-corner" scope="col">EQUIPE</th>'+head+'</tr></thead><tbody>'+phRow+body+'</tbody></table>'+(rows.length?'':'<p class="hint" style="padding:8px 10px">Ninguém escalado ainda. Clique num dia da linha ETAPA (ou arraste por vários) pra colocar equipe, pessoa ou produtor — ou use a lista aqui embaixo.</p>');
 }
 function teamCardHTML(ev,rid){
-  const ro=readOnly, r=regOf(rid), keys=rDays(ev,rid), mem=membersOf(rid), entry=(ev.equipes||[]).find(t=>t.regId===rid), terc=r.propria===false, al=alOf(ev);
+  const ro=readOnly, r=regOf(rid), keys=rDays(ev,rid), mem=membersOf(rid), entry=(ev.equipes||[]).find(t=>t.regId===rid), terc=r.propria===false, al=alOf(ev), qt=qtdEq(ev,rid);
   const ch=new Map(); keys.forEach(k=>addConf(ch,ev,k,rid));
   const sg=mem.length?segsOf(ev,rid,keys):[], anyPart=sg.some(x=>x.g.length<mem.length);
   const quem=anyPart?'<ul class="tql">'+sg.map(x=>'<li><b>'+rangeD(x.a,x.b,true)+'</b>'+(x.g.length<mem.length?'VÃO '+x.g.length+' DE '+mem.length+': '+esc(x.g.map(pShort).join(', ')||'NINGUÉM'):'EQUIPE COMPLETA')+'</li>').join('')+'</ul>':'';
@@ -3673,13 +3683,13 @@ function teamCardHTML(ev,rid){
   const conf=M.confirm==='rmt:'+rid;
   const veh=r.veiculoId||r.motorista?'<span class="ec-v">'+esc([r.veiculoId?'CARRO: '+vehName(r.veiculoId):'',r.motorista?'MOTORISTA: '+normName(r.motorista):'',r.lider?'RESPONSÁVEL: '+normName(r.lider):''].filter(Boolean).join(' · '))+'</span>':(r.lider?'<span class="ec-v">RESPONSÁVEL: '+esc(normName(r.lider))+'</span>':'');
   return '<div class="ecard'+(ch.size?' ch':'')+(terc?' terc':'')+'" data-rid="'+esc(rid)+'">'
-    +'<div class="ec-h"><span class="ec-n">'+esc(r.nome)+'</span><span class="st '+(terc?'st-orange':'st-blue')+'">'+(terc?'TERCEIRIZADA':'NOSSA'+(mem.length?' · '+mem.length+' PESSOAS':''))+'</span>'+perfilHTML(r,false)+(ro||conf?'':'<button type="button" class="btn sm danger" data-act="rm-team" data-rid="'+esc(rid)+'">Tirar do evento</button>')+'</div>'
+    +'<div class="ec-h"><span class="ec-n">'+esc(r.nome)+'</span><span class="st '+(terc?'st-orange':'st-blue')+'">'+(terc?'TERCEIRIZADA'+(qt?' · '+qt+' PESSOAS':''):'NOSSA'+(mem.length?' · '+mem.length+' PESSOAS':''))+'</span>'+perfilHTML(r,false)+(ro||conf?'':'<button type="button" class="btn sm danger" data-act="rm-team" data-rid="'+esc(rid)+'">Tirar do evento</button>')+'</div>'
     +'<span class="ec-d">'+(keys.length?esc(rangesTxt(keys,true))+' · '+plural(keys.length,'dia','dias')+(mem.length&&!anyPart?' · EQUIPE COMPLETA':''):'SEM DIA NA ESCALA AINDA')+'</span>'
     +veh+quem
     +(ch.size?'<span class="pw">CHOQUE: '+esc(choqueTxt(ch))+'</span>':'')
     +fzl
     +'<label class="sr" for="tar-'+esc(rid)+'">O que '+esc(r.nome)+' vai fazer no evento</label><input class="ec-tar" id="tar-'+esc(rid)+'" data-tar="'+esc(rid)+'" value="'+esc(tarefaOf(ev,rid))+'" placeholder="'+(fzs.length?'O QUE FAZ NO EVENTO (GERAL) — O DE CADA DIA ESTÁ AÍ EM CIMA':'O QUE VAI FAZER NO EVENTO (OU ANOTE POR DIA NA GRADE)')+'" autocomplete="off"'+(ro?' disabled':'')+'>'
-    +(terc&&entry?'<div class="ec-terc"><label>COTAÇÃO <select data-tst="'+esc(entry.id)+'"'+(ro?' disabled':'')+'>'+opt(COT,entry.status||'')+'</select></label><label>CONTATO <input data-tct="'+esc(entry.id)+'" value="'+esc(entry.contato||r.contato||'')+'" placeholder="TELEFONE / EMPRESA" autocomplete="off"'+(ro?' disabled':'')+'></label></div>':'')
+    +(terc&&entry?'<div class="ec-terc"><label>COTAÇÃO <select data-tst="'+esc(entry.id)+'"'+(ro?' disabled':'')+'>'+opt(COT,entry.status||'')+'</select></label><label>PESSOAS <input class="ec-qt" type="number" min="1" max="999" step="1" inputmode="numeric" data-tqt="'+esc(entry.id)+'" value="'+(qt||'')+'" placeholder="QTAS?" title="Quantas pessoas a equipe vai trazer nesse evento" autocomplete="off"'+(ro?' disabled':'')+'></label><label>CONTATO <input data-tct="'+esc(entry.id)+'" value="'+esc(entry.contato||r.contato||'')+'" placeholder="TELEFONE / EMPRESA" autocomplete="off"'+(ro?' disabled':'')+'></label></div>':'')
     +(ro||!ph.length?'':'<div class="pmore">'+phChips(ev,rid,ph)+'</div>')
     +(conf?'<div class="confirm2"><span>Tirar '+esc(r.nome)+' do evento inteiro? Sai de todos os dias e dos itens.</span><button type="button" class="btn danger solid sm" data-act="rm-team-yes" data-rid="'+esc(rid)+'">Tirar</button><button type="button" class="btn sm" data-act="rm-no">Cancelar</button></div>':'')
     +'</div>';
@@ -4199,10 +4209,12 @@ function cellHTML(ev,d,k,cw,ps,al,o){
     const mem=membersOf(t),g=going(ev,k,t),part=!!g&&g.length<mem.length,fz=fazerEf(ev,k,t),cf=conflictsOf(ev,k,t),vc=vehConf(ev,k,t);
     if(fz&&lv<2) fzHid=true;
     const fc=fz&&lv<2?' fz':'';
-    const tip=recNome(t)+(g?(part?' · VÃO '+g.length+' DE '+mem.length+': ':' · EQUIPE COMPLETA: ')+g.map(pShort).join(', '):'')+(cf.length?' · CHOQUE: '+cf.map(x=>tokLabel(x.tok)).join(', ')+' em outro evento nesse dia':'')+(vc.length?' · CHOQUE DE CARRO':'')+(fz?' · VAI FAZER: '+fz:'');
+    const qt=g?0:qtdEq(ev,t);
+    const tip=recNome(t)+(g?(part?' · VÃO '+g.length+' DE '+mem.length+': ':' · EQUIPE COMPLETA: ')+g.map(pShort).join(', '):'')+(qt?' · '+qt+' PESSOAS':'')+(cf.length?' · CHOQUE: '+cf.map(x=>tokLabel(x.tok)).join(', ')+' em outro evento nesse dia':'')+(vc.length?' · CHOQUE DE CARRO':'')+(fz?' · VAI FAZER: '+fz:'');
     let sub='';
     if(lv>=2&&fz) sub+='<span class="m-fz">'+esc(fz)+'</span>';
     if(lv>=3&&g){ sub+='<span class="m-q">'+esc(quemCurto(ev,k,t))+'</span>'; }
+    if(lv>=3&&qt){ sub+='<span class="m-q">'+qt+' PESSOAS</span>'; }
     if(lv>=3){ const r=regOf(t); if(r&&(r.veiculoId||r.motorista)){ const mot=normName(r.motorista), sem=semMotorista(ev,k,t), car=carWith(ev,k,t), motHere=!!mot&&(!g||g.indexOf(mot)>=0); const bits=[car?'CARRO '+vehName(r.veiculoId):'',sem?'MOTORISTA ('+pShort(mot)+') NÃO VAI':(motHere?'MOT. '+pShort(mot):'')].filter(Boolean); if(bits.length) sub+='<span class="m-v'+(vc.length?' ch':'')+(sem?' warn':'')+'">'+esc(bits.join(' · '))+'</span>'; } }
     /* uma ou duas pessoas avulsas: aparece o nome de cada uma */
     if(part&&g.length&&g.length<=2&&lv<3) return g.map(n=>{ const c2=((IX.pday.get('@'+n+'|'+k))||[]).length>1; return '<span class="m-chip pers'+(c2?' ch':'')+fc+'" title="'+esc(n+' · '+recNome(t)+(c2?' · CHOQUE: está em outro evento nesse dia':'')+(fz?' · VAI FAZER: '+fz:''))+'">'+esc(pShort(n))+'</span>'; }).join('')+sub;
@@ -4219,7 +4231,7 @@ function footRows(days,o){
   const idx=new Map(keys.map((k,i)=>[k,i]));
   evsAtivos().forEach(ev=>{
     const al=alOf(ev);
-    keys.forEach((k,i)=>(al[k]||[]).forEach(t=>{ if(isProdId(t)) return; const g=going(ev,k,t); if(g){ g.forEach(n=>ppl[i].add(n)); return; } const r=regOf(t), n=r?Math.round(num(r.pessoas)):0; if(n>0) cnt[i]+=n; else sem[i].add(t); }));
+    keys.forEach((k,i)=>(al[k]||[]).forEach(t=>{ if(isProdId(t)) return; const g=going(ev,k,t); if(g){ g.forEach(n=>ppl[i].add(n)); return; } const n=pessoasEq(ev,t); if(n>0) cnt[i]+=n; else sem[i].add(t); }));
     (ev.fretes||[]).forEach(f=>{ [f.ida,f.volta].forEach(k=>{ const i=idx.get(k); if(i!=null) frt[i]+=num(f.qtd)||1; }); });
     /* carregadores contratados (todos os eventos): quantas pessoas em cada dia */
     ambsOf(ev.id).forEach(a=>(a.mo||[]).forEach(m=>{ if((m.tipo||'CARREGADOR')!=='CARREGADOR') return; keys.forEach((k,i)=>{ if(!inSpan(k,m.de,m.ate)) return; const n=num(m.qtd)||0; if(n) car[i].n+=n; else car[i].q++; if(isOpen(m.status)) car[i].ab++; }); }));
@@ -4483,7 +4495,7 @@ function presHTML(ev,t,m,days,ro){
       return '<button type="button" class="pp'+(st?' '+st:'')+(cf.size?' ch':'')+'" data-pp="'+esc(t)+'" data-pn="'+esc(nm)+'" aria-pressed="'+(st==='on'?'true':(st==='mix'?'mixed':'false'))+'"'+(ro?' disabled':'')+'><span class="pp-box" aria-hidden="true"></span><span class="pp-n">'+esc(nm)+(nm===mot?' <small>MOTORISTA</small>':'')+(r&&normName(r.lider)===nm?' <small>RESPONSÁVEL</small>':'')+'</span>'+note+docAvisoPessoa(ev,nm,t)+'</button>';
     }).join('')+'</div>'+(!ro&&part?'<button type="button" class="btn-sm" data-pfull="'+esc(t)+'">VAI A EQUIPE TODA</button>':'');
   }
-  else if(r&&r.tipo==='EQUIPE') ppl=semNomesHTML(t,ro);
+  else if(r&&r.tipo==='EQUIPE'){ const qt=qtdEq(ev,t); ppl=qt&&M.pnOpen!==t?'<div class="pnv pnq"><span>'+qt+' PESSOAS NESSE EVENTO</span>'+(ro?'':'<button type="button" class="btn-sm" data-pnopen="'+esc(t)+'">+ NOMES</button>')+'</div>':semNomesHTML(t,ro); }
   const carDays=here.filter(k=>carWith(ev,k,t)).length, vinfo=r&&r.veiculoId&&carDays?'<span class="pvei">CARRO: '+esc(vehName(r.veiculoId))+(carDays<here.length?' (EM '+carDays+' DE '+here.length+' DIAS)':'')+'</span>':'';
   /* motorista fixo da equipe fora do dia: avisa (alguém precisa levar o carro) */
   const mot=r?normName(r.motorista):'', semMot=here.filter(k=>!!semMotorista(ev,k,t));
@@ -5196,8 +5208,8 @@ function wireImport(){
 /* ===== eventos de UI ===== */
 function wireHeaderBlock(sel,onChange){
   const box=$(sel);
-  box.addEventListener('input',ev=>{ if(ev.target.closest('[data-tar],[data-pct],[data-tct]')) return; if(currentId) schedule('ev:'+currentId,saveHeader,700); });
-  box.addEventListener('change',ev=>{ if(ev.target.closest('[data-pst],[data-tst],[data-pct],[data-tct],#prodPick,#escPick')) return; if(onChange) onChange(ev.target); if(currentId) schedule('ev:'+currentId,saveHeader,150); });
+  box.addEventListener('input',ev=>{ if(ev.target.closest('[data-tar],[data-pct],[data-tct],[data-tqt]')) return; if(currentId) schedule('ev:'+currentId,saveHeader,700); });
+  box.addEventListener('change',ev=>{ if(ev.target.closest('[data-pst],[data-tst],[data-pct],[data-tct],[data-tqt],#prodPick,#escPick')) return; if(onChange) onChange(ev.target); if(currentId) schedule('ev:'+currentId,saveHeader,150); });
   box.addEventListener('focusout',ev=>{ if(!box.contains(ev.relatedTarget)&&currentId){ flush('ev:'+currentId); setTimeout(()=>{ if(view==='eventos'&&currentId) renderDetail(); },0); } });
 }
 function openRestoreFile(obj){
@@ -5357,8 +5369,9 @@ function wire(){
     else if(t.dataset.pct){ const pid=t.dataset.pct,v=t.value,id=e.id; schedule('tar:pct:'+pid,()=>patchEv(id,o=>{ const p=o.produtores.find(x=>x.id===pid); if(p) p.contato=normName(v); }),700); }
     else if(t.dataset.presp){ const pid=t.dataset.presp,v=t.value,id=e.id; schedule('tar:presp:'+pid,()=>patchEv(id,o=>{ const p=o.produtores.find(x=>x.id===pid); if(p) p.resp=normName(v); }),700); }
     else if(t.dataset.tct){ const tid=t.dataset.tct,v=t.value,id=e.id; schedule('tar:tct:'+tid,()=>patchEv(id,o=>{ const x=o.equipes.find(y=>y.id===tid); if(x) x.contato=normName(v); }),700); }
+    else if(t.dataset.tqt){ const tid=t.dataset.tqt,v=t.value,id=e.id; schedule('tar:tqt:'+tid,()=>patchEv(id,o=>{ const x=o.equipes.find(y=>y.id===tid); if(x){ const n=Math.round(num(v)); x.pessoas=n>0?String(Math.min(n,999)):''; } }),700); }
   });
-  det.addEventListener('focusout',ev=>{ const t=ev.target, e=cur(); if(!e||!t.dataset) return; if(t.dataset.tar) flush('tar:'+e.id+':'+t.dataset.tar); if(t.dataset.pct) flush('tar:pct:'+t.dataset.pct); if(t.dataset.presp) flush('tar:presp:'+t.dataset.presp); if(t.dataset.tct) flush('tar:tct:'+t.dataset.tct); });
+  det.addEventListener('focusout',ev=>{ const t=ev.target, e=cur(); if(!e||!t.dataset) return; if(t.dataset.tar) flush('tar:'+e.id+':'+t.dataset.tar); if(t.dataset.pct) flush('tar:pct:'+t.dataset.pct); if(t.dataset.presp) flush('tar:presp:'+t.dataset.presp); if(t.dataset.tct) flush('tar:tct:'+t.dataset.tct); if(t.dataset.tqt) flush('tar:tqt:'+t.dataset.tqt); });
   det.addEventListener('keydown',ev=>{ const t=ev.target; if((ev.key==='Enter'||ev.key===' ')&&t.classList&&t.classList.contains('ptitle')){ ev.preventDefault(); t.click(); } if(ev.key==='Enter'&&t.id==='escNewNome'){ ev.preventDefault(); toast('Agora escolha em que dias: montagem, evento, manutenção ou desmontagem.'); } if(ev.key==='Enter'&&t.id==='prodNewNome'){ ev.preventDefault(); const b=$('[data-act="prod-new"]'); if(b) b.click(); } });
   wireMapGrid($('#evMapa'));
   $('#btnDelEv').addEventListener('click',()=>{ closeMenuMais(); $('#delEvConfirm').hidden=false; const n=$('#btnDelEvNao'); if(n) n.focus(); });
@@ -5979,8 +5992,8 @@ function renderCrono(JsPDF,ev,O,S,tight){
       rows.push({k:pg?(pg.id===p.id?'PROD. GERAL':'PROD. APOIO'):'PRODUÇÃO',n:(r?r.nome:p.nome)||'PRODUTOR',
         d:EF&&!efProd?(ambs.length?'AMBIENTES: '+ambs.join(', '):''):[tr(p.resp)?'RESPONSÁVEL POR: '+p.resp:'',ambs.length?'AMBIENTES: '+ambs.join(', '):'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
         x:CLI?'':[!EF&&prodIsTerc(p)?'TERCEIRIZADO':'',tel].filter(Boolean).join(' · ')}); });
-    teams.forEach(t=>{ const r=regOf(t), mem=membersOf(t), ds=rDaysOk(ev,t), te=(ev.equipes||[]).find(x=>x.regId===t);
-      rows.push({k:'EQUIPE',n:r.nome,d:[tr(r.lider)?'RESPONSÁVEL: '+normName(r.lider):'',tr(r.motorista)?'MOTORISTA: '+normName(r.motorista):'',mem.length?mem.length+' PESSOAS':'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
+    teams.forEach(t=>{ const r=regOf(t), mem=membersOf(t), ds=rDaysOk(ev,t), te=(ev.equipes||[]).find(x=>x.regId===t), qn=qtdEq(ev,t)||mem.length;
+      rows.push({k:'EQUIPE',n:r.nome,d:[tr(r.lider)?'RESPONSÁVEL: '+normName(r.lider):'',tr(r.motorista)?'MOTORISTA: '+normName(r.motorista):'',qn?qn+' PESSOAS':'',ds.length?rangesTxt(ds,true):''].filter(Boolean).join('  ·  '),
         x:[r.propria===false?'TERCEIRIZADA':'',r.veiculoId?'CARRO '+vehName(r.veiculoId):'',!EF&&!SIMP&&r.propria===false&&te&&tr(te.status)?te.status:''].filter(Boolean).join(' · ')}); });
     if(rows.length){
       fnt('bold',8.5); tc(C.navy); T('QUEM É QUEM',ML,y+3.5,{charSpace:0.5}); y+=6;
@@ -6052,12 +6065,12 @@ function renderCrono(JsPDF,ev,O,S,tight){
         const r=regOf(t), prod=r.tipo==='PRODUTOR', mem=membersOf(t);
         if(ri%2===1){ fc(C.soft); doc.rect(ML,y,gw,rowH,'F'); }
         tc(prod?C.navy:C.ink); T(fitT(r.nome,NW-3,'bold',7.6),ML+1.5,y+V(3.6));
-        fnt('normal',5.6); tc(C.muted); T(prod?'PRODUÇÃO':(r.propria===false?'TERCEIRIZADA':(mem.length?mem.length+' PESSOAS':'')),ML+1.5,y+V(6.3));
+        fnt('normal',5.6); tc(C.muted); T(prod?'PRODUÇÃO':(r.propria===false?(qtdEq(ev,t)?'TERC. · '+qtdEq(ev,t)+' PESSOAS':'TERCEIRIZADA'):(mem.length?mem.length+' PESSOAS':'')),ML+1.5,y+V(6.3));
         cols.forEach((c,i)=>{ const x=ML+NW+i*colW; if(c.gap){ fc([246,248,251]); doc.rect(x+0.3,y,colW-0.6,rowH,'F'); return; } const k=c.k, so=semOpDia(ev,k);
           if((al[k]||[]).indexOf(t)<0){ if(so){ fc(SOC); doc.rect(x+0.3,y,colW-0.6,rowH,'F'); } return; }
           const ph=dayPhases(ev,ps,c.d,k), g=going(ev,k,t), part=!!g&&g.length<mem.length, cf=false;
           fc(cf?[248,215,209]:so?[250,228,205]:(ph.length?PHC[ph[0]]:[226,232,240])); doc.roundedRect(x+0.7,y+V(1),colW-1.4,rowH-V(2),0.8,0.8,'F');
-          const txt=prod?'P':(g?(part?g.length+'/'+mem.length:String(g.length)):'X');
+          const txt=prod?'P':(g?(part?g.length+'/'+mem.length:String(g.length)):(qtdEq(ev,t)?String(qtdEq(ev,t)):'X'));
           fnt('bold',6.8); tc(cf?C.bad:(so?C.warn:(part?C.blue:C.ink))); T(txt,x+colW/2,y+rowH/2+V(1.2),{align:'center'});
         });
         dc(C.line); doc.setLineWidth(0.15); doc.line(ML,y+rowH,ML+gw,y+rowH);
@@ -6084,7 +6097,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const d=PD(k), ph=dayPhases(ev,ps,d,k), so=semOpDia(ev,k), ok=naData(ev,k);
     /* dia fora das datas do evento: a escala desse dia não vale (engano) */
     const ts=ok?(al[k]||[]).filter(t=>!EF||t===EF):[];
-    const teams=CLI?[]:noProd(ts).map(t=>{ const g=going(ev,k,t), mem=membersOf(t); return {t:t,nome:recNome(t),terc:!isPropria(t),g:g,mem:mem,part:!!g&&g.length<mem.length,fz:fazerEf(ev,k,t),chTxt:'',semMot:semMotorista(ev,k,t),its:[]}; });
+    const teams=CLI?[]:noProd(ts).map(t=>{ const g=going(ev,k,t), mem=membersOf(t); return {t:t,nome:recNome(t),terc:!isPropria(t),qtd:qtdEq(ev,t),g:g,mem:mem,part:!!g&&g.length<mem.length,fz:fazerEf(ev,k,t),chTxt:'',semMot:semMotorista(ev,k,t),its:[]}; });
     const prods=CLI?[]:ts.filter(isProdId);
     const prodLine=prods.length&&!(prods.length===1&&prods[0]===prodBase)?prods.map(recNome).join(', '):'';
     let x={itens:[],equip:[],fretes:[],radar:[],mo:[]}; const xmo=CLI||EF?[]:(dayExtras(ev,k).mo||[]);
@@ -6134,7 +6147,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
       while(L.length&&L[L.length-1].gap) L.pop();
       return L;
     }
-    const head=m=>m.nome+(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':''))+(m.terc?'  ·  TERCEIRIZADA':'');
+    const head=m=>m.nome+(m.part?'  ·  '+m.g.length+' DE '+m.mem.length:(m.qtd?'  ·  '+m.qtd+' PESSOAS':(m.g&&!SIMP?'  ·  COMPLETA ('+m.mem.length+')':'')))+(m.terc?'  ·  TERCEIRIZADA':'');
     const info=(m,pre)=>{ if(m.chTxt) add((pre?m.nome+': ':'')+'CHOQUE: '+m.chTxt,'bold',7.2,C.bad,3);
       if(m.g&&m.part) add((pre?m.nome+' · '+m.g.length+' DE '+m.mem.length+' · ':'')+'VÃO: '+(m.g.map(pShort).join(', ')||'NINGUÉM'),'normal',7.8,C.blue,3);
       if(m.semMot) add((pre?m.nome+': ':'')+pShort(m.semMot)+' (MOTORISTA) NÃO VAI NESSE DIA','bold',7.2,C.warn,3); };
@@ -6143,7 +6156,7 @@ function renderCrono(JsPDF,ev,O,S,tight){
     const grupos=b.grupos||[], feitos=new Set(), semTarefa=[], emGrupo=t=>grupos.some(g=>g.ts.indexOf(t)>=0);
     /* bloco das equipes que fazem junto: "JARDEL + GEOVANESSON" e os itens uma vez só */
     const grupoBloco=g=>{ feitos.add(g.key);
-      add(g.ts.map(t=>{ const m=b.teams.find(z=>z.t===t); return recNome(t)+((m?m.terc:!isPropria(t))?' (TERC.)':''); }).join(' + '),'bold',9.6,C.ink,0);
+      add(g.ts.map(t=>{ const m=b.teams.find(z=>z.t===t); const q=qtdEq(ev,t); return recNome(t)+((m?m.terc:!isPropria(t))?' (TERC.'+(q?' · '+q+' PESSOAS':'')+')':''); }).join(' + '),'bold',9.6,C.ink,0);
       g.ts.map(t=>b.teams.find(z=>z.t===t)).filter(Boolean).forEach(m=>info(m,true));
       g.its.forEach(itemLine); gap(1.4); };
     b.teams.forEach(m=>{
@@ -6487,7 +6500,7 @@ async function gerarPDFMapa(){
       const ts0=al[k]||[],ts=ft?ts0.filter(t=>t===ft):ts0,items=[], so=semOpDia(ev,k);
       if(so) items.push({t:semOpLinha(ev,k),s:'so'});
       noProd(ts).forEach(t=>{ const g=going(ev,k,t),mem=membersOf(t),part=!!g&&g.length<mem.length, ch=teamConf(ev,k,t)||vehConf(ev,k,t).length;
-        items.push({t:recNome(t)+(part?' ('+g.length+'/'+mem.length+')':''),s:ch?'bad':(isPropria(t)?'team':'ter')});
+        items.push({t:recNome(t)+(part?' ('+g.length+'/'+mem.length+')':(!g&&qtdEq(ev,t)?' ('+qtdEq(ev,t)+')':'')),s:ch?'bad':(isPropria(t)?'team':'ter')});
         if(part&&mp.quem) items.push({t:g.map(pShort).join(', ')||'NINGUÉM',s:'quem'});
         const fz=mp.fazer?fazerEf(ev,k,t):''; if(fz) items.push({t:fz,s:'fz'}); });
       ts.filter(isProdId).forEach(t=>items.push({t:'PROD. '+recNome(t),s:teamConf(ev,k,t)?'bad':'prod'}));
@@ -6895,7 +6908,7 @@ function wBloco(E,x,o,semMo){
   L.push('*'+nm+'*'+(um&&g0&&mem.length?(g0.length===mem.length?' — equipe completa ('+mem.length+')':' — vão '+g0.length+' de '+mem.length):''));
   x.itens.forEach(it=>{
     const etapa=it.ph.length?phLabel(it.ph):'';
-    const quem=it.g&&mem.length&&!(um&&it.g.length===mem.length)?': '+(it.g.map(pShort).join(', ')||'NINGUÉM'):'';
+    const qt=it.g?0:qtdEq(it.ev,t), quem=it.g&&mem.length&&!(um&&it.g.length===mem.length)?': '+(it.g.map(pShort).join(', ')||'NINGUÉM'):(qt?' — '+qt+' pessoas':'');
     L.push('• '+tr(it.ev.nome||'EVENTO').toUpperCase()+(etapa?' ('+etapa+')':'')+quem);
     if(o.local&&tr(it.ev.local)) L.push('  Local: '+tr(it.ev.local));
     if(o.fazer&&tr(it.fazer)) L.push('  Fazer: '+tr(it.fazer).toUpperCase());
