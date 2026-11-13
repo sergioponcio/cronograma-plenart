@@ -1688,6 +1688,7 @@ div.thead{cursor:default}
 .rd-lb.rd-bad{color:var(--danger);font-weight:700}
 #sp-mats{font-variant-numeric:tabular-nums}
 </style>
+<style>.dev-bt{display:flex;flex-wrap:wrap;gap:6px}</style>
 
 <div class="wrap">
   <header class="top">
@@ -7453,6 +7454,7 @@ function provQuando(p){
   else if(md==='ENTREGA NA EMPRESA'){ a.push('NA EMPRESA'+(p.empresa?' '+dmS(p.empresa):'')); if(p.data) a.push('MONTAGEM '+dmS(p.data)); }
   else if(md==='RETIRAMOS'){ a.push('RETIRAMOS'+(p.retirada?' '+dmS(p.retirada):'')); if(p.data) a.push('MONTAGEM '+dmS(p.data)); }
   else if(p.data) a.push('CHEGA '+dmS(p.data));
+  if(p.recSt) a.push((p.recSt==='COM FALTA'?'RECEBIDO COM FALTA':'RECEBIDO')+(p.recEm?' '+dmS(p.recEm):''));
   if(p.tipo!=='COMPRAR'){ if(p.devSt) a.push((p.devSt==='COM FALTA'?'DEVOLVIDO COM FALTA':'DEVOLVIDO')+(p.devEm?' '+dmS(p.devEm):''));
     else if(p.devModo==='FICA NO LOCAL') a.push('FICA NO LOCAL');
     else if(p.devModo==='TRAZER PRA BASE') a.push('VOLTA PRA BASE'+(p.devolve?' '+dmS(p.devolve):''));
@@ -7469,7 +7471,7 @@ function fabQuando(f){
   return a;
 }
 const moQuando=m=>[m.de||m.ate?periodoDM(m.de,m.ate):'',tr(m.horario)?normName(m.horario):''].filter(Boolean);
-const eqQuando=q=>[q.de||q.ate?periodoDM(q.de,q.ate):'',(q.origem||'PRÓPRIO')==='ALUGADO'&&q.devSt?(q.devSt==='COM FALTA'?'DEVOLVIDO COM FALTA':'DEVOLVIDO')+(q.devEm?' '+dmS(q.devEm):''):''].filter(Boolean);
+const eqQuando=q=>[q.de||q.ate?periodoDM(q.de,q.ate):'',(q.origem||'PRÓPRIO')==='ALUGADO'&&q.recSt?(q.recSt==='COM FALTA'?'RECEBIDO COM FALTA':'RECEBIDO')+(q.recEm?' '+dmS(q.recEm):''):'',(q.origem||'PRÓPRIO')==='ALUGADO'&&q.devSt?(q.devSt==='COM FALTA'?'DEVOLVIDO COM FALTA':'DEVOLVIDO')+(q.devEm?' '+dmS(q.devEm):''):''].filter(Boolean);
 function supAberto(tab,x){ return tab==='eqp'?(x.origem||'PRÓPRIO')==='ALUGADO'&&isOpen(x.status):isOpen(x.status); }
 const supTemStatus=(tab,x)=>tab!=='eqp'||(x.origem||'PRÓPRIO')==='ALUGADO';
 function supStList(tab,x){ return tab==='loc'?(x.tipo==='COMPRAR'?COT_COM:COT):tab==='fab'?COT_FAB:COT; }
@@ -7620,6 +7622,7 @@ const spSec=(tit,body,show)=>'<section class="sp-sec"'+(show?' data-show="'+show
 const SUP_SHOW={
   alugar:(t,it)=>it.tipo!=='COMPRAR', empresa:(t,it)=>it.modo==='ENTREGA NA EMPRESA', retira:(t,it)=>it.modo==='RETIRAMOS',
   terc:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA', fabEmp:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA'&&it.modo==='ENTREGA NA EMPRESA', fabRet:(t,it)=>(it.quem||'NOSSA')==='TERCEIRA'&&it.modo==='RETIRAMOS',
+  recFeito:(t,it)=>!!it.recSt, recFaltou:(t,it)=>it.recSt==='COM FALTA',
   devLeva:(t,it)=>it.devModo==='DEVOLVEMOS'||it.devModo==='TRAZER PRA BASE', devFeito:(t,it)=>!!it.devSt, devFaltou:(t,it)=>it.devSt==='COM FALTA',
   alug:(t,it)=>(it.origem||'PRÓPRIO')==='ALUGADO', nosso:(t,it)=>(it.origem||'PRÓPRIO')==='PRÓPRIO', outro:(t,it)=>it.tipo==='OUTRO'
 };
@@ -7628,6 +7631,7 @@ function supSegOpts(tab,it,f){
   if(f==='modo') return ENTREGAS.map(e=>[e[0],e[1]]);
   if(f==='devModo') return DEVOLS;
   if(f==='devSt') return [['DEVOLVIDO','DEVOLVIDO'],['COM FALTA','DEVOLVIDO COM FALTA']];
+  if(f==='recSt') return [['RECEBIDO','RECEBIDO'],['COM FALTA','RECEBIDO COM FALTA']];
   if(f==='quem') return [['NOSSA','NOSSA'],['TERCEIRA','TERCEIRA']];
   if(f==='origem') return [['PRÓPRIO','NOSSO'],['ALUGADO','ALUGADO'],['CLIENTE','DO CLIENTE']];
   if(f==='status') return supStList(tab,it).map(s=>[s,s]);
@@ -7641,8 +7645,8 @@ function supFormHTML(p,it,dis){
   if(tab==='loc'){
     h+=spSec('',spSeg('sp-tipo','É PRA','tipo')+spT('sp-oque','O QUE É','oque','Descreva à vontade: o item, medida, modelo, cor, quanto de cada…',3,dis,af)+'<div class="fgrid2">'+spF('sp-qtd','QUANTIDADE','qtd','EX: 20 UN, 2 JOGOS, 150 M²','',dis)+'</div>');
     h+=spSec('FORNECEDOR',forn('NOME','QUEM ALUGA'));
-    h+=spSec('ENTREGA',spSeg('sp-modo','COMO CHEGA','modo')+'<div class="fgrid2">'+spD('sp-emp','CHEGA NA EMPRESA','empresa',dis,'empresa')+spD('sp-ret','A GENTE RETIRA','retirada',dis,'retira')+spD('sp-data','CHEGA NA MONTAGEM','data',dis)+'</div>');
-    h+=spSec('MATERIAIS',spT('sp-mats','MATERIAIS — UM POR LINHA, COM A QUANTIDADE NA FRENTE','mats','54 TRELIÇA DE 5 M\n16 TRELIÇA DE 4 M\nLOTE 2:\n44 TRELIÇA DE 2 M',5,dis)+'<p class="hint">Vira a tabela do checklist de devolução. Linha terminada em dois-pontos (LOTE 2:) abre um grupo.</p>','alugar');
+    h+=spSec('ENTREGA',spSeg('sp-modo','COMO CHEGA','modo')+'<div class="fgrid2">'+spD('sp-emp','CHEGA NA EMPRESA','empresa',dis,'empresa')+spD('sp-ret','A GENTE RETIRA','retirada',dis,'retira')+spD('sp-data','CHEGA NA MONTAGEM','data',dis)+'</div>'+spSeg('sp-recst','JÁ CHEGOU / RETIROU?','recSt')+'<div class="fgrid2">'+spD('sp-recem','RECEBIDO EM','recEm',dis,'recFeito')+'</div>'+'<div class="fld" data-show="recFaltou"><label for="sp-recf">O QUE FALTOU / AVARIA</label><textarea id="sp-recf" data-sf="recFalta" rows="2" placeholder="Ex.: vieram 14 ar-condicionados (faltaram 2)"'+dis+'></textarea></div>');
+    h+=spSec('MATERIAIS',spT('sp-mats','MATERIAIS — UM POR LINHA, COM A QUANTIDADE NA FRENTE','mats','54 TRELIÇA DE 5 M\n16 TRELIÇA DE 4 M\nLOTE 2:\n44 TRELIÇA DE 2 M',5,dis)+'<p class="hint">Vira a tabela dos checklists de retirada e de devolução. Linha terminada em dois-pontos (LOTE 2:) abre um grupo.</p>','alugar');
     h+=spSec('DEVOLUÇÃO','<div class="fgrid2">'+spD('sp-dev','DEVOLVE','devolve',dis)+'</div>'+spSeg('sp-devm','COMO VOLTA','devModo')+'<div class="fld" data-show="devLeva"><label for="sp-devo">ONDE ENTREGAR</label><input id="sp-devo" data-sf="devOnde" autocomplete="off" placeholder="EX: GALPÃO DELE NO RIO, RUA TAL, 57 - SÃO PAULO, NOSSA BASE"'+dis+'></div>'+spT('sp-devobs','OBSERVAÇÃO DA DEVOLUÇÃO (SAI NO CHECKLIST)','devObs','Ex.: o piso fica no local pro próximo evento; só volta a parte tal…',2,dis)+spSeg('sp-devst','JÁ DEVOLVEU?','devSt')+'<div class="fgrid2">'+spD('sp-devem','DEVOLVIDO EM','devEm',dis,'devFeito')+'</div>'+'<div class="fld" data-show="devFaltou"><label for="sp-devf">O QUE FALTOU / AVARIA</label><textarea id="sp-devf" data-sf="devFalta" rows="2" placeholder="Ex.: voltaram 52 treliças de 5 m (faltaram 2); 1 cubo amassado"'+dis+'></textarea></div>','alugar');
     h+=cot('COTAÇÃO','Valor, prazo, condição de pagamento, quem passou, outras opções…');
   }else if(tab==='eqp'){
@@ -7653,6 +7657,7 @@ function supFormHTML(p,it,dis){
     h+=spSec('PERÍODO','<div class="fgrid2">'+spD('sp-de','DE','de',dis)+spD('sp-ate','ATÉ','ate',dis)+'</div>');
     h+=spSec('FORNECEDOR',forn('NOME','DE QUEM ALUGA'),'alug');
     h+=cot('COTAÇÃO','Valor da diária, com operador?, frete, prazo…','alug');
+    h+=spSec('CHEGADA','<p class="hint">A data é o DE do período.</p>'+spSeg('sp-recst','JÁ CHEGOU / RETIROU?','recSt')+'<div class="fgrid2">'+spD('sp-recem','RECEBIDO EM','recEm',dis,'recFeito')+'</div>'+'<div class="fld" data-show="recFaltou"><label for="sp-recf">O QUE FALTOU / AVARIA</label><textarea id="sp-recf" data-sf="recFalta" rows="2" placeholder="Ex.: vieram 14 ar-condicionados (faltaram 2)"'+dis+'></textarea></div>','alug');
     h+=spSec('DEVOLUÇÃO','<p class="hint">A data é o ATÉ do período.</p>'+spSeg('sp-devm','COMO VOLTA','devModo')+'<div class="fld" data-show="devLeva"><label for="sp-devo">ONDE ENTREGAR</label><input id="sp-devo" data-sf="devOnde" autocomplete="off" placeholder="EX: GALPÃO DELE NO RIO, RUA TAL, 57 - SÃO PAULO, NOSSA BASE"'+dis+'></div>'+spT('sp-devobs','OBSERVAÇÃO DA DEVOLUÇÃO (SAI NO CHECKLIST)','devObs','Ex.: o piso fica no local pro próximo evento; só volta a parte tal…',2,dis)+spSeg('sp-devst','JÁ DEVOLVEU?','devSt')+'<div class="fgrid2">'+spD('sp-devem','DEVOLVIDO EM','devEm',dis,'devFeito')+'</div>'+'<div class="fld" data-show="devFaltou"><label for="sp-devf">O QUE FALTOU / AVARIA</label><textarea id="sp-devf" data-sf="devFalta" rows="2" placeholder="Ex.: voltaram 52 treliças de 5 m (faltaram 2); 1 cubo amassado"'+dis+'></textarea></div>','alug');
   }else if(tab==='fab'){
     h+=spSec('',spT('sp-oque','O QUE FABRICAR','oque','Descreva a peça: o que é, acabamento, cor, referência…',3,dis,af)+'<div class="fgrid2">'+spF('sp-qtd','QUANTIDADE / MEDIDAS','qtd','EX: 2 PEÇAS 8,30 X 4,00 H','',dis)+spF('sp-mat','MATERIAL','material','EX: LONA CRISTAL, FERRO, MADEIRA','',dis)+'</div>');
@@ -7742,7 +7747,7 @@ function supParts(){
   }
   supSugParts(p,it);
   supFill(false);
-  const foot=$('#sp-foot'); if(foot) foot.innerHTML='<div class="sp-acts"><button type="button" class="btn sm" data-sact="copiar">Copiar os dados</button>'+(((tab==='loc'&&it.tipo!=='COMPRAR')||(tab==='eqp'&&it.origem==='ALUGADO'))&&tr(it.fornecedor)?'<button type="button" class="btn sm" data-sact="devpdf">Checklist de devolução</button>':'')+(ro?'':'<button type="button" class="btn sm" data-sact="dup">Duplicar</button>')+'<span class="hint">em texto, pra mandar pro fornecedor ou pra equipe</span></div>'
+  const foot=$('#sp-foot'); if(foot) foot.innerHTML='<div class="sp-acts"><button type="button" class="btn sm" data-sact="copiar">Copiar os dados</button>'+(((tab==='loc'&&it.tipo!=='COMPRAR')||(tab==='eqp'&&it.origem==='ALUGADO'))&&tr(it.fornecedor)?'<button type="button" class="btn sm" data-sact="retpdf">Checklist de retirada</button><button type="button" class="btn sm" data-sact="devpdf">Checklist de devolução</button>':tab==='loc'&&tr(it.fornecedor)?'<button type="button" class="btn sm" data-sact="retpdf">Checklist de retirada</button>':'')+(ro?'':'<button type="button" class="btn sm" data-sact="dup">Duplicar</button>')+'<span class="hint">em texto, pra mandar pro fornecedor ou pra equipe</span></div>'
     +(ro?'':(M.confirm==='sdel'?'<div class="confirm2"><span>Excluir este cadastro? Sai do cronograma, do radar e do mapa de dias.</span><button type="button" class="btn danger solid sm" data-sact="del-yes">Excluir</button><button type="button" class="btn sm" data-sact="del-no">Cancelar</button></div>':'<div><button type="button" class="btn-ghost danger" data-sact="del">EXCLUIR</button></div>'));
 }
 /* lê os campos da ficha (só o que mudou vai pro banco) */
@@ -7766,10 +7771,11 @@ function saveSup(){
 }
 function supSeg(p,f,v){
   flush('sup:'+p.iid); const r=supFind(p); if(!r) return; const it=r.it, tab=p.tab;
-  let nv=v; if((f==='modo'||f==='devModo'||f==='devSt')&&(it[f]||'')===v) nv=''; /* tocar de novo desmarca */
+  let nv=v; if((f==='modo'||f==='devModo'||f==='devSt'||f==='recSt')&&(it[f]||'')===v) nv=''; /* tocar de novo desmarca */
   if(nv===(it[f]||'')) return;
   patchSup(p,x=>{ x[f]=nv;
     if(f==='devSt'&&nv&&!x.devEm) x.devEm=iso(today0());
+    if(f==='recSt'&&nv&&!x.recEm) x.recEm=iso(today0());
     if(tab==='loc'&&f==='tipo'){ if(nv==='COMPRAR'&&x.status==='FECHADO') x.status='COMPRADO'; if(nv==='ALUGAR'&&x.status==='COMPRADO') x.status='FECHADO'; }
     /* fabricação nossa começa "a produzir"; de terceira, "a cotar" */
     if(tab==='fab'&&f==='quem'){ if(nv==='TERCEIRA'&&x.status==='A PRODUZIR') x.status='A COTAR'; if(nv==='NOSSA'&&x.status==='A COTAR') x.status='A PRODUZIR'; }
@@ -7810,6 +7816,7 @@ function supTexto(p){
 }
 function supAct(p,act){
   if(act==='copiar'){ flush('sup:'+p.iid); wCopia(supTexto(p)); return; }
+  if(act==='retpdf'){ flush('sup:'+p.iid); const r=supFind(p); if(r) gerarChecklistDevolucao(r.ev,r.it.fornecedor,true); return; }
   if(act==='devpdf'){ flush('sup:'+p.iid); const r=supFind(p); if(r) gerarChecklistDevolucao(r.ev,r.it.fornecedor); return; }
   if(readOnly) return;
   if(act==='del'){ M.confirm='sdel'; supParts(); const y=$('#panel [data-sact="del-yes"]'); if(y) y.focus(); return; }
@@ -7824,6 +7831,7 @@ function supTitLive(p){ const r=supFind(p); if(!r) return; const tt=$('#sp-tit')
 function wireSup(){
   const box=$('#supBox');
   box.addEventListener('click',ev=>{ const t=ev.target, e=cur(); if(!e) return;
+    if(t.closest('[data-act="retir-pdf"]')){ flushAll(); gerarChecklistDevolucao(e,'',true); return; }
     if(t.closest('[data-act="devol-pdf"]')){ flushAll(); gerarChecklistDevolucao(e); return; }
     const ad=t.closest('[data-sadd]'); if(ad){ addSup(M.evTab,ad.dataset.sadd); return; }
     const fl=t.closest('[data-sfilt]'); if(fl){ supFiltro(e).amb=fl.dataset.sfilt; renderSup(e); return; }
@@ -7854,6 +7862,7 @@ function wireSup(){
    - mão de obra de fora (não carregador) com fornecedor entra como SERVIÇO, com "serviço concluído? sim / não"
    =================================================================== */
 const DEV_MODOS={'ELES BUSCAM':['FORNECEDOR RETIRA','O FORNECEDOR VEM BUSCAR',[46,117,182]],'DEVOLVEMOS':['NÓS ENTREGAMOS','LEVAMOS ATÉ O FORNECEDOR',[232,116,26]],'FICA NO LOCAL':['FICA NO LOCAL','NÃO VOLTA AGORA',[96,108,124]],'TRAZER PRA BASE':['TRAZER PRA BASE','TRAZEMOS PRA NOSSA BASE',[34,128,86]]};
+const RET_MODOS={'RETIRAMOS':['NÓS RETIRAMOS','BUSCAMOS NO FORNECEDOR',[232,116,26]],'ENTREGA NO LOCAL':['ENTREGA NO LOCAL','O FORNECEDOR ENTREGA NA MONTAGEM',[46,117,182]],'ENTREGA NA EMPRESA':['ENTREGA NA BASE','O FORNECEDOR ENTREGA NA NOSSA BASE',[34,128,86]]};
 const DIA3=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
 const diaDM=k=>{ const d=PD(k); return d?DIA3[d.getDay()]+' '+fmtDM(k):''; };
 /* "54 TRELIÇA DE 5 M" → {q:'54',t:'TRELIÇA DE 5 M'}; "LOTE 1:" → {lote:'LOTE 1'}; "50 X 40 GALPÃO" fica sem quantidade (é medida) */
@@ -7865,9 +7874,16 @@ function matsParse(txt){
 }
 const devAberta=p=>p.tipo!=='COMPRAR'&&!p.devSt&&p.devModo!=='FICA NO LOCAL';
 /* tudo que volta (ou fica) de terceiros nesse evento, agrupado por fornecedor e na ordem da data */
-function devGrupos(ev,soForn){
+function devGrupos(ev,soForn,ret){
   const recs=[];
-  supAmbsOrd(ev.id).forEach(a=>{
+  /* retirada / recebimento: o que chega (locação, compra e equipamento alugado), pela data de como chega */
+  if(ret) supAmbsOrd(ev.id).forEach(a=>{
+    (a.prov||[]).forEach(p=>{ const ms=matsParse(p.mats), tit=normName(linha1(p.oque)), md=p.modo||'';
+      recs.push({forn:p.fornecedor,contato:p.contato,tit:tit+(p.tipo==='COMPRAR'?' (COMPRA)':''),mats:ms.length?ms:[{q:normName(p.qtd),t:(tit||'(SEM DESCRIÇÃO)')+(p.tipo==='COMPRAR'?' (COMPRA)':'')}],temLista:ms.length>0,data:(md==='RETIRAMOS'?p.retirada:md==='ENTREGA NA EMPRESA'?p.empresa:'')||p.data||'',modo:md,onde:'',obs:'',st:p.recSt||'',em:p.recEm||'',falta:linhasDe(p.recFalta).map(normName).join(' '),amb:''}); });
+    (a.equip||[]).forEach(q=>{ if((q.origem||'PRÓPRIO')!=='ALUGADO') return; const pr=eqParse(q.nome), ms=matsParse(q.mats);
+      recs.push({forn:q.fornecedor,contato:q.contato,tit:normName(q.nome),mats:ms.length?ms:[{q:pr.n>1?String(pr.n):'1',t:normName(String(q.nome||'').replace(/^\s*\d+\s*(?:X\s+)?/i,''))||'EQUIPAMENTO'}],temLista:ms.length>0,data:q.de||'',modo:'',onde:'',obs:'',st:q.recSt||'',em:q.recEm||'',falta:linhasDe(q.recFalta).map(normName).join(' '),amb:''}); });
+  });
+  else supAmbsOrd(ev.id).forEach(a=>{
     (a.prov||[]).forEach(p=>{ if(p.tipo==='COMPRAR') return; const ms=matsParse(p.mats), tit=normName(linha1(p.oque));
       recs.push({forn:p.fornecedor,contato:p.contato,tit:tit,mats:ms.length?ms:[{q:normName(p.qtd),t:tit||'(SEM DESCRIÇÃO)'}],temLista:ms.length>0,data:p.devolve||'',modo:p.devModo||'',onde:normName(p.devOnde),obs:linhasDe(p.devObs).map(normName).join(' '),st:p.devSt||'',em:p.devEm||'',falta:linhasDe(p.devFalta).map(normName).join(' '),amb:isGeral(a)?'':(a.nome||'')}); });
     (a.equip||[]).forEach(q=>{ if((q.origem||'PRÓPRIO')!=='ALUGADO') return; const pr=eqParse(q.nome), ms=matsParse(q.mats);
@@ -7883,11 +7899,13 @@ function devGrupos(ev,soForn){
 function devResumo(ev){ const t=iso(today0()); let ab=0, ok=0, late=0, fica=0; supAmbsOrd(ev.id).forEach(a=>{ (a.prov||[]).forEach(p=>{ if(p.tipo==='COMPRAR') return; if(p.devSt) ok++; else if(p.devModo==='FICA NO LOCAL') fica++; else { ab++; if(p.devolve&&p.devolve<t) late++; } });
     (a.equip||[]).forEach(q=>{ if((q.origem||'PRÓPRIO')!=='ALUGADO') return; if(q.devSt) ok++; else if(q.devModo==='FICA NO LOCAL') fica++; else { ab++; if(q.ate&&q.ate<t) late++; } }); });
   return {ab:ab,ok:ok,late:late,fica:fica,n:ab+ok+fica}; }
-function devBarraHTML(ev){ const r=devResumo(ev); if(!r.n) return '';
-  return '<div class="dev-bar"><span class="dev-t"><b>DEVOLUÇÃO DOS TERCEIRIZADOS</b> '+[r.ab?plural(r.ab,'pra devolver','pra devolver'):'',r.late?'<em>'+plural(r.late,'atrasado','atrasados')+'</em>':'',r.ok?plural(r.ok,'devolvido','devolvidos'):'',r.fica?r.fica+' fica no local':''].filter(Boolean).join(' · ')+'</span><button type="button" class="btn sm" data-act="devol-pdf">Checklist de devolução (PDF)</button></div>'; }
+function devBarraHTML(ev){ const r=devResumo(ev); let rec=0, tot=0; supAmbsOrd(ev.id).forEach(a=>{ (a.prov||[]).forEach(p=>{ tot++; if(p.recSt) rec++; }); (a.equip||[]).forEach(q=>{ if((q.origem||'PRÓPRIO')==='ALUGADO'){ tot++; if(q.recSt) rec++; } }); });
+  if(!r.n&&!tot) return '';
+  return '<div class="dev-bar"><span class="dev-t"><b>TERCEIRIZADOS</b> '+[rec?rec+' de '+tot+' recebidos':'',r.ab?plural(r.ab,'pra devolver','pra devolver'):'',r.late?'<em>'+plural(r.late,'atrasado','atrasados')+'</em>':'',r.ok?plural(r.ok,'devolvido','devolvidos'):'',r.fica?r.fica+' fica no local':''].filter(Boolean).join(' · ')+'</span><span class="dev-bt"><button type="button" class="btn sm" data-act="retir-pdf">Checklist de retirada (PDF)</button><button type="button" class="btn sm" data-act="devol-pdf">Checklist de devolução (PDF)</button></span></div>'; }
 
-async function gerarChecklistDevolucao(ev,soForn){
-  const gs=devGrupos(ev,soForn?normName(soForn):''); if(!gs.length){ toast(soForn?'Esse fornecedor não tem nada pra devolver nesse evento.':'Nada alugado nesse evento ainda — cadastre em Locação e compra.',true); return; }
+async function gerarChecklistDevolucao(ev,soForn,ret){
+  const MOD=ret?RET_MODOS:DEV_MODOS;
+  const gs=devGrupos(ev,soForn?normName(soForn):'',ret); if(!gs.length){ toast(soForn?'Esse fornecedor não tem nada pra '+(ret?'retirar':'devolver')+' nesse evento.':'Nada alugado nesse evento ainda — cadastre em Locação e compra.',true); return; }
   let JsPDF; try{ JsPDF=await loadJsPDF(); }catch(e){ toast('Não consegui carregar o gerador de PDF. Confira a internet.',true); return; }
   const doc=new JsPDF({unit:'mm',format:'a4',compress:true});
   const PW=210,PH=297,ML=14,CW=PW-2*ML,TOP=16,BOT=PH-15;
@@ -7900,24 +7918,24 @@ async function gerarChecklistDevolucao(ev,soForn){
   const evNome=(tr(ev.nome)||'EVENTO').toUpperCase(), MES=['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
   const datas=[]; gs.forEach(g=>g.recs.forEach(r=>{ if(r.data) datas.push(r.data); })); const ref=PD(datas.sort()[0]||iso(today0()));
   let y=0;
-  const chip=(modo,x,yy)=>{ const m=DEV_MODOS[modo]; if(!m) return 0; const w=tw(m[0],'bold',7)+4; fc(m[2]); doc.roundedRect(x,yy-3.3,w,4.6,0.8,0.8,'F'); fnt('bold',7); tc(C.white); T(m[0],x+2,yy); return w; };
+  const chip=(modo,x,yy)=>{ const m=MOD[modo]; if(!m) return 0; const w=tw(m[0],'bold',7)+4; fc(m[2]); doc.roundedRect(x,yy-3.3,w,4.6,0.8,0.8,'F'); fnt('bold',7); tc(C.white); T(m[0],x+2,yy); return w; };
   /* cabeçalho da 1ª página */
   fc(C.navy); doc.rect(0,0,PW,30,'F'); fc(C.orange); doc.rect(0,30,PW,1.2,'F');
   [[0,0,C.white],[1,0,C.orange],[0,1,C.orange],[1,1,C.blue]].forEach(([i,j,c])=>{ fc(c); doc.rect(ML+i*3.6,7.6+j*3.6,3,3,'F'); });
-  fnt('bold',8.5); tc([200,214,235]); T('CHECKLIST DE DEVOLUÇÃO DOS MATERIAIS TERCEIRIZADOS'+(ref?'  ·  '+MES[ref.getMonth()]+'/'+ref.getFullYear():''),ML+10,11.2,{charSpace:0.4});
+  fnt('bold',8.5); tc([200,214,235]); T((ret?'CHECKLIST DE RETIRADA E RECEBIMENTO DOS MATERIAIS TERCEIRIZADOS':'CHECKLIST DE DEVOLUÇÃO DOS MATERIAIS TERCEIRIZADOS')+(ref?'  ·  '+MES[ref.getMonth()]+'/'+ref.getFullYear():''),ML+10,11.2,{charSpace:0.4});
   tc(C.white); T(fit('TERCEIRIZADOS – '+evNome+(soForn?'  ·  '+normName(soForn):''),CW,'bold',16),ML,22);
   if(tr(ev.local)){ tc([214,226,242]); T(fit(ev.local,CW,'normal',7.6),ML,27); }
   y=38;
   /* legenda */
-  const usados=Object.keys(DEV_MODOS).filter(k=>gs.some(g=>g.recs.some(r=>r.modo===k))); let lx=ML;
-  (usados.length?usados:Object.keys(DEV_MODOS)).forEach(k=>{ const m=DEV_MODOS[k], w=tw(m[0],'bold',7)+4+tw(m[1],'normal',7)+7; if(lx+w>PW-ML){ lx=ML; y+=6; } const cw=chip(k,lx,y); fnt('normal',7); tc(C.muted); T(m[1],lx+cw+1.5,y); lx+=w; });
-  y+=6.5; fnt('normal',7.6); tc(C.ink); wrap('MARCAR CADA ITEM CONFERIDO NA DEVOLUÇÃO. SE A QUANTIDADE NÃO BATER, ANOTAR EM "QTD. DEVOLVIDA" E NAS OBSERVAÇÕES.',CW,'normal',7.6).forEach(l=>{ T(l,ML,y); y+=3.6; });
+  const usados=Object.keys(MOD).filter(k=>gs.some(g=>g.recs.some(r=>r.modo===k))); let lx=ML;
+  (usados.length?usados:Object.keys(MOD)).forEach(k=>{ const m=MOD[k], w=tw(m[0],'bold',7)+4+tw(m[1],'normal',7)+7; if(lx+w>PW-ML){ lx=ML; y+=6; } const cw=chip(k,lx,y); fnt('normal',7); tc(C.muted); T(m[1],lx+cw+1.5,y); lx+=w; });
+  y+=6.5; fnt('normal',7.6); tc(C.ink); wrap(ret?'MARCAR CADA ITEM CONFERIDO NA RETIRADA OU NA ENTREGA. SE A QUANTIDADE NÃO BATER, ANOTAR EM "QTD. RECEBIDA" E NAS OBSERVAÇÕES.':'MARCAR CADA ITEM CONFERIDO NA DEVOLUÇÃO. SE A QUANTIDADE NÃO BATER, ANOTAR EM "QTD. DEVOLVIDA" E NAS OBSERVAÇÕES.',CW,'normal',7.6).forEach(l=>{ T(l,ML,y); y+=3.6; });
   y+=3;
   const novaPag=()=>{ doc.addPage(); y=TOP; };
   /* altura de cada pedaço (pra não cortar um bloco no meio) */
   const colQ=ML+10, colM=ML+26, colD=PW-ML-30;
   const linhasMat=r=>r.mats.map(m=>m.lote!=null?{lote:m.lote,h:5.2}:{m:m,ls:wrap(m.t,(r.svc?PW-ML-2:colD-3)-(r.svc?colQ:colM),'normal',8.4)}).map(o=>o.lote!=null?o:Object.assign(o,{h:Math.max(6.2,o.ls.length*3.7+2.5)}));
-  const recInfo=r=>{ const m=DEV_MODOS[r.modo], lbl=r.svc?'SERVIÇO':r.modo==='TRAZER PRA BASE'?'DATA':'DEVOLUÇÃO';
+  const recInfo=r=>{ const m=MOD[r.modo], lbl=ret?(r.modo==='RETIRAMOS'?'RETIRADA':r.modo?'ENTREGA':'CHEGA'):r.svc?'SERVIÇO':r.modo==='TRAZER PRA BASE'?'DATA':'DEVOLUÇÃO';
     const quando=r.svc?(r.de||r.ate?periodoDM(r.de,r.ate):'____ / ____'):(r.data?diaDM(r.data):'____ / ____');
     const obsL=r.obs?wrap(r.obs,CW,'normal',8):[], fica=r.modo==='FICA NO LOCAL', rows=fica&&!r.temLista?[]:linhasMat(r);
     const hTab=rows.length?6+rows.reduce((s,o)=>s+o.h,0):0, hAss=fica?0:(r.svc?27:31), hSt=r.st?5.5+(r.falta?wrap('FALTA / AVARIA: '+r.falta,CW-4,'normal',7.6).length*3.4:0):0;
@@ -7936,14 +7954,14 @@ async function gerarChecklistDevolucao(ev,soForn){
       if(!(I.fica&&!r.data)){ fnt('bold',8.8); tc(C.ink); const q=I.lbl+': '+I.quando; T(q,x,y+3); x+=tw(q,'bold',8.8)+4; }
       if(I.m) x+=chip(r.modo,x,y+3)+2.5;
       if(r.onde){ fnt('bold',7.6); tc(C.ink); T(fit(r.onde,PW-ML-x,'bold',7.6),x,y+3); }
-      else if(!I.m&&!r.svc){ fnt('normal',7.6); tc(C.muted); T(fit('QUEM LEVA E ONDE: ______________________________',PW-ML-x,'normal',7.6),x,y+3); }
+      else if(!I.m&&!r.svc){ fnt('normal',7.6); tc(C.muted); T(fit(ret?'QUEM RETIRA OU ONDE ENTREGA: ______________________':'QUEM LEVA E ONDE: ______________________________',PW-ML-x,'normal',7.6),x,y+3); }
       else if(r.svc){ fnt('normal',7.6); tc(C.muted); T(fit('SEM MATERIAL PRA DEVOLVER',PW-ML-x,'normal',7.6),x,y+3); }
       y+=7;
       I.obsL.forEach(l=>{ fnt('normal',8); tc(C.ink); T(l,ML,y+2.2); y+=3.6; });
-      if(r.st){ fc(r.st==='COM FALTA'?[248,220,214]:[222,242,231]); const fl=r.falta?wrap('FALTA / AVARIA: '+r.falta,CW-4,'normal',7.6):[]; doc.rect(ML,y,CW,4.6+fl.length*3.4,'F'); fnt('bold',7.6); tc(r.st==='COM FALTA'?C.bad:C.ok); T('JÁ MARCADO NO SISTEMA: '+(r.st==='COM FALTA'?'DEVOLVIDO COM FALTA':'DEVOLVIDO')+(r.em?' EM '+diaDM(r.em):''),ML+2,y+3.2); fl.forEach((l,i)=>{ fnt('normal',7.6); tc(C.ink); T(l,ML+2,y+6.8+i*3.4); }); y+=5.5+fl.length*3.4; }
+      if(r.st){ fc(r.st==='COM FALTA'?[248,220,214]:[222,242,231]); const fl=r.falta?wrap('FALTA / AVARIA: '+r.falta,CW-4,'normal',7.6):[]; doc.rect(ML,y,CW,4.6+fl.length*3.4,'F'); fnt('bold',7.6); tc(r.st==='COM FALTA'?C.bad:C.ok); T('JÁ MARCADO NO SISTEMA: '+(ret?'RECEBIDO':'DEVOLVIDO')+(r.st==='COM FALTA'?' COM FALTA':'')+(r.em?' EM '+diaDM(r.em):''),ML+2,y+3.2); fl.forEach((l,i)=>{ fnt('normal',7.6); tc(C.ink); T(l,ML+2,y+6.8+i*3.4); }); y+=5.5+fl.length*3.4; }
       if(I.rows.length){
         fc(C.soft); doc.rect(ML,y,CW,5.4,'F'); fnt('bold',6.8); tc(C.muted); T('OK',ML+2.5,y+3.7); if(!r.svc) T('QTD.',colQ+5,y+3.7,{align:'center'}); T(r.svc?'SERVIÇO':'MATERIAL',r.svc?colQ:colM,y+3.7);
-        if(!r.svc) T(r.modo==='TRAZER PRA BASE'?'QTD. NA BASE':'QTD. DEVOLVIDA',PW-ML-2,y+3.7,{align:'right'}); y+=6;
+        if(!r.svc) T(ret?'QTD. RECEBIDA':r.modo==='TRAZER PRA BASE'?'QTD. NA BASE':'QTD. DEVOLVIDA',PW-ML-2,y+3.7,{align:'right'}); y+=6;
         I.rows.forEach(o=>{
           if(o.lote!=null){ fnt('bold',7.4); tc(C.navy); T(fit(o.lote,CW-4,'bold',7.4),ML+2,y+3.6); dc(C.line); doc.setLineWidth(0.15); doc.line(ML,y+o.h,PW-ML,y+o.h); y+=o.h; return; }
           dc(C.ink); doc.setLineWidth(0.3); doc.rect(ML+2.6,y+1.3,3.3,3.3);
@@ -7956,18 +7974,18 @@ async function gerarChecklistDevolucao(ev,soForn){
         /* assinaturas */
         const half=(CW-10)/2, x2=ML+half+10, base=r.modo==='TRAZER PRA BASE'; y+=11;
         dc(C.ink); doc.setLineWidth(0.25); doc.line(ML,y,ML+half,y); doc.line(x2,y,x2+half,y);
-        fnt('bold',6.8); tc(C.muted); T(base?'ASSINATURA – SAÍDA DO LOCAL':'ASSINATURA – RESPONSÁVEL PLENART',ML+half/2,y+3.2,{align:'center'}); T(fit(base?'ASSINATURA – RECEBIDO NA BASE':'ASSINATURA – '+(r.svc?g.nome:'FORNECEDOR'),half,'bold',6.8),x2+half/2,y+3.2,{align:'center'});
+        fnt('bold',6.8); tc(C.muted); T(base?'ASSINATURA – SAÍDA DO LOCAL':ret?'ASSINATURA – PLENART (CONFERIU E RECEBEU)':'ASSINATURA – RESPONSÁVEL PLENART',ML+half/2,y+3.2,{align:'center'}); T(fit(base?'ASSINATURA – RECEBIDO NA BASE':'ASSINATURA – '+(r.svc?g.nome:'FORNECEDOR'),half,'bold',6.8),x2+half/2,y+3.2,{align:'center'});
         y+=7.5; fnt('normal',7.6); tc(C.ink); T('NOME:',ML,y); T('NOME:',x2,y);
         y+=5.5; if(r.svc){ T('DATA:      /      /',ML,y); T('SERVIÇO CONCLUÍDO?',ML+34,y); dc(C.ink); doc.setLineWidth(0.3); doc.rect(ML+66,y-2.7,3,3); T('SIM',ML+70.5,y); doc.rect(ML+79,y-2.7,3,3); T('NÃO',ML+83.5,y); }
-        else T((base?'DATA DA SAÍDA DO LOCAL':r.modo==='ELES BUSCAM'?'DATA DA RETIRADA':'DATA DA DEVOLUÇÃO')+':      /      /',ML,y);
+        else T((ret?(r.modo==='RETIRAMOS'?'DATA DA RETIRADA':'DATA DO RECEBIMENTO'):base?'DATA DA SAÍDA DO LOCAL':r.modo==='ELES BUSCAM'?'DATA DA RETIRADA':'DATA DA DEVOLUÇÃO')+':      /      /',ML,y);
         if(!r.svc){ y+=5; T('OBSERVAÇÕES (FALTA / AVARIA):',ML,y); dc(C.faint); doc.setLineWidth(0.2); doc.line(ML+tw('OBSERVAÇÕES (FALTA / AVARIA): ','normal',7.6)+1,y+0.4,PW-ML,y+0.4); y+=2; }
         else { T('OBSERVAÇÕES:',ML+96,y); dc(C.faint); doc.setLineWidth(0.2); doc.line(ML+118,y+0.4,PW-ML,y+0.4); y+=2; }
       }
       y+=5; if(ri<g.recs.length-1){ dc(C.line); doc.setLineWidth(0.2); doc.setLineDashPattern([1,1],0); doc.line(ML,y-2.5,PW-ML,y-2.5); doc.setLineDashPattern([],0); y+=1.5; } });
     y+=3; });
   const np=doc.getNumberOfPages();
-  for(let i=1;i<=np;i++){ doc.setPage(i); fnt('normal',7); tc(C.faint); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,PH-11,PW-ML,PH-11); T('GRUPO TENDAS PLENART  ·  '+fit('TERCEIRIZADOS – '+evNome,110,'normal',7)+'  ·  CHECKLIST DE DEVOLUÇÃO',ML,PH-7); T('PÁGINA '+i+' DE '+np,PW-ML,PH-7,{align:'right'}); }
-  abrirPDF('DEVOLUCAO_TERCEIRIZADOS_'+slug(ev.nome)+(soForn?'_'+slug(soForn):'')+'_'+stampNow()+'.pdf',doc.output('arraybuffer'),'Checklist de devolução salvo.');
+  for(let i=1;i<=np;i++){ doc.setPage(i); fnt('normal',7); tc(C.faint); dc(C.line); doc.setLineWidth(0.2); doc.line(ML,PH-11,PW-ML,PH-11); T('GRUPO TENDAS PLENART  ·  '+fit('TERCEIRIZADOS – '+evNome,110,'normal',7)+'  ·  CHECKLIST DE '+(ret?'RETIRADA':'DEVOLUÇÃO'),ML,PH-7); T('PÁGINA '+i+' DE '+np,PW-ML,PH-7,{align:'right'}); }
+  abrirPDF((ret?'RETIRADA':'DEVOLUCAO')+'_TERCEIRIZADOS_'+slug(ev.nome)+(soForn?'_'+slug(soForn):'')+'_'+stampNow()+'.pdf',doc.output('arraybuffer'),'Checklist de '+(ret?'retirada':'devolução')+' salvo.');
 }
 /* ===== boot ===== */
 function snapshot(){ flushAll(); return {view:view,currentId:currentId,q:q}; }
